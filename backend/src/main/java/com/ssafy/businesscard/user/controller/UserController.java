@@ -9,15 +9,20 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/users")
 @Tag(name = "유저 기능 API", description = "유저와 관련된 기능 제공")
+
 public class UserController {
     private final MemberService userService;
+    private final WebClientConfig webclientConfig;
 
     @PostMapping("/register")
     @Operation(summary = "유저 회원가입", description = "이메일, 비밀번호, 닉네임을 입력받아 회원가입을 진행한다")
@@ -47,5 +52,23 @@ public class UserController {
 //        return ResponseEntity.ok().body(MessageUtils.success());
 //    }
 
+//    @GetMapping("/user")
+//    public String getUserDetails(@RegisteredOAuth2AuthorizedClient("microsoft") OAuth2AuthorizedClient authorizedClient) {
+//        String userInfoEndpointUri = authorizedClient.getClientRegistration()
+//                .getProviderDetails().getUserInfoEndpoint().getUri();
+//
+//        if (!userInfoEndpointUri.isEmpty()) {
+//            String response = webclientConfig.webClientBuilder()
+//                    .get()
+//                    .uri(userInfoEndpointUri)
+//                    .attributes(oauth2AuthorizedClient(authorizedClient))
+//                    .retrieve()
+//                    .bodyToMono(String.class)
+//                    .block();
+//            return "User Info: " + response;
+//        }
+//
+//        return "User Info Endpoint not configured";
+//    }
 
 }

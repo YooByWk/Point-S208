@@ -1,7 +1,7 @@
 spring:
 
   profiles:
-    include : oauth
+    include: oauth
 
   datasource:
     url: jdbc:mysql://localhost:3306/oauth?serverTimezone=Asia/Seoul
@@ -24,9 +24,24 @@ spring:
             client-id: 56933131412-secpaj90db6jjv86v66mkvstlhsvtdol.apps.googleusercontent.com
             client-secret: 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
             #            redirect-uri: https://j10c102.p.ssafy.io/login/oauth2/code/google
-            redirect-uri: http://localhost:8080/login/oauth2/code/google
+            #            redirect-uri: http://localhost:8080/login/oauth2/code/google
+            #            http://localhost:8080/microsoft-signin
             scope: profile, email
 
+          microsoft:
+            client-id: 02331f7f-ee11-47ae-97ba-44f60702dabd
+            client-secret: fdeb56a9-1f3c-4ce4-8bae-6ff2159f1c3f
+            authorization-grant-type: authorization_code
+            redirect-uri: http://localhost:8080/login/oauth2/code/microsoft
+            scope: User.Read, Mail.Read
+            client-name: Microsoft
+
+        provider:
+          microsoft:
+            authorization-uri: https://login.microsoftonline.com/common/oauth2/v2.0/authorize
+            token-uri: https://login.microsoftonline.com/common/oauth2/v2.0/token
+            user-info-uri: https://graph.microsoft.com/oidc/userinfo
+            user-name-attribute: name
 
 
   jwt:
@@ -35,32 +50,20 @@ spring:
     accesstime: 360000000  # 10H -> 0?? ? ??...
     refreshtime: 604800000 # 7Days
 
+
   servlet:
     multipart:
       max-file-size: 10MB
       max-request-size: 110MB
 
-
   jpa:
-    show-sql: false  # jpa ??? ?? ??
+    show-sql: false
     hibernate:
-      ddl-auto: update  # Hibernate? ???? ???? ????? ??
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
     open-in-view: false  # SSE ??? ?? -> DB Connection ??? connection ?? ??
-
-cloud:
-  aws:
-    credentials:
-      access-key: AKIAW3MEAWFWGVMIB3VX
-      secret-key: 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
-    region:
-      static: ap-northeast-2
-    s3:
-      bucket: fullerting-s3-v2
-      stack:
-        auto: false
 
 springdoc:
   swagger-ui:
@@ -75,26 +78,10 @@ logging:
           web:
           FilterChainProxy: DEBUG
 
-
-fcm:
-  service-account-file: key/fullerting-fcm-firebase-adminsdk-rjmjj-0e19a90e90.json
-  topic-name: alarm
-  project-id: fullerting-fcm
-
-#      hibernate:
-#        type:
-#          descriptor:
-#            sql: trace
-
-
 server:
   port: 8080
   servlet:
     context-path: /
   websocket:
     port: 9090
-
-#  tomcat:
-#    remoteip:
-#      protocol-header: x-forwarded-proto
 

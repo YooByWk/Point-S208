@@ -45,7 +45,6 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
 //                .oauth2Login(Customizer.withDefaults())
-
                 .oauth2Login(customizer ->
                                 customizer
 //                                .failureHandler(authFailureHandler)
@@ -105,4 +104,5 @@ public class SecurityConfig {
             return config;
         };
     }
+
 }

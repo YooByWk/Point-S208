@@ -24,11 +24,16 @@ public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
+
         if (authentication instanceof OAuth2AuthenticationToken) {
             OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
 
             // OAuth2 제공자로부터 받은 사용자 정보
             String username = oauthToken.getPrincipal().getAttribute("name");
+
+//            if(oauthToken.){
+//
+//            }
 
             // 사용자 정보를 바탕으로 JWT 생성
             IssuedToken jwtToken = tokenService.issueToken(authentication);
@@ -39,6 +44,7 @@ public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
         } else {
             throw new IllegalArgumentException("AuthenticationSuccessHandler only supports OAuth2AuthenticationToken");
         }
+
     }
 
 }
