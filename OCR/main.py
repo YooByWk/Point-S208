@@ -199,6 +199,9 @@ async def extract_emails(file: UploadFile = File(...)):
     image_data = await file.read()
     emails, processed_image,info,analysis = await process_image(image_data)
 
+    print(info)
+    print(emails)
+
     # return {"emails": emails , "info": info, "images":analysis}
     return {"emails": emails , "info": info}
 
