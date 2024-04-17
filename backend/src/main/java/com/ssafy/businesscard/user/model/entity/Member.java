@@ -28,7 +28,7 @@ public class Member implements UserDetails {
     @Column(name = "member_id")
     private Long id;
 
-    @Column(name = "name" )
+    @Column(name = "name")
     private String name;
 
     @Column(name = "email", nullable = false)
@@ -40,9 +40,8 @@ public class Member implements UserDetails {
     @Column(name = "provider", nullable = false)
     private String provider;
 
-    @Column(name = "nickname",   unique = true)
+    @Column(name = "nickname", unique = true)
     private String nickname;
-
 
 
     public Member update(String name, String email) {

@@ -28,26 +28,26 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final TokenService tokenService;
 
-    public IssuedToken login(LoginRequest loginRequest) {
-        // 사용자가 입력한 정보
-        String inputEmail = loginRequest.getEmail();
-        String inputPassword = loginRequest.getPassword();
-
-        try {
-            Authentication authentication =
-                    authenticationManager.authenticate(new CustomAuthenticationToken(inputEmail, inputPassword));
-            // 성공한 인증객체를 ContextHolder에 등록
-//            SecurityContextHolder.getContext().setAuthentication(authentication);
-            log.info("로그인 성공 객체정보 : {} ", authentication.toString());
-
-            // 해당 인증 객체를 바탕으로 토큰을 발급한다
-            IssuedToken issuedToken = tokenService.issueToken(authentication);
-            return issuedToken;
-
-        } catch (AuthenticationException e) {
-            throw new UserException(UserErrorCode.ACCESS_DENIED);
-        }
-    }
+//    public IssuedToken login(LoginRequest loginRequest) {
+//        // 사용자가 입력한 정보
+//        String inputEmail = loginRequest.getEmail();
+//        String inputPassword = loginRequest.getPassword();
+//
+//        try {
+//            Authentication authentication =
+//                    authenticationManager.authenticate(new CustomAuthenticationToken(inputEmail, inputPassword));
+//            // 성공한 인증객체를 ContextHolder에 등록
+////            SecurityContextHolder.getContext().setAuthentication(authentication);
+//            log.info("로그인 성공 객체정보 : {} ", authentication.toString());
+//
+//            // 해당 인증 객체를 바탕으로 토큰을 발급한다
+//            IssuedToken issuedToken = tokenService.issueToken(authentication);
+//            return issuedToken;
+//
+//        } catch (AuthenticationException e) {
+//            throw new UserException(UserErrorCode.ACCESS_DENIED);
+//        }
+//    }
 
     public void logout() {
         // 인증 정보삭제

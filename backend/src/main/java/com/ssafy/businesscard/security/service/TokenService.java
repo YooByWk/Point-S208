@@ -51,6 +51,7 @@ public class TokenService {
         else if (authentication.getPrincipal() instanceof OAuth2User) {
             OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
             email = oAuth2User.getAttribute("email");
+            log.info("emailll"+email);
         }
 
         // 이메일 사용해서 사용자 정보 조회

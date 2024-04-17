@@ -1,11 +1,13 @@
 package com.ssafy.businesscard.security.model.entity;
 
 import com.ssafy.businesscard.user.model.entity.MemberProfile;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 import java.util.Map;
 import java.util.function.Function;
 
+@Slf4j
 public enum OAuthAttributes {
     GOOGLE("google", (attributes) -> {
         MemberProfile memberProfile = new MemberProfile();
@@ -22,12 +24,13 @@ public enum OAuthAttributes {
         memberProfile.setEmail(((String) response.get("email")));
         return memberProfile;
     }),
-    MICROSOFT("microsoft", (attributes) -> {
+    AZURE("azure", (attributes) -> {
         // Microsoft의 경우, 사용자 정보를 가져오는 필드명에 주의하세요.
         // 예시에서는 일반적으로 사용되는 필드명을 사용했습니다. 실제 필드명은 Microsoft의 문서를 참조하세요.
         MemberProfile memberProfile = new MemberProfile();
-        memberProfile.setNickname((String) attributes.get("displayName")); // Microsoft에서는 displayName을 사용할 수 있습니다.
-        memberProfile.setEmail((String) attributes.get("userPrincipalName")); // 이메일 정보는 userPrincipalName에 있을 수 있습니다.
+        memberProfile.setNickname((String) attributes.get("name")); // Microsoft에서는 displayName을 사용할 수 있습니다.
+        memberProfile.setEmail((String) attributes.get("email")); // 이메일 정보는 userPrincipalName에 있을 수 있습니다.
+       log.info("azureeeeeeeee"+attributes);
         return memberProfile;
     }),
 
@@ -52,6 +55,8 @@ public enum OAuthAttributes {
     }
 
     public static MemberProfile extract(String registrationId, Map<String, Object> attributes) {
+        log.info("extractattibutesss"+attributes+" "+registrationId);
+
         return Arrays.stream(values())
                 .filter(provider -> registrationId.equals(provider.registrationId))
                 .findFirst()

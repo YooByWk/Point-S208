@@ -23,12 +23,12 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/login")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    @Operation(summary="회원 로그인", description="이메일, 비밀번호로 로그인한다")
-    public ResponseEntity<MessageUtils> login(@Valid @RequestBody LoginRequest loginRequest) {
-        return ResponseEntity.ok().body(MessageUtils.success(authService.login(loginRequest)));
-    }
+//    @PostMapping("/login")
+//    @ResponseStatus(HttpStatus.ACCEPTED)
+//    @Operation(summary="회원 로그인", description="이메일, 비밀번호로 로그인한다")
+//    public ResponseEntity<MessageUtils> login(@Valid @RequestBody LoginRequest loginRequest) {
+//        return ResponseEntity.ok().body(MessageUtils.success(authService.login(loginRequest)));
+//    }
 
     @PostMapping("/logout")
     @ResponseStatus(HttpStatus.OK)

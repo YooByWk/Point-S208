@@ -13,6 +13,7 @@ import cv2
 from azure.cognitiveservices.vision.computervision import ComputerVisionClient
 from azure.cognitiveservices.vision.computervision.models import OperationStatusCodes
 from msrest.authentication import CognitiveServicesCredentials
+from azure.core.credentials import AzureKeyCredential
 
 
 from fastapi import FastAPI, File, UploadFile, HTTPException
@@ -20,6 +21,7 @@ from fastapi.responses import JSONResponse
 import uvicorn
 from typing import List
 
+from azure.ai.formrecognizer import FormRecognizerClient
 
 
 def plt_imshow(title='image', img=None, figsize=(8, 5)):
@@ -89,6 +91,8 @@ ENDPOINT_URL = secrets["ENDPOINT_URL"]
 
 
 computervision_client = ComputerVisionClient(ENDPOINT_URL, CognitiveServicesCredentials(SUBSCRIPTION_KEY))
+form_recognizer_client = FormRecognizerClient(endpoint=ENDPOINT_URL, credential=AzureKeyCredential(SUBSCRIPTION_KEY))
+
 
 path = 'sampleimage/kim.jpg'
 imageData = open(path, "rb").read()
@@ -143,6 +147,42 @@ email_regex = r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
 #     print(email)
 
 
+async def extract_business_card_info(image_data):
+    # Form Recognizer 서비스 키와 엔드포인트를 설정합니다.
+    key = SUBSCRIPTION_KEY
+    endpoint = ENDPOINT_URL
+    
+     # Form Recognizer 비동기 클라이언트 생성
+    form_recognizer_client = FormRecognizerClient(endpoint=endpoint, credential=AzureKeyCredential(key))
+    try:
+        # 이미지 데이터로부터 명함 정보를 비동기적으로 추출
+        poller = await form_recognizer_client.begin_recognize_business_cards(image_data)
+        business_cards = await poller.result()
+
+        extracted_info = {"ContactNames": [], "Emails": [], "PhoneNumbers": []}
+
+        for business_card in business_cards:
+            contact_names = business_card.fields.get("ContactNames")
+            if contact_names:
+                for name in contact_names.value:
+                    extracted_info["ContactNames"].append(name.value_data.text)
+            
+            emails = business_card.fields.get("Emails")
+            if emails:
+                for email in emails.value:
+                    extracted_info["Emails"].append(email.value_data.text)
+            
+            phones = business_card.fields.get("PhoneNumbers")
+            if phones:
+                for phone in phones.value:
+                    extracted_info["PhoneNumbers"].append(phone.value_data.text)
+        
+        return extracted_info
+    finally:
+        # 클라이언트 리소스를 명시적으로 해제
+         form_recognizer_client.close()
+
+
 # 이미지 처리 및 텍스트 추출 함수
 async def process_image(image_data):
     emails = []
@@ -155,7 +195,7 @@ async def process_image(image_data):
     operation_id = operation_location.split("/")[-1]
 
     # 분석할 시각적 특징
-    visual_features = ["Categories", "Description", "Objects", "Tags", "Faces", "Brands"]
+    # visual_features = ["Categories", "Description", "Objects", "Tags", "Faces", "Brands"]
 
     while True:
         read_result = computervision_client.get_read_result(operation_id)
@@ -198,12 +238,14 @@ async def extract_emails(file: UploadFile = File(...)):
 
     image_data = await file.read()
     emails, processed_image,info,analysis = await process_image(image_data)
+    infos = await extract_business_card_info(image_data)
 
     print(info)
     print(emails)
+    print(infos)
 
     # return {"emails": emails , "info": info, "images":analysis}
-    return {"emails": emails , "info": info}
+    return {"emails": emails , "info": info,"infos":infos}
 
 
 if __name__ == "__main__":
