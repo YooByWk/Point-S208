@@ -10,7 +10,6 @@ import com.ssafy.businesscard.user.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -19,8 +18,6 @@ import org.springframework.stereotype.Service;
 public class MemberService {
 
     private final MemberRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    String defaultThunmail = "https://businesscard-s3-v2.s3.ap-northeast-2.amazonaws.com/default_thumnail.svg";
 
 
     public void registUser(UserRegisterRequest request) {
@@ -32,7 +29,6 @@ public class MemberService {
         // 유저 객체를 DB에 저장
         userRepository.save(Member.builder()
                 .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
                 .nickname(request.getNickname())
                 .provider(request.getAuthProvider())
                 .name(request.getName())

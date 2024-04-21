@@ -1,7 +1,6 @@
 package com.ssafy.businesscard.global.exception;
 
 import com.ssafy.businesscard.global.utils.MessageUtils;
-import com.ssafy.businesscard.security.exception.JwtException;
 import com.ssafy.businesscard.user.exception.UserException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -32,12 +31,6 @@ public class GlobalExceptionHandler {
         log.error(Arrays.toString(e.getStackTrace()));
         return ResponseEntity.status(e.getUserErrorCode().getHttpStatus())
                 .body(MessageUtils.fail(String.valueOf(e.getUserErrorCode()),e.getMessage()));
-    }
-    @ExceptionHandler(JwtException.class)
-    public ResponseEntity<MessageUtils> jwtExceptionHandler(JwtException e){
-        log.error(Arrays.toString(e.getStackTrace()));
-        return ResponseEntity.status(e.getJwtErrorCode().getHttpStatus())
-                .body(MessageUtils.fail(String.valueOf(e.getJwtErrorCode()),e.getMessage()));
     }
     @ExceptionHandler({MethodArgumentNotValidException.class})
     public ResponseEntity<MessageUtils> validException(MethodArgumentNotValidException exception) {
