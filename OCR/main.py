@@ -208,19 +208,17 @@ import json
 #     return {"emails": emails , "info": info,"infos":infos}
 #
 #
-#
-#
-#
-#
-#
+# 
 #
 # if __name__ == "__main__":
 #     uvicorn.run(app, host="0.0.0.0", port=8000)
 #
 
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, UploadFile , HTTPException
 from fastapi.responses import JSONResponse
 import requests
+import uuid
+import time
 
 app = FastAPI()
 
@@ -229,20 +227,67 @@ with open('secrets.json', 'r') as f:
     secrets = json.load(f)
 
 
-CLIENT_ID = secrets["CLIENT_ID"]  # Your Client ID
+# CLIENT_ID = secrets["CLIENT_ID"]  # Your Client ID
 CLIENT_SECRET = secrets["CLIENT_SECRET"]  # Your Client Secret
+API_URL = secrets["API_URL"]  
+ 
+ 
+print('apiurl   '+API_URL)
+print('secret   '+CLIENT_SECRET)
+ 
+# print('secret'+CLIENT_SECRET)
 
-API_URL = "https://naveropenapi.apigw.ntruss.com/vision-ocr/v1/businesscard"
+# @app.post("/recognize")
+# async def recognize_business_card(file: UploadFile = File(...)):
+#     headers = {
+#         'X-OCR-SECRET': CLIENT_SECRET,
+#     }
+    
+#     files = {'file': (file.filename, await file.read(), file.content_type)}
+#     response = requests.post(API_URL, headers=headers, files=files)
+#     try:
+#         return JSONResponse(status_code=response.status_code, content=response.json())
+#     except ValueError:  # JSON 디코딩 에러 처리
+#         return JSONResponse(status_code=500, content={"message": "Server error"})
 
-@app.post("/recognize/")
-async def recognize_business_card(file: UploadFile = File(...)):
-    headers = {
-        "X-NCP-APIGW-API-KEY-ID": CLIENT_ID,
-        "X-NCP-APIGW-API-KEY": CLIENT_SECRET,
+@app.post("/process_business_card/")
+async def process_business_card(file: UploadFile = File(...)):
+    # 파일을 메모리에 저장
+    contents = await file.read()
+    
+    # OCR 요청 데이터 준비
+    request_json = {
+        'images': [{'format': file.content_type.split('/')[-1].upper(), 'name': 'string'}],
+        'requestId': str(uuid.uuid4()),
+        'version': 'V2',
+        'timestamp': int(time.time() * 1000)
     }
-    files = {'image': (file.filename, await file.read(), file.content_type)}
+    
+    # payload = {'message': json.dumps(request_json).encode('UTF-8')}
+    # files = [('file', (file.filename, contents, file.content_type))]
+    headers = {'X-OCR-SECRET': CLIENT_SECRET}
+    files = {
+        'file': (file.filename, contents, file.content_type),
+        'message': (None, json.dumps(request_json), 'application/json')
+    }
+    # OCR API로 요청 전송
     response = requests.post(API_URL, headers=headers, files=files)
-    return JSONResponse(status_code=response.status_code, content=response.json())
+    
+     # 응답 처리
+    if response.status_code == 200:
+        ocr_result = response.json()
+        print('ocrrrrrrrrrrrr'+ocr_result)
+        # OCR 결과를 원하는 형태로 가공
+        text_results = " ".join(
+            [field['inferText'] 
+             for image in ocr_result['images'] 
+                 for field in image.get('fields', [])]
+        )
+        return JSONResponse(content={"OCR 결과": text_results}, status_code=200)
+    
+    else:
+        # 실패시 HTTPException 대신 JSONResponse를 사용하여 오류 메시지 반환
+        return JSONResponse(content={"error": "OCR 서비스 처리 실패", "details": response.text}, status_code=response.status_code)
 
 if __name__ == "__main__":
     import uvicorn
