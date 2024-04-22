@@ -1,6 +1,15 @@
 version: '3.8'
 
 services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    ports:
+      - "8081:8080"  # Jenkins 웹 인터페이스 포트
+      - "50000:50000"  # Jenkins 에이전트 연결 포트
+    volumes:
+      - jenkins_home:/var/jenkins_home  # Jenkins 데이터를 저장할 볼륨
+
+
 
   prometheus:
     image: prom/prometheus:v2.20.1
@@ -10,7 +19,7 @@ services:
       - "9090:9090"
 
   grafana:
-    image: grafana/grafana:7.1.5
+    image: grafana/grafana:latest
     depends_on:
       - prometheus
     ports:
@@ -92,3 +101,9 @@ services:
 networks:
   jenkins-network:
     external: true
+
+
+volumes:
+  jenkins_home:
+  prometheus_data:
+  grafana_data:
