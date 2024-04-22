@@ -14,6 +14,8 @@ import TermsOfUse from "./TermsOfUse";
 import Tab from "./Tab";
 import { TeamsFxContext } from "./Context";
 import config from "./sample/lib/config";
+import AuthRouter from "../routers/AuthRouter";
+import GlobalStyle from "../styles/global";
 
 /**
  * The main app which handles the initialization and routing
@@ -39,8 +41,10 @@ export default function App() {
         }
         style={{ background: tokens.colorNeutralBackground3 }}
       >
+        <GlobalStyle />
         <Router>
-          {loading ? (
+          <AuthRouter />
+          {/* {loading ? (
             <Spinner style={{ margin: 100 }} />
           ) : (
             <Routes>
@@ -49,7 +53,7 @@ export default function App() {
               <Route path="/tab" element={<Tab />} />
               <Route path="*" element={<Navigate to={"/tab"} />}></Route>
             </Routes>
-          )}
+          )} */}
         </Router>
       </FluentProvider>
     </TeamsFxContext.Provider>
