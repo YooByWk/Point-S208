@@ -53,11 +53,22 @@
         },
         {
             "entityId": "second",
-            "name": "Second Tab",
-            "contentUrl": "${{TAB_ENDPOINT}}/index.html#/tab",
-            "websiteUrl": "${{TAB_ENDPOINT}}/index.html#/tab",
+            "name": "제발",
+            "contentUrl": "${{TAB_ENDPOINT}}/index.html#/newTab",
+            "websiteUrl": "${{TAB_ENDPOINT}}/index.html#/newTab",
             "scopes": [
-                "personal"
+                "personal",
+                "team"
+            ]
+        },
+        {
+            "entityId": "tercero",
+            "name": " Tab tercero",
+            "contentUrl": "${{TAB_ENDPOINT}}/index.html#/tercero",
+            "websiteUrl": "${{TAB_ENDPOINT}}/index.html#/tercero",
+            "scopes": [
+                "personal",
+                "team"
             ]
         }
     ],
