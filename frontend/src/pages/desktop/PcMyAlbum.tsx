@@ -1,5 +1,5 @@
 
-const index = () => {
+const PcMyAlbum = () => {
   return (
     <div>
       <p>MyAlbum Page</p>
@@ -7,4 +7,4 @@ const index = () => {
   )
 }
 
-export default index
+export default PcMyAlbum

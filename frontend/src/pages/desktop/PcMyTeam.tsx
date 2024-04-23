@@ -1,5 +1,5 @@
 
-const index = () => {
+const PcMyTeam = () => {
   return (
     <div>
       <p>MyTeam Page</p>
@@ -7,4 +7,4 @@ const index = () => {
   )
 }
 
-export default index
+export default PcMyTeam

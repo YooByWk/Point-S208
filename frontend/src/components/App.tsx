@@ -11,9 +11,11 @@ import { HashRouter as Router } from 'react-router-dom'
 import { useTeamsUserCredential } from '@microsoft/teamsfx-react'
 import { TeamsFxContext } from './Context'
 import config from './sample/lib/config'
-import AuthRouter from '../routers/AuthRouter'
 import { RecoilRoot } from 'recoil'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import useWindowSize from '../hooks/useWindowSize'
+import DesktopRouter from '../routers/DesktopRouter'
+import MobileRouter from '../routers/MobileRouter'
 
 const queryClient = new QueryClient()
 
@@ -27,6 +29,8 @@ export default function App() {
       initiateLoginEndpoint: config.initiateLoginEndpoint!,
       clientId: config.clientId!,
     })
+  const width = useWindowSize()
+
   return (
     <TeamsFxContext.Provider
       value={{ theme, themeString, teamsUserCredential }}
@@ -50,7 +54,7 @@ export default function App() {
               <Spinner style={{ margin: 100 }} />
             ) : (
               <Router>
-                <AuthRouter />
+                {width >= 768 ? <DesktopRouter /> : <MobileRouter />}
               </Router>
             )}
           </FluentProvider>
