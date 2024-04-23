@@ -13,9 +13,7 @@ import { TeamsFxContext } from './Context'
 import config from './sample/lib/config'
 import { RecoilRoot } from 'recoil'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import useWindowSize from '../hooks/useWindowSize'
-import DesktopRouter from '../routers/DesktopRouter'
-import MobileRouter from '../routers/MobileRouter'
+import AuthRouter from '@/routers/AuthRouter'
 
 const queryClient = new QueryClient()
 
@@ -29,7 +27,6 @@ export default function App() {
       initiateLoginEndpoint: config.initiateLoginEndpoint!,
       clientId: config.clientId!,
     })
-  const width = useWindowSize()
 
   return (
     <TeamsFxContext.Provider
@@ -54,7 +51,7 @@ export default function App() {
               <Spinner style={{ margin: 100 }} />
             ) : (
               <Router>
-                {width >= 768 ? <DesktopRouter /> : <MobileRouter />}
+                <AuthRouter />
               </Router>
             )}
           </FluentProvider>

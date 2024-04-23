@@ -1,7 +1,7 @@
+import MyAlbum from '@/pages/MyAlbum'
+import MyCard from '@/pages/MyCard'
+import MyTeam from '@/pages/MyTeam'
 import { Route, Routes } from 'react-router-dom'
-import MyAlbum from '@pages/mobile/MyAlbum'
-import MyCard from '@pages/mobile/MyCard'
-import MyTeam from '@pages/mobile/MyTeam'
 
 const AuthRouter = () => {
   return (
