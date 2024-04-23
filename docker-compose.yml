@@ -3,6 +3,9 @@ version: '3.8'
 services:
   jenkins:
     image: jenkins/jenkins:lts
+    build:
+      context: ./jenkins
+      dockerfile: Dockerfile
     ports:
       - "8081:8080"  # Jenkins 웹 인터페이스 포트
       - "50000:50000"  # Jenkins 에이전트 연결 포트
@@ -60,7 +63,7 @@ services:
 
   ocr:
     container_name: ocr
-    image: junwon1131/s10c102-ai:latest
+    image: junwon1131/s10c102-ocr:latest
     build:
       context: ./OCR
       dockerfile: Dockerfile
