@@ -6,13 +6,17 @@ import {
   teamsHighContrastTheme,
   Spinner,
   tokens,
-} from "@fluentui/react-components";
-import { HashRouter as Router } from "react-router-dom";
-import { useTeamsUserCredential } from "@microsoft/teamsfx-react";
-import { TeamsFxContext } from "./Context";
-import config from "./sample/lib/config";
-import AuthRouter from "../routers/AuthRouter";
-import GlobalStyle from "../styles/global";
+} from '@fluentui/react-components'
+import { HashRouter as Router } from 'react-router-dom'
+import { useTeamsUserCredential } from '@microsoft/teamsfx-react'
+import { TeamsFxContext } from './Context'
+import config from './sample/lib/config'
+import AuthRouter from '../routers/AuthRouter'
+import GlobalStyle from '../styles/global'
+import { RecoilRoot } from 'recoil'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
+const queryClient = new QueryClient()
 
 /**
  * The main app which handles the initialization and routing
@@ -23,33 +27,37 @@ export default function App() {
     useTeamsUserCredential({
       initiateLoginEndpoint: config.initiateLoginEndpoint!,
       clientId: config.clientId!,
-    });
+    })
   return (
     <TeamsFxContext.Provider
       value={{ theme, themeString, teamsUserCredential }}
     >
-      <FluentProvider
-        theme={
-          themeString === "dark"
-            ? teamsDarkTheme
-            : themeString === "contrast"
-            ? teamsHighContrastTheme
-            : {
-                ...teamsLightTheme,
-                colorNeutralBackground3: "#eeeeee",
-              }
-        }
-        style={{ background: tokens.colorNeutralBackground3 }}
-      >
-        <GlobalStyle />
-        {loading ? (
-          <Spinner style={{ margin: 100 }} />
-        ) : (
-          <Router>
-            <AuthRouter />
-          </Router>
-        )}
-      </FluentProvider>
+      <RecoilRoot>
+        <QueryClientProvider client={queryClient}>
+          <FluentProvider
+            theme={
+              themeString === 'dark'
+                ? teamsDarkTheme
+                : themeString === 'contrast'
+                ? teamsHighContrastTheme
+                : {
+                    ...teamsLightTheme,
+                    colorNeutralBackground3: '#eeeeee',
+                  }
+            }
+            style={{ background: tokens.colorNeutralBackground3 }}
+          >
+            <GlobalStyle />
+            {loading ? (
+              <Spinner style={{ margin: 100 }} />
+            ) : (
+              <Router>
+                <AuthRouter />
+              </Router>
+            )}
+          </FluentProvider>
+        </QueryClientProvider>
+      </RecoilRoot>
     </TeamsFxContext.Provider>
-  );
+  )
 }
