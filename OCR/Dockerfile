@@ -21,11 +21,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Make port 80 available to the world outside this container
 EXPOSE 80
 
-# Define environment variable
-ENV NAME World
-
-# Set the PATH environment variable to include /usr/local/bin after uvicorn is installed
-ENV PATH="/usr/local/bin:${PATH}"
 
 # Run your application using a different web server or framework, for example:
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
