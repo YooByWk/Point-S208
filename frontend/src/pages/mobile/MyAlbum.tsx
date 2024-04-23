@@ -1,9 +1,8 @@
-import React from 'react';
 
 const MyAlbum = () => {
   return (
     <div>
-      <p>MyAlbum Page</p>
+      내 명함 지갑
     </div>
   );
 };
