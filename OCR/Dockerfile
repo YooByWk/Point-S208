@@ -1,9 +1,6 @@
 # Use an official Python runtime as a parent image
 FROM python:3.8-slim
 
-
-ENV PATH="/usr/local/bin:${PATH}"
-
 # Set the working directory in the container
 WORKDIR /usr/src/app
 
@@ -17,7 +14,6 @@ COPY . .
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --upgrade pip
-
 RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install uvicorn
 
@@ -26,6 +22,9 @@ EXPOSE 80
 
 # Define environment variable
 ENV NAME World
+
+# Set the PATH environment variable to include /usr/local/bin after uvicorn is installed
+ENV PATH="/usr/local/bin:${PATH}"
 
 # Run your application using a different web server or framework, for example:
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
