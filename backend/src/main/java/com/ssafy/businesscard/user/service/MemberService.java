@@ -9,8 +9,7 @@ import com.ssafy.businesscard.user.model.entity.MemberProfile;
 import com.ssafy.businesscard.user.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
+ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
@@ -47,20 +46,20 @@ public class MemberService {
     }
 
     public UserResponse getUserInfo() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String email = (String) principal;
+//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = null;
 
         Member customUser = userRepository.findByEmail(email).orElseThrow(() -> new UserException(UserErrorCode.NOT_EXISTS_USER));
         return customUser.toUserResponse(customUser);
     }
 
-    public Member getNowUserInfoEntityByToken() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String email = (String) principal;
-
-        Member customUser = userRepository.findByEmail(email).orElseThrow(() -> new UserException(UserErrorCode.NOT_EXISTS_USER));
-        return customUser;
-    }
+//    public Member getNowUserInfoEntityByToken() {
+//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        String email = (String) principal;
+//
+//        Member customUser = userRepository.findByEmail(email).orElseThrow(() -> new UserException(UserErrorCode.NOT_EXISTS_USER));
+//        return customUser;
+//    }
 
 
 //

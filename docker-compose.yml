@@ -44,7 +44,7 @@ services:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
 
   nginx:
-    image: junwon1131/s10c102-nginx:latest
+    image: junwon1131/s208-nginx:latest
     container_name: nginx-https
     build:
       context: ./backend/nginx
@@ -56,8 +56,9 @@ services:
     volumes:
       #      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       #      - host머신 인증서를 컨테이너 내부로 볼륨매핑.
-      - /etc/letsencrypt/live/j10c102.p.ssafy.io/fullchain.pem:/etc/ssl/certs/fullchain.pem
-      - /etc/letsencrypt/live/j10c102.p.ssafy.io/privkey.pem:/etc/ssl/private/privkey.pem
+      - /etc/letsencrypt/live/j10s208.p.ssafy.io/fullchain.pem:/etc/ssl/certs/fullchain.pem
+      - /etc/letsencrypt/live/j10s208.p.ssafy.io/privkey.pem:/etc/ssl/private/privkey.pem
+      
     restart: unless-stopped
     depends_on:
       - back
@@ -68,7 +69,7 @@ services:
 
   ocr:
     container_name: ocr
-    image: junwon1131/s10c102-ocr:latest
+    image: junwon1131/s208-ocr:latest
     build:
       context: ./OCR
       dockerfile: Dockerfile
@@ -81,7 +82,7 @@ services:
 
   front:
     container_name: front
-    image: junwon1131/s10c102-front:latest
+    image: junwon1131/s208-front:latest
     build:
       context: ./frontend
       dockerfile: Dockerfile
@@ -95,7 +96,7 @@ services:
 
   back:
     container_name: back
-    image: junwon1131/s10c102-back:latest
+    image: junwon1131/s208-back:latest
     build:
       context: ./backend
       dockerfile: Dockerfile
