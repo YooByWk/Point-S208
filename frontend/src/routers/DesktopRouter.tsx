@@ -6,10 +6,9 @@ import PcMyTeam from '@pages/desktop/PcMyTeam'
 const DesktopRouter = () => {
   return (
     <Routes>
-      <Route path="/" element={<PcMyCard />} />
+      <Route path="/web/" element={<PcMyCard />} />
       <Route path="/web/myAlbum" element={<PcMyAlbum />} />
       <Route path="/web/myTeam" element={<PcMyTeam />} />
-      <Route path="*" element={<PcMyCard />} />
     </Routes>
   )
 }
