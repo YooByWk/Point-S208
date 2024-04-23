@@ -1,7 +1,7 @@
 package com.ssafy.businesscard.global.s3.controller;
 
-import com.ssafy.fullerting.global.s3.model.entity.response.S3ManyFilesResponse;
-import com.ssafy.fullerting.global.s3.servcie.AmazonS3Service;
+import com.ssafy.businesscard.global.s3.model.entity.response.S3ManyFilesResponse;
+import com.ssafy.businesscard.global.s3.servcie.AmazonS3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

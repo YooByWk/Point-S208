@@ -69,6 +69,17 @@ springdoc:
   swagger-ui:
     path: /api/swagger-ui.html
 
+cloud:
+  aws:
+    credentials:
+      access-key: AKIAW3MEAWFWGVMIB3VX
+      secret-key: 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
+    region:
+      static: ap-northeast-2
+    s3:
+      bucket: fullerting-s3-v2
+      stack:
+        auto: false
 
 logging:
   level:
