@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+
   jenkins:
     image: jenkins/jenkins:lts
     build:
@@ -12,7 +13,11 @@ services:
     volumes:
       - jenkins_home:/var/jenkins_home  # Jenkins 데이터를 저장할 볼륨
 
-
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
 
   prometheus:
     image: prom/prometheus:v2.20.1
