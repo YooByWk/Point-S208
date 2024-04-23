@@ -12,7 +12,6 @@ import { useTeamsUserCredential } from '@microsoft/teamsfx-react'
 import { TeamsFxContext } from './Context'
 import config from './sample/lib/config'
 import AuthRouter from '../routers/AuthRouter'
-import GlobalStyle from '../styles/global'
 import { RecoilRoot } from 'recoil'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
@@ -47,7 +46,6 @@ export default function App() {
             }
             style={{ background: tokens.colorNeutralBackground3 }}
           >
-            <GlobalStyle />
             {loading ? (
               <Spinner style={{ margin: 100 }} />
             ) : (
