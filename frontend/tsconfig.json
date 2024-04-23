@@ -3,24 +3,7 @@
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
-    "skipLibCheck": true,
-    // path 설정
-    "baseUrl": "./src",
-    "paths": {
-      "@/*": ["*"],
-      "@apis/*": ["apis/*"],
-      "@common/*": ["common/*"],
-      "@components/*": ["components/*"],
-      "@assets/*": ["assets/*"],
-      "@pages/*": ["pages/*"],
-      "@styles/*": ["styles/*"],
-      "@hooks/*": ["hooks/*"],
-      "@types/*": ["types/*"],
-      "@utils/*": ["utils/*"],
-      "@stores/*": ["stores/*"],
-      "@routers/*": ["routers/*"]
-    },
-    
+    "skipLibCheck": true,    
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,

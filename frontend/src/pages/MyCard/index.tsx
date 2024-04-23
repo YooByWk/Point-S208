@@ -1,11 +1,10 @@
-import React from 'react';
 
-const index = () => {
+const Index = () => {
   return (
     <div>
-      <p>MyCard Page</p>
+      <p>MyTeam Page</p>
     </div>
-  );
-};
+  )
+}
 
-export default index;
+export default Index
