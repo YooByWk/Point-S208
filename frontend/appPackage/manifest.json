@@ -11,12 +11,12 @@
         "termsOfUseUrl": "${{TAB_ENDPOINT}}/index.html#/termsofuse"
     },
     "icons": {
-        "color": "color.png",
-        "outline": "outline.png"
+        "color": "BizCard.png",
+        "outline": "BizCardOutline.png"
     },
     "name": {
-        "short": "frontend${{APP_NAME_SUFFIX}}",
-        "full": "Full name for frontend"
+        "short": "BizCard",
+        "full": "BizCard"
     },
     "description": {
         "short": "Short description of frontend",
@@ -43,19 +43,28 @@
     ],
     "staticTabs": [
         {
-            "entityId": "index",
-            "name": "Personal Tab",
-            "contentUrl": "${{TAB_ENDPOINT}}/index.html#/tab",
-            "websiteUrl": "${{TAB_ENDPOINT}}/index.html#/tab",
+            "entityId": "myCard",
+            "name": "내 명함",
+            "contentUrl": "${{TAB_ENDPOINT}}/index.html#",
+            "websiteUrl": "${{TAB_ENDPOINT}}/index.html#",
             "scopes": [
                 "personal"
             ]
         },
         {
-            "entityId": "second",
-            "name": "Second Tab",
-            "contentUrl": "${{TAB_ENDPOINT}}/index.html#/tab",
-            "websiteUrl": "${{TAB_ENDPOINT}}/index.html#/tab",
+            "entityId": "myAlbum",
+            "name": "명함 지갑",
+            "contentUrl": "${{TAB_ENDPOINT}}/index.html#/myAlbum",
+            "websiteUrl": "${{TAB_ENDPOINT}}/index.html#/myAlbum",
+            "scopes": [
+                "personal"
+            ]
+        },
+        {
+            "entityId": "myTeam",
+            "name": "팀 명함",
+            "contentUrl": "${{TAB_ENDPOINT}}/index.html#/myTeam",
+            "websiteUrl": "${{TAB_ENDPOINT}}/index.html#/myTeam",
             "scopes": [
                 "personal"
             ]

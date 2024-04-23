@@ -1,11 +1,11 @@
 import React from 'react';
 
-const index = () => {
+const MyAlbum = () => {
   return (
     <div>
-      
+      <p>MyAlbum Page</p>
     </div>
   );
 };
 
-export default index;
+export default MyAlbum;
