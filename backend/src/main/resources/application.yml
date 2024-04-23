@@ -59,7 +59,7 @@ spring:
   jpa:
     show-sql: false
     hibernate:
-      ddl-auto: update
+#      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
@@ -82,6 +82,5 @@ server:
   port: 8080
   servlet:
     context-path: /
-  websocket:
-    port: 9090
+
 
