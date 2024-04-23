@@ -38,37 +38,4 @@ public class UserController {
         return ResponseEntity.ok().body(MessageUtils.success(userService.getUserInfo()));
     }
 
-//
-//    @GetMapping("/info/{userid}")
-//    @Operation(summary = "유저정보조회", description = "user id로   유저의 상세 정보를 조회한다 <br> [헤더 Bearer: Access토큰 필요] <br> 토큰을 통해 유저정보를 조회한다")
-//    public ResponseEntity<MessageUtils> getUserInfobyid(@PathVariable Long userid) {
-//        return ResponseEntity.ok().body(MessageUtils.success(userService.getUserInfobyid(userid)));
-//
-//    }
-//    @PatchMapping("")
-//    @Operation(summary = "유저 정보 수정", description = "유저의 정보를 수정한다 <br> 현재는 닉네임만 ")
-//    public ResponseEntity<MessageUtils> updateUserInfo(@RequestBody @Valid UserUpdateRequest userUpdateRequest) {
-//        userService.updateCurrentUserInfo(userUpdateRequest);
-//        return ResponseEntity.ok().body(MessageUtils.success());
-//    }
-
-//    @GetMapping("/user")
-//    public String getUserDetails(@RegisteredOAuth2AuthorizedClient("microsoft") OAuth2AuthorizedClient authorizedClient) {
-//        String userInfoEndpointUri = authorizedClient.getClientRegistration()
-//                .getProviderDetails().getUserInfoEndpoint().getUri();
-//
-//        if (!userInfoEndpointUri.isEmpty()) {
-//            String response = webclientConfig.webClientBuilder()
-//                    .get()
-//                    .uri(userInfoEndpointUri)
-//                    .attributes(oauth2AuthorizedClient(authorizedClient))
-//                    .retrieve()
-//                    .bodyToMono(String.class)
-//                    .block();
-//            return "User Info: " + response;
-//        }
-//
-//        return "User Info Endpoint not configured";
-//    }
-
-}
+ }
