@@ -1,5 +1,6 @@
  
 import json
+import uvicorn
  
 
 from fastapi import FastAPI, File, UploadFile , HTTPException,Form,Request
@@ -80,5 +81,4 @@ async def process_ocr(file: bytes = File(...), message: str = Form(...)):
 #         return JSONResponse(content={"error": "OCR 서비스 처리 실패", "details": response.text}, status_code=response.status_code)
 
 if __name__ == "__main__":
-    import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
