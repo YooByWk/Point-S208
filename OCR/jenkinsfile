@@ -80,17 +80,23 @@ pipeline {
                     sh 'pwd'
                     sh 'ls -al'
 
-
-
-                    // docker-compose가 설치되어 있는지 확인하고, 없으면 설치
+                    // docker-compose가 설치되어 있는지 확인하고, 없으면 사용자의 홈 디렉토리에 설치
                     sh '''
                     if ! command -v docker-compose &> /dev/null
                     then
                         echo "docker-compose not found, installing..."
-                          curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-                          chmod +x /usr/local/bin/docker-compose
+
+                        # 사용자의 로컬 bin 디렉토리 생성 및 PATH에 추가
+                        mkdir -p $HOME/bin
+                        curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o $HOME/bin/docker-compose
+                        chmod +x $HOME/bin/docker-compose
+                        export PATH=$HOME/bin:$PATH
+
+                        # 설치 완료 후 버전 확인
+                        docker-compose --version
                     else
                         echo "docker-compose is already installed."
+                        docker-compose --version
                     fi
                     '''
 
