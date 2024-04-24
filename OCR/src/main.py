@@ -12,7 +12,7 @@ import os
 
 app = FastAPI()
 
-file_path = '/app'
+file_path = '/app/submodule'
 
 if os.path.exists(file_path):
     print(f"File exists: {file_path}")
