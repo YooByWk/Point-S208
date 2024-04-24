@@ -80,7 +80,7 @@ services:
     networks:
       - jenkins-network
     volumes:
-      - /var/jenkins_home/workspace/back-ocr/submodule/secrets.json:/app
+      - /var/jenkins_home/workspace/back-ocr/submodule/secrets.json:/app/src
 
 #  front:
 #    container_name: front
