@@ -1,11 +1,12 @@
 package com.ssafy.businesscard.user.repository;
-import com.ssafy.businesscard.user.model.entity.User;
+
+import com.ssafy.businesscard.user.entity.User;
+import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-import java.util.Optional;
+import org.springframework.data.jpa.repository.Query;
 
-@Repository
-public interface UserRepository extends JpaRepository<User,Long> {
-    Optional<User> findByEmail(String email);
-
+public interface UserRepository extends JpaRepository<User, Long> {
+    @Query("SELECT u.userId FROM User u WHERE u.name = :name AND u.email = :email")
+    Long findUserIdByNameAndEmail(@Param("name") String name, @Param("email") String email);
 }
+

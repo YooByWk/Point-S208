@@ -1,7 +1,7 @@
 package com.ssafy.businesscard.card.model.entity;
 
 import com.ssafy.businesscard.global.BaseTimeEntity;
-import com.ssafy.businesscard.user.model.entity.User;
+import com.ssafy.businesscard.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
