@@ -23,10 +23,4 @@ public class UserController {
         return ResponseEntity.ok().body(MessageUtils.success(userId));
     }
 
-    //내 명함 조회
-    @GetMapping("/my-card/{user_id}")
-    public ResponseEntity<?> mycard(@PathVariable("user_id")Long userId){
-
-        return ResponseEntity.ok().body(MessageUtils.success());
-    }
 }
