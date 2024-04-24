@@ -2,7 +2,7 @@
 FROM python:3.9
 
 # Set the working directory in the container
-#WORKDIR /code
+WORKDIR /app
 
 # Install dependencies for Tesseract-OCR
 RUN apt-get update && apt-get install -y \
@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
 
 # Copy the current directory contents into the container at /usr/src/app
 # COPY . .
-COPY ./requirements.txt /code/requirements.txt
+COPY ./requirements.txt app/requirements.txt
 
 
 # Install any needed packages specified in requirements.txt
