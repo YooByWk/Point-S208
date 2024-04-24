@@ -12,7 +12,7 @@ import time
 app = FastAPI()
 
 # secrets.json 파일을 열고 정보를 불러옵니다.
-with open('secrets.json', 'r') as f:
+with open('/var/jenkins_home/workspace/back-ocr/OCR/secrets.json', 'r') as f:
     secrets = json.load(f)
 
 
