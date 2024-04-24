@@ -67,6 +67,7 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
 tasks.register('copyPrivate', Copy) {
     copy {
         from './secure-settings'
