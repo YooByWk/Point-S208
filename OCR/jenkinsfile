@@ -6,7 +6,7 @@ def component = [
 // 파일 복사 작업을 수행하는 함수 정의
 def fileCopy() {
     // 파일 복사 작업 수행
-    // sh 'cp /var/jenkins_home/workspace/fullerting/submodule/*.yml /var/jenkins_home/workspace/fullerting/backend/src/main/resources'
+    sh 'cp /var/jenkins_home/workspace/ocr/submodule/secrets.json /var/jenkins_home/workspace/ocr'
     // sh 'cp /var/jenkins_home/workspace/fullerting/submodule/.env /var/jenkins_home/workspace/fullerting/frontend'
 }
 
@@ -26,6 +26,7 @@ pipeline {
         REPO = 's10-final/S10P31S208'
 
         GIT_REPO = 'https://github.com/junwon9824/businesscard_submodule.git'
+
         // Gradle 환경 변수 설정
         ORG_GRADLE_JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64'
     }
