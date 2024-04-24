@@ -1,4 +1,5 @@
 import { css } from '@emotion/react'
+import { tokens } from '@fluentui/react-components'
 
 export const colorPalette = css`
   :root {
@@ -40,6 +41,14 @@ export const colors = {
   white: 'var(--white)',
   black: 'var(--black)',
   red: 'var(--red)',
+  /// 테마 따라서 변하는 색상.
+  themeMainBlue: tokens.colorBrandStroke1,  // L  : #336BA7  || D : #3A8CDD
+  themeSubBlue: tokens.colorBrandStroke2,  //  L : #ACCDFF  || D : #233D5C
+  themeText: tokens.colorStrokeFocus2, // L : #000000  || D : #FFFFFF
+  themeTextInverted : tokens.colorStrokeFocus1, // L : #FFFFFF  || D : #000000
+  themeRed: tokens.colorPaletteRedBorder2, // L & D : #d13438
+  themeYellow: tokens.colorPaletteYellowBackground3, // L & D : #ffeb3b
+  themeGray: tokens.colorNeutralForegroundDisabled, // L : #bdbdbd  || D : #5c5c5c
 }
 
 export type Colors = keyof typeof colors

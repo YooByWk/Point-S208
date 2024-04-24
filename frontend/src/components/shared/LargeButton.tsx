@@ -21,9 +21,16 @@ const LargeButton: React.FC<ButtonProps> = ({
   bgColor,
 }) => {
   return (
-    <>
-      <Button shape="rounded" onClick={onClick} appearance="primary">
-        <Text color="white" bold={true} textAlign="center">
+  <>
+    <Button
+    shape="rounded"
+    onClick={onClick}
+    appearance="primary"
+    >
+        <Text 
+          bold={true}
+          textAlign='center'
+        >
           {text}
         </Text>
       </Button>
