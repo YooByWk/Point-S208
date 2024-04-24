@@ -2,6 +2,9 @@ import { CSSProperties } from 'react'
 import { colors, Colors } from '@styles/colorPalette'
 import { Typography, typographyMap } from '@styles/typography'
 
+import { useRecoilValue } from 'recoil'
+import { themeState } from '@/stores/common'
+
 import styled from '@emotion/styled'
 
 interface TextProps {
@@ -14,7 +17,16 @@ interface TextProps {
 }
 
 const Text = styled.span<TextProps>(
-  ({ color = 'black', display, textAlign, fontWeight, bold }) => ({
+  ({
+    color = useRecoilValue(themeState) === 'dark' ||
+    useRecoilValue(themeState) === 'contrast'
+      ? 'white'
+      : 'black',
+    display,
+    textAlign,
+    fontWeight,
+    bold,
+  }) => ({
     color: colors[color],
     display,
     textAlign,

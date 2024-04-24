@@ -1,10 +1,11 @@
+import Text from '@/components/shared/Text'
 
 const AppCard = () => {
   return (
     <div>
-      모바일 내 명함
+      <Text>모바일 내 명함</Text>
     </div>
   )
-};
+}
 
-export default AppCard;
+export default AppCard
