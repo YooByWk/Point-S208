@@ -125,6 +125,7 @@ pipeline {
             steps {
                 script {
                     sh 'docker image prune --filter until=1h'
+                    sh 'y'
                 }
             }
         }
