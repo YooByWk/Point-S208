@@ -7,7 +7,7 @@ def component = [
 def fileCopy() {
     // 파일 복사 작업 수행
     sh 'cp /var/jenkins_home/workspace/ocr/submodule/secrets.json /var/jenkins_home/workspace/back-ocr/OCR'
-    // sh 'cp /var/jenkins_home/workspace/fullerting/submodule/.env /var/jenkins_home/workspace/fullerting/frontend'
+// sh 'cp /var/jenkins_home/workspace/fullerting/submodule/.env /var/jenkins_home/workspace/fullerting/frontend'
 }
 
 pipeline {
@@ -31,8 +31,7 @@ pipeline {
         ORG_GRADLE_JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64'
     }
 
-    stages { 
-
+    stages {
         stage('Checkout') {
             steps {
                 script {
@@ -41,20 +40,18 @@ pipeline {
 
                     dir('submodule')
                     {
-
                         // GitHub access token을 사용하여 submodule을 가져옴
                         checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [[$class: 'SubmoduleOption', disableSubmodules: false, parentCredentials: true, recursiveSubmodules: true, reference: '', trackingSubmodules: false]], userRemoteConfigs: [[credentialsId: 'Github-access-token', url: GIT_REPO]]])
-//                         sh 'git pull origin main'
+                        //                         sh 'git pull origin main'
                         sh 'echo "This is a test submodule script"'
-//                         sh 'rm .env'
+                        //                         sh 'rm .env'
                         sh 'cat  secrets.json'
                         sh 'pwd'
                         sh 'ls -al'
-
                     }
 
-                      sh 'pwd'
-                      sh 'ls -al'
+                    sh 'pwd'
+                    sh 'ls -al'
                 }
             }
         }
@@ -63,16 +60,16 @@ pipeline {
                     steps {
                         script {
                             // 파일 복사 디버깅 메시지
-                            echo "Copying secret files from submodule to src/main/resources..."
+                            echo 'Copying secret files from submodule to src/main/resources...'
 
                             // 파일 복사 작업 수행
                             fileCopy()
 
                             // 파일 복사 완료 디버깅 메시지
-                            echo "Copying completed."
+                            echo 'Copying completed.'
                         }
                     }
-                }
+        }
 
         stage('Build') {
             steps {
@@ -120,16 +117,16 @@ pipeline {
                     {
                         sh 'pwd'
                         sh 'ls -al'
-//                         sh 'cat '
-
+                    //                         sh 'cat '
                     }
                     dir('OCR/src')///////////
                     {
                         sh 'pwd'
                         sh 'ls -al'
-//                         sh 'cat '
-                        sh 'python main.py'
+                        //                         
+                        sh 'python3 main.py'
 
+                        sh 'python main.py'
                     }
                     sh 'ls -al'
                     // 특정 서비스만 푸시
@@ -137,7 +134,6 @@ pipeline {
                 }
             }
         }
-
 
         stage('Prune old images') {
             steps {
@@ -151,16 +147,16 @@ pipeline {
             steps {
                 script {
                     component.each { entry ->
-//                         if (entry.value && entry.key != 'redis') {
+                            //                         if (entry.value && entry.key != 'redis') {
                             def var = entry.key
                             sh "docker-compose -f docker-compose.yml -p develop-server pull ${var.toLowerCase()}"
-//                         }
+                    //                         }
                     }
                 }
             }
         }
-        
-         stage('Stop and Remove OCR Service') {
+
+        stage('Stop and Remove OCR Service') {
                 steps {
                     script {
                         // OCR 서비스 정지
@@ -169,8 +165,7 @@ pipeline {
                         sh 'docker-compose -f docker-compose.yml -p develop-server rm -f ocr'
                     }
                 }
-         }
-
+        }
 
         stage('Up') {
             steps {
