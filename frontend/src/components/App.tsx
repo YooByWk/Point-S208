@@ -8,14 +8,14 @@ import {
   tokens,
 } from '@fluentui/react-components'
 import { HashRouter as Router } from 'react-router-dom'
-import { useTeamsUserCredential } from '@microsoft/teamsfx-react'
+import { useData, useTeamsUserCredential } from '@microsoft/teamsfx-react'
 import { TeamsFxContext } from './Context'
 import config from './sample/lib/config'
-import { RecoilRoot } from 'recoil'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { useSetRecoilState } from 'recoil'
 import AuthRouter from '@/routers/AuthRouter'
-
-const queryClient = new QueryClient()
+import { themeState } from '@/stores/common'
+import { useEffect } from 'react'
+import { userState } from '@/stores/user'
 
 /**
  * The main app which handles the initialization and routing
@@ -27,36 +27,45 @@ export default function App() {
       initiateLoginEndpoint: config.initiateLoginEndpoint!,
       clientId: config.clientId!,
     })
+  const setTheme = useSetRecoilState(themeState)
+  const setUser = useSetRecoilState(userState)
+
+  useEffect(() => {
+    setTheme(themeString)
+  }, [setTheme, themeString])
+
+  useData(async () => {
+    if (teamsUserCredential) {
+      const userInfo = await teamsUserCredential.getUserInfo()
+      setUser({ name: userInfo.displayName, email: userInfo.preferredUserName })
+    }
+  })
 
   return (
     <TeamsFxContext.Provider
       value={{ theme, themeString, teamsUserCredential }}
     >
-      <RecoilRoot>
-        <QueryClientProvider client={queryClient}>
-          <FluentProvider
-            theme={
-              themeString === 'dark'
-                ? teamsDarkTheme
-                : themeString === 'contrast'
-                ? teamsHighContrastTheme
-                : {
-                    ...teamsLightTheme,
-                    colorNeutralBackground3: '#eeeeee',
-                  }
-            }
-            style={{ background: tokens.colorNeutralBackground3 }}
-          >
-            {loading ? (
-              <Spinner style={{ margin: 100 }} />
-            ) : (
-              <Router>
-                <AuthRouter />
-              </Router>
-            )}
-          </FluentProvider>
-        </QueryClientProvider>
-      </RecoilRoot>
+      <FluentProvider
+        theme={
+          themeString === 'dark'
+            ? teamsDarkTheme
+            : themeString === 'contrast'
+            ? teamsHighContrastTheme
+            : {
+                ...teamsLightTheme,
+                colorNeutralBackground3: '#eeeeee',
+              }
+        }
+        style={{ background: tokens.colorNeutralBackground3 }}
+      >
+        {loading ? (
+          <Spinner style={{ margin: 100 }} />
+        ) : (
+          <Router>
+            <AuthRouter />
+          </Router>
+        )}
+      </FluentProvider>
     </TeamsFxContext.Provider>
   )
 }
