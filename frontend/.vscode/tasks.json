@@ -8,11 +8,34 @@
             "label": "Start Teams App Locally",
             "dependsOn": [
                 "Validate prerequisites",
+                "Start local tunnel",
                 "Provision",
                 "Deploy",
                 "Start application"
             ],
             "dependsOrder": "sequence"
+        },
+        {
+            "label": "Start local tunnel",
+            "type": "teamsfx",
+            "command": "debug-start-local-tunnel",
+            "args": {
+                "type": "dev-tunnel",
+                "ports": [
+                    {
+                        "portNumber": 53000,
+                        "protocol": "https",
+                        "access": "public",
+                        "writeToEnvironmentFile": {
+                            "endpoint": "TAB_ENDPOINT",
+                            "domain": "TAB_DOMAIN"
+                        }
+                    }
+                ],
+                "env": "local"
+            },
+            "isBackground": true,
+            "problemMatcher": "$teamsfx-local-tunnel-watch"
         },
         {
             // Check if all required prerequisites.
