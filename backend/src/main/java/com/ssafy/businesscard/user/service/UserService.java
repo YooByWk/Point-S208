@@ -4,9 +4,9 @@ import com.ssafy.businesscard.user.exception.UserErrorCode;
 import com.ssafy.businesscard.user.exception.UserException;
 import com.ssafy.businesscard.user.model.dto.request.UserRegisterRequest;
 import com.ssafy.businesscard.user.model.dto.response.UserResponse;
-import com.ssafy.businesscard.user.model.entity.Member;
+import com.ssafy.businesscard.user.model.entity.User;
 import com.ssafy.businesscard.user.model.entity.MemberProfile;
-import com.ssafy.businesscard.user.repository.MemberRepository;
+import com.ssafy.businesscard.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
  import org.springframework.stereotype.Service;
@@ -14,9 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MemberService {
+public class UserService {
 
-    private final MemberRepository userRepository;
+    private final UserRepository userRepository;
 
 
     public void registUser(UserRegisterRequest request) {
@@ -26,10 +26,8 @@ public class MemberService {
         });
 
         // 유저 객체를 DB에 저장
-        userRepository.save(Member.builder()
+        userRepository.save(User.builder()
                 .email(request.getEmail())
-                .nickname(request.getNickname())
-                .provider(request.getAuthProvider())
                 .name(request.getName())
                 .build());
     }
@@ -49,7 +47,7 @@ public class MemberService {
 //        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String email = null;
 
-        Member customUser = userRepository.findByEmail(email).orElseThrow(() -> new UserException(UserErrorCode.NOT_EXISTS_USER));
+        User customUser = userRepository.findByEmail(email).orElseThrow(() -> new UserException(UserErrorCode.NOT_EXISTS_USER));
         return customUser.toUserResponse(customUser);
     }
 

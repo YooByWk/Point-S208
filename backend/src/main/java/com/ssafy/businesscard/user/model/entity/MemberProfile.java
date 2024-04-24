@@ -16,11 +16,10 @@ public class MemberProfile {
     private String role;
 
 
-    public Member toMember() {
-        return Member.builder()
+    public User toMember() {
+        return User.builder()
                 .name(nickname)
                 .email(email)
-                .provider(provider)
                 .build();
     }
 
@@ -29,7 +28,6 @@ public class MemberProfile {
 //                .nickname(  name)
                 .nickname(nickname)
                 .email(email)
-                .authProvider(provider)
                 .build();
     }
 

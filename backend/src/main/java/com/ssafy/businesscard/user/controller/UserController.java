@@ -2,7 +2,7 @@ package com.ssafy.businesscard.user.controller;
 
 import com.ssafy.businesscard.global.utils.MessageUtils;
 import com.ssafy.businesscard.user.model.dto.request.UserRegisterRequest;
-import com.ssafy.businesscard.user.service.MemberService;
+import com.ssafy.businesscard.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "유저 기능 API", description = "유저와 관련된 기능 제공")
 
 public class UserController {
-    private final MemberService userService;
+    private final UserService userService;
     private final WebClientConfig webclientConfig;
 
     @PostMapping("/register")
