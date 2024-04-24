@@ -1,6 +1,7 @@
-package com.ssafy.businesscard.user.exception;
+package com.ssafy.businesscard.global.exception;
 
 
+import com.ssafy.businesscard.global.exception.UserErrorCode;
 import lombok.Getter;
 
 @Getter

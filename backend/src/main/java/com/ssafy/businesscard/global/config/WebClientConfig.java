@@ -1,4 +1,4 @@
-package com.ssafy.businesscard.user.controller;
+package com.ssafy.businesscard.global.config;
 
 import io.netty.channel.ChannelOption;
 import org.springframework.context.annotation.Bean;

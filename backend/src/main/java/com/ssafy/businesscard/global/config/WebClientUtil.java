@@ -1,10 +1,9 @@
-package com.ssafy.businesscard.user.controller;
+package com.ssafy.businesscard.global.config;
 
+import com.ssafy.businesscard.global.config.WebClientConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Mono;
 
 @Component
 @RequiredArgsConstructor

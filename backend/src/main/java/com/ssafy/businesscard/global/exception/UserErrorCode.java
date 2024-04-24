@@ -1,4 +1,4 @@
-package com.ssafy.businesscard.user.exception;
+package com.ssafy.businesscard.global.exception;
 
 
 import lombok.AllArgsConstructor;
