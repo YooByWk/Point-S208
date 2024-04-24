@@ -10,6 +10,8 @@ import com.ssafy.businesscard.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class MycardServiceImpl implements MycardService {
@@ -19,22 +21,43 @@ public class MycardServiceImpl implements MycardService {
     @Override
     public void registerCard(Long userId, MycardRegistRequest registRequest) {
         User user = userRepository.findById(userId).orElseThrow(() -> new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_USER));
-        System.out.println("userId : " + userId);
-        businesscardRepository.save(Businesscard.builder()
-                        .name(registRequest.name())
-                        .company(registRequest.company())
-                        .position(registRequest.position())
-                        .rank(registRequest.rank())
-                        .email(registRequest.email())
-                        .landlineNumber(registRequest.landlineNumber())
-                        .faxNumber(registRequest.faxNumber())
-                        .phoneNumber(registRequest.phoneNumber())
-                        .address(registRequest.address())
-                        .realPicture(registRequest.realPicture())
-                        .digitalPicture(registRequest.digitalPicture())
-                        .frontBack(registRequest.frontBack())
-                        .domainUrl(registRequest.domainUrl())
-                        .user(user)
-                .build());
+        Optional<Businesscard> card = businesscardRepository.findByUser_userId(userId);
+        if (card.isEmpty()) {
+            businesscardRepository.save(Businesscard.builder()
+                    .name(registRequest.name())
+                    .company(registRequest.company())
+                    .position(registRequest.position())
+                    .rank(registRequest.rank())
+                    .email(registRequest.email())
+                    .landlineNumber(registRequest.landlineNumber())
+                    .faxNumber(registRequest.faxNumber())
+                    .phoneNumber(registRequest.phoneNumber())
+                    .address(registRequest.address())
+                    .realPicture(registRequest.realPicture())
+                    .digitalPicture(registRequest.digitalPicture())
+                    .frontBack(registRequest.frontBack())
+                    .domainUrl(registRequest.domainUrl())
+                    .user(user)
+                    .build());
+        } else {
+            businesscardRepository.save(Businesscard.builder()
+                    .cardId(card.get().getCardId())
+                    .name(registRequest.name())
+                    .company(registRequest.company())
+                    .position(registRequest.position())
+                    .rank(registRequest.rank())
+                    .email(registRequest.email())
+                    .landlineNumber(registRequest.landlineNumber())
+                    .faxNumber(registRequest.faxNumber())
+                    .phoneNumber(registRequest.phoneNumber())
+                    .address(registRequest.address())
+                    .realPicture(registRequest.realPicture())
+                    .digitalPicture(registRequest.digitalPicture())
+                    .frontBack(registRequest.frontBack())
+                    .domainUrl(registRequest.domainUrl())
+                    .user(user)
+                    .build());
+        }
+        
     }
 }

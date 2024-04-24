@@ -24,4 +24,13 @@ public class MycardController {
         log.info("[New Card] : {}", registRequest.toString());
         return ResponseEntity.ok().body(MessageUtils.success("명함이 등록되었습니다."));
     }
+
+    @PostMapping("/{userId}/{cardId}")
+    public ResponseEntity<MessageUtils> reRegister(@PathVariable("userId") Long userId,
+                                                   @PathVariable("cardId") Long cardId,
+                                                   @RequestBody MycardRegistRequest registRequest) {
+        mycardService.registerCard(userId, registRequest);
+        log.info("[ReRegister Card] : {}", registRequest.toString());
+        return ResponseEntity.ok().body(MessageUtils.success("명함이 재등록되었습니다."));
+    }
 }
