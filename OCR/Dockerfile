@@ -1,26 +1,15 @@
-# Use an official Python runtime as a parent image
+# 기본 이미지 설정
 FROM python:3.9
 
-# Set the working directory in the container
+# 작업 디렉토리 설정
 WORKDIR /app
 
-# Install dependencies for Tesseract-OCR
-RUN apt-get update && apt-get install -y \
-    # tesseract-ocr \
-    libtesseract-dev
-
-# Copy the current directory contents into the container at /usr/src/app
-# COPY . .
-COPY ./requirements.txt /app/requirements.txt
-
-
-# Install any needed packages specified in requirements.txt
-RUN pip install --upgrade pip
+# 의존성 파일 복사 및 설치
+COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Make port 80 available to the world outside this container
-EXPOSE 80
+# 애플리케이션 코드 복사
+COPY src/ ./src/
 
-
-# Run your application using a different web server or framework, for example:
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Uvicorn 서버 실행 명령
+CMD ["uvicorn", "src.main:app", "--host=0.0.0.0", "--port=8000"]
