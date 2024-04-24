@@ -8,12 +8,22 @@ from fastapi.responses import JSONResponse
 import requests
 import uuid
 import time
+import os
 
 app = FastAPI()
 
+file_path = '/var/jenkins_home/workspace/back-ocr/submodule/secrets.json'
+if os.path.exists(file_path):
+    print(f"File exists: {file_path}")
+else:
+    print(f"File does not exist: {file_path}")
+    
 # secrets.json 파일을 열고 정보를 불러옵니다.
-with open('/var/jenkins_home/workspace/back-ocr/submodule/secrets.json', 'r') as f:
+with open('/app/submodule/secrets.json', 'r') as f:
     secrets = json.load(f)
+
+# secrets 내용을 출력하여 확인합니다. (필요한 경우)
+# print(secrets)
 
 
 # CLIENT_ID = secrets["CLIENT_ID"]  # Your Client ID
