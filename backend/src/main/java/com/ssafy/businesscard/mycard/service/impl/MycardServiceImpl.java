@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class MycardServiceImpl implements MycardService {
     private final UserRepository userRepository;
     private final BusinesscardRepository businesscardRepository;
-    private final MycardMapper mycardMapper;
+    
     @Override
     public void registerCard(Long userId, MycardRegistRequest registRequest) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserException(UserErrorCode.NOT_EXISTS_USER));
