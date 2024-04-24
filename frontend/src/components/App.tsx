@@ -16,6 +16,7 @@ import AuthRouter from '@/routers/AuthRouter'
 import { themeState } from '@/stores/common'
 import { useEffect } from 'react'
 import { userState } from '@/stores/user'
+import { customLightTheme, customDarkTheme } from '@/styles/colorRamp'
 
 /**
  * The main app which handles the initialization and routing
@@ -48,11 +49,11 @@ export default function App() {
       <FluentProvider
         theme={
           themeString === 'dark'
-            ? teamsDarkTheme
+            ? customDarkTheme
             : themeString === 'contrast'
             ? teamsHighContrastTheme
             : {
-                ...teamsLightTheme,
+                ...customLightTheme,
                 colorNeutralBackground3: '#eeeeee',
               }
         }

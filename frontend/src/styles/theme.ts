@@ -40,3 +40,4 @@ export const mediaQuery = {
   desktop3: `@media only screen and (min-width: ${size.larger})`,
   desktop4: `@media only screen and (min-width: ${size.largest})`,
 }
+
