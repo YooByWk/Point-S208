@@ -1,41 +1,69 @@
-import { Button, makeStyles } from '@fluentui/react-components'
+import { Button, makeStyles, tokens } from '@fluentui/react-components'
 import { colors, Colors } from '@/styles/colorPalette'
 import { CSSProperties } from 'react'
+/** @jsxImportSource @emotion/react */
 // import type { ButtonProps } from "@fluentui/react-components"
 import Text from '@/components/shared/Text'
+import { css } from '@emotion/react'
 interface ButtonProps {
   text: string
   onClick: () => void
-  width?: number
-  height?: number
+  width?:   string 
+  height?:   string
   disabled?: boolean
-  bgColor?: Colors
+  secondary?: boolean
 }
-
+/**
+ * @param 
+ *  onclick: () => void, 
+ * @param 
+ * text: string,
+ * @param
+ *  width?: string, 
+ * @param
+ * height?: string, 
+ * @param
+ * disabled?: boolean 
+ */
 const LargeButton: React.FC<ButtonProps> = ({
   text,
   onClick,
   width,
   height,
   disabled,
-  bgColor,
+  secondary
 }) => {
   return (
-  <>
-    <Button
-    shape="rounded"
-    onClick={onClick}
-    appearance="primary"
-    >
-        <Text 
-          bold={true}
-          textAlign='center'
+    <div>
+      <Button
+        shape="rounded"
+        onClick={onClick}
+        appearance= {secondary? "secondary" : "primary"}
+        css={buttonCss({ width, height, secondary })}
+      >
+        <Text
+          bold={false}
+          textAlign="center"
+          style={{ color: colors.white }}
         >
           {text}
         </Text>
       </Button>
-    </>
+    </div>
   )
 }
 
 export default LargeButton
+
+const buttonCss = (props: any) => css`
+  width: ${props.width ? props.width : '50vw'};
+  height: ${props.height ? props.height : '2.5rem'};
+  background-color: ${props.secondary ? tokens.colorBrandForeground2 : null};
+  &:hover{
+    background-color: ${props.secondary ? tokens.colorBrandForeground2Hover : null};
+  }
+  &:active{
+    background-color: ${props.secondary ? tokens.colorPaletteRoyalBlueForeground2 : null};
+  }
+`;
+
