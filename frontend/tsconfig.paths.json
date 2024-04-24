@@ -13,7 +13,8 @@
       "@/types/*": ["types/*"],
       "@utils/*": ["utils/*"],
       "@stores/*": ["stores/*"],
-      "@routers/*": ["routers/*"]
+      "@routers/*": ["routers/*"],
+      "@shared/*":["components/shared/*"]
     },
   }
 }
