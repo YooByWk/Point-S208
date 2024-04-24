@@ -1,4 +1,4 @@
-package com.ssafy.businesscard.mycard.dto;
+package com.ssafy.businesscard.user.dto;
 
 public record UserRequestDto(
         String name,

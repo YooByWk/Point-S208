@@ -1,6 +1,6 @@
-package com.ssafy.businesscard.mycard.repository;
+package com.ssafy.businesscard.user.repository;
 
-import com.ssafy.businesscard.mycard.entity.User;
+import com.ssafy.businesscard.user.entity.User;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

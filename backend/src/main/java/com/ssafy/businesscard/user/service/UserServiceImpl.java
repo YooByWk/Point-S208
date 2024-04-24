@@ -1,9 +1,9 @@
-package com.ssafy.businesscard.mycard.service;
+package com.ssafy.businesscard.user.service;
 
-import com.ssafy.businesscard.mycard.dto.UserRequestDto;
-import com.ssafy.businesscard.mycard.entity.User;
-import com.ssafy.businesscard.mycard.mapper.UserMapper;
-import com.ssafy.businesscard.mycard.repository.UserRepository;
+import com.ssafy.businesscard.user.dto.UserRequestDto;
+import com.ssafy.businesscard.user.entity.User;
+import com.ssafy.businesscard.user.mapper.UserMapper;
+import com.ssafy.businesscard.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

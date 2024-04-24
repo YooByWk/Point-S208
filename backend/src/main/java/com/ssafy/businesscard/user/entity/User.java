@@ -1,4 +1,4 @@
-package com.ssafy.businesscard.mycard.entity;
+package com.ssafy.businesscard.user.entity;
 
 import com.ssafy.businesscard.global.BaseTimeEntity;
 import jakarta.persistence.*;

@@ -1,8 +1,8 @@
-package com.ssafy.businesscard.mycard.controller;
+package com.ssafy.businesscard.user.controller;
 
 import com.ssafy.businesscard.global.utils.MessageUtils;
-import com.ssafy.businesscard.mycard.dto.UserRequestDto;
-import com.ssafy.businesscard.mycard.service.UserService;
+import com.ssafy.businesscard.user.dto.UserRequestDto;
+import com.ssafy.businesscard.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.ssafy.businesscard.mycard.mapper;
+package com.ssafy.businesscard.user.mapper;
 
 import org.mapstruct.Mapper;
 
