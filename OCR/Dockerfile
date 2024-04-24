@@ -2,7 +2,7 @@
 FROM python:3.9
 
 # Set the working directory in the container
-WORKDIR /code
+#WORKDIR /code
 
 # Install dependencies for Tesseract-OCR
 RUN apt-get update && apt-get install -y \
