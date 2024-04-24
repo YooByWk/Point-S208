@@ -90,7 +90,7 @@ pipeline {
                         mkdir -p $HOME/bin
                         curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o $HOME/bin/docker-compose
                         chmod +x $HOME/bin/docker-compose
-                        export PATH=$HOME/bin:$PATH
+                         export PATH=$HOME/bin:$PATH
 
                         # 설치 완료 후 버전 확인
                         docker-compose --version
