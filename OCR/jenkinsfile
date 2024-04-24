@@ -80,37 +80,22 @@ pipeline {
                     sh 'pwd'
                     sh 'ls -al'
 
-                                       // docker-compose가 설치되어 있는지 확인하고, 없으면 사용자의 홈 디렉토리에 설치
+                    // docker-compose가 설치되어 있는지 확인하고, 없으면 설치
                     sh '''
                     if ! command -v docker-compose &> /dev/null
                     then
                         echo "docker-compose not found, installing..."
-
-                        # 사용자의 로컬 bin 디렉토리 생성
-                        mkdir -p $HOME/bin
-
-                        # Docker Compose 다운로드 및 설치
-                        curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o $HOME/bin/docker-compose
-                        chmod +x $HOME/bin/docker-compose
-
-                        # 설치 완료 후 버전 확인
-                        docker-compose --version
+                        mkdir -p /var/jenkins_home/bin
+                        curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /var/jenkins_home/bin/docker-compose
+                        chmod +x /var/jenkins_home/bin/docker-compose
+                        export PATH=$PATH:/var/jenkins_home/bin
                     else
                         echo "docker-compose is already installed."
-                        docker-compose --version
                     fi
                     '''
 
-                    // PATH 환경 변수에 사용자의 bin 디렉터리 추가
-                    environment {
-                        PATH = "$HOME/bin:$PATH"
-                    }
-
-                    sh 'pwd'
-                    sh 'ls -al'
-
                     // Docker Compose를 사용하여 서비스 빌드
-                    sh 'docker-compose -f docker-compose.yml build'
+                    sh '/var/jenkins_home/bin/docker-compose -f docker-compose.yml build'
                 }
             }
         }
