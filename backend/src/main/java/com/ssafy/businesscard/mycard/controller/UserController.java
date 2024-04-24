@@ -5,7 +5,6 @@ import com.ssafy.businesscard.mycard.dto.UserRequestDto;
 import com.ssafy.businesscard.mycard.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class MycardController {
+public class UserController {
 
     private final UserService userService;
 
@@ -22,5 +21,12 @@ public class MycardController {
     public ResponseEntity<?> tutorial(@RequestBody UserRequestDto userRequestDto){
         Long userId = userService.findUserId(userRequestDto);
         return ResponseEntity.ok().body(MessageUtils.success(userId));
+    }
+
+    //내 명함 조회
+    @GetMapping("/my-card/{user_id}")
+    public ResponseEntity<?> mycard(@PathVariable("user_id")Long userId){
+
+        return ResponseEntity.ok().body(MessageUtils.success());
     }
 }
