@@ -120,6 +120,14 @@ pipeline {
                     {
                         sh 'pwd'
                         sh 'ls -al'
+//                         sh 'cat '
+
+                    }
+                    dir('OCR/src')///////////
+                    {
+                        sh 'pwd'
+                        sh 'ls -al'
+//                         sh 'cat '
 
                     }
                     sh 'ls -al'
