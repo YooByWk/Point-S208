@@ -79,7 +79,8 @@ services:
       - "8000:8000"
     networks:
       - jenkins-network
-
+    volumes:
+      - /var/jenkins_home/workspace/back-ocr/submodule/secrets.json:/app/secrets.json
 
 #  front:
 #    container_name: front
