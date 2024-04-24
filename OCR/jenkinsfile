@@ -124,8 +124,7 @@ pipeline {
         stage('Prune old images') {
             steps {
                 script {
-                    sh 'docker image prune --filter until=1h'
-                    sh 'y'
+                    sh 'docker image prune --filter until=1h -y'
                 }
             }
         }
