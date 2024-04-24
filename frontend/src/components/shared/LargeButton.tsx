@@ -1,4 +1,4 @@
-import { Button, makeStyles } from '@fluentui/react-components'
+import { Button, makeStyles, tokens } from '@fluentui/react-components'
 import { colors, Colors } from '@/styles/colorPalette'
 import { CSSProperties } from 'react'
 /** @jsxImportSource @emotion/react */
@@ -13,27 +13,38 @@ interface ButtonProps {
   disabled?: boolean
   secondary?: boolean
 }
-
+/**
+ * @param 
+ *  onclick: () => void, 
+ * @param 
+ * text: string,
+ * @param
+ *  width?: string, 
+ * @param
+ * height?: string, 
+ * @param
+ * disabled?: boolean 
+ */
 const LargeButton: React.FC<ButtonProps> = ({
   text,
   onClick,
   width,
   height,
   disabled,
+  secondary
 }) => {
-  console.log(width)
   return (
     <div>
       <Button
         shape="rounded"
         onClick={onClick}
-        appearance="primary"
-        css={buttonCss({ width, height })}
+        appearance= {secondary? "secondary" : "primary"}
+        css={buttonCss({ width, height, secondary })}
       >
         <Text
-          bold={true}
+          bold={false}
           textAlign="center"
-          style={{ color: colors.themeText }}
+          style={{ color: colors.white }}
         >
           {text}
         </Text>
@@ -45,20 +56,14 @@ const LargeButton: React.FC<ButtonProps> = ({
 export default LargeButton
 
 const buttonCss = (props: any) => css`
-  background-color: ${props.width ? 'red': 'blue'};
-  width: ${props.width ? props.width : '10rem'};
+  width: ${props.width ? props.width : '50vw'};
   height: ${props.height ? props.height : '2.5rem'};
-  color: ${colors.themeTextInverted};
-  /* border-radius: 10px; */
-  /* border: none; */
+  background-color: ${props.secondary ? tokens.colorBrandForeground2 : null};
+  &:hover{
+    background-color: ${props.secondary ? tokens.colorBrandForeground2Hover : null};
+  }
+  &:active{
+    background-color: ${props.secondary ? tokens.colorPaletteRoyalBlueForeground2 : null};
+  }
 `;
 
-
-
-        // style={{
-        //   width: width ? `${width}%` : '10rem',
-        //   height: height ? `${height}%` : '2.5rem',
-        //   color: colors.themeTextInverted,
-        //   borderRadius: '10px',
-        //   border: 'none',
-        // }}
