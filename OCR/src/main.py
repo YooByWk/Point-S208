@@ -12,7 +12,8 @@ import os
 
 app = FastAPI()
 
-file_path = '/var/jenkins_home/workspace/back-ocr/submodule/secrets.json'
+file_path = '/app'
+
 if os.path.exists(file_path):
     print(f"File exists: {file_path}")
 else:
