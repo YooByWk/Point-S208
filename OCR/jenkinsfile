@@ -108,7 +108,8 @@ pipeline {
                     sh 'pwd'
                     sh 'ls -al'
                     // Docker Compose를 사용하여 서비스 빌드
-                    sh 'docker-compose -f docker-compose.yml build'
+                    // PATH 환경 변수에 사용자의 bin 디렉터리 추가
+                    sh 'export PATH=$HOME/bin:$PATH && docker-compose -f docker-compose.yml build'
                 }
             }
         }
