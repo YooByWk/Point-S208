@@ -12,6 +12,7 @@ const card = (width: string) => css`
   background-color: ${colors.gray02};
   border-radius: 15px;
   margin: 30px auto;
+  color: white;
 `
 
 export const Card = ({ text, children }: StringChildType) => {

@@ -1,35 +1,14 @@
 /** @jsxImportSource @emotion/react */
-import EmptyCard from '@/components/mobile/MyCard/EmptyCard'
-import * as s from './AppCard.styled'
-import Flex from '@shared/Flex'
-import Text from '@shared/Text'
-import Spacing from '@shared/Spacing'
-import { CameraAdd48Regular, Edit48Regular } from '@fluentui/react-icons'
-import { css } from '@emotion/react'
+import WriteCardInfo from '@components/mobile/MyCard/WriteCardInfo'
+import EmptyCard from '@components/mobile/MyCard/EmptyCard'
+import { writeInfoState } from '@stores/writeInfo'
+import { useRecoilValue } from 'recoil'
 
 const AppCard = () => {
   const isCard = false
+  const writeInfo = useRecoilValue(writeInfoState)
 
-  return (
-    <>
-      {!isCard && <EmptyCard />}
-      <Text>모바일 내 명함</Text>
-      <Flex justify="space-around" css={iconsStyles}>
-        <Flex direction="column" align="center">
-          <CameraAdd48Regular />
-          <Text typography="t7">직접 촬영</Text>
-        </Flex>
-        <Flex direction="column" align="center">
-          <Edit48Regular />
-          <Text typography="t7">직접 입력</Text>
-        </Flex>
-      </Flex>
-    </>
-  )
+  return <>{!isCard ? writeInfo ? <WriteCardInfo /> : <EmptyCard /> : null}</>
 }
-
-const iconsStyles = css`
-  margin: 0 auto;
-`
 
 export default AppCard

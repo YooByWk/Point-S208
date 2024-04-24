@@ -1,16 +1,50 @@
 /** @jsxImportSource @emotion/react */
-import { Card } from '@/components/shared/Card'
+import { Card } from '@shared/Card'
 import * as s from './EmptyCard.styled'
+import Flex from '@shared/Flex'
+import Text from '@shared/Text'
+import { CameraAdd48Regular, Edit48Regular } from '@fluentui/react-icons'
+import Spacing from '@shared/Spacing'
+import { writeInfoState } from '@stores/writeInfo'
+import { useSetRecoilState } from 'recoil'
 
 const EmptyCard = () => {
+  const setWriteInfo = useSetRecoilState(writeInfoState)
+
   const children = () => {
-    return <p css={s.text}>명함을 추가해 주세요</p>
+    return <Text typography="t6">명함을 추가해 주세요</Text>
   }
 
   return (
-    <div css={s.container}>
-      <Card text="80vw" children={children()} />
-    </div>
+    <>
+      <div css={s.container}>
+        <Card text="80vw" children={children()} />
+      </div>
+      <Spacing size={50} />
+      <Flex justify="space-around">
+        <Flex
+          direction="column"
+          align="center"
+          onClick={() => {
+            console.log('직접 촬영')
+          }}
+        >
+          <CameraAdd48Regular />
+          <Text typography="t7">직접 촬영</Text>
+        </Flex>
+        <Flex
+          direction="column"
+          align="center"
+          onClick={() => {
+            console.log('직접 입력')
+            setWriteInfo(true)
+          }}
+        >
+          <Edit48Regular />
+          <Text typography="t7">직접 입력</Text>
+        </Flex>
+      </Flex>
+    </>
   )
 }
 
