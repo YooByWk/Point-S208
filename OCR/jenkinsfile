@@ -114,12 +114,14 @@ pipeline {
         stage('Tag and Push') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'Docker-hub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
-                     sh 'pwd'
-                     sh 'ls -al'
-                    sh 'docker-compose -f docker-compose.yml push'
+                    sh 'pwd'
+                    sh 'ls -al'
+                    // 특정 서비스만 푸시
+                    sh 'docker-compose -f docker-compose.yml push ocr'
                 }
             }
         }
+
 
         stage('Prune old images') {
             steps {
@@ -142,23 +144,25 @@ pipeline {
             }
         }
         
-        stage('Down') {
-            steps {
-                script {
-                    component.each { entry ->
-                        if (entry.value) {
-                            def var = entry.key
-                            try {
-                                sh "docker-compose -f docker-compose.yml -p develop-server down ${var.toLowerCase()}"
-                            } catch (Exception e) {
-                                echo "Failed to down ${var.toLowerCase()}."
-                            }
-                        }
+      stage('Down') {
+    steps {
+        script {
+            component.each { entry ->
+                if (entry.value) {
+                    def var = entry.key
+                    try {
+                        // 서비스를 중지합니다.
+                        sh "docker-compose -f docker-compose.yml -p develop-server stop ${var.toLowerCase()}"
+                        // 서비스에 해당하는 컨테이너를 삭제합니다.
+                        sh "docker-compose -f docker-compose.yml -p develop-server rm -f ${var.toLowerCase()}"
+                    } catch (Exception e) {
+                        echo "Failed to down ${var.toLowerCase()}."
                     }
                 }
             }
         }
-
+    }
+}
 
         stage('Up') {
             steps {
