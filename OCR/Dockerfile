@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
 
 # Copy the current directory contents into the container at /usr/src/app
 # COPY . .
-COPY ./requirements.txt app/requirements.txt
+COPY ./requirements.txt /app/requirements.txt
 
 
 # Install any needed packages specified in requirements.txt
