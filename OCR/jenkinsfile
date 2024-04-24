@@ -116,6 +116,13 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'Docker-hub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh 'pwd'
                     sh 'ls -al'
+                    dir('OCR')///////////
+                    {
+                        sh 'pwd'
+                        sh 'ls -al'
+
+                    }
+                    sh 'ls -al'
                     // 특정 서비스만 푸시
                     sh 'docker-compose -f docker-compose.yml push ocr'
                 }
