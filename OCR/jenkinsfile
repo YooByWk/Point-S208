@@ -23,7 +23,7 @@ pipeline {
         DOCKER_HUB_CREDENTIALS_ID = 'Docker-hub'
         GITHUB_CREDENTIALS_ID = 'Github-access-token'
         GITLAB_CREDENTIALS_ID = 'GitLab-access-token' // GitLab 크리덴셜 ID 추가
-        REPO = 's10-final / S10P31S208'
+        REPO = 's10-final/S10P31S208'
         GIT_REPO = 'https://github.com/junwon9824/businesscard_submodule.git'
         // Gradle 환경 변수 설정
         ORG_GRADLE_JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64'
@@ -129,10 +129,10 @@ pipeline {
             steps {
                 script {
                     component.each { entry ->
-                        if (entry.value && entry.key != 'redis') {
+//                         if (entry.value && entry.key != 'redis') {
                             def var = entry.key
                             sh "docker-compose -f backend/docker-compose.yml -p develop-server pull ${var.toLowerCase()}"
-                        }
+//                         }
                     }
                 }
             }

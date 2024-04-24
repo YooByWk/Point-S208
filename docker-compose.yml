@@ -62,7 +62,6 @@ services:
     restart: unless-stopped
     depends_on:
       - back
-      - front
     networks:
       - jenkins-network
 
