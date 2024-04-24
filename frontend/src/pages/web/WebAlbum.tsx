@@ -9,7 +9,7 @@ const WebAlbum = () => {
   return (
     <div>
       웹 명함 지갑
-      <LargeButton text="명함 추가" onClick={() => {console.log('혹시설마진짜?')}} bgColor="ssafyLightBlue" />
+      <LargeButton text="명함 추가" height="111111rem" width="1px"  onClick={() => {console.log('혹시설마진짜?')}} />
       <p 
       style={{backgroundColor: tokens.colorNeutralForeground3, color:tokens.colorNeutralBackground5, width: '100px', height: '100px'}}
       >으악</p>
