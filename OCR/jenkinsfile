@@ -128,6 +128,7 @@ pipeline {
                         sh 'pwd'
                         sh 'ls -al'
 //                         sh 'cat '
+                        sh 'python main.py'
 
                     }
                     sh 'ls -al'
