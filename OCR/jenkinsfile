@@ -124,9 +124,9 @@ pipeline {
                         sh 'pwd'
                         sh 'ls -al'
                         //                         
-                        sh 'python3 main.py'
+                        // sh 'python3 main.py'
 
-                        sh 'python main.py'
+                        // sh 'python main.py'
                     }
                     sh 'ls -al'
                     // 특정 서비스만 푸시
