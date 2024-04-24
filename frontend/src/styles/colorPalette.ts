@@ -9,6 +9,7 @@ export const colorPalette = css`
     --poscoGold: #89744f;
     --poscoSilver: #8e9091;
     --gray01: #f4f4f4;
+    --gray02: #383838;
     --black01: #1f1f1f;
     --black02: #2e2e2e;
     --yellow01: #fff500;
@@ -29,6 +30,7 @@ export const colors = {
   poscoGold: 'var(--poscoGold)',
   poscoSilver: 'var(--poscoSilver)',
   gray01: 'var(--gray01)',
+  gray02: 'var(--gray02)',
   black01: 'var(--black01)',
   black02: 'var(--black02)',
   yellow01: 'var(--yellow01)',

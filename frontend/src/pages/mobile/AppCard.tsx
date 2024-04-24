@@ -1,13 +1,18 @@
+/** @jsxImportSource @emotion/react */
+import EmptyCard from '@/components/mobile/MyCard/EmptyCard'
+import * as s from './AppCard.styled'
 import Flex from '@shared/Flex'
 import Text from '@shared/Text'
 import Spacing from '@shared/Spacing'
-
 import { CameraAdd48Regular, Edit48Regular } from '@fluentui/react-icons'
 import { css } from '@emotion/react'
 
 const AppCard = () => {
+  const isCard = false
+
   return (
     <>
+      {!isCard && <EmptyCard />}
       <Text>모바일 내 명함</Text>
       <Flex justify="space-around" css={iconsStyles}>
         <Flex direction="column" align="center">
