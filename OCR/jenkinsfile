@@ -115,7 +115,8 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'Docker-hub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
                      sh 'pwd'
-                    sh 'docker-compose -f backend/docker-compose.yml push'
+                     sh 'ls -al'
+                    sh 'docker-compose -f docker-compose.yml push'
                 }
             }
         }
