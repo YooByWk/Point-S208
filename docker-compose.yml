@@ -4,7 +4,7 @@ services:
 
   jenkins:
     user: root
-    image: jenkins/jenkins:lts
+    image: junwon1131/jenkins:lts
     build:
       context: ./jenkins
       dockerfile: Dockerfile
