@@ -10,7 +10,7 @@ import uuid
 import time
 import os
 
-app = FastAPI()
+api = FastAPI()
 
 file_path = '/app/src/main.py'
 
@@ -37,7 +37,7 @@ print('secret   '+CLIENT_SECRET)
  
 # print('secret'+CLIENT_SECRET)
 
-@app.post("/process_ocr/")
+@api.post("/process_ocr/")
 async def process_ocr(file: bytes = File(...), message: str = Form(...)):
     headers = {'X-OCR-SECRET': CLIENT_SECRET}
     files = {'file': ('filename', file, 'image/jpeg')}
