@@ -27,8 +27,8 @@ public class WebClientUtil {
                 .uri(url)
                 .bodyValue(requestDto)
                 .retrieve()
-                .onStatus(clientResponse -> clientResponse.is4xxClientError(), clientResponse -> Mono.error(InternalServerException.EXCEPTION))
-                .onStatus(clientResponse -> clientResponse.is5xxServerError(), clientResponse -> Mono.error(InternalServerException.EXCEPTION))
+                //.onStatus(clientResponse -> clientResponse.is4xxClientError(), clientResponse -> Mono.error(InternalServerException.EXCEPTION))
+                //.onStatus(clientResponse -> clientResponse.is5xxServerError(), clientResponse -> Mono.error(InternalServerException.EXCEPTION))
                 .bodyToMono(responseDtoClass)
                 .block();
     }
