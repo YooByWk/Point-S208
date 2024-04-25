@@ -14,6 +14,7 @@ services:
     volumes:
       - jenkins_home:/var/jenkins_home  # Jenkins 데이터를 저장할 볼륨
       - /var/run/docker.sock:/var/run/docker.sock
+      - jenkins-data:/var/jenkins_home
 
   redis:
     image: redis:latest
@@ -79,12 +80,14 @@ services:
       - "8000:8000"
     networks:
       - jenkins-network
-#    volumes:
-#      - /var/jenkins_home/workspace/back-ocr/submodule/secrets.json:/app/src
+    volumes:
+      - jenkins-data:/app/src
 
 
 
-#  front:
+
+
+  #  front:
 #    container_name: front
 #    image: junwon1131/s208-front:latest
 #    build:
@@ -121,3 +124,9 @@ volumes:
   jenkins_home:
   prometheus_data:
   grafana_data:
+  jenkins-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /var/jenkins_home/workspace/back-ocr/submodule
+      o: bind
