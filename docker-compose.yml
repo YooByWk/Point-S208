@@ -102,11 +102,11 @@ services:
 #    depends_on:
 #      - back
 
-  back:
-    container_name: back
-    image: junwon1131/s208-back:latest
+  backend-cud:
+    container_name: backend-cud
+    image: junwon1131/s208-backend-cud:latest
     build:
-      context: ./backend
+      context: ./backend-cud
       dockerfile: Dockerfile
     restart: unless-stopped
     ports:
