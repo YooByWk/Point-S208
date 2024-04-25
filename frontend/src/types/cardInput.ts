@@ -1,6 +1,4 @@
-export type CardType = {
-  cardId: number
-  userId: number
+export interface cardInput {
   name: string
   company: string
   position: string
@@ -11,10 +9,5 @@ export type CardType = {
   faxNumber: string
   phoneNumber: string
   address: string
-  realPicture: string
-  digitalPicture: string
-  frontBack: string
   domainUrl: string
-  createdAt: string
-  updateAt: string
 }

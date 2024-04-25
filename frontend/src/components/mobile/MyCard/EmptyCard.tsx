@@ -7,12 +7,17 @@ import { CameraAdd48Regular, Edit48Regular } from '@fluentui/react-icons'
 import Spacing from '@shared/Spacing'
 import { writeInfoState } from '@stores/writeInfo'
 import { useSetRecoilState } from 'recoil'
+import { css } from '@emotion/react'
 
 const EmptyCard = () => {
   const setWriteInfo = useSetRecoilState(writeInfoState)
 
   const children = () => {
-    return <Text typography="t6">명함을 추가해 주세요</Text>
+    return (
+      <Text typography="t6" color="white">
+        명함을 추가해 주세요
+      </Text>
+    )
   }
 
   return (
@@ -28,6 +33,7 @@ const EmptyCard = () => {
           onClick={() => {
             console.log('직접 촬영')
           }}
+          css={linkStyles}
         >
           <CameraAdd48Regular />
           <Text typography="t7">직접 촬영</Text>
@@ -39,6 +45,7 @@ const EmptyCard = () => {
             console.log('직접 입력')
             setWriteInfo(true)
           }}
+          css={linkStyles}
         >
           <Edit48Regular />
           <Text typography="t7">직접 입력</Text>
@@ -47,5 +54,13 @@ const EmptyCard = () => {
     </>
   )
 }
+
+const linkStyles = css`
+  text-align: center;
+
+  &:hover {
+    cursor: pointer;
+  }
+`
 
 export default EmptyCard
