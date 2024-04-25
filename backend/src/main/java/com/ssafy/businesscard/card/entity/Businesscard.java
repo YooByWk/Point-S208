@@ -1,4 +1,4 @@
-package com.ssafy.businesscard.card.model.entity;
+package com.ssafy.businesscard.card.entity;
 
 import com.ssafy.businesscard.global.BaseTimeEntity;
 import com.ssafy.businesscard.user.entity.User;
@@ -30,7 +30,10 @@ public class Businesscard extends BaseTimeEntity {
     @Column(name = "rank", length = 30)
     private String rank;
 
-    @Column(name = "email", unique = true, nullable = false, length = 100)
+    @Column(name = "department", length = 30)
+    private String department;
+
+    @Column(name = "email", nullable = false, length = 100)
     private String email;
 
     @Column(name = "landline_number", length = 30)
