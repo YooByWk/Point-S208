@@ -136,7 +136,7 @@ pipeline {
 //                     }
                     sh 'ls -al'
                     // 특정 서비스만 푸시
-                    sh 'docker-compose -f docker-compose.yml push ocr'
+                    sh 'docker-compose -f docker-compose.yml push backend-cud'
                 }
             }
         }
@@ -153,10 +153,10 @@ pipeline {
             steps {
                 script {
                     component.each { entry ->
-                            //                         if (entry.value && entry.key != 'redis') {
+                        if (entry.value && entry.key != 'redis') {
                             def var = entry.key
                             sh "docker-compose -f docker-compose.yml -p develop-server pull ${var.toLowerCase()}"
-                    //                         }
+                        }
                     }
                 }
             }
@@ -165,9 +165,7 @@ pipeline {
         stage('Stop and Remove backend-cud Service') {
                 steps {
                     script {
-                        // OCR 서비스 정지
                         sh 'docker-compose -f docker-compose.yml -p develop-server stop backend-cud'
-                        // OCR 서비스 삭제. 이미 정지된 상태라면 "No stopped containers" 메시지가 나타날 수 있으나, 이는 문제되지 않음.
                         sh 'docker-compose -f docker-compose.yml -p develop-server rm -f backend-cud'
                     }
                 }

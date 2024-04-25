@@ -113,8 +113,8 @@ services:
       - "8080:8080"
     networks:
       - jenkins-network
-    depends_on:
-      - redis
+#    depends_on:
+#      - redis
 
 networks:
   jenkins-network:
