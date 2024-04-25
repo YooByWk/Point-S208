@@ -21,8 +21,16 @@ public class MycardController {
     public ResponseEntity<MessageUtils> register(@PathVariable("userId") Long userId,
                                                  @RequestBody MycardRegistRequest registRequest) {
         mycardService.registerCard(userId, registRequest);
-        log.info("[New Card] : {}", registRequest.toString());
+        log.info("[Register Card] : {}", registRequest.toString());
         return ResponseEntity.ok().body(MessageUtils.success("명함이 등록되었습니다."));
     }
 
+    @PatchMapping("/{userId}/{cardId}")
+    public ResponseEntity<MessageUtils> update(@PathVariable("userId") Long userId,
+                                               @PathVariable("cardId") Long cardId,
+                                               @RequestBody MycardRegistRequest registRequest) {
+        mycardService.update(userId, cardId, registRequest);
+        log.info("[Update Card] : {}", registRequest.toString());
+        return ResponseEntity.ok().body(MessageUtils.success("정보가 수정되었습니다."));
+    }
 }
