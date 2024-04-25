@@ -14,7 +14,6 @@ services:
     volumes:
       - jenkins_home:/var/jenkins_home  # Jenkins 데이터를 저장할 볼륨
       - /var/run/docker.sock:/var/run/docker.sock
-      - /var/jenkins_home/workspace/back-ocr/submodule/secrets.json:/mnt/secrets.json  # 호스트 시크릿 파일을 젠킨스 컨테이너 내에 마운트
 
 
   ocr:
@@ -29,8 +28,7 @@ services:
     networks:
       - jenkins-network
     volumes:
-      - secrets:/app/src
-    command: cp /mnt/secrets.json /app/src/secrets.json  # 호스트 파일을 파이썬 컨테이너의 볼륨으로 복사하는 명령어
+      - /var/jenkins_home/workspace/back-ocr/submodule/secrets.json:/app/secrets.json
 
 
 
