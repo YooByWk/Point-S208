@@ -1,13 +1,13 @@
 def component = [
-    'ocr': true,
+    'backend-read': true,
 
 ]
 
 // 파일 복사 작업을 수행하는 함수 정의
 def fileCopy() {
     // 파일 복사 작업 수행
-    sh 'cp /var/jenkins_home/workspace/ocr/submodule/secrets.json /var/jenkins_home/workspace/back-ocr/OCR/src'
-// sh 'cp /var/jenkins_home/workspace/fullerting/submodule/.env /var/jenkins_home/workspace/fullerting/frontend'
+//     sh 'cp /var/jenkins_home/workspace/ocr/submodule/application.yml /var/jenkins_home/workspace/backend-read/OCR/src'
+
 }
 
 pipeline {
@@ -32,6 +32,7 @@ pipeline {
     }
 
     stages {
+
         stage('Checkout') {
             steps {
                 script {
@@ -116,26 +117,26 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'Docker-hub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh 'pwd'
                     sh 'ls -al'
-                    dir('OCR')///////////
-                    {
-                        echo 'innn ocrrrrrrr'
-                        sh 'pwd'
-                        sh 'ls -al'
-                    //                         sh 'cat '
-                    }
-                    dir('OCR/src')///////////
-                    {
-                        sh 'pwd'
-                        sh 'ls -al'
-                        sh 'cat main.py'
-                        //                         
-                        // sh 'python3 main.py'
-
-                        // sh 'python main.py'
-                    }
+//                     dir('OCR')///////////
+//                     {
+//                         echo 'innn ocrrrrrrr'
+//                         sh 'pwd'
+//                         sh 'ls -al'
+//                     //                         sh 'cat '
+//                     }
+//                     dir('OCR/src')///////////
+//                     {
+//                         sh 'pwd'
+//                         sh 'ls -al'
+//                         sh 'cat main.py'
+//                         //
+//                         // sh 'python3 main.py'
+//
+//                         // sh 'python main.py'
+//                     }
                     sh 'ls -al'
                     // 특정 서비스만 푸시
-                    sh 'docker-compose -f docker-compose.yml push ocr'
+                    sh 'docker-compose -f docker-compose.yml push backend-read'
                 }
             }
         }
@@ -152,22 +153,20 @@ pipeline {
             steps {
                 script {
                     component.each { entry ->
-                            //                         if (entry.value && entry.key != 'redis') {
+                        if (entry.value && entry.key != 'redis') {
                             def var = entry.key
                             sh "docker-compose -f docker-compose.yml -p develop-server pull ${var.toLowerCase()}"
-                    //                         }
+                        }
                     }
                 }
             }
         }
 
-        stage('Stop and Remove OCR Service') {
+        stage('Stop and Remove backend-read Service') {
                 steps {
                     script {
-                        // OCR 서비스 정지
-                        sh 'docker-compose -f docker-compose.yml -p develop-server stop ocr'
-                        // OCR 서비스 삭제. 이미 정지된 상태라면 "No stopped containers" 메시지가 나타날 수 있으나, 이는 문제되지 않음.
-                        sh 'docker-compose -f docker-compose.yml -p develop-server rm -f ocr'
+                        sh 'docker-compose -f docker-compose.yml -p develop-server stop backend-read'
+                        sh 'docker-compose -f docker-compose.yml -p develop-server rm -f backend-read'
                     }
                 }
         }
@@ -190,15 +189,15 @@ pipeline {
                     sh 'pwd'
                     sh 'ls -al'
 
-                     dir('OCR')///////////
-                    {
-                        echo 'innn ocrrrrrrr'
-                        sh 'pwd'
-                        sh 'ls -al'
-                    //                         sh 'cat '
-                    }
+//                      dir('OCR')///////////
+//                     {
+//                         echo 'innn ocrrrrrrr'
+//                         sh 'pwd'
+//                         sh 'ls -al'
+//                     //                         sh 'cat '
+//                     }
 
-                    
+
                 }
             }
         }
