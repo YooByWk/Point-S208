@@ -1,6 +1,6 @@
-package com.ssafy.businesscard.mycard.model.dto.request;
+package com.ssafy.businesscard.mycard.dto.request;
 
-import com.ssafy.businesscard.card.model.entity.Businesscard;
+import com.ssafy.businesscard.card.entity.Businesscard;
 import com.ssafy.businesscard.user.entity.User;
 import lombok.Builder;
 
@@ -8,18 +8,14 @@ import lombok.Builder;
 public record MycardRegistRequest(
         String name,
         String company,
+        String department,
         String position,
-        String rank,
         String email,
         String landlineNumber,
-        String faxNumber,
         String phoneNumber,
-        String address,
         String realPicture,
         String digitalPicture,
-        Businesscard.Status frontBack,
-        String domainUrl,
-        User user
+        Businesscard.Status frontBack
 
 ) {
 }
