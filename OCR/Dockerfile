@@ -9,7 +9,7 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 # 애플리케이션 코드 복사
-COPY src/ ./src/
+COPY ../src/ ./src/
 
 # Uvicorn 서버 실행 명령
 CMD ["uvicorn", "src.main:api", "--host=0.0.0.0", "--port=8000"]
