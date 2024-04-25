@@ -189,6 +189,16 @@ pipeline {
                     }
                     sh 'pwd'
                     sh 'ls -al'
+
+                     dir('OCR')///////////
+                    {
+                        echo 'innn ocrrrrrrr'
+                        sh 'pwd'
+                        sh 'ls -al'
+                    //                         sh 'cat '
+                    }
+
+                    
                 }
             }
         }
