@@ -118,7 +118,7 @@ pipeline {
                     sh 'ls -al'
                     dir('OCR')///////////
                     {
-                        sh 'innn ocrrrrrrr'
+                        echo 'innn ocrrrrrrr'
                         sh 'pwd'
                         sh 'ls -al'
                     //                         sh 'cat '
