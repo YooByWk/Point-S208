@@ -2,7 +2,10 @@ package com.ssafy.businesscard.global.utils;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.ssafy.businesscard.global.config.QueryDslConfig;
 import lombok.*;
+import org.springframework.http.HttpMethod;
+import org.springframework.stereotype.Component;
 
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
@@ -83,5 +86,34 @@ public class MessageUtils<T> {
                     .resultMessage(resultMessage)
                     .build();
         }
+    }
+
+    @Component
+    @RequiredArgsConstructor
+    public static class WebClientUtil {
+
+        private final QueryDslConfig.WebClientConfig webClientConfig;
+
+        public <T> T get(String url, Class<T> responseDtoClass) {
+            return webClientConfig.webClient().method(HttpMethod.GET)
+                    .uri(url)
+                    .retrieve()
+    //                .onStatus(HttpStatus::is4xxClientError, clientResponse -> Mono.error(InternalServerException.EXCEPTION))
+    //                .onStatus(HttpStatus::is5xxServerError, clientResponse -> Mono.error(InternalServerException.EXCEPTION))
+                    .bodyToMono(responseDtoClass)
+                    .block();
+        }
+
+        public <T, V> T post(String url, V requestDto, Class<T> responseDtoClass) {
+            return webClientConfig.webClient().method(HttpMethod.POST)
+                    .uri(url)
+                    .bodyValue(requestDto)
+                    .retrieve()
+                    //.onStatus(clientResponse -> clientResponse.is4xxClientError(), clientResponse -> Mono.error(InternalServerException.EXCEPTION))
+                    //.onStatus(clientResponse -> clientResponse.is5xxServerError(), clientResponse -> Mono.error(InternalServerException.EXCEPTION))
+                    .bodyToMono(responseDtoClass)
+                    .block();
+        }
+
     }
 }
