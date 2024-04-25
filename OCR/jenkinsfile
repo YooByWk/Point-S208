@@ -187,7 +187,8 @@ pipeline {
                             }
                         }
                     }
-                    
+                    sh 'pwd'
+                    sh 'ls -al'
                 }
             }
         }
