@@ -14,7 +14,8 @@ services:
     volumes:
       - jenkins_home:/var/jenkins_home  # Jenkins 데이터를 저장할 볼륨
       - /var/run/docker.sock:/var/run/docker.sock
-      - jenkins-data:/var/jenkins_home
+      - /var/jenkins_home/secret.json:/var/jenkins_home/workspace/back-ocr/submodule/secrets.json  # 젠킨스 컨테이너의 볼륨에 secret.json 마운트
+
 
   redis:
     image: redis:latest
@@ -81,7 +82,7 @@ services:
     networks:
       - jenkins-network
     volumes:
-      - jenkins-data:/app/src
+      - jenkins_home:/app/src  # 젠킨스 컨테이너의 볼륨을 파이썬 컨테이너로 마운트
 
 
 
@@ -124,6 +125,7 @@ volumes:
   jenkins_home:
   prometheus_data:
   grafana_data:
+
   jenkins-data:
     driver: local
     driver_opts:
