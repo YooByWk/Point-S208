@@ -12,7 +12,7 @@ import os
 
 api = FastAPI()
 
-file_path = '/app/src/main.py'
+file_path = '/app/src/secrets.json'
 
 if os.path.exists(file_path):
     print(f"File exists: {file_path}")
