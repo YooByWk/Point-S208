@@ -20,7 +20,7 @@ else:
     print(f"File does not exist: {file_path}")
     
 # secrets.json 파일을 열고 정보를 불러옵니다.
-with open('../../secrets.json', 'r') as f:
+with open('../secrets.json', 'r') as f:
 # with open('src/secrets.json', 'r') as f:  # local
     secrets = json.load(f)
 
