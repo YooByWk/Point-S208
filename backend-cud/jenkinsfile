@@ -153,10 +153,10 @@ pipeline {
             steps {
                 script {
                     component.each { entry ->
-                            //                         if (entry.value && entry.key != 'redis') {
+                        if (entry.value && entry.key != 'redis') {
                             def var = entry.key
                             sh "docker-compose -f docker-compose.yml -p develop-server pull ${var.toLowerCase()}"
-                    //                         }
+                        }
                     }
                 }
             }
