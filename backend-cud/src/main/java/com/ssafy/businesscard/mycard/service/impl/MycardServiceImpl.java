@@ -59,9 +59,23 @@ public class MycardServiceImpl implements MycardService {
 
     @Override
     public void update(Long userId, Long cardId, MycardRegistRequest registRequest) {
-        System.out.println("regist : " + registRequest.toString());
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_USER));
         Businesscard businesscard = businesscardRepository.findByUser_userIdAndCardId(userId, cardId);
-
+        businesscardRepository.save(Businesscard.builder()
+                .cardId(businesscard.getCardId())
+                .name(registRequest.name())
+                .company(registRequest.company())
+                .department(registRequest.department())
+                .position(registRequest.position())
+                .email(registRequest.email())
+                .landlineNumber(registRequest.landlineNumber())
+                .phoneNumber(registRequest.phoneNumber())
+                .realPicture(registRequest.realPicture())
+                .digitalPicture(registRequest.digitalPicture())
+                .frontBack(registRequest.frontBack())
+                .user(user)
+                .build());
     }
 
 }
