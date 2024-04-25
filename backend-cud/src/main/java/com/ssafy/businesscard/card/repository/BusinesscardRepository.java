@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface BusinesscardRepository extends JpaRepository<Businesscard, Long> {
-    List<Businesscard> findAllByUser_userId(Long userId);
     Optional<Businesscard> findByUser_userIdAndFrontBack(Long userId, Businesscard.Status frontBack);
+    Businesscard findByUser_userIdAndCardId(Long userId, Long cardId);
 }

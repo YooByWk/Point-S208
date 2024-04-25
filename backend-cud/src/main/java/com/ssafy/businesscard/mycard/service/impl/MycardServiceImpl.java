@@ -22,7 +22,8 @@ public class MycardServiceImpl implements MycardService {
     // 내 명함 직접 입력으로 등록
     @Override
     public void registerCard(Long userId, MycardRegistRequest registRequest) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_USER));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_USER));
         Optional<Businesscard> card = businesscardRepository.findByUser_userIdAndFrontBack(userId, registRequest.frontBack());
         if (card.isEmpty()) {
             businesscardRepository.save(Businesscard.builder()
@@ -54,6 +55,13 @@ public class MycardServiceImpl implements MycardService {
                     .user(user)
                     .build());
         }
+    }
+
+    @Override
+    public void update(Long userId, Long cardId, MycardRegistRequest registRequest) {
+        System.out.println("regist : " + registRequest.toString());
+        Businesscard businesscard = businesscardRepository.findByUser_userIdAndCardId(userId, cardId);
+
     }
 
 }
