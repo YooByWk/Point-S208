@@ -116,6 +116,21 @@ services:
 #    depends_on:
 #      - redis
 
+
+  backend-read:
+    container_name: backend-read
+    image: junwon1131/s208-backend-read:latest
+    build:
+      context: ./backend-read
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8082:8080"
+    networks:
+      - jenkins-network
+#    depends_on:
+#      - redis
+
 networks:
   jenkins-network:
     external: true
