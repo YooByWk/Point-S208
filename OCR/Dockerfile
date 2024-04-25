@@ -15,4 +15,4 @@ COPY ../src/ ./src/
 RUN chmod +x src/main.py
 
 # Uvicorn 서버 실행 명령
-CMD ["uvicorn", "src.main:api", "--host=0.0.0.0", "--port=8000"]
+CMD ["uvicorn", "main:api", "--host=0.0.0.0", "--port=8000"]
