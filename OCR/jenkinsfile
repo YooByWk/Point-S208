@@ -6,7 +6,7 @@ def component = [
 // 파일 복사 작업을 수행하는 함수 정의
 def fileCopy() {
     // 파일 복사 작업 수행
-    sh 'cp /var/jenkins_home/workspace/ocr/submodule/secrets.json /var/jenkins_home/workspace/back-ocr/OCR'
+    sh 'cp /var/jenkins_home/workspace/ocr/submodule/secrets.json /var/jenkins_home/workspace/back-ocr/OCR/src'
 // sh 'cp /var/jenkins_home/workspace/fullerting/submodule/.env /var/jenkins_home/workspace/fullerting/frontend'
 }
 
