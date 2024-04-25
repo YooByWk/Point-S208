@@ -38,7 +38,7 @@ print('secret   '+CLIENT_SECRET)
  
 # print('secret'+CLIENT_SECRET)
 
-@api.post("/process_ocr/")
+@api.post("/process_ocr")
 async def process_ocr(file: bytes = File(...), message: str = Form(...)):
     headers = {'X-OCR-SECRET': CLIENT_SECRET}
     files = {'file': ('filename', file, 'image/jpeg')}
