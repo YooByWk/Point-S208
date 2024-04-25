@@ -187,16 +187,7 @@ pipeline {
                             }
                         }
                     }
-                    dir('OCR')///////////
-                    {
-                        sh 'pwd'
-                        sh 'ls -al'
-                        sh 'cat main.py'
-                        //                         
-                        // sh 'python3 main.py'
-
-                        // sh 'python main.py'
-                    }
+                    
                 }
             }
         }
