@@ -1,12 +1,9 @@
 package com.ssafy.businesscard.global.exception;
 
 import com.ssafy.businesscard.global.utils.MessageUtils;
-<<<<<<<< HEAD:backend-cud/src/main/java/com/ssafy/businesscard/global/exception/GlobalExceptionHandler.java
-import lombok.AllArgsConstructor;
+ import lombok.AllArgsConstructor;
 import lombok.Getter;
-========
->>>>>>>> 1f3f8a09d1ff322a34efcd05b68976791b341a4c:backend-read/src/main/java/com/ssafy/businesscard/global/exception/GlobalExceptionHandler.java
-import lombok.extern.slf4j.Slf4j;
+ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
