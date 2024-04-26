@@ -1,54 +1,19 @@
-/** @jsxImportSource @emotion/react */
 
 import { useState } from 'react'
-import SearchBox from '@/components/shared/SearchBox'
-import LargeButton from '@/components/shared/LargeButton'
-import type { CardType } from '@/types/cardType'
-import { useRecoilValue } from 'recoil'
-
-import { dummyCard } from '@/assets/data/dummyCard'
-import { dummyTeamList } from '@/assets/data/dummyTeamList'
-
-import MyDigitalCard from './../../components/mobile/MyCard/MyDigitalCard'
-import TeamCard from './../../components/mobile/Team/TeamCard'
-import Spacing from '@/components/shared/Spacing'
-import { tokens } from '@fluentui/react-components'
 import { css } from '@emotion/react'
-
+import TeamList from '@/components/mobile/Team/TeamList'
+import { atom, useRecoilValue, useRecoilState } from 'recoil'
+import * as teamState from '@/stores/team'
+import CardList from '@/components/shared/CardList'
 const AppTeam = () => {
-  const [searchValue, setSearchValue] = useState('')
-  const CardDummy: CardType = dummyCard[0]
-
+  const selectedTeam = useRecoilValue(teamState.selectedTeamIdState)
+  const hasSelectedTeam = useRecoilValue(teamState.hasSelectedTeam)
+  
   return (
     <div css={bg}>
-      {/* 분리예정 */}
-      <SearchBox
-        value={searchValue}
-        onChange={(e: any) => {
-          setSearchValue(e.target.value)
-          console.log(searchValue)
-        }}
-        memberIcon={false}
-        filterIcon={true}
-        sortIcon={true}
-        placeholder="모바일 팀 명함"
-      />
+      
+      {hasSelectedTeam ? <CardList/> : <TeamList /> }
 
-      {/* <MyDigitalCard  cardInfo={CardDummy} scale={1} /> */}
-      {/*  for문으로 팀을 만들겠지? */}
-      {dummyTeamList.map(team => {
-        return <TeamCard teamInfo={team} />
-      })}
-
-      <Spacing size={30} direction="vertical" />
-      <LargeButton
-        text="팀 추가"
-        onClick={() => {
-          console.log('팀 추가')
-        }}
-        width="80%"
-      />
-      {/* 분리예정*/}
     </div>
   )
 }
@@ -65,5 +30,4 @@ const bg = css`
     background: transparent !important;
     -webkit-appearance: none !important;
   }
-
 `

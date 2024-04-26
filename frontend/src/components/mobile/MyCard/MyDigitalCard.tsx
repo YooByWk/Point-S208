@@ -19,7 +19,7 @@ interface MainContainerProps {
 }
 
 const MyDigitalCard: React.FC<MyDigitalCardProps> = ({cardInfo, scale, border}) => {
-  console.log(scale)
+  // console.log(scale)
   if (!scale) {
     scale = 1
   } 
@@ -28,7 +28,7 @@ const MyDigitalCard: React.FC<MyDigitalCardProps> = ({cardInfo, scale, border}) 
     <div css={MainContainer({scale, border})}>
       {/* <Spacing size={20} /> */}
       <Flex justify="flex-end" css={ImageBox}>
-        <img src="logo.png" alt="" />
+        <img src="logo.png" alt="포스코 인터내셔널" />
       </Flex>
       <Flex direction="row" justify="space-around">
         <Flex direction="column">

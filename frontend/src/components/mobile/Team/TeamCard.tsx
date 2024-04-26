@@ -11,37 +11,34 @@ import Spacing from '@/components/shared/Spacing'
 import { css } from '@emotion/react'
 import { tokens } from '@fluentui/react-components'
 import type { TeamListType } from '@/types/TeamListType'
-
+import { useState } from 'react'
 
 /*  유저의 디지털 카드가 필요함*/
 const cardInfo: CardType = dummyCard[0]
-
 interface TeamCardProps {
   teamInfo: TeamListType
+  onClick?: () => void
 }
-const TeamCard = ({teamInfo} : TeamCardProps ) => {
-  console.log('color', tokens.colorNeutralBackground1)
+const TeamCard = ({ teamInfo,onClick }: TeamCardProps) => {
+  const [isHover, setIsHover] = useState(false)
+  
+
+  
   return (
-    <div
-      css={bg}
-      onClick={() => {
-        console.log(teamInfo.teamName, teamInfo)
-      }}
-    >
+    <div css={bg} onClick={onClick}>
       <Flex direction="row" align="center">
         <TeamCardThumbnail cardInfo={cardInfo} />
-        <Flex direction='column' align='center'>
-        <Text typography="t7" bold={true} color="themeText">
-          {teamInfo.teamName}
-        </Text>
-        <Spacing size={5} direction="vertical" />
-        <Text typography="t9" bold={true} color="themeText">
-          {teamInfo.teamSize}명
-        </Text>
-        <Text typography="t9" bold={true} color="themeText">
-          {teamInfo.cardSize}개의 명함
-        </Text>
-        
+        <Flex direction="column" align="center">
+          <Text typography="t7" bold={true} color="themeText">
+            {teamInfo.teamName}
+          </Text>
+          <Spacing size={5} direction="vertical" />
+          <Text typography="t9" bold={true} color="themeText">
+            {teamInfo.teamSize}명
+          </Text>
+          <Text typography="t9" bold={true} color="themeText">
+            {teamInfo.cardSize}개의 명함
+          </Text>
         </Flex>
       </Flex>
 
@@ -53,7 +50,24 @@ const TeamCard = ({teamInfo} : TeamCardProps ) => {
 export default TeamCard
 
 const bg = css`
-  background-color: ${tokens.colorNeutralBackground1};
+  height: 125px;
   -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+  scrollbar-width: none; /* Firefox */
+  &:hover,
+  &:active,
+  &.wave {
+    animation: wave 1.2s ease forwards;
+    background: linear-gradient(90deg, ${tokens.colorNeutralBackground4Hover} 0%, ${tokens.colorNeutralBackground5Hover} 100%);
+    background-size: 200% 200%;
+  }
+  @keyframes wave {
+    0% {
+        background-position: 10% 50%;
+    }
+    100% {
+        background-position: 80% 50%;
+        background: none;
+    }
+  }
 `
+
