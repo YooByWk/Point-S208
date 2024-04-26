@@ -110,37 +110,17 @@ pipeline {
                 }
             }
         }
-
         stage('Tag and Push') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'Docker-hub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
-                    sh 'pwd'
-                    sh 'ls -al'
-                    //                     dir('OCR')///////////
-                    //                     {
-                    //                         echo 'innn ocrrrrrrr'
-                    //                         sh 'pwd'
-                    //                         sh 'ls -al'
-                    //                     //                         sh 'cat '
-                    //                     }
-                    //                     dir('OCR/src')///////////
-                    //                     {
-                    //                         sh 'pwd'
-                    //                         sh 'ls -al'
-                    //                         sh 'cat main.py'
-                    //                         //
-                    //                         // sh 'python3 main.py'
-                    //
-                    //                         // sh 'python main.py'
-                    //                     }
-                    sh 'ls -al'
-                    // 특정 서비스만 푸시
-
+                script {
                     withCredentials([usernamePassword(credentialsId: 'Docker-hub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        // component 맵을 이용하여 특정 서비스를 푸시
-                        component.each { serviceName, shouldPush ->
-                            if (shouldPush) {
-                                sh "docker-compose -f docker-compose.yml push ${serviceName.toLowerCase()}"
+                        sh 'pwd'
+                        sh 'ls -al'
+                        script {
+                            component.each { serviceName, shouldPush ->
+                                if (shouldPush) {
+                                    sh "docker-compose -f docker-compose.yml push ${serviceName.toLowerCase()}"
+                                }
                             }
                         }
                     }
