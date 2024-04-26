@@ -24,8 +24,8 @@ public class MycardServiceImpl implements MycardService {
     public void registerCard(Long userId, MycardRegistRequest registRequest) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_USER));
-        Optional<Businesscard> card = businesscardRepository.findByUser_userIdAndFrontBack(userId, registRequest.frontBack());
-        if (card.isEmpty()) {
+        Optional<Businesscard> myBusinessCard = businesscardRepository.findByUser_userIdAndFrontBack(userId, registRequest.frontBack());
+        if (myBusinessCard.isEmpty()) {
             businesscardRepository.save(Businesscard.builder()
                     .name(registRequest.name())
                     .company(registRequest.company())
@@ -41,7 +41,7 @@ public class MycardServiceImpl implements MycardService {
                     .build());
         } else {
             businesscardRepository.save(Businesscard.builder()
-                    .cardId(card.get().getCardId())
+                    .cardId(myBusinessCard.get().getCardId())
                     .name(registRequest.name())
                     .company(registRequest.company())
                     .department(registRequest.department())
@@ -57,13 +57,14 @@ public class MycardServiceImpl implements MycardService {
         }
     }
 
+    // 내 명함 정보 수정
     @Override
     public void update(Long userId, Long cardId, MycardRegistRequest registRequest) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_USER));
-        Businesscard businesscard = businesscardRepository.findByUser_userIdAndCardId(userId, cardId);
+        Businesscard myBusinessCard = businesscardRepository.findByUser_userIdAndCardId(userId, cardId);
         businesscardRepository.save(Businesscard.builder()
-                .cardId(businesscard.getCardId())
+                .cardId(myBusinessCard.getCardId())
                 .name(registRequest.name())
                 .company(registRequest.company())
                 .department(registRequest.department())
@@ -76,6 +77,13 @@ public class MycardServiceImpl implements MycardService {
                 .frontBack(registRequest.frontBack())
                 .user(user)
                 .build());
+    }
+
+    // 내 명함 삭제
+    @Override
+    public void delete(Long userId) {
+        List<Businesscard> myBusinessCards = businesscardRepository.findAllByUser_userId(userId);
+        businesscardRepository.deleteAll(myBusinessCards);
     }
 
 }

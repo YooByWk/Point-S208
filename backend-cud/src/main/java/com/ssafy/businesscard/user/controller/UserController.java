@@ -29,11 +29,5 @@ public class UserController {
         return ResponseEntity.ok().body(MessageUtils.success());
     }
 
-
-    @GetMapping("/test")
-    public ResponseEntity<?> test( ){
-
-        return ResponseEntity.ok().body(MessageUtils.success());
-    }
 }
 
