@@ -12,11 +12,13 @@ import {
 import Text from '@/components/shared/Text'
 import { colors } from '@/styles/colorPalette'
 
-const Camera = () => {
+const PhotoAddReg = (props: { isFront: boolean }) => {
+  // KOR Card Registration or ENG Card Registration
+  const { isFront } = props
   const setCamera = useSetRecoilState(cameraState)
   const fileInput = useRef<HTMLInputElement | null>(null)
   const videoRef = useRef<HTMLVideoElement | null>(null)
-  const [imageSrc, setImageSrc] = useState<string | null>(null)
+  const [imgSrc, setImgSrc] = useState<string | null>(null)
 
   const getCameraStream = async () => {
     try {
@@ -41,7 +43,7 @@ const Camera = () => {
       if (ctx) {
         ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height)
         const imageDataURL = canvas.toDataURL('image/png')
-        setImageSrc(imageDataURL)
+        setImgSrc(imageDataURL)
       }
     }
   }
@@ -52,62 +54,83 @@ const Camera = () => {
       const reader = new FileReader()
 
       reader.onload = function (e) {
-        setImageSrc(e.target?.result as string)
+        setImgSrc(e.target?.result as string)
       }
 
       reader.readAsDataURL(file)
     }
   }
 
+  const requestApi = () => {
+    // 등록 성공하면 setCamera(false) 변경
+    if (isFront) {
+      console.log('국문 카드 등록 api 요청 만들기')
+    } else {
+      console.log('영문 카드 등록 api 요청 만들기')
+    }
+  }
+
   useEffect(() => {
     getCameraStream()
-  }, [imageSrc])
+  }, [imgSrc])
 
   return (
-    <Flex direction="column">
+    <Flex direction="column" style={{ height: '100vh' }}>
       <Top>
         <Dismiss20Filled onClick={() => setCamera(false)} />
       </Top>
-      <Scene>
-        {imageSrc ? (
-          <img src={imageSrc} alt="Captured" width={'90%'} />
+      <Flex justify="center">
+        {imgSrc ? (
+          <img src={imgSrc} alt="Captured" width={'80%'} />
         ) : (
-          <video ref={videoRef} autoPlay playsInline width={'90%'} />
+          <video ref={videoRef} autoPlay playsInline width={'80%'} />
         )}
-      </Scene>
-      {imageSrc ? (
-        <Grid2>
-          <Button $position={'left'} onClick={() => setImageSrc(null)}>
-            재촬영
-          </Button>
-          <Button $position={'right'}>확인</Button>
-        </Grid2>
+      </Flex>
+      {imgSrc ? (
+        <>
+          <Text typography="t8" textAlign="center" style={{ marginTop: '2%' }}>
+            {isFront ? '국문' : '영문'}
+          </Text>
+          <Grid2>
+            <Button $position={'left'} onClick={() => setImgSrc(null)}>
+              재촬영
+            </Button>
+            <Button $position={'right'} onClick={() => requestApi()}>
+              확인
+            </Button>
+          </Grid2>
+        </>
       ) : (
-        <Grid3>
-          <Flex direction="column" align="center">
-            <FileInput
-              type="file"
-              accept="image/*"
-              ref={fileInput}
-              onChange={handleFileSelect}
-            />
-            <Image32Regular onClick={() => fileInput.current?.click()} />
-            <Text typography="t8">사진첩</Text>
-          </Flex>
-          <Flex justify="center">
-            <Circle48Regular onClick={takePicture} />
-          </Flex>
-          <Box>
-            <CheckmarkCircle32Filled />
-            <Text typography="t10">입력 완료</Text>
-          </Box>
-        </Grid3>
+        <>
+          <Text typography="t8" textAlign="center" style={{ marginTop: '2%' }}>
+            {isFront ? '국문' : '영문'}
+          </Text>
+          <Grid3>
+            <Flex direction="column" align="center">
+              <FileInput
+                type="file"
+                accept="image/*"
+                ref={fileInput}
+                onChange={handleFileSelect}
+              />
+              <Image32Regular onClick={() => fileInput.current?.click()} />
+              <Text typography="t8">사진첩</Text>
+            </Flex>
+            <Flex justify="center">
+              <Circle48Regular onClick={takePicture} />
+            </Flex>
+            <Box $isFront={true} onClick={() => requestApi()}>
+              <CheckmarkCircle32Filled />
+              <Text typography="t10">입력 완료</Text>
+            </Box>
+          </Grid3>
+        </>
       )}
     </Flex>
   )
 }
 
-export default Camera
+export default PhotoAddReg
 
 // style
 
@@ -117,15 +140,13 @@ const Top = styled.div`
   margin: 5%;
 `
 
-const Scene = styled.div`
-  display: flex;
-  justify-content: center;
-`
-
 const Grid3 = styled.div`
+  position: absolute;
+  width: 90vw;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   margin: 5%;
+  bottom: 0;
 `
 
 const FileInput = styled.input`
@@ -135,7 +156,7 @@ const FileInput = styled.input`
   overflow: hidden;
 `
 
-const Box = styled.div`
+const Box = styled.div<{ $isFront: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -144,14 +165,17 @@ const Box = styled.div`
   background-color: ${colors.teamsBG6};
   margin: auto;
   gap: 4px;
-  display: none;
+  display: ${props => (props.$isFront ? 'none' : '')};
 `
 
 const Grid2 = styled.div`
+  position: absolute;
+  width: 90vw;
   display: grid;
   grid-template-columns: 1fr 1fr;
   margin: 5%;
   gap: 10px;
+  bottom: 0;
 `
 
 const Button = styled.button<{ $position: string }>`

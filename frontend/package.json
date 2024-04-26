@@ -19,6 +19,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.8.0",
     "react-scripts": "^5.0.1",
+    "react-swipeable": "^7.0.1",
     "recoil": "^0.7.7",
     "recoil-persist": "^5.1.0"
   },

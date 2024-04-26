@@ -3,7 +3,7 @@ import WriteCardInfo from '@components/mobile/MyCard/WriteCardInfo'
 import EmptyCard from '@components/mobile/MyCard/EmptyCard'
 import { useRecoilValue } from 'recoil'
 import { cameraState, writeInfoState } from '@/stores/emptyCard'
-import Camera from '@/components/mobile/MyCard/Camera'
+import PhotoReg from '@/components/mobile/MyCard/PhotoCardInfo/PhotoReg'
 
 const AppCard = () => {
   const isCard = false
@@ -14,7 +14,13 @@ const AppCard = () => {
     <>
       {isCard ? null : (
         <>
-          {writeInfo ? <WriteCardInfo /> : camera ? <Camera /> : <EmptyCard />}
+          {writeInfo ? (
+            <WriteCardInfo />
+          ) : camera ? (
+            <PhotoReg isMyCard={true} />
+          ) : (
+            <EmptyCard />
+          )}
         </>
       )}
     </>
