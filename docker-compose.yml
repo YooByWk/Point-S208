@@ -51,6 +51,16 @@ services:
       - prometheus
     ports:
       - "3000:3000"
+      
+  alertmanager:
+    image: prom/alertmanager:v0.21.0
+    volumes:
+      - /etc/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--web.listen-address=:9093'
+    ports:
+      - '9093:9093'
 
 
 #  alertmanager:
@@ -61,6 +71,10 @@ services:
 #      - ./alertmanager:/etc/alertmanager
 #    command:
 #      - '--config.file=/etc/alertmanager/alertmanager.yml'
+
+
+
+
 #
 #  nginx:
 #    image: junwon1131/s208-nginx:latest
