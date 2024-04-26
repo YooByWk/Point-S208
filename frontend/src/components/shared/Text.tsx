@@ -1,10 +1,12 @@
 import { CSSProperties } from 'react'
+import { colors, Colors } from '@styles/colorPalette'
 import { Typography, typographyMap } from '@styles/typography'
 
 import styled from '@emotion/styled'
 
 interface TextProps {
   typography?: Typography
+  color?: Colors
   display?: CSSProperties['display']
   textAlign?: CSSProperties['textAlign']
   fontWeight?: CSSProperties['fontWeight']
@@ -12,7 +14,8 @@ interface TextProps {
 }
 
 const Text = styled.span<TextProps>(
-  ({ display, textAlign, fontWeight, bold }) => ({
+  ({ color = 'themeText', display, textAlign, fontWeight, bold }) => ({
+    color: colors[color],
     display,
     textAlign,
     fontWeight: bold ? 'bold' : fontWeight,

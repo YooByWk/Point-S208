@@ -1,0 +1,3 @@
+[submodule "secrets"]
+	path = secrets
+	url = https://github.com/junwon9824/businesscard_submodule.git

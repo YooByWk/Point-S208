@@ -5,6 +5,7 @@ import { CSSProperties } from 'react'
 // import type { ButtonProps } from "@fluentui/react-components"
 import Text from '@/components/shared/Text'
 import { css } from '@emotion/react'
+import Flex from './Flex'
 interface ButtonProps {
   text: string
   onClick: () => void
@@ -34,7 +35,7 @@ const LargeButton: React.FC<ButtonProps> = ({
   secondary
 }) => {
   return (
-    <div>
+    <Flex  justify='center' css={searchBoxContainerCss}>
       <Button
         shape="rounded"
         onClick={onClick}
@@ -49,7 +50,7 @@ const LargeButton: React.FC<ButtonProps> = ({
           {text}
         </Text>
       </Button>
-    </div>
+    </Flex>
   )
 }
 
@@ -66,4 +67,8 @@ const buttonCss = (props: any) => css`
     background-color: ${props.secondary ? tokens.colorPaletteRoyalBlueForeground2 : null};
   }
 `;
+
+const searchBoxContainerCss = css`
+  background-color: ${tokens.colorNeutralBackground2};
+`
 

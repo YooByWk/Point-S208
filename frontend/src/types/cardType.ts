@@ -5,6 +5,7 @@ export type CardType = {
   company: string
   position: string
   rank: string
+  department: string
   email: string
   landlineNumber: string
   faxNumber: string
@@ -12,6 +13,7 @@ export type CardType = {
   address: string
   realPicture: string
   digitalPicture: string
+  frontBack: string
   domainUrl: string
   createdAt: string
   updateAt: string

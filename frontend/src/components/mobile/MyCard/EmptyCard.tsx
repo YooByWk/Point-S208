@@ -14,7 +14,11 @@ const EmptyCard = () => {
   const setCamera = useSetRecoilState(cameraState)
 
   const children = () => {
-    return <Text typography="t6">명함을 추가해 주세요</Text>
+    return (
+      <Text typography="t6" color="white">
+        명함을 추가해 주세요
+      </Text>
+    )
   }
 
   return (
@@ -31,6 +35,7 @@ const EmptyCard = () => {
             console.log('직접 촬영')
             setCamera(true)
           }}
+          css={linkStyles}
         >
           <CameraAdd48Regular />
           <Text typography="t7">직접 촬영</Text>
@@ -42,6 +47,7 @@ const EmptyCard = () => {
             console.log('직접 입력')
             setWriteInfo(true)
           }}
+          css={linkStyles}
         >
           <Edit48Regular />
           <Text typography="t7">직접 입력</Text>
@@ -50,6 +56,14 @@ const EmptyCard = () => {
     </>
   )
 }
+
+const linkStyles = css`
+  text-align: center;
+
+  &:hover {
+    cursor: pointer;
+  }
+`
 
 export default EmptyCard
 
