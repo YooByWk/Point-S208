@@ -6,7 +6,7 @@ import { cardInput } from '@/types/cardInput'
 import { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { css } from '@emotion/react'
 import { Button } from '@fluentui/react-components'
-import { writeInfoState } from '@/stores/writeInfo'
+import { writeInfoState } from '@/stores/emptyCard'
 import { useSetRecoilState } from 'recoil'
 
 const WriteCardInfo = ({
