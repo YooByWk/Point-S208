@@ -58,7 +58,8 @@ const SearchBox: React.FC<SearchBoxProps> = ({
          sortIcon={sortIcon}
         />
       </Flex>
-      <Spacing size={10} direction='vertical'/>
+      <Spacing size={30} direction='vertical'/>
+      
     </div>
     
   )

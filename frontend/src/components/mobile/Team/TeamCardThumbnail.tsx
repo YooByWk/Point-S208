@@ -4,11 +4,9 @@ import { css } from '@emotion/react';
 import MyDigitalCard from './../MyCard/MyDigitalCard'
 import type { CardType } from '@/types/cardType'
 // import { dummyCard } from '@/assets/data/dummyCard'
-import  Flex from '@/components/shared/Flex';
 
 interface TeamCardThumbnailProps {
   cardInfo: CardType
-
 }
 
 const TeamCardThumbnail: React.FC<TeamCardThumbnailProps>= ({cardInfo}) => {

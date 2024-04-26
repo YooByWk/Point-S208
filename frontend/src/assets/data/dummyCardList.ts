@@ -1,0 +1,47 @@
+export const dummyCardList = [
+  {
+    private_album_detail_id: 1,
+    cards: [
+      {
+        cardId: 1,
+        userId: 1,
+        name: '김민수',
+        company: '삼성전자',
+        position: '사원',
+        rank: '대리',
+        department: '개발부',
+        email: 'asdasdasda@fhjkdsaf.com',
+        landlineNumber: '02-123-4567',
+        faxNumber: '02-123-4567',
+        phoneNumber: '010-1234-5678',
+        address: '서울시 강남구',
+        realPicture: 'https://1drv.ms/i/c/60d1136c8e1eeac5/IQPtHI8a_PwASK5IZLcow2yZAdjLhrrPZqV_cjryVMdkpRA?width=150&height=120',
+        digitalPicture: 'https://via.placeholder.com/150',
+        frontBack: 'front',
+        domainUrl: 'https://www.samsung.com',
+        createdAt: '2021-07-01',
+        updateAt: '2021-07-01',
+      },
+      {
+        cardId: 2,
+        userId: 1,
+        name: '퉁퉁이',
+        company: '칠성전자',
+        position: '대장',
+        rank: '대리',
+        department: '골목점령부 ',
+        email: '123123@asda.com',
+        landlineNumber: '02-123-4567',
+        faxNumber: '02-123-4567',
+        phoneNumber: '010-1234-5678',
+        address: '서울시 강남구',
+        realPicture: '',
+        digitalPicture: 'https://1drv.ms/i/c/60d1136c8e1eeac5/IQPtHI8a_PwASK5IZLcow2yZAdjLhrrPZqV_cjryVMdkpRA?width=150&height=120',
+        frontBack: 'front',
+        domainUrl: 'https://www.samsung.com',
+        createdAt: '2021-07-01',
+        updateAt: '2021-07-01',
+      },       
+]
+}
+]
