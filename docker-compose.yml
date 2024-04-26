@@ -93,7 +93,7 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     ports:
-      - "5173:5173"
+      - "35000:35000"
     networks:
       - jenkins-network
 
