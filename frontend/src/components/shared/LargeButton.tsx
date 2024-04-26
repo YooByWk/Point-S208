@@ -35,7 +35,7 @@ const LargeButton: React.FC<ButtonProps> = ({
   secondary
 }) => {
   return (
-    <Flex  justify='center' css={searchBoxContainerCss}>
+    <Flex  justify='center' css={searchBoxContainerCss} >
       <Button
         shape="rounded"
         onClick={onClick}
@@ -69,6 +69,6 @@ const buttonCss = (props: any) => css`
 `;
 
 const searchBoxContainerCss = css`
-  background-color: ${tokens.colorNeutralBackground2};
+  background-color: ${tokens.colorNeutralBackground1};
 `
 

@@ -113,6 +113,7 @@ export default css`
   }
   body {
     line-height: 1;
+    
   }
   ol,
   ul {
@@ -148,4 +149,5 @@ export default css`
     color: inherit;
     text-decoration: inherit;
   }
+  
 `

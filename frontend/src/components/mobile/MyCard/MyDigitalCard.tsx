@@ -10,16 +10,22 @@ import type { CardType } from '@/types/cardType'
 interface MyDigitalCardProps {
   cardInfo: CardType
   scale?: number
+  border?: boolean
 }
 
-const MyDigitalCard: React.FC<MyDigitalCardProps> = ({cardInfo, scale}) => {
+interface MainContainerProps {
+  scale?: number;
+  border?: boolean;
+}
+
+const MyDigitalCard: React.FC<MyDigitalCardProps> = ({cardInfo, scale, border}) => {
   console.log(scale)
   if (!scale) {
     scale = 1
   } 
   // const cardInfo = props.cardInfo
   return (
-    <div css={MainContainer({scale})}>
+    <div css={MainContainer({scale, border})}>
       {/* <Spacing size={20} /> */}
       <Flex justify="flex-end" css={ImageBox}>
         <img src="logo.png" alt="" />
@@ -49,19 +55,23 @@ const MyDigitalCard: React.FC<MyDigitalCardProps> = ({cardInfo, scale}) => {
 }
 
 export default MyDigitalCard
-const MainContainer = (props:any) => css`
+
+
+
+const MainContainer = (props:MainContainerProps) => css`
   background-color: ${colors.white};
   /* width: 65%; */
   /* height: 25%; */
   width: 270px;
   height: 150px;
   border-radius: 15px;
-  border: 2px solid ${colors.themeText};
+  border: ${props.border ? "2px solid " + colors.black : "none"};
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   padding-bottom: 2%;
   transform: scale(${props.scale});
+  
 `
 
 const ImageBox = css`

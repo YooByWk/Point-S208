@@ -6,6 +6,7 @@ import { useState } from 'react'
 import Flex from './Flex'
 import PeopleFilterSortIcons from './PeopleFilterSortIcons';
 import { colors } from '@/styles/colorPalette';
+import Spacing  from '@/components/shared/Spacing';
 
 interface SearchBoxProps {
   placeholder?: string
@@ -38,23 +39,28 @@ const SearchBox: React.FC<SearchBoxProps> = ({
     }
   }
   return (
-    <Flex justify="space-around" align="center" direction="row"
-    style={{backgroundColor: tokens.colorNeutralBackground2}}>
-      <div  css={searchBoxContainerCss}>
-        <FluentSearchBox
-          placeholder={placeholder}
-          onKeyDown={handleKeyDown}
-          onChange={onChange}
-          css={searchBoxCss}
-          appearance='filled-darker'
+    <div>
+      <Spacing size={10} direction='vertical'/>
+      <Flex justify="space-around" align="center" direction="row"
+      style={{backgroundColor: tokens.colorNeutralBackground1}}>
+        <div  css={searchBoxContainerCss}>
+          <FluentSearchBox
+            placeholder={placeholder}
+            onKeyDown={handleKeyDown}
+            onChange={onChange}
+            css={searchBoxCss}
+            appearance='filled-darker'
+          />
+        </div>
+        <PeopleFilterSortIcons
+         memberIcon={memberIcon}
+         filterIcon={filterIcon}
+         sortIcon={sortIcon}
         />
-      </div>
-      <PeopleFilterSortIcons
-       memberIcon={memberIcon}
-       filterIcon={filterIcon}
-       sortIcon={sortIcon}
-      />
-    </Flex>
+      </Flex>
+      <Spacing size={10} direction='vertical'/>
+    </div>
+    
   )
 }
 
@@ -80,6 +86,7 @@ export default SearchBox
 
 
 const searchBoxCss = css`
+  background-color: ${tokens.colorNeutralBackground1} !important;
 .ms-SearchBox-clearButton {
   position: absolute;
     right: 0;
