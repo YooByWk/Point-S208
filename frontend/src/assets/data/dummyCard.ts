@@ -6,6 +6,7 @@ export const dummyCard = [
     company: '포스코 인터내셔널',
     position: '과장',
     rank: '개발팀',
+    department: 'Azure개발팀',
     email: 'abc@poscointl.com',
     landlineNumber: '02-123-4567',
     faxNumber: '02-123-4568',
@@ -16,14 +17,17 @@ export const dummyCard = [
     domainUrl: 'https://www.posco.co.kr/',
     createdAt: '2024-04-20',
     updateAt: '2024-04-23',
+    frontBack: 'front'
+    
   },
-  {
+  {  
     cardId: 2,
     userId: 2,
     name: '김싸피',
     company: '포스코 인터내셔널',
     position: '대리',
     rank: '영업팀',
+    department: 'Azure개발팀',
     email: 'def@poscointl.com',
     landlineNumber: '02-123-4567',
     faxNumber: '02-123-4568',
@@ -34,6 +38,7 @@ export const dummyCard = [
     domainUrl: 'https://www.posco.co.kr/',
     createdAt: '2024-04-20',
     updateAt: '2024-04-23',
+    frontBack: 'front'
   },
   {
     cardId: 3,
@@ -43,6 +48,7 @@ export const dummyCard = [
     position: '차장',
     rank: 'Azure개발팀',
     email: 'koreanplus@poscointl.com',
+    department: 'Azure개발팀',
     landlineNumber: '02-123-4567',
     faxNumber: '02-123-4568',
     phoneNumber: '010-1234-5678',
@@ -52,5 +58,7 @@ export const dummyCard = [
     domainUrl: 'https://www.posco.co.kr/',
     createdAt: '2024-04-20',
     updateAt: '2024-04-23',
+    frontBack: 'front'
+    
   }
 ]

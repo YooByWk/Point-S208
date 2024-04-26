@@ -49,15 +49,18 @@ export default function App() {
       <FluentProvider
         theme={
           themeString === 'dark'
-            ? customDarkTheme
+            ? {...customDarkTheme,
+              colorNeutralBackground1: '#1f1f1f',
+            }
             : themeString === 'contrast'
             ? teamsHighContrastTheme
             : {
                 ...customLightTheme,
+                // colorNeutralBackground1: '#',
                 colorNeutralBackground3: '#eeeeee',
               }
         }
-        style={{ background: tokens.colorNeutralBackground3 }}
+        style={{ background: tokens.colorNeutralBackground1 }}
       >
         {loading ? (
           <Spinner style={{ margin: 100 }} />
