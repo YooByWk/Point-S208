@@ -42,4 +42,5 @@ public class MycardController {
         log.info("[Delete Card] : {}");
         return ResponseEntity.ok().body(MessageUtils.success("명함이 삭제되었습니다."));
     }
+
 }
