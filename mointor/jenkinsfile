@@ -1,13 +1,14 @@
 def component = [
-    'backend-cud': true,
+    'alertmanager': true,
+    'prometheus': true,
+    'grafana': true,
 
 ]
 
 // 파일 복사 작업을 수행하는 함수 정의
 def fileCopy() {
-    // 파일 복사 작업 수행
+// 파일 복사 작업 수행
 //     sh 'cp /var/jenkins_home/workspace/ocr/submodule/application.yml /var/jenkins_home/workspace/backend-cud/OCR/src'
-
 }
 
 pipeline {
@@ -32,7 +33,6 @@ pipeline {
     }
 
     stages {
-
         stage('Checkout') {
             steps {
                 script {
@@ -98,7 +98,6 @@ pipeline {
                     sh '/var/jenkins_home/bin/docker-compose -f docker-compose.yml build'
                     // sh '/var/jenkins_home/bin/docker-compose -f docker-compose.yml build --no-cache'
                     fileCopy()
-
                 }
             }
         }
@@ -117,26 +116,34 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'Docker-hub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh 'pwd'
                     sh 'ls -al'
-//                     dir('OCR')///////////
-//                     {
-//                         echo 'innn ocrrrrrrr'
-//                         sh 'pwd'
-//                         sh 'ls -al'
-//                     //                         sh 'cat '
-//                     }
-//                     dir('OCR/src')///////////
-//                     {
-//                         sh 'pwd'
-//                         sh 'ls -al'
-//                         sh 'cat main.py'
-//                         //
-//                         // sh 'python3 main.py'
-//
-//                         // sh 'python main.py'
-//                     }
+                    //                     dir('OCR')///////////
+                    //                     {
+                    //                         echo 'innn ocrrrrrrr'
+                    //                         sh 'pwd'
+                    //                         sh 'ls -al'
+                    //                     //                         sh 'cat '
+                    //                     }
+                    //                     dir('OCR/src')///////////
+                    //                     {
+                    //                         sh 'pwd'
+                    //                         sh 'ls -al'
+                    //                         sh 'cat main.py'
+                    //                         //
+                    //                         // sh 'python3 main.py'
+                    //
+                    //                         // sh 'python main.py'
+                    //                     }
                     sh 'ls -al'
                     // 특정 서비스만 푸시
-                    sh 'docker-compose -f docker-compose.yml push backend-cud'
+
+                    withCredentials([usernamePassword(credentialsId: 'Docker-hub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        // component 맵을 이용하여 특정 서비스를 푸시
+                        component.each { serviceName, shouldPush ->
+                            if (shouldPush) {
+                                sh "docker-compose -f docker-compose.yml push ${serviceName.toLowerCase()}"
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -162,13 +169,17 @@ pipeline {
             }
         }
 
-        stage('Stop and Remove backend-cud Service') {
-                steps {
-                    script {
-                        sh 'docker-compose -f docker-compose.yml -p develop-server stop backend-cud'
-                        sh 'docker-compose -f docker-compose.yml -p develop-server rm -f backend-cud'
+        stage('Stop and Remove Services') {
+            steps {
+                script {
+                    component.each { serviceName, shouldStop ->
+                        if (shouldStop) {
+                            sh "docker-compose -f docker-compose.yml -p develop-server stop ${serviceName.toLowerCase()}"
+                            sh "docker-compose -f docker-compose.yml -p develop-server rm -f ${serviceName.toLowerCase()}"
+                        }
                     }
                 }
+            }
         }
 
         stage('Up') {
@@ -189,15 +200,13 @@ pipeline {
                     sh 'pwd'
                     sh 'ls -al'
 
-//                      dir('OCR')///////////
-//                     {
-//                         echo 'innn ocrrrrrrr'
-//                         sh 'pwd'
-//                         sh 'ls -al'
-//                     //                         sh 'cat '
-//                     }
-
-
+                //                      dir('OCR')///////////
+                //                     {
+                //                         echo 'innn ocrrrrrrr'
+                //                         sh 'pwd'
+                //                         sh 'ls -al'
+                //                     //                         sh 'cat '
+                //                     }
                 }
             }
         }
