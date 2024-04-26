@@ -1,6 +1,10 @@
 # yaml-language-server: $schema=https://aka.ms/teams-toolkit/v1.4/yaml.schema.json
 # Visit https://aka.ms/teamsfx-v5.0-guide for details on this file
+<<<<<<< HEAD
 # Visit https://aka.ms/teamsfx-actions for details on actions
+=======
+# Visit https://aka.ms/teamsfx-actions for details on actions.
+>>>>>>> 77353f4921c19c50e62742b4849d0f23376dc52a
 version: v1.4
 
 environmentFolderPath: ./env
@@ -15,7 +19,11 @@ provision:
       # based on the definition in manifest. If you don't want to change the
       # name, make sure the name in Microsoft Entra manifest is the same with the name
       # defined here.
+<<<<<<< HEAD
       name: test
+=======
+      name: frontend
+>>>>>>> 77353f4921c19c50e62742b4849d0f23376dc52a
       # If the value is false, the action will not generate client secret for you
       generateClientSecret: true
       # Authenticate users with a Microsoft work or school account in your
@@ -37,7 +45,11 @@ provision:
   - uses: teamsApp/create
     with:
       # Teams app name
+<<<<<<< HEAD
       name: test${{APP_NAME_SUFFIX}}
+=======
+      name: frontend${{APP_NAME_SUFFIX}}
+>>>>>>> 77353f4921c19c50e62742b4849d0f23376dc52a
     # Write the information of created resources into environment file for
     # the specified environment variable(s).
     writeToEnvironmentFile:
@@ -204,4 +216,8 @@ publish:
     # the specified environment variable(s).
     writeToEnvironmentFile:
       publishedAppId: TEAMS_APP_PUBLISHED_APP_ID
+<<<<<<< HEAD
 projectId: d5a799ff-a882-4ec2-b242-9716c93d35b8
+=======
+projectId: 9a247db7-511a-4e21-9487-4b83f92a9e69
+>>>>>>> 77353f4921c19c50e62742b4849d0f23376dc52a

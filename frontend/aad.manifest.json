@@ -1,7 +1,11 @@
 {
     "id": "${{AAD_APP_OBJECT_ID}}",
     "appId": "${{AAD_APP_CLIENT_ID}}",
+<<<<<<< HEAD
     "name": "test-aad",
+=======
+    "name": "frontend-aad",
+>>>>>>> 77353f4921c19c50e62742b4849d0f23376dc52a
     "accessTokenAcceptedVersion": 2,
     "signInAudience": "AzureADMyOrg",
     "optionalClaims": {

@@ -12,7 +12,11 @@ provision:
       # based on the definition in manifest. If you don't want to change the
       # name, make sure the name in Microsoft Entra manifest is the same with the name
       # defined here.
+<<<<<<< HEAD
       name: test
+=======
+      name: frontend
+>>>>>>> 77353f4921c19c50e62742b4849d0f23376dc52a
       # If the value is false, the action will not generate client secret for you
       generateClientSecret: true
       # Authenticate users with a Microsoft work or school account in your
@@ -34,7 +38,11 @@ provision:
   - uses: teamsApp/create
     with:
       # Teams app name
+<<<<<<< HEAD
       name: test${{APP_NAME_SUFFIX}}
+=======
+      name: frontend${{APP_NAME_SUFFIX}}
+>>>>>>> 77353f4921c19c50e62742b4849d0f23376dc52a
     # Write the information of created resources into environment file for
     # the specified environment variable(s).
     writeToEnvironmentFile:
@@ -44,8 +52,13 @@ provision:
   - uses: script
     with:
       run:
+<<<<<<< HEAD
         echo "::set-teamsfx-env TAB_DOMAIN=localhost:53000";
         echo "::set-teamsfx-env TAB_ENDPOINT=https://localhost:53000";
+=======
+        # echo "::set-teamsfx-env TAB_DOMAIN=localhost:53000";
+        # echo "::set-teamsfx-env TAB_ENDPOINT=https://localhost:53000";
+>>>>>>> 77353f4921c19c50e62742b4849d0f23376dc52a
         echo "::set-teamsfx-env FUNC_NAME=getUserProfile";
         echo "::set-teamsfx-env FUNC_ENDPOINT=http://localhost:7071";
 
@@ -142,6 +155,10 @@ deploy:
         REACT_APP_START_LOGIN_PAGE_URL: ${{TAB_ENDPOINT}}/auth-start.html
         REACT_APP_FUNC_NAME: ${{FUNC_NAME}}
         REACT_APP_FUNC_ENDPOINT: ${{FUNC_ENDPOINT}}
+<<<<<<< HEAD
+=======
+        WDS_SOCKET_PORT: 0 
+>>>>>>> 77353f4921c19c50e62742b4849d0f23376dc52a
 
   # Generate runtime environment variables for backend
   - uses: file/createOrUpdateEnvironmentFile

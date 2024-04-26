@@ -10,5 +10,10 @@
     ],
     "azureFunctions.stopFuncTaskPostDebug": false,
     "azureFunctions.showProjectWarning": false,
+<<<<<<< HEAD
     "csharp.suppressDotnetRestoreNotification": true
+=======
+    "csharp.suppressDotnetRestoreNotification": true,
+    "typescript.tsdk": "node_modules\\typescript\\lib"
+>>>>>>> 77353f4921c19c50e62742b4849d0f23376dc52a
 }

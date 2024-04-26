@@ -4,15 +4,23 @@
 
 body {
   margin: 0;
+<<<<<<< HEAD
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+=======
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+>>>>>>> 77353f4921c19c50e62742b4849d0f23376dc52a
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 @media only screen and (max-width: 768px) {
+<<<<<<< HEAD
   body {
     width: fit-content;
   }
+=======
+>>>>>>> 77353f4921c19c50e62742b4849d0f23376dc52a
 }

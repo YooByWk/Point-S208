@@ -11,6 +11,7 @@
         "termsOfUseUrl": "${{TAB_ENDPOINT}}/index.html#/termsofuse"
     },
     "icons": {
+<<<<<<< HEAD
         "color": "color.png",
         "outline": "outline.png"
     },
@@ -21,10 +22,23 @@
     "description": {
         "short": "Short description of test",
         "full": "Full description of test"
+=======
+        "color": "BizCard.png",
+        "outline": "BizCardOutline.png"
+    },
+    "name": {
+        "short": "BizCard",
+        "full": "BizCard"
+    },
+    "description": {
+        "short": "Short description of frontend",
+        "full": "Full description of frontend"
+>>>>>>> 77353f4921c19c50e62742b4849d0f23376dc52a
     },
     "accentColor": "#FFFFFF",
     "bots": [],
     "composeExtensions": [],
+<<<<<<< HEAD
     "configurableTabs": [],
     "staticTabs": [
         {
@@ -32,6 +46,48 @@
             "name": "Personal Tab",
             "contentUrl": "${{TAB_ENDPOINT}}/index.html#/tab",
             "websiteUrl": "${{TAB_ENDPOINT}}/index.html#/tab",
+=======
+    "configurableTabs": [
+        {
+            "configurationUrl": "https://${{TAB_DOMAIN}}/configure",
+            "canUpdateConfiguration": true,
+            "scopes": [
+                "team",
+                "groupchat"
+            ],
+            "context": [
+                "meetingSidePanel",
+                "meetingStage",
+                "meetingDetailsTab",
+                "meetingChatTab"
+            ]
+        }
+    ],
+    "staticTabs": [
+        {
+            "entityId": "myCard",
+            "name": "내 명함",
+            "contentUrl": "${{TAB_ENDPOINT}}/index.html#",
+            "websiteUrl": "${{TAB_ENDPOINT}}/index.html#",
+            "scopes": [
+                "personal"
+            ]
+        },
+        {
+            "entityId": "myAlbum",
+            "name": "명함 지갑",
+            "contentUrl": "${{TAB_ENDPOINT}}/index.html#/myAlbum",
+            "websiteUrl": "${{TAB_ENDPOINT}}/index.html#/myAlbum",
+            "scopes": [
+                "personal"
+            ]
+        },
+        {
+            "entityId": "myTeam",
+            "name": "팀 명함",
+            "contentUrl": "${{TAB_ENDPOINT}}/index.html#/myTeam",
+            "websiteUrl": "${{TAB_ENDPOINT}}/index.html#/myTeam",
+>>>>>>> 77353f4921c19c50e62742b4849d0f23376dc52a
             "scopes": [
                 "personal"
             ]
