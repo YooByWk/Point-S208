@@ -1,16 +1,17 @@
 /** @jsxImportSource @emotion/react */
+import { colors } from '@/styles/colorPalette'
+import { css } from '@emotion/react'
 import { Card } from '@shared/Card'
-import * as s from './EmptyCard.styled'
 import Flex from '@shared/Flex'
 import Text from '@shared/Text'
 import { CameraAdd48Regular, Edit48Regular } from '@fluentui/react-icons'
 import Spacing from '@shared/Spacing'
-import { writeInfoState } from '@stores/writeInfo'
 import { useSetRecoilState } from 'recoil'
-import { css } from '@emotion/react'
+import { cameraState, writeInfoState } from '@/stores/emptyCard'
 
 const EmptyCard = () => {
   const setWriteInfo = useSetRecoilState(writeInfoState)
+  const setCamera = useSetRecoilState(cameraState)
 
   const children = () => {
     return (
@@ -22,7 +23,7 @@ const EmptyCard = () => {
 
   return (
     <>
-      <div css={s.container}>
+      <div css={container}>
         <Card text="80vw" children={children()} />
       </div>
       <Spacing size={50} />
@@ -32,6 +33,7 @@ const EmptyCard = () => {
           align="center"
           onClick={() => {
             console.log('직접 촬영')
+            setCamera(true)
           }}
           css={linkStyles}
         >
@@ -64,3 +66,12 @@ const linkStyles = css`
 `
 
 export default EmptyCard
+
+// style
+
+const container = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid ${colors.gray02};
+`
