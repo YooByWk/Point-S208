@@ -85,22 +85,19 @@ services:
 #      - jenkins-network
 
 
-
-
-
-  #  front:
-#    container_name: front
-#    image: junwon1131/s208-front:latest
-#    build:
-#      context: ./frontend
-#      dockerfile: Dockerfile
-#    restart: unless-stopped
-#    ports:
-#      - "5173:5173"
-#    networks:
-#      - jenkins-network
-#    depends_on:
-#      - back
+  front:
+    container_name: front
+    image: junwon1131/s208-front:latest
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    networks:
+      - jenkins-network
+    depends_on:
+      - back
 
   backend-cud:
     container_name: backend-cud
