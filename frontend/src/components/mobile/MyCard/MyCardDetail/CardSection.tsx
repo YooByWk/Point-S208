@@ -1,12 +1,21 @@
+/** @jsxImportSource @emotion/react */
 import { themeState } from '@/stores/common'
+import { colors } from '@/styles/colorPalette'
+import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { Switch } from '@fluentui/react-components'
 import { useCallback, useState } from 'react'
 import { useRecoilValue } from 'recoil'
+import {
+  ErrorCircle20Regular,
+  ArrowHookUpLeft28Regular,
+} from '@fluentui/react-icons'
+import Flex from '@/components/shared/Flex'
 
 const CardSection = () => {
   const theme = useRecoilValue(themeState)
   const [isRealCard, setIsRealCard] = useState(true)
+  const [isKorCard, setIsKorCard] = useState(true)
   const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setIsRealCard(e.currentTarget.checked)
   }, [])
@@ -14,7 +23,14 @@ const CardSection = () => {
   return (
     <Container $theme={theme}>
       <SwitchBtn>
-        <Switch checked={isRealCard} onChange={onChange} />
+        <Switch
+          checked={isRealCard}
+          onChange={onChange}
+          css={switchStyle(isRealCard)}
+        />
+        <Flex align="center">
+          <ErrorCircle20Regular css={errorCircleStyle} />
+        </Flex>
       </SwitchBtn>
       <Wrap>
         <Card $isFront={false}>
@@ -30,6 +46,11 @@ const CardSection = () => {
           />
         </Card>
       </Wrap>
+      <ArrowHookUpLeft28Regular
+        css={changeStyle}
+        onClick={() => setIsKorCard(!isKorCard)}
+      />
+      <Desc>{isKorCard ? '국문' : '영문'}</Desc>
     </Container>
   )
 }
@@ -74,8 +95,42 @@ const Card = styled.div<{ $isFront: boolean }>`
 
 const SwitchBtn = styled.div`
   position: absolute;
+  display: flex;
   z-index: 10;
   margin: 2%;
   top: 0;
   left: 0;
+`
+
+const Desc = styled.div`
+  position: absolute;
+  color: white;
+  bottom: 0;
+  right: 0;
+  margin: 3%;
+`
+
+// css
+
+const switchStyle = (isRealCard: boolean) => css`
+  .fui-Switch__indicator {
+    background-color: ${isRealCard
+      ? colors.themeText
+      : colors.themeTextInverted} !important;
+
+    color: ${isRealCard
+      ? colors.themeTextInverted
+      : colors.themeText} !important;
+  }
+`
+
+const errorCircleStyle = css`
+  color: white;
+`
+
+const changeStyle = css`
+  position: absolute;
+  right: 0;
+  margin: 3%;
+  color: white;
 `
