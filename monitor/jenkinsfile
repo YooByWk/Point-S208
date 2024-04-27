@@ -2,6 +2,7 @@ def component = [
     'alertmanager': true,
     'prometheus': true,
     'grafana': true,
+    'prometheus_nginx_exporter': true,
 
 ]
 
