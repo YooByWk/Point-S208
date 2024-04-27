@@ -53,6 +53,10 @@ services:
       - "9113:9113"  # Nginx exporter가 노출하는 포트
     networks:
         - jenkins-network
+    command:
+      - "-nginx.scrape-uri=https://k10s208.p.ssafy.io//basic_status"
+
+
         
   grafana:
     image: grafana/grafana:latest
