@@ -8,7 +8,7 @@ import { css } from '@emotion/react'
 import Flex from './Flex'
 interface ButtonProps {
   text: string
-  onClick: () => void
+  onClick?: () => void
   width?:   string 
   height?:   string
   disabled?: boolean
@@ -38,7 +38,7 @@ const LargeButton: React.FC<ButtonProps> = ({
     <Flex  justify='center' css={searchBoxContainerCss} >
       <Button
         shape="rounded"
-        onClick={onClick}
+        onClick={onClick? onClick : () => {}}
         appearance= {secondary? "secondary" : "primary"}
         css={buttonCss({ width, height, secondary })}
       >
@@ -69,6 +69,6 @@ const buttonCss = (props: any) => css`
 `;
 
 const searchBoxContainerCss = css`
-  background-color: ${tokens.colorNeutralBackground1};
+  /* background-color: ${tokens.colorNeutralBackground1}; */
 `
 

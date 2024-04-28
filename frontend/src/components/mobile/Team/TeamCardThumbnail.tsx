@@ -1,7 +1,8 @@
 /** @jsxImportSource @emotion/react */
 
 import { css } from '@emotion/react';
-import MyDigitalCard from './../MyCard/MyDigitalCard'
+// import MyDigitalCard from './../MyCard/MyDigitalCard'
+import MyDigitalCard from '@components/mobile/MyCard/MyDigitalCard'
 import type { CardType } from '@/types/cardType'
 // import { dummyCard } from '@/assets/data/dummyCard'
 
@@ -42,7 +43,7 @@ const TeamCardThumbnailContainer = css`
 `
 const cardStyle = (offset: number) => css`
   position: absolute;
-  left: ${offset - 36}px;
+  left: ${offset - 70}px;
   top: -${offset}px;
   
   /* transform: translate(${offset}px, -${offset}px); */
