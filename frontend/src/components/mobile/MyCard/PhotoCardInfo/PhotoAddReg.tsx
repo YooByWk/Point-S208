@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
 import Flex from '@/components/shared/Flex'
 import { cameraState } from '@/stores/emptyCard'
 import styled from '@emotion/styled'
@@ -79,7 +81,7 @@ const PhotoAddReg = (props: { isFront: boolean }) => {
       <Top>
         <Dismiss20Filled onClick={() => setCamera(false)} />
       </Top>
-      <Flex justify="center">
+      <Flex justify="center" css={imgSrc ? '' : photoStyle}>
         {imgSrc ? (
           <img src={imgSrc} alt="Captured" width={'80%'} />
         ) : (
@@ -187,4 +189,16 @@ const Button = styled.button<{ $position: string }>`
     props.$position === 'left' ? '' : colors.themeTextInverted};
   padding: 10px;
   font-weight: bold;
+`
+
+// css
+
+const photoStyle = css`
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(0, 0, 0, 0.5),
+    rgba(0, 0, 0, 0.5) 4px,
+    transparent 2px,
+    transparent 6px
+  );
 `

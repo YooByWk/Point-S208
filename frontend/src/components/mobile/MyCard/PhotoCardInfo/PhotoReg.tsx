@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
 import Flex from '@/components/shared/Flex'
 import { cameraState } from '@/stores/emptyCard'
 import styled from '@emotion/styled'
@@ -22,6 +24,8 @@ const PhotoReg = (props: { isMyCard: boolean }) => {
   const [frontImgSrc, setFrontImgSrc] = useState<string | null>(null)
   const [backImgSrc, setBackImgSrc] = useState<string | null>(null)
   const [isFront, setIsFront] = useState<boolean>(true)
+  const isImgSrc: boolean =
+    (isFront && frontImgSrc) || (!isFront && backImgSrc) ? true : false
 
   const getCameraStream = async () => {
     try {
@@ -90,7 +94,7 @@ const PhotoReg = (props: { isMyCard: boolean }) => {
       <Top>
         <Dismiss20Filled onClick={() => setCamera(false)} />
       </Top>
-      <Flex justify="center">
+      <Flex justify="center" css={isImgSrc ? '' : photoStyle}>
         {frontImgSrc && backImgSrc ? (
           <SwipeableImg
             frontImgSrc={frontImgSrc}
@@ -98,7 +102,7 @@ const PhotoReg = (props: { isMyCard: boolean }) => {
             isFront={isFront}
             setIsFront={setIsFront}
           />
-        ) : (isFront && frontImgSrc) || (!isFront && backImgSrc) ? (
+        ) : isImgSrc ? (
           <img
             src={isFront ? (frontImgSrc as string) : (backImgSrc as string)}
             alt="Captured"
@@ -108,7 +112,7 @@ const PhotoReg = (props: { isMyCard: boolean }) => {
           <video ref={videoRef} autoPlay playsInline width={'80%'} />
         )}
       </Flex>
-      {(isFront && frontImgSrc) || (!isFront && backImgSrc) ? (
+      {isImgSrc ? (
         <>
           {frontImgSrc && backImgSrc && (
             <Flex justify="center">
@@ -235,4 +239,16 @@ const Point = styled.div<{ $isFront: boolean }>`
   border: 1px solid ${colors.themeText};
   background-color: ${props =>
     props.$isFront ? colors.themeText : colors.themeTextInverted};
+`
+
+// css
+
+const photoStyle = css`
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(0, 0, 0, 0.5),
+    rgba(0, 0, 0, 0.5) 4px,
+    transparent 2px,
+    transparent 6px
+  );
 `

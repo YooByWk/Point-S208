@@ -7,7 +7,6 @@ import PhotoReg from '@/components/mobile/MyCard/PhotoCardInfo/PhotoReg'
 import MyCardDetail from '@/components/mobile/MyCard/MyCardDetail/MyCardDetail'
 import { useState } from 'react'
 
-
 const AppCard = () => {
   const [isCard, setIsCard] = useState(true)
   const writeInfo = useRecoilValue(writeInfoState)
@@ -21,14 +20,14 @@ const AppCard = () => {
         <>
           {writeInfo ? (
             <WriteCardInfo
-            onSubmit={cardInputs => {
-              //TODO: 백앤드로 정보 보내기
-              setIsCard(true)
-            }}
-            isEnglish={false}
-          />
+              onSubmit={cardInputs => {
+                //TODO: 백앤드로 정보 보내기
+                setIsCard(true)
+              }}
+              isEnglish={false}
+            />
           ) : camera ? (
-            <PhotoReg isMyCard={true} />
+            <PhotoReg isMyCard={isCard} />
           ) : (
             <EmptyCard />
           )}
