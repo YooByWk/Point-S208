@@ -14,7 +14,9 @@ interface SearchBoxProps {
   memberIcon?: boolean
   filterIcon?: boolean
   sortIcon?: boolean
-  value: string
+  value: string | number
+  spacing? : boolean
+  width?: string
 }
 
 /**
@@ -29,6 +31,8 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   onChange,
   value,
   sortIcon,
+  spacing = true,
+  width
 }) => {
   const handleKeyDown = (e: any): void => {
     if (e.key === 'Enter') {
@@ -41,9 +45,9 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   return (
     <div>
       <Spacing size={10} direction='vertical'/>
-      <Flex justify="space-around" align="center" direction="row"
-      style={{backgroundColor: tokens.colorNeutralBackground1}}>
-        <div  css={searchBoxContainerCss}>
+      <Flex justify="space-between" align="center" direction="row"
+      css={mainContainerCss}>
+        <div  css={searchBoxContainerCss(width? width : '70%')}>
           <FluentSearchBox
             placeholder={placeholder}
             onKeyDown={handleKeyDown}
@@ -58,7 +62,6 @@ const SearchBox: React.FC<SearchBoxProps> = ({
          sortIcon={sortIcon}
         />
       </Flex>
-      <Spacing size={30} direction='vertical'/>
       
     </div>
     
@@ -85,9 +88,15 @@ export default SearchBox
  * );
  */
 
+const mainContainerCss = css`
+  padding-left: 5%;
+  padding-right: 5%;
+  background-color: ${tokens.colorNeutralBackground1};
+`
 
 const searchBoxCss = css`
   background-color: ${tokens.colorNeutralBackground1} !important;
+  
 .ms-SearchBox-clearButton {
   position: absolute;
     right: 0;
@@ -97,8 +106,8 @@ const searchBoxCss = css`
   width: 100%;
   background-color: ${tokens.colorNeutralBackground2};
 `
-const searchBoxContainerCss = css`
+const searchBoxContainerCss =(width: string) =>  css`
   min-width: 220px;
   background-color: ${tokens.colorNeutralBackground2};
-  
+  width: ${width} !important;
 `
