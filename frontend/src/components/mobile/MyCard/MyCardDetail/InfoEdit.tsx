@@ -7,6 +7,7 @@ import { BooleanStateType } from '@/types/commonType'
 import { ChangeEvent, useCallback, useState } from 'react'
 import { Dismiss24Filled } from '@fluentui/react-icons'
 import { Button } from '@fluentui/react-components'
+import ScrollToTop from '@/utils/scrollToTop'
 
 const InfoEdit = (props: BooleanStateType) => {
   const { setValue } = props
@@ -22,6 +23,8 @@ const InfoEdit = (props: BooleanStateType) => {
   const onSubmit = () => {
     console.log('내 명함 수정 api 보내기')
   }
+
+  ScrollToTop()
 
   return (
     <Flex direction="column" style={{ padding: '24px' }}>

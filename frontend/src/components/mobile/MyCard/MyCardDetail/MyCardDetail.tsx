@@ -3,6 +3,7 @@ import CardSection from './CardSection'
 import InfoSection from './InfoSection'
 import { useState } from 'react'
 import InfoEdit from './InfoEdit'
+import BottomSection from './BottomSection'
 
 const MyCardDetail = () => {
   const [editOpen, setEditOpen] = useState(false)
@@ -15,6 +16,7 @@ const MyCardDetail = () => {
         <Container>
           <CardSection />
           <InfoSection value={editOpen} setValue={setEditOpen} />
+          <BottomSection />
         </Container>
       )}
     </>
