@@ -36,4 +36,11 @@ public class PrivateAlbumFilterController {
     }
 
     // 필터 삭제
+    @DeleteMapping("/{userId}/filter/{filterId}")
+    public ResponseEntity<MessageUtils> delete(@PathVariable("userId") Long userId,
+                                               @PathVariable("filterId") Long filterId) {
+        privateAlbumFilterService.delete(userId, filterId);
+        log.info("Delete Filter : {}", filterId);
+        return ResponseEntity.ok().body(MessageUtils.success("필터가 삭제되었습니다."));
+    }
 }

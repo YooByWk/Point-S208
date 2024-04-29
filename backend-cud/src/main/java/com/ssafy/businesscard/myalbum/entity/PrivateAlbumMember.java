@@ -1,5 +1,6 @@
 package com.ssafy.businesscard.myalbum.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.businesscard.card.entity.Filter;
 import com.ssafy.businesscard.user.entity.User;
 import jakarta.persistence.*;
@@ -16,15 +17,18 @@ import lombok.ToString;
 public class PrivateAlbumMember {
 
     @Id
+    @JsonIgnore
     @JoinColumn(name = "filter_id")
     @ManyToOne
     private Filter filter;
 
     @Id
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
+    @JsonIgnore
     @JoinColumn(name = "private_album_id")
     @ManyToOne
     private PrivateAlbum privateAlbum;

@@ -46,6 +46,16 @@ public class PrivateAlbumFilterServiceImpl implements PrivateAlbumFilterService 
                 .build());
     }
 
+    // 필터 삭제
+    @Override
+    public void delete(Long userId, Long filterId) {
+        Filter filter = privateAlbumFilterRepository.findById(filterId)
+                .orElseThrow(() -> new GlobalExceptionHandler.UserException(
+                        GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_FILTER
+                ));
+        privateAlbumFilterRepository.delete(filter);
+    }
+
     // 필터 생성 후 filterId와 userId를 중계 테이블에 저장 
     private void saveFilter(Long userId, Long filterId) {
         User user = userRepository.findById(userId)
@@ -62,7 +72,4 @@ public class PrivateAlbumFilterServiceImpl implements PrivateAlbumFilterService 
                 .build());
     }
 
-    // 필터 수정
-
-    // 필터 삭제
 }
