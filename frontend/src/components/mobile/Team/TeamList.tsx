@@ -10,6 +10,7 @@ import { css } from '@emotion/react'
 import LargeButton from '@/components/shared/LargeButton'
 import AddTeam from '@/components/mobile/Team/AddTeam'
 import { tokens } from '@fluentui/react-components';
+import { useNavigate, useParams } from 'react-router-dom'
 
 
 const TeamList = () => {
@@ -18,7 +19,7 @@ const TeamList = () => {
   const [selectedTeam, setSelectedTeam] = useRecoilState(
     teamState.selectedTeamIdState,
   )
-
+  const navigate = useNavigate()
   return (
     <>
     {!isWrite ? <>
@@ -38,10 +39,11 @@ const TeamList = () => {
           <TeamCard
             teamInfo={team}
             key={team.teamId}
-            onClick={() => {
-              console.log('팀 클릭')
-              setSelectedTeam(team)
-              console.log(selectedTeam)
+            onClick={ () =>  {
+              console.log('팀 클릭', team.teamId)
+               setSelectedTeam(team)
+              navigate(`/myTeam/${team.teamId}`)
+              console.log()
             }}
           />
         )

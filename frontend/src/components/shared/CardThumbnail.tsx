@@ -84,7 +84,7 @@ const CardThumbnail = ({
             {cardInfo.name}
           </Text>
           <Text typography="t9">{`${cardInfo.rank} / ${cardInfo.position}`}</Text>
-          <Text typography="t10">{cardInfo.company}</Text>
+          <Text typography="t9">{cardInfo.company}</Text>
         </Flex>
         <img
           src={

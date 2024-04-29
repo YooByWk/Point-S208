@@ -18,7 +18,6 @@ interface SearchBoxProps {
   spacing? : boolean
   width?: string
   lefticon?: boolean
-  righticon?: boolean
   bgColor?: string
 }
 
@@ -107,7 +106,7 @@ const mainContainerCss = css`
 
 const searchBoxCss = (bg: string) => css`
   background-color: ${bg?  'tokens.'+ bg :tokens.colorNeutralBackground1 } !important;
-  
+  font-size: 16px !important;
 .ms-SearchBox-clearButton {
   position: absolute;
     right: 0;

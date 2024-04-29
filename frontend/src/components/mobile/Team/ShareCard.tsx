@@ -44,10 +44,9 @@ const ShareCard = ({
       <Spacing size={10} direction='horizontal'/> 
       <Text typography='t7'>뒤로가기</Text>
       </Flex >
-      <hr />
-      <Spacing  size={20} />
+      <Spacing size={10} direction='vertical'/> 
       <Text typography="t5" bold={true} css={textCss}>공유할 명함을 선택해주세요</Text>
-      <Spacing  size={20} />
+      <Spacing  size={10} />
       <SearchBox
         value="공유할 명함 검색 로직"
         placeholder="공유할 명함 검색"
@@ -56,14 +55,14 @@ const ShareCard = ({
         sortIcon={false}
         width="100%"
       />
-      <Spacing  size={15} />
+      <Spacing  size={5} />
       
       <MultiSelectBar
         selectedCards={selectedCards}
         allCards={cards}
         setSelectedCards={setSelectedCards}
       />
-      <Spacing  size={10} />
+      <Spacing  size={5} />
       <Flex direction="column" justify="center" align="center">
         {cards.map(card => {
           return (

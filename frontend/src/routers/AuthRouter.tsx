@@ -8,7 +8,7 @@ const AuthRouter = () => {
     <Routes>
       <Route path="/" element={<MyCard />} />
       <Route path="/myAlbum" element={<MyAlbum />} />
-      <Route path="/myTeam" element={<MyTeam />} />
+      <Route path="/myTeam/*" element={<MyTeam />} />
       <Route path="*" element={<MyCard />} />
     </Routes>
   )

@@ -12,6 +12,7 @@ import Spacing from '@/components/shared/Spacing'
 import { css } from '@emotion/react'
 import LargeButton from './LargeButton'
 import ShareCard from '@/components/mobile/Team/ShareCard'
+import { useParams } from 'react-router-dom'
 
 const CardList = () => {
   const cardList: CardListType = dummyCardList
@@ -20,7 +21,7 @@ const CardList = () => {
   const [selectedCards, setSelectedCards] = useState<number[]>([])
   const [isShare, setIsShare] = useState(false)
   // 공유창에서 선택한 명함을 저장하는 state를 별도로?
-  
+  const { teamId } = useParams()
   const handleCardSelect = (cardId: number) => {
     setSelectedCards(prev =>
       prev.includes(cardId)
@@ -28,7 +29,7 @@ const CardList = () => {
         : [...prev, cardId],
     )
   }
-
+  console.log(teamId, 'asdasjkldhasjkldhasjkldashdjkashdkl')
   console.log(cards)
   return (
   <>
