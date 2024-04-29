@@ -3,7 +3,12 @@ import { themeState } from '@/stores/common'
 import { colors } from '@/styles/colorPalette'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import { Switch } from '@fluentui/react-components'
+import {
+  Switch,
+  Popover,
+  PopoverTrigger,
+  PopoverSurface,
+} from '@fluentui/react-components'
 import { useCallback, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import {
@@ -29,7 +34,14 @@ const CardSection = () => {
           css={switchStyle(isRealCard)}
         />
         <Flex align="center">
-          <ErrorCircle20Regular css={errorCircleStyle} />
+          <Popover withArrow>
+            <PopoverTrigger disableButtonEnhancement>
+              <ErrorCircle20Regular css={errorCircleStyle} />
+            </PopoverTrigger>
+            <PopoverSurface tabIndex={-1} css={popoverStyle}>
+              실물명함과 디지털명함을 교차 선택합니다.
+            </PopoverSurface>
+          </Popover>
         </Flex>
       </SwitchBtn>
       <Wrap>
@@ -133,4 +145,10 @@ const changeStyle = css`
   right: 0;
   margin: 3%;
   color: white;
+`
+
+const popoverStyle = css`
+  background-color: ${colors.gray02};
+  color: #fff;
+  padding: 8px;
 `

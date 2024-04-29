@@ -1,5 +1,5 @@
-export type userType = {
-  userId: string
+export type UserType = {
+  id?: number
   name: string
   email: string
 }

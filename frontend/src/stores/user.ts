@@ -1,13 +1,13 @@
-import { userType } from '@/types/userType'
+import { UserType } from '@/types/userType'
 import { atom } from 'recoil'
 
 const defaultUser = {
-  userId: '1',
+  id: 0,
   name: '',
   email: '',
 }
 
-export const userState = atom<userType>({
+export const userState = atom<UserType>({
   key: 'userState',
   default: defaultUser,
 })
