@@ -1,9 +1,9 @@
 package com.ssafy.businesscard.global.exception;
 
 import com.ssafy.businesscard.global.utils.MessageUtils;
- import lombok.AllArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
- import lombok.extern.slf4j.Slf4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
