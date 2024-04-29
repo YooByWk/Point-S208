@@ -23,18 +23,15 @@ public class BusinessCardServiceImpl implements BusinessCardService {
     @Override
     public void register(Long userId, List<MultipartFile> cardImages) {
         MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
-        bodyBuilder.part("cardImages", cardImages);
-        bodyBuilder.part("version", "V2");
-        bodyBuilder.part("requestId", "string");
-        bodyBuilder.part("timestamp", "0");
-        bodyBuilder.part("images", "[{\"format\": \"JPG\", \"name\": \"string\"}]");
+        bodyBuilder.part("file", cardImages);
+        bodyBuilder.part("message", "{\"version\": \"V2\", \"requestId\": \"String\", \"timestamp\": 0, \"images\":[{\"format: \"JPG\", \"name\": \"string\"}]}");
         WebClient webClient = WebClient.builder().baseUrl("https://k10s208.p.ssafy.io/").build();
         webClient.post()
                 .uri(uriBuilder -> uriBuilder
                         .path("ocr/")
                         .path("process_ocr")
                         .build())
-                .bodyValue(BodyInserters.fromMultipartData(bodyBuilder.build()))
+                .body(BodyInserters.fromMultipartData(bodyBuilder.build()))
                 .accept(MediaType.MULTIPART_FORM_DATA)
                 .retrieve()
                 .bodyToMono(String.class);
@@ -42,3 +39,4 @@ public class BusinessCardServiceImpl implements BusinessCardService {
 
     }
 }
+
