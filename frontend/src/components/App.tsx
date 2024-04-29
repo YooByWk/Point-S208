@@ -38,7 +38,11 @@ export default function App() {
   useData(async () => {
     if (teamsUserCredential) {
       const userInfo = await teamsUserCredential.getUserInfo()
-      setUser({ name: userInfo.displayName, email: userInfo.preferredUserName })
+      setUser({
+        userId: '1',
+        name: userInfo.displayName,
+        email: userInfo.preferredUserName,
+      })
     }
   })
 
@@ -49,9 +53,7 @@ export default function App() {
       <FluentProvider
         theme={
           themeString === 'dark'
-            ? {...customDarkTheme,
-              colorNeutralBackground1: '#1f1f1f',
-            }
+            ? { ...customDarkTheme, colorNeutralBackground1: '#1f1f1f' }
             : themeString === 'contrast'
             ? teamsHighContrastTheme
             : {
