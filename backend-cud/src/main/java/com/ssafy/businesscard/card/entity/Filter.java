@@ -19,7 +19,8 @@ public class Filter {
     private Long filterId;
 
     @Column(name = "filter_name", length = 30)
-    private String filterName;
+    @Builder.Default
+    private String filterName = "none";
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)

@@ -22,7 +22,8 @@ public class PrivateAlbum extends BaseTimeEntity {
     private Long privateAlbumId;
 
     @Column(name = "favorite", nullable = false)
-    private boolean favorite;
+    @Builder.Default
+    private boolean favorite = false;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
