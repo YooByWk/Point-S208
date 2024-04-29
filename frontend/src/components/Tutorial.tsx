@@ -16,13 +16,13 @@ const Tutorial = (props: BooleanStateType) => {
     mutationFn: userReg,
     onSuccess(result) {
       console.log('등록 성공', result)
-      // setUser(prev => ({ ...prev, id: result.data.id }))
-      // setLocalStorage('User', {
-      //   id: result.data.id,
-      //   name: user.name,
-      //   email: user.email,
-      // })
-      // setValue(true)
+      setUser(prev => ({ ...prev, id: result.data_body }))
+      setLocalStorage('User', {
+        id: result.data_body,
+        name: user.name,
+        email: user.email,
+      })
+      setValue(true)
     },
     onError(error) {
       console.error('등록 실패:', error)
@@ -51,19 +51,29 @@ const Tutorial = (props: BooleanStateType) => {
 
 export default Tutorial
 
+// style
+
 const Container = styled.div`
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+`
 
-  div {
-    position: relative;
-    text-align: center;
-    padding: 30px;
-  }
+const Button = styled.button`
+  position: relative;
+  padding: 5px 10px;
+  border-radius: 10px;
+  background-color: ${colors.teamsBG6};
+  color: #fff;
+`
 
-  div::before {
+const Box = styled.div`
+  position: relative;
+  text-align: center;
+  padding: 30px;
+
+  ::before {
     content: '';
     opacity: 0.3;
     position: absolute;
@@ -81,13 +91,3 @@ const Container = styled.div`
     margin-bottom: 20px;
   }
 `
-
-const Button = styled.button`
-  position: relative;
-  padding: 5px 10px;
-  border-radius: 10px;
-  background-color: ${colors.teamsBG6};
-  color: #fff;
-`
-
-const Box = styled.div``

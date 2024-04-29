@@ -7,6 +7,6 @@ const url = '/read/api'
 export const userReg = async (params: UserType) => {
   return authRequest
     .post(`${url}/tutorial`, params)
-    .then(res => res)
+    .then(res => res.data)
     .catch(err => console.log(err))
 }
