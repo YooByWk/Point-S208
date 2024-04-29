@@ -9,13 +9,12 @@ import { HashRouter as Router } from 'react-router-dom'
 import { useData, useTeamsUserCredential } from '@microsoft/teamsfx-react'
 import { TeamsFxContext } from './Context'
 import config from './sample/lib/config'
-import { useSetRecoilState } from 'recoil'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 import AuthRouter from '@/routers/AuthRouter'
 import { themeState } from '@/stores/common'
 import { useEffect, useState } from 'react'
 import { userState } from '@/stores/user'
 import { customLightTheme, customDarkTheme } from '@/styles/colorRamp'
-import { getLocalStorage } from '@/utils/localStorage'
 import Tutorial from './Tutorial'
 
 /**
@@ -29,7 +28,7 @@ export default function App() {
       clientId: config.clientId!,
     })
   const setTheme = useSetRecoilState(themeState)
-  const setUser = useSetRecoilState(userState)
+  const [user, setUser] = useRecoilState(userState)
   const [isUserInfoinLocal, setIsUserInfoinLocal] = useState(true)
 
   useEffect(() => {
@@ -41,9 +40,7 @@ export default function App() {
       const userInfo = await teamsUserCredential.getUserInfo()
       setUser({ name: userInfo.displayName, email: userInfo.preferredUserName })
 
-      // localStorage - user정보 확인
-      const getUserInfo = getLocalStorage('User')
-      if (!getUserInfo) {
+      if (!user.userId) {
         setIsUserInfoinLocal(false)
       }
     }
