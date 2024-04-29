@@ -1,8 +1,6 @@
 // https://fluentsite.z22.web.core.windows.net/quick-start
 import {
   FluentProvider,
-  teamsLightTheme,
-  teamsDarkTheme,
   teamsHighContrastTheme,
   Spinner,
   tokens,
@@ -14,9 +12,11 @@ import config from './sample/lib/config'
 import { useSetRecoilState } from 'recoil'
 import AuthRouter from '@/routers/AuthRouter'
 import { themeState } from '@/stores/common'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { userState } from '@/stores/user'
 import { customLightTheme, customDarkTheme } from '@/styles/colorRamp'
+import { getLocalStorage } from '@/utils/localStorage'
+import Tutorial from './Tutorial'
 
 /**
  * The main app which handles the initialization and routing
@@ -30,6 +30,7 @@ export default function App() {
     })
   const setTheme = useSetRecoilState(themeState)
   const setUser = useSetRecoilState(userState)
+  const [isUserInfoinLocal, setIsUserInfoinLocal] = useState(true)
 
   useEffect(() => {
     setTheme(themeString)
@@ -39,6 +40,12 @@ export default function App() {
     if (teamsUserCredential) {
       const userInfo = await teamsUserCredential.getUserInfo()
       setUser({ name: userInfo.displayName, email: userInfo.preferredUserName })
+
+      // localStorage - user정보 확인
+      const getUserInfo = getLocalStorage('User')
+      if (!getUserInfo) {
+        setIsUserInfoinLocal(false)
+      }
     }
   })
 
@@ -49,9 +56,7 @@ export default function App() {
       <FluentProvider
         theme={
           themeString === 'dark'
-            ? {...customDarkTheme,
-              colorNeutralBackground1: '#1f1f1f',
-            }
+            ? { ...customDarkTheme, colorNeutralBackground1: '#1f1f1f' }
             : themeString === 'contrast'
             ? teamsHighContrastTheme
             : {
@@ -64,10 +69,12 @@ export default function App() {
       >
         {loading ? (
           <Spinner style={{ margin: 100 }} />
-        ) : (
+        ) : isUserInfoinLocal ? (
           <Router>
             <AuthRouter />
           </Router>
+        ) : (
+          <Tutorial value={isUserInfoinLocal} setValue={setIsUserInfoinLocal} />
         )}
       </FluentProvider>
     </TeamsFxContext.Provider>
