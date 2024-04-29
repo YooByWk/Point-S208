@@ -22,13 +22,4 @@ public class Filter {
     @Builder.Default
     private String filterName = "none";
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "private_album_id")
-    private PrivateAlbum privateAlbum;
-
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "team_album_detail_id")
-    private TeamAlbumDetail teamAlbumDetail;
 }
