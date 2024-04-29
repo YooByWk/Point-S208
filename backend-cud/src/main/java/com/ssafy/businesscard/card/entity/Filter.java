@@ -5,8 +5,6 @@ import com.ssafy.businesscard.myalbum.entity.PrivateAlbum;
 import com.ssafy.businesscard.team.entity.TeamAlbumDetail;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.Fetch;
 
 @Entity
 @Getter
@@ -21,7 +19,6 @@ public class Filter {
     private Long filterId;
 
     @Column(name = "filter_name", length = 30)
-    @ColumnDefault("none")
     private String filterName;
 
     @JsonIgnore

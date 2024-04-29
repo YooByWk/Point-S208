@@ -6,8 +6,7 @@ import com.ssafy.businesscard.global.BaseTimeEntity;
 import com.ssafy.businesscard.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DialectOverride;
+
 
 @Entity
 @Getter
@@ -23,7 +22,6 @@ public class PrivateAlbum extends BaseTimeEntity {
     private Long privateAlbumId;
 
     @Column(name = "favorite", nullable = false)
-    @ColumnDefault("false")
     private boolean favorite;
 
     @JsonIgnore
