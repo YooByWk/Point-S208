@@ -43,7 +43,6 @@ const TeamList = () => {
               console.log('팀 클릭', team.teamId)
                setSelectedTeam(team)
               navigate(`/myTeam/${team.teamId}`)
-              console.log()
             }}
           />
         )
