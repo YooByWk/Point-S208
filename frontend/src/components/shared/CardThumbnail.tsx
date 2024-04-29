@@ -4,6 +4,7 @@ import type { CardType } from '@/types/cardType'
 import Flex from '@/components/shared/Flex'
 import Text from '@/components/shared/Text'
 import { css } from '@emotion/react'
+import Spacing from '@/components/shared/Spacing'
 import { tokens } from '@fluentui/react-components'
 import {
   CheckmarkCircle24Regular,
@@ -102,7 +103,9 @@ const CardThumbnail = ({
           <ShareAndroid24Filled css={i} onClick={handleShare} />
           <Delete24Filled css={i} onClick={handleDelete} />
         </Flex>}
+        
       </Flex>
+      <Spacing  size={10} direction='vertical'/>
     </div>
   )
 }
