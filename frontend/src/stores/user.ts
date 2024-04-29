@@ -2,6 +2,7 @@ import { userType } from '@/types/userType'
 import { atom } from 'recoil'
 
 const defaultUser = {
+  userId: '',
   name: '',
   email: '',
 }
