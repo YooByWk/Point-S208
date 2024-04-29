@@ -85,31 +85,6 @@ const WriteCardInfo = ({
         <Spacing size={16} />
 
         <TextField
-          label="직책"
-          type="position"
-          name="position"
-          placeholder={isEnglish ? 'PR Planning, Leader' : '리더'}
-          isRequired={true}
-          onChange={handleCardInputs}
-          value={cardInputs.position}
-          hasError={Boolean(dirty.position) && Boolean(errors.position)}
-          helpMessage={Boolean(dirty.position) ? errors.position : ''}
-          onBlur={handleBlur}
-        />
-
-        <Spacing size={16} />
-
-        <TextField
-          label="직무"
-          type="rank"
-          name="rank"
-          onChange={handleCardInputs}
-          value={cardInputs.rank}
-        />
-
-        <Spacing size={16} />
-
-        <TextField
           label="부서"
           type="department"
           name="department"
@@ -119,6 +94,21 @@ const WriteCardInfo = ({
           value={cardInputs.department}
           hasError={Boolean(dirty.department) && Boolean(errors.department)}
           helpMessage={Boolean(dirty.department) ? errors.department : ''}
+          onBlur={handleBlur}
+        />
+
+        <Spacing size={16} />
+
+        <TextField
+          label="직책"
+          type="position"
+          name="position"
+          placeholder={isEnglish ? 'PR Planning, Leader' : '리더'}
+          isRequired={true}
+          onChange={handleCardInputs}
+          value={cardInputs.position}
+          hasError={Boolean(dirty.position) && Boolean(errors.position)}
+          helpMessage={Boolean(dirty.position) ? errors.position : ''}
           onBlur={handleBlur}
         />
 
@@ -158,16 +148,6 @@ const WriteCardInfo = ({
         <Spacing size={16} />
 
         <TextField
-          label="팩스번호"
-          type="faxNumber"
-          name="faxNumber"
-          onChange={handleCardInputs}
-          value={cardInputs.faxNumber}
-        />
-
-        <Spacing size={16} />
-
-        <TextField
           label="핸드폰 번호"
           type="phoneNumber"
           name="phoneNumber"
@@ -178,26 +158,6 @@ const WriteCardInfo = ({
           hasError={Boolean(dirty.phoneNumber) && Boolean(errors.phoneNumber)}
           helpMessage={Boolean(dirty.phoneNumber) ? errors.phoneNumber : ''}
           onBlur={handleBlur}
-        />
-
-        <Spacing size={16} />
-
-        <TextField
-          label="주소"
-          type="address"
-          name="address"
-          onChange={handleCardInputs}
-          value={cardInputs.address}
-        />
-
-        <Spacing size={16} />
-
-        <TextField
-          label="도메인 주소"
-          type="domainUrl"
-          name="domainUrl"
-          onChange={handleCardInputs}
-          value={cardInputs.domainUrl}
         />
 
         <Spacing size={32} />

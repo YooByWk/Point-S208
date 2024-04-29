@@ -3,8 +3,8 @@
 import  { useState } from 'react'
 import Flex from '@/components/shared/Flex'
 import {
-  Circle20Regular,
-  CheckmarkCircle20Regular,
+  Circle24Regular,
+  CheckmarkCircle24Regular,
   ArrowDownload24Regular,
   Delete24Filled
 } from '@fluentui/react-icons'
@@ -40,7 +40,7 @@ const MultiSelectBar = ({selectedCards, allCards, setSelectedCards}:MultiSelectB
   return (
     <Flex direction="row" align="center" justify="space-between" css={selectbarContainer} >
       <Flex direction="row" align="center" justify="space-around">
-        {allCards.length === selectedCards.length ? <CheckmarkCircle20Regular onClick={handleSelectAll}/> : <Circle20Regular onClick={handleSelectAll}/> }
+        {allCards.length === selectedCards.length ? <CheckmarkCircle24Regular onClick={handleSelectAll}/> : <Circle24Regular onClick={handleSelectAll}/> }
         <Spacing size={10} direction='horizontal'/>
         {selectedCards.length > 0 &&<Text typography="t9" color="themeMainBlue">
           {selectedCards.length}개 선택됨

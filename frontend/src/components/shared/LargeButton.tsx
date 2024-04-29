@@ -39,8 +39,9 @@ const LargeButton: React.FC<ButtonProps> = ({
       <Button
         shape="rounded"
         onClick={onClick? onClick : () => {}}
-        appearance= {secondary? "secondary" : "primary"}
+        appearance= {secondary? "secondary" : disabled ? "secondary" : "primary"}
         css={buttonCss({ width, height, secondary })}
+        disabled={disabled? disabled : false}
       >
         <Text
           bold={false}
@@ -59,12 +60,12 @@ export default LargeButton
 const buttonCss = (props: any) => css`
   width: ${props.width ? props.width : '50vw'};
   height: ${props.height ? props.height : '2.5rem'};
-  background-color: ${props.secondary ? tokens.colorBrandForeground2 : null};
+  background-color: ${props.secondary ? tokens.colorNeutralStroke1 : null};
   &:hover{
-    background-color: ${props.secondary ? tokens.colorBrandForeground2Hover : null};
+    background-color: ${props.secondary ? tokens.colorNeutralStroke1Hover : null};
   }
   &:active{
-    background-color: ${props.secondary ? tokens.colorPaletteRoyalBlueForeground2 : null};
+    background-color: ${props.secondary ? tokens.colorNeutralStroke1Pressed : null};
   }
 `;
 

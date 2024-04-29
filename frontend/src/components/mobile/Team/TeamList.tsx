@@ -6,17 +6,22 @@ import SearchBox from '@/components/shared/SearchBox'
 import { useState } from 'react'
 import { useRecoilState } from 'recoil'
 import * as teamState from '@/stores/team'
-import LargeModal from '@/components/shared/LargeModal'
 import { css } from '@emotion/react'
-import Text from '@shared/Text'
+import LargeButton from '@/components/shared/LargeButton'
+import AddTeam from '@/components/mobile/Team/AddTeam'
+import { tokens } from '@fluentui/react-components';
+
+
 const TeamList = () => {
   const [searchValue, setSearchValue] = useState('')
+  const [isWrite, setIsWrite] = useState(false)
   const [selectedTeam, setSelectedTeam] = useRecoilState(
     teamState.selectedTeamIdState,
   )
 
   return (
-    <div>
+    <>
+    {!isWrite ? <>
       <SearchBox
         value={searchValue}
         onChange={(e: any) => {
@@ -26,6 +31,7 @@ const TeamList = () => {
         memberIcon={false}
         placeholder="팀 검색"
       />
+      <Spacing size={30}/>
       {/* <MyDigitalCard  cardInfo={CardDummy} scale={1} /> */}
       {dummyTeamList.map(team => {
         return (
@@ -40,33 +46,18 @@ const TeamList = () => {
           />
         )
       })}
-
+      
       <Spacing size={30} direction="vertical" />
       <div css={buttonCss}>
-        <LargeModal 
-          buttonText="팀 추가"
-          dialogTitle="팀 추가"
-          height='60vh'
-          dialogContent= {(<>
-          <Text typography='t9'>팀원을 추가하려면 팀원의 이름 또는 전자 메일을 입력하세요.</Text>
-          
-          <SearchBox 
-            value = '팀원 검색 컴포로 변경해야 함'
-            placeholder='이름 또는 전자 메일 입력'
-            memberIcon={false}
-            filterIcon={false}
-            sortIcon={false}
-            width='100%'
-          />
-          </>)}
-          
-          /* */
-          onClick={() => console.log('팀 추가')}
-          actionButtonText='추가'
-          btnWidth='80%'
-        />
+      <LargeButton text='팀 추가' width='80%' onClick={() =>setIsWrite(true)} />
         </div>
-    </div>
+    </> :
+    <AddTeam 
+      isWrite={isWrite}
+      setIsWrite={setIsWrite}
+    />
+  }
+  </>
   )
 }
 
@@ -74,7 +65,7 @@ export default TeamList
 const buttonCss = css`
   position: fixed;
   width: 100%;
-  bottom: 10;
+  bottom: 0vh;
   z-index: 999;
-  background-color: transparent;
+  background-color: ${tokens.colorNeutralBackground1};
   `
