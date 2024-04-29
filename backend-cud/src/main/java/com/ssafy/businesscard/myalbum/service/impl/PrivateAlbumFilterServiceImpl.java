@@ -37,6 +37,15 @@ public class PrivateAlbumFilterServiceImpl implements PrivateAlbumFilterService 
         saveFilter(userId, filter.getFilterId());
     }
 
+    // 필터 이름 편집
+    @Override
+    public void update(Long userId, Long filterId, FilterRequest request) {
+        privateAlbumFilterRepository.save(Filter.builder()
+                        .filterId(filterId)
+                        .filterName(request.filterName())
+                .build());
+    }
+
     // 필터 생성 후 filterId와 userId를 중계 테이블에 저장 
     private void saveFilter(Long userId, Long filterId) {
         User user = userRepository.findById(userId)

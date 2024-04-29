@@ -25,7 +25,15 @@ public class PrivateAlbumFilterController {
         return ResponseEntity.ok().body(MessageUtils.success("필터가 생성되었습니다."));
     }
 
-    // 필터 수정
+    // 필터 이름 편집
+    @PatchMapping("/{userId}/filter/{filterId}")
+    public ResponseEntity<MessageUtils> update(@PathVariable("userId") Long userId,
+                                               @PathVariable("filterId") Long filterId,
+                                               @RequestBody FilterRequest request) {
+        privateAlbumFilterService.update(userId, filterId, request);
+        log.info("Update Filter : {}", request.filterName());
+        return ResponseEntity.ok().body(MessageUtils.success("필터가 수정되었습니다."));
+    }
 
     // 필터 삭제
 }
