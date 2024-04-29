@@ -34,7 +34,7 @@ const AppCard = () => {
         email: cardInput.email,
         landline_number: cardInput.landlineNumber,
         phone_number: cardInput.phoneNumber,
-        front_back: 'front',
+        frontBack: 'FRONT',
       })
       .then(response => {
         console.log('Success:', response.data) // 성공적으로 데이터가 전송되었을 때의 로직
