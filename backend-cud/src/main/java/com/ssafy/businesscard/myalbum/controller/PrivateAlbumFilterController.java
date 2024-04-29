@@ -10,5 +10,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/my-album")
 public class PrivateAlbumFilterController {
-    private final
+
 }
