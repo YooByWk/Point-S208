@@ -1,10 +1,12 @@
 import styled from '@emotion/styled'
 import CardSection from './CardSection'
+import InfoSection from './InfoSection'
 
 const MyCardDetail = () => {
   return (
     <Container>
       <CardSection />
+      <InfoSection />
     </Container>
   )
 }
