@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import { colors } from '@/styles/colorPalette'
 import { css } from '@emotion/react'
 import { Card } from '@shared/Card'
 import Flex from '@shared/Flex'
@@ -53,8 +52,4 @@ const linkStyles = css`
   &:hover {
     cursor: pointer;
   }
-`
-
-const containerStyles = css`
-  padding: 24px;
 `

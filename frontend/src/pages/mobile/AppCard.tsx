@@ -13,7 +13,7 @@ import axios from 'axios'
 import { userState } from '@/stores/user'
 
 const AppCard = () => {
-  const [isCard, setIsCard] = useState(false)
+  const [isCard, setIsCard] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const writeInfo = useRecoilValue(writeInfoState)
   const camera = useRecoilValue(cameraState)
