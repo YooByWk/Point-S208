@@ -1,5 +1,6 @@
 package com.ssafy.businesscard.card.service.impl;
 
+import com.ssafy.businesscard.card.dto.response.OCRResponse;
 import com.ssafy.businesscard.card.repository.BusinesscardRepository;
 import com.ssafy.businesscard.card.service.BusinessCardService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class BusinessCardServiceImpl implements BusinessCardService {
         MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
         bodyBuilder.part("file", cardImages);
         bodyBuilder.part("message", "{\"version\": \"V2\", \"requestId\": \"String\", \"timestamp\": 0, \"images\":[{\"format: \"JPG\", \"name\": \"string\"}]}");
+        System.out.println("response : " + bodyBuilder.toString());
         WebClient webClient = WebClient.builder().baseUrl("https://k10s208.p.ssafy.io/").build();
         webClient.post()
                 .uri(uriBuilder -> uriBuilder
@@ -34,8 +36,9 @@ public class BusinessCardServiceImpl implements BusinessCardService {
                 .body(BodyInserters.fromMultipartData(bodyBuilder.build()))
                 .accept(MediaType.MULTIPART_FORM_DATA)
                 .retrieve()
-                .bodyToMono(String.class);
+                .bodyToMono(OCRResponse.class);
         System.out.println("webClient : " + webClient.get());
+
 
     }
 }

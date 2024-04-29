@@ -21,8 +21,8 @@ public class MycardController {
     @PostMapping("/{userId}")
     public ResponseEntity<MessageUtils> register(@PathVariable("userId") Long userId,
                                                  @RequestBody MycardRegistRequest registRequest) {
-        mycardService.registerCard(userId, registRequest);
         log.info("[Register Card] : {}", registRequest.toString());
+        mycardService.registerCard(userId, registRequest);
         return ResponseEntity.ok().body(MessageUtils.success("명함이 등록되었습니다."));
     }
 
@@ -31,16 +31,16 @@ public class MycardController {
     public ResponseEntity<MessageUtils> update(@PathVariable("userId") Long userId,
                                                @PathVariable("cardId") Long cardId,
                                                @RequestBody MycardRegistRequest registRequest) {
-        mycardService.update(userId, cardId, registRequest);
         log.info("[Update Card] : {}", registRequest.toString());
+        mycardService.update(userId, cardId, registRequest);
         return ResponseEntity.ok().body(MessageUtils.success("정보가 수정되었습니다."));
     }
 
     // 내 명함 삭제
     @DeleteMapping("/{userId}")
     public ResponseEntity<MessageUtils> delete(@PathVariable("userId") Long userId) {
-        mycardService.delete(userId);
         log.info("[Delete Card] : {}");
+        mycardService.delete(userId);
         return ResponseEntity.ok().body(MessageUtils.success("명함이 삭제되었습니다."));
     }
 
