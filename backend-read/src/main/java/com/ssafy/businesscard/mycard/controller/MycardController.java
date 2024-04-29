@@ -21,12 +21,6 @@ public class MycardController {
     private final MycardService mycardService;
 
     //내카드 조회
-//    @GetMapping("/my-card/{user_id}")
-//    public ResponseEntity<List<MycardResponseDto>> searchMycard(@PathVariable("user_id")Long userId){
-//        List<MycardResponseDto> mycard = mycardService.searchMycard(userId);
-//        return ResponseEntity.ok().body(MessageUtils.success(mycard).getDataBody());
-//    }
-
     @GetMapping("/my-card/{user_id}")
     public ResponseEntity<MycardListResponseDto> getMycard(@PathVariable("user_id")Long userId){
         MycardListResponseDto list =mycardService.getMycard(userId);

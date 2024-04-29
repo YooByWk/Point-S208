@@ -10,8 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class MyalbumController {
+public class PrivateAlbumController {
 
     private MyalbumService myalbumService;
+
+    //명함지갑에서목록조회
+
 
 }

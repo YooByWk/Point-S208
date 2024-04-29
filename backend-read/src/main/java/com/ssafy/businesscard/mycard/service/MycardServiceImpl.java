@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,11 +19,13 @@ public class MycardServiceImpl implements MycardService{
 
     private final BusinesscardRepository businesscardRepository;
 
+    //내 명함 전체조회
     @Override
     public List<MycardResponseDto> searchMycard(Long userId){
         return businesscardRepository.findByUser_UserId(userId);
     }
 
+    //내 명함탭
     @Override
     public MycardListResponseDto getMycard(Long userId){
         Long Id = userId;
