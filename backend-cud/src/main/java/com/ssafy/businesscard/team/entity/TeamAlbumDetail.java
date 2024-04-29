@@ -13,7 +13,7 @@ import lombok.*;
 public class TeamAlbumDetail {
 
     @Id
-    @GeneratedValue(generator = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "team_album_detail_id")
     private Long teamAlbumDetailId;
 
