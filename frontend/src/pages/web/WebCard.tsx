@@ -1,10 +1,11 @@
+import WebEmptyCard from '@components/web/WebEmptyCard'
 
 const WebCard = () => {
-  return (
-    <div>
-      웹 내 명함
-    </div>
-  );
-};
+  const renderContent = () => {
+    return <WebEmptyCard />
+  }
 
-export default WebCard;
+  return <>{renderContent()}</>
+}
+
+export default WebCard
