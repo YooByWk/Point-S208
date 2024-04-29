@@ -7,6 +7,7 @@ import styled from '@emotion/styled'
 import { useRecoilState } from 'recoil'
 import { EditRegular, Guest24Regular } from '@fluentui/react-icons'
 import Spacing from '@/components/shared/Spacing'
+import { BooleanStateType } from '@/types/commonType'
 
 const CardInfo = (props: { name: string; value: string }) => {
   const { name, value } = props
@@ -26,7 +27,8 @@ const CardInfo = (props: { name: string; value: string }) => {
   )
 }
 
-const InfoSection = () => {
+const InfoSection = (props: BooleanStateType) => {
+  const { setValue } = props
   // const [card, setCard] = useRecoilState(cardState)
   const card = dummyCard[0]
 
@@ -39,7 +41,7 @@ const InfoSection = () => {
         <Text typography="t7">
           {card.position} / {card.department}
         </Text>
-        <Edit>
+        <Edit onClick={() => setValue(true)}>
           <EditRegular />
           <Text typography="t8">수정</Text>
         </Edit>
