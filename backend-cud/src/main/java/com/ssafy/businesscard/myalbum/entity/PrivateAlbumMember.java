@@ -16,18 +16,23 @@ import lombok.ToString;
 public class PrivateAlbumMember {
 
     @Id
-    @JoinColumn(name = "private_album_id")
-    @ManyToOne
-    private PrivateAlbum privateAlbum;
-
-    @Id
     @JoinColumn(name = "filter_id")
     @ManyToOne
     private Filter filter;
 
+    @Id
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @JoinColumn(name = "private_album_id")
+    @ManyToOne
+    private PrivateAlbum privateAlbum;
+
     @Builder
-    public PrivateAlbumMember(PrivateAlbum privateAlbum, Filter filter) {
-        this.privateAlbum = privateAlbum;
+    public PrivateAlbumMember(Filter filter, User user, PrivateAlbum privateAlbum) {
         this.filter = filter;
+        this.user = user;
+        this.privateAlbum = privateAlbum;
     }
 }

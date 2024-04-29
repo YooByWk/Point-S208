@@ -65,7 +65,11 @@ public class GlobalExceptionHandler {
     public enum UserErrorCode {
         NOT_EXISTS_USER("존재하지 않는 회원입니다.",HttpStatus.BAD_REQUEST),
         ALREADY_IN_EMAIL("이미 가입된 회원입니다.", HttpStatus.BAD_REQUEST),
-        ACCESS_DENIED("권한이 없습니다.", HttpStatus.FORBIDDEN);
+        ACCESS_DENIED("권한이 없습니다.", HttpStatus.FORBIDDEN),
+
+        NOT_EXISTS_CARD("존재하지 않는 명함입니다.", HttpStatus.BAD_REQUEST),
+        ALREADY_IN_CARD("이미 등록된 명함입니다.", HttpStatus.BAD_REQUEST),
+        NOT_EXISTS_FILTER("존재하는 않는 필터 입니다.", HttpStatus.BAD_REQUEST);
 
         private final String message;
         private final HttpStatus httpStatus;
