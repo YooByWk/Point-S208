@@ -1,4 +1,4 @@
-package com.ssafy.businesscard.myalbum.entity;
+package com.ssafy.businesscard.privateAlbum.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.businesscard.global.BaseTimeEntity;
@@ -13,7 +13,7 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class PrivateAlbumDetail extends BaseTimeEntity {
+public class PrivateAlbum extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
