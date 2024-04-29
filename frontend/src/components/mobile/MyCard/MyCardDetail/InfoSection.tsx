@@ -13,14 +13,11 @@ const CardInfo = (props: { name: string; value: string }) => {
   const { name, value } = props
 
   return (
-    <Flex style={{ position: 'relative' }}>
-      <Text typography="t8" style={{ width: '70px' }}>
+    <Flex>
+      <Text typography="t8" style={{ minWidth: '70px' }}>
         {name}
       </Text>
-      <Text
-        typography="t8"
-        style={{ position: 'absolute', left: '70px', wordBreak: 'keep-all' }}
-      >
+      <Text typography="t8" style={{ wordBreak: 'keep-all' }}>
         {value}
       </Text>
     </Flex>
@@ -46,7 +43,9 @@ const InfoSection = (props: BooleanStateType) => {
           <Text typography="t8">수정</Text>
         </Edit>
       </Wrap>
+
       <BreackLine />
+
       <Wrap>
         <Flex align="center">
           <Guest24Regular />
@@ -59,7 +58,9 @@ const InfoSection = (props: BooleanStateType) => {
         <CardInfo name={'부서'} value={card.department} />
         <CardInfo name={'직책'} value={card.position} />
       </Wrap>
+
       <BreackLine />
+
       <Wrap>
         <Flex align="center">
           <Guest24Regular />
@@ -73,6 +74,8 @@ const InfoSection = (props: BooleanStateType) => {
         <CardInfo name={'팩스'} value={card.faxNumber} />
         <CardInfo name={'주소'} value={card.address} />
       </Wrap>
+
+      <BreackLine />
     </Flex>
   )
 }
