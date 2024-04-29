@@ -7,7 +7,7 @@ import Flex from './Flex'
 import PeopleFilterSortIcons from './PeopleFilterSortIcons';
 import { colors } from '@/styles/colorPalette';
 import Spacing  from '@/components/shared/Spacing';
-
+import { SearchRegular } from '@fluentui/react-icons';
 interface SearchBoxProps {
   placeholder?: string
   onChange?: (e: any) => void
@@ -17,7 +17,11 @@ interface SearchBoxProps {
   value: string | number
   spacing? : boolean
   width?: string
+  lefticon?: boolean
+  righticon?: boolean
+  bgColor?: string
 }
+
 
 /**
  *
@@ -32,28 +36,35 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   value,
   sortIcon,
   spacing = true,
-  width
+  width,
+  lefticon=true,
+  bgColor=''
 }) => {
   const handleKeyDown = (e: any): void => {
+    // console.log(e)
     if (e.key === 'Enter') {
       console.log('submit', value)
       // handleSubmit()
     } else {
-      console.log('not enter')
+      console.log('not enter', value)
     }
   }
+  
+
   return (
     <div>
-      <Spacing size={10} direction='vertical'/>
+      {/* <Spacing size={10} direction='vertical'/> */}
       <Flex justify="space-between" align="center" direction="row"
       css={mainContainerCss}>
         <div  css={searchBoxContainerCss(width? width : '70%')}>
           <FluentSearchBox
+            size='large'
             placeholder={placeholder}
             onKeyDown={handleKeyDown}
             onChange={onChange}
-            css={searchBoxCss}
+            css={searchBoxCss(bgColor)}
             appearance='filled-darker'
+            contentBefore={lefticon? <SearchRegular/>: null}
           />
         </div>
         <PeopleFilterSortIcons
@@ -94,8 +105,8 @@ const mainContainerCss = css`
   background-color: ${tokens.colorNeutralBackground1};
 `
 
-const searchBoxCss = css`
-  background-color: ${tokens.colorNeutralBackground1} !important;
+const searchBoxCss = (bg: string) => css`
+  background-color: ${bg?  'tokens.'+ bg :tokens.colorNeutralBackground1 } !important;
   
 .ms-SearchBox-clearButton {
   position: absolute;

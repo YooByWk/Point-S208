@@ -20,3 +20,4 @@ export const hasSelectedTeam = selector({
     return selectedTeam.teamName !== ''
   }
 })
+
