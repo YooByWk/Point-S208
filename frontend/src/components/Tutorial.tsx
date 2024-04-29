@@ -5,7 +5,6 @@ import { useMutation } from '@tanstack/react-query'
 import { userReg } from '@/apis/auth'
 import { useRecoilState } from 'recoil'
 import { userState } from '@/stores/user'
-import { setLocalStorage } from '@/utils/localStorage'
 
 const Tutorial = (props: BooleanStateType) => {
   const { setValue } = props
@@ -16,12 +15,7 @@ const Tutorial = (props: BooleanStateType) => {
     mutationFn: userReg,
     onSuccess(result) {
       console.log('등록 성공', result)
-      setUser(prev => ({ ...prev, id: result.data_body }))
-      setLocalStorage('User', {
-        id: result.data_body,
-        name: user.name,
-        email: user.email,
-      })
+      setUser(prev => ({ ...prev, userId: result.data_body }))
       setValue(true)
     },
     onError(error) {
