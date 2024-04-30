@@ -1,26 +1,17 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import {
-  ShareAndroid16Filled,
-  ArrowSwap16Filled,
-  Delete16Filled,
-  Edit16Filled,
-  PersonBoard32Filled,
-  Phone32Regular,
-} from '@fluentui/react-icons'
 import Flex from '@shared/Flex'
-import Text from '@shared/Text'
-import TextButton from '@shared/TextButton'
 import Spacing from '@shared/Spacing'
-import { SearchBox } from '@fluentui/react-components'
 
 import axios from 'axios'
 import { useState, useEffect } from 'react'
 import { useRecoilValue } from 'recoil'
 import { userState } from '@stores/user'
-import WebNewlyAdded from './WebNewlyAdded'
-import CardSection from '../mobile/MyCard/MyCardDetail/CardSection'
 import { colors } from '@/styles/colorPalette'
+import WebTopBar from './WebMyCardDetail/WebTopBar'
+import WebMyCardInfo from './WebMyCardDetail/WebMyCardInfo'
+import WebNewlyAddedCard from './WebMyCardDetail/WebNewlyAddedCard'
+import WebEmptyBackCard from './WebMyCardDetail/WebEmptyBackCard'
 
 interface CardInfo {
   card_id: number
@@ -73,7 +64,13 @@ function useFetchCardData(userId: number | undefined, isCard: boolean) {
   return { data, loading, error }
 }
 
-const WebMyCard = ({ isCard }: { isCard: boolean }) => {
+const WebMyCard = ({
+  isCard,
+  setIsEnglish,
+}: {
+  isCard: boolean
+  setIsEnglish: (isFront: boolean) => void
+}) => {
   const userId = useRecoilValue(userState).userId
   const { data, loading, error } = useFetchCardData(userId, isCard)
   const [isFront, setIsFront] = useState(true)
@@ -81,137 +78,23 @@ const WebMyCard = ({ isCard }: { isCard: boolean }) => {
   if (loading) return <div>Loading...</div>
   if (error) return <div>Error loading data!</div>
   if (!data) return <div>No data available</div>
-  if (!isFront && data.back === null) return <div>카드 뒷면 입력하세요</div>
+  if (!isFront && data.back === null) {
+    setIsEnglish(true)
+    return (
+      <WebEmptyBackCard isFront={isFront} setIsFront={setIsFront} data={data} />
+    )
+  }
   console.log(data)
 
   return (
     <>
       <Flex justify="center">
-        {/* 내명함 */}
         <Flex direction="column" css={containerStyles}>
-          {/* 타이틀 바 */}
-          <Flex justify="space-between">
-            <Text typography="t7">내 명함</Text>
-            <Flex>
-              <TextButton>
-                <ShareAndroid16Filled /> 공유
-              </TextButton>
-              <Spacing size={10} direction="horizontal" />
-              <TextButton onClick={() => setIsFront(!isFront)}>
-                <ArrowSwap16Filled /> 전환
-              </TextButton>
-              <Spacing size={10} direction="horizontal" />
-              <TextButton>
-                <Edit16Filled /> 수정
-              </TextButton>
-              <Spacing size={10} direction="horizontal" />
-              <TextButton>
-                <Delete16Filled /> 삭제
-              </TextButton>
-            </Flex>
-          </Flex>
+          <WebTopBar isFront={isFront} setIsFront={setIsFront} />
           <Spacing size={10} />
-          {/* 내용 */}
-          <Flex direction="column">
-            <div css={boxStyles}>사진</div>
-            <CardSection />
-            <Spacing size={20} />
-            <Flex direction="column" css={container3Styles}>
-              <Flex justify="flex-start" align="center">
-                <PersonBoard32Filled />
-                <Text bold={true}>명함 정보</Text>
-              </Flex>
-              <Spacing size={20} />
-              <Flex>
-                <Text typography="t6">회사</Text>
-                <Spacing size={60} direction="horizontal" />
-                <Text typography="t6">
-                  {isFront ? data.front.company : data.back!.company}
-                </Text>
-              </Flex>
-              <Flex>
-                <Text typography="t6">부서</Text>
-                <Spacing size={60} direction="horizontal" />
-                <Text typography="t6">
-                  {isFront ? data.front.department : data.back!.department}
-                </Text>
-              </Flex>
-              <Flex>
-                <Text typography="t6">직책</Text>
-                <Spacing size={60} direction="horizontal" />
-                <Text typography="t6">
-                  {isFront ? data.front.position : data.back!.position}
-                </Text>
-              </Flex>
-              <Spacing size={20} />
-            </Flex>
-
-            <Spacing size={20} />
-            <Flex direction="column">
-              <Flex justify="flex-start" align="center">
-                <Phone32Regular />
-                <Text bold={true}>연락처</Text>
-              </Flex>
-              <Spacing size={20} />
-              <Flex>
-                <Text typography="t6">이메일</Text>
-                <Spacing size={40} direction="horizontal" />
-                <Text typography="t6">
-                  {isFront ? data.front.email : data.back!.email}
-                </Text>
-              </Flex>
-              <Flex>
-                <Text typography="t6">유선전화</Text>
-                <Spacing size={20} direction="horizontal" />
-                <Text typography="t6">
-                  {isFront
-                    ? data.front.landlineNumber
-                    : data.back!.landlineNumber}
-                </Text>
-              </Flex>
-              <Flex>
-                <Text typography="t6">휴대전화</Text>
-                <Spacing size={20} direction="horizontal" />
-                <Text typography="t6">
-                  {isFront ? data.front.phoneNumber : data.back!.phoneNumber}
-                </Text>
-              </Flex>
-              <Spacing size={20} />
-            </Flex>
-          </Flex>
+          <WebMyCardInfo isFront={isFront} data={data} />
         </Flex>
-
-        {/* 새로 추가된 명함 */}
-        <Flex direction="column" css={container2Styles}>
-          {/* 타이틀 바 */}
-          <Flex justify="space-between">
-            <Text typography="t7"> 새로 추가된 명함 </Text>
-            <SearchBox
-              appearance="underline"
-              size="medium"
-              placeholder="명함 검색"
-            />
-          </Flex>
-          <Spacing size={10} />
-          {/* 내용 */}
-          <Flex direction="column">
-            {/* for문으로 카드 리스트 돌리기 */}
-            {data.list.length === 0 ? (
-              <>
-                <Spacing size={20} />
-                <Text textAlign="center" typography="t7" css={boxStyles}>
-                  새로 추가된 명함이 없습니다.
-                </Text>
-              </>
-            ) : (
-              data.list.map((card, index) => (
-                <div key={index} css={boxStyles}>
-                  <WebNewlyAdded card={card} />
-                </div>
-              ))
-            )}
-          </Flex>
-        </Flex>
+        <WebNewlyAddedCard list={data.list} />
       </Flex>
     </>
   )
@@ -223,17 +106,4 @@ const containerStyles = css`
   padding-top: 10px;
   padding-right: 10px;
   border-right: 1px solid ${colors.themeGray};
-`
-
-const container2Styles = css`
-  padding-top: 13px;
-  padding-left: 10px;
-`
-
-const container3Styles = css`
-  border-bottom: 1px solid ${colors.themeGray};
-`
-
-const boxStyles = css`
-  width: 47vw;
 `
