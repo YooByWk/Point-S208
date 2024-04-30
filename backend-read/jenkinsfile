@@ -94,9 +94,14 @@ pipeline {
                     sh 'pwd'
                     sh 'ls -al'
 
-                    // Docker Compose를 사용하여 서비스 빌드
-                    sh '/var/jenkins_home/bin/docker-compose -f docker-compose.yml build'
-                    // sh '/var/jenkins_home/bin/docker-compose -f docker-compose.yml build --no-cache'
+                   component.each { entry ->
+                if (entry.value) {
+                    def component_name = entry.key
+                    // 지정된 컴포넌트만 빌드
+                    sh "/var/jenkins_home/bin/docker-compose -f docker-compose.yml build ${component_name}"
+                }
+            }
+            
                     fileCopy()
 
                 }
