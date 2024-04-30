@@ -1,5 +1,6 @@
 package com.ssafy.businesscard.privateAlbum.service;
 
+import com.ssafy.businesscard.privateAlbum.dto.FilterListResponseDto;
 import com.ssafy.businesscard.privateAlbum.dto.PrivateAlbumListDto;
 import com.ssafy.businesscard.privateAlbum.dto.PrivateAlbumResponseDto;
 
@@ -10,4 +11,5 @@ public interface PrivateAlbumService {
 
     public List<PrivateAlbumResponseDto> getAlbumList(Long userId, int page);
     public PrivateAlbumResponseDto getAlbumDtail(Long userId, Long cardId);
+    public List<FilterListResponseDto> getFilter(Long userId);
 }
