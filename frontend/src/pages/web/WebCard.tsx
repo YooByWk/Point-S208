@@ -6,7 +6,7 @@ import WriteCardInfo from '@components/mobile/MyCard/WriteCardInfo'
 import WebMyCard from '@/components/web/WebMyCard'
 
 const WebCard = () => {
-  const [isCard, setIsCard] = useState(false)
+  const [isCard, setIsCard] = useState(true)
   const writeInfo = useRecoilValue(writeInfoState)
 
   const renderContent = () => {
