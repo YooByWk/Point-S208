@@ -1,16 +1,14 @@
 package com.ssafy.businesscard.privateAlbum.controller;
 
 import com.ssafy.businesscard.global.utils.MessageUtils;
+import com.ssafy.businesscard.privateAlbum.dto.FilterListResponseDto;
 import com.ssafy.businesscard.privateAlbum.dto.PrivateAlbumListDto;
 import com.ssafy.businesscard.privateAlbum.dto.PrivateAlbumResponseDto;
 import com.ssafy.businesscard.privateAlbum.service.PrivateAlbumService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class PrivateAlbumController {
 
     private final PrivateAlbumService privateAlbumService;
@@ -39,6 +38,13 @@ public class PrivateAlbumController {
             @PathVariable("card_id")Long cardId){
         PrivateAlbumResponseDto privateAlbumResponseDto = privateAlbumService.getAlbumDtail(userId, cardId);
         return ResponseEntity.ok().body(MessageUtils.success(privateAlbumResponseDto).getDataBody());
+    }
+
+    //필터 목록 조회
+    @GetMapping("/my-album/{user_id}/filter")
+    public ResponseEntity<List<FilterListResponseDto>> getFilter(@PathVariable("user_id")Long userId){
+        List<FilterListResponseDto> list = privateAlbumService.getFilter(userId);
+        return ResponseEntity.ok().body(MessageUtils.success(list).getDataBody());
     }
 
 

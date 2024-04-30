@@ -1,6 +1,7 @@
 package com.ssafy.businesscard.privateAlbum.service;
 
 import com.ssafy.businesscard.mycard.repository.BusinesscardRepository;
+import com.ssafy.businesscard.privateAlbum.dto.FilterListResponseDto;
 import com.ssafy.businesscard.privateAlbum.dto.PrivateAlbumResponseDto;
 import com.ssafy.businesscard.privateAlbum.entity.PrivateAlbum;
 import com.ssafy.businesscard.privateAlbum.repository.PrivateAlbumRepository;
@@ -54,6 +55,7 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
         return responseDtoList;
     }
 
+    //명함 상세 조회
     @Override
     public PrivateAlbumResponseDto getAlbumDtail(Long userId, Long cardId){
         Optional<PrivateAlbum> optionalPrivateAlbum = privateAlbumRepository.findByUser_userIdAndBusinesscard_cardId(userId, cardId);
@@ -77,5 +79,11 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
         } else {
             throw new NoSuchElementException("카드가 없음");
         }
+    }
+
+    //필터 목록 조회
+    public List<FilterListResponseDto> getFilter(Long userId){
+
+        return null;
     }
 }
