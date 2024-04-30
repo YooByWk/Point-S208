@@ -3,7 +3,6 @@ import { atom } from 'recoil'
 
 const defaultCard = {
   cardId: 0,
-  userId: 0,
   name: '',
   company: '',
   position: '',
@@ -18,11 +17,24 @@ const defaultCard = {
   digitalPicture: '',
   frontBack: '',
   domainUrl: '',
-  createdAt: '',
-  updateAt: '',
 }
 
-export const cardState = atom<CardType>({
-  key: 'cardState',
+export const frontCardState = atom<CardType>({
+  key: 'frontCardState',
   default: defaultCard,
+})
+
+export const backCardState = atom<CardType>({
+  key: 'backCardState',
+  default: defaultCard,
+})
+
+export const isFrontState = atom({
+  key: 'isFrontState',
+  default: true,
+})
+
+export const isRealState = atom({
+  key: 'isRealState',
+  default: true,
 })
