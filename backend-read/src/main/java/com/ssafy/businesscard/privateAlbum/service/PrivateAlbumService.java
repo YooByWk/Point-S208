@@ -9,4 +9,5 @@ import java.util.List;
 public interface PrivateAlbumService {
 
     public List<PrivateAlbumResponseDto> getAlbumList(Long userId, int page);
+    public PrivateAlbumResponseDto getAlbumDtail(Long userId, Long cardId);
 }

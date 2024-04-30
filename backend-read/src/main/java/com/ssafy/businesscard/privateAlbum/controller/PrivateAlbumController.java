@@ -31,4 +31,15 @@ public class PrivateAlbumController {
         List<PrivateAlbumResponseDto> list = privateAlbumService.getAlbumList(userId, page);
         return ResponseEntity.ok().body(MessageUtils.success(list).getDataBody());
     }
+
+    //명함 상세 조회
+    @GetMapping("/my-album/{user_id}/{card_id}")
+    public ResponseEntity<PrivateAlbumResponseDto> getAlbumDtail(
+            @PathVariable("user_id")Long userId,
+            @PathVariable("card_id")Long cardId){
+        PrivateAlbumResponseDto privateAlbumResponseDto = privateAlbumService.getAlbumDtail(userId, cardId);
+        return ResponseEntity.ok().body(MessageUtils.success(privateAlbumResponseDto).getDataBody());
+    }
+
+
 }

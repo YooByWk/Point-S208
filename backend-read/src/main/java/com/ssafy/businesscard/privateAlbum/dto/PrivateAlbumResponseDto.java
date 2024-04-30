@@ -1,7 +1,9 @@
 package com.ssafy.businesscard.privateAlbum.dto;
 
 import com.ssafy.businesscard.mycard.entity.Businesscard;
+import lombok.Builder;
 
+@Builder
 public record PrivateAlbumResponseDto(
         Long cardId,
         String name,
