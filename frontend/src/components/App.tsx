@@ -39,11 +39,9 @@ export default function App() {
     if (teamsUserCredential) {
       const userInfo = await teamsUserCredential.getUserInfo()
       setUser({
-        userId: 6,
         name: userInfo.displayName,
         email: userInfo.preferredUserName,
       })
-      console.log(user)
 
       if (!user.userId) {
         setIsUserInfoinLocal(false)
