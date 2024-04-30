@@ -1,3 +1,4 @@
+import TeamDetail from '@/components/mobile/Team/TeamDetail/TeamDetail'
 import AppTeamList from '@/components/mobile/Team/TeamList' // 구분을 위해 이름 변경 : 원래는 TeamList
 import CardList from '@/components/shared/CardList'
 import useWindowSize from '@/hooks/useWindowSize'
@@ -19,7 +20,8 @@ const AuthRouter = () => {
   ?<Route path='/myTeam' element={<WebTeam />} /> 
   :<Route path='/myTeam' element={<AppTeam/>}>
     <Route index  element={<AppTeamList />}/>
-    <Route path=':teamId' element={<CardList />}/> 
+    {/* <Route path=':teamId' element={<CardList />}/>  */}
+    <Route path=':teamId' element={<TeamDetail />}/> 
   </Route>
   }
   <Route path="*" element={<MyCard />} />
