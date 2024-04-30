@@ -26,7 +26,4 @@ public class MycardController {
         MycardListResponseDto list =mycardService.getMycard(userId);
         return ResponseEntity.ok().body(MessageUtils.success(list).getDataBody());
     }
-
-
-
 }

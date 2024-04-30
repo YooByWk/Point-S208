@@ -17,11 +17,12 @@ public class PrivateAlbum extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "private_album_detail_id")
+    @Column(name = "private_album_id")
     private Long privateAlbumDetailId;
 
-    @Column(name = "favorite", nullable = false)
-    private boolean favorite;
+    @Column(name = "favorite", nullable = false, columnDefinition = "boolean default false")
+    @Builder.Default
+    private boolean favorite = false;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
@@ -29,9 +30,7 @@ public class PrivateAlbum extends BaseTimeEntity {
     private User user;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "card_id")
     private Businesscard businesscard;
-
-
 }

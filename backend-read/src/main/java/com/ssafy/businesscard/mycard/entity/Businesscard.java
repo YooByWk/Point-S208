@@ -4,6 +4,7 @@ import com.ssafy.businesscard.global.BaseTimeEntity;
 import com.ssafy.businesscard.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.checkerframework.checker.units.qual.C;
 
 @Entity
 @Getter
@@ -29,6 +30,9 @@ public class Businesscard extends BaseTimeEntity {
 
     @Column(name = "rank", length = 30)
     private String rank;
+
+    @Column(name = "department", length = 30)
+    private String department;
 
     @Column(name = "email", unique = true, nullable = false, length = 100)
     private String email;
