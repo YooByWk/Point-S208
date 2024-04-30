@@ -21,7 +21,7 @@ interface MainContainerProps {
 const MyDigitalCard: React.FC<MyDigitalCardProps> = ({cardInfo, scale, border}) => {
   // console.log(scale)
   if (!scale) {
-    scale = 1
+    scale = 1.1
   } 
   // const cardInfo = props.cardInfo
   return (
@@ -62,8 +62,8 @@ const MainContainer = (props:MainContainerProps) => css`
   background-color: ${colors.white};
   /* width: 65%; */
   /* height: 25%; */
-  width: 270px;
-  height: 150px;
+  width: 245px;
+  height: 135px;
   border-radius: 15px;
   border: ${props.border ? "2px solid " + colors.black : "none"};
   display: flex;
