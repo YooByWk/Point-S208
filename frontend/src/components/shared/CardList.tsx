@@ -19,11 +19,12 @@ interface CardListProps {
   cardList? : CardListType
   cards: CardType[]
   isTeam?: boolean
+  parentisLoading?: boolean
 }
 
 
-const CardList = ({cardList, cards, isTeam, }:CardListProps) => {
-
+const CardList = ({parentisLoading=false,cardList, cards, isTeam, }:CardListProps) => {
+  
   const [searchValue, setSearchValue] = useState('')
   const [selectedCards, setSelectedCards] = useState<number[]>([]) 
   const [isShare, setIsShare] = useState(false)  // 공유창 여닫는 state
@@ -85,7 +86,7 @@ const CardList = ({cardList, cards, isTeam, }:CardListProps) => {
         <Spacing size={40} direction="vertical" />
       </Flex>
       <div css={buttonCss}>
-       <LargeButton text="명함 공유" width="80%" onClick={()=>setIsShare(!isShare)}/>
+       {<LargeButton text="명함 공유" width="80%" onClick={()=>setIsShare(!isShare)}/>}
       </div> </>) :
       <>
       
