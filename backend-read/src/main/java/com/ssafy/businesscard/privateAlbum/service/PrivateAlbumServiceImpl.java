@@ -9,10 +9,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,11 +26,12 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
     private final PrivateAlbumRepository privateAlbumRepository;
     private final BusinesscardRepository businesscardRepository;
 
+    //명함 지갑 목록 조회
     @Override
     public List<PrivateAlbumResponseDto> getAlbumList(Long userId, int page){
         int size = 10;
-        // 페이지 번호와 페이지당 아이템 수를 이용하여 데이터 조회
-        Pageable pageable = PageRequest.of(page, size);
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by("businesscard.cardId").descending());
         Page<PrivateAlbum> albumPage = privateAlbumRepository.findByUser_userId(userId, pageable);
 
         List<PrivateAlbumResponseDto> responseDtoList = albumPage.getContent().stream()
@@ -48,5 +52,30 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
                         ))
                 .collect(Collectors.toList());
         return responseDtoList;
+    }
+
+    @Override
+    public PrivateAlbumResponseDto getAlbumDtail(Long userId, Long cardId){
+        Optional<PrivateAlbum> optionalPrivateAlbum = privateAlbumRepository.findByUser_userIdAndBusinesscard_cardId(userId, cardId);
+        if (optionalPrivateAlbum.isPresent()) {
+            PrivateAlbum privateAlbum = optionalPrivateAlbum.get();
+            return PrivateAlbumResponseDto.builder()
+                    .cardId(privateAlbum.getBusinesscard().getCardId())
+                    .name(privateAlbum.getBusinesscard().getName())
+                    .company(privateAlbum.getBusinesscard().getCompany())
+                    .position(privateAlbum.getBusinesscard().getPosition())
+                    .rank(privateAlbum.getBusinesscard().getRank())
+                    .email(privateAlbum.getBusinesscard().getEmail())
+                    .landlineNumber(privateAlbum.getBusinesscard().getLandlineNumber())
+                    .faxNumber(privateAlbum.getBusinesscard().getFaxNumber())
+                    .phoneNumber(privateAlbum.getBusinesscard().getPhoneNumber())
+                    .address(privateAlbum.getBusinesscard().getAddress())
+                    .realPicture(privateAlbum.getBusinesscard().getRealPicture())
+                    .frontBack(privateAlbum.getBusinesscard().getFrontBack())
+                    .domainUrl(privateAlbum.getBusinesscard().getDomainUrl())
+                    .build();
+        } else {
+            throw new NoSuchElementException("카드가 없음");
+        }
     }
 }
