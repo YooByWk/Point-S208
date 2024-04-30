@@ -75,6 +75,8 @@ const BottomSection = () => {
           명함 공유
         </Button>
       </Flex>
+
+      <Spacing size={24} />
     </>
   )
 }
