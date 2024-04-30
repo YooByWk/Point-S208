@@ -20,9 +20,8 @@ import { isFrontState, isRealState } from '@/stores/card'
 import { frontCardState, backCardState } from '@/stores/card'
 import MyDigitalCard from '../MyDigitalCard'
 
-const CardComponent = () => {
+const CardComponent = (isFront: boolean) => {
   const isReal = useRecoilValue(isRealState)
-  const isFront = useRecoilValue(isFrontState)
   const frontCard = useRecoilValue(frontCardState)
   const backCard = useRecoilValue(backCardState)
   const dummyUrl =
@@ -37,9 +36,9 @@ const CardComponent = () => {
           <RealCard $url={dummyUrl} />
         )
       ) : isFront ? (
-        <MyDigitalCard cardInfo={frontCard} border={false} />
+        <MyDigitalCard cardInfo={frontCard} scale={1} border={false} />
       ) : (
-        <MyDigitalCard cardInfo={backCard} border={false} />
+        <MyDigitalCard cardInfo={backCard} scale={1} border={false} />
       )}
     </>
   )
@@ -49,9 +48,12 @@ const CardSection = () => {
   const theme = useRecoilValue(themeState)
   const [isReal, setIsReal] = useRecoilState(isRealState)
   const [isFront, setIsFront] = useRecoilState(isFrontState)
-  const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setIsReal(e.currentTarget.checked)
-  }, [])
+  const onChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setIsReal(e.currentTarget.checked)
+    },
+    [setIsReal],
+  )
 
   return (
     <Container $theme={theme}>
@@ -73,8 +75,8 @@ const CardSection = () => {
         </Flex>
       </SwitchBtn>
       <Wrap>
-        <Card $isFront={false}>{CardComponent()}</Card>
-        <Card $isFront={true}>{CardComponent()}</Card>
+        <Card $isFront={false}>{CardComponent(!isFront)}</Card>
+        <Card $isFront={true}>{CardComponent(isFront)}</Card>
       </Wrap>
       <ArrowHookUpLeft28Regular
         css={changeStyle}
@@ -113,6 +115,7 @@ const Card = styled.div<{ $isFront: boolean }>`
   width: 245px;
   height: 135px;
   border-radius: 10px;
+  filter: drop-shadow(2px 4px 4px rgba(0, 0, 0, 0.25));
   ${props =>
     props.$isFront
       ? `left: 0; bottom: 0;`
