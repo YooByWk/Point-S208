@@ -86,7 +86,7 @@ const WriteCardInfo = ({
         email: cardInputs.email,
         landlineNumber: cardInputs.landlineNumber,
         phoneNumber: cardInputs.phoneNumber,
-        frontBack: 'FRONT',
+        frontBack: isEnglish ? 'BACK' : 'FRONT',
       },
     }
 

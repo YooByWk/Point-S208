@@ -7,12 +7,14 @@ import WebMyCard from '@/components/web/WebMyCard'
 
 const WebCard = () => {
   const [isCard, setIsCard] = useState(true)
+  const [isEnglish, setIsEnglish] = useState(false)
   const writeInfo = useRecoilValue(writeInfoState)
 
   const renderContent = () => {
-    if (isCard) return <WebMyCard isCard={isCard} />
     if (writeInfo)
-      return <WriteCardInfo isEnglish={false} setIsCard={setIsCard} />
+      return <WriteCardInfo isEnglish={isEnglish} setIsCard={setIsCard} />
+    if (isCard) return <WebMyCard isCard={isCard} setIsEnglish={setIsEnglish} />
+
     return <WebEmptyCard />
   }
 
