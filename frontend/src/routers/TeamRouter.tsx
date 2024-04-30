@@ -7,8 +7,8 @@ const TeamRouter = () => {
   const { teamId } = useParams()
   return (
     <Routes>
-      <Route path="/" element={<CardList />} />
-      <Route path="/:teamId" element={<CardList />} />
+      {/* <Route path="/" element={<CardList />} /> */}
+      {/* <Route path="/:teamId" element={<CardList />} /> */}
     </Routes>
   )
 }

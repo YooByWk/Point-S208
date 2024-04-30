@@ -76,8 +76,6 @@ const CardThumbnail = ({
       ) : (
         <Circle24Regular onClick={handleCheck} />
       )}
-      {/* <CheckmarkCircle24Regular /> */}
-      {/* <Circle24Regular /> */}
       <Flex direction="row" justify="space-around" align="center" css={content}>
         <Flex direction="column" justify="center" align="center">
           <Text typography="t7" bold={true}>
@@ -114,7 +112,7 @@ export default CardThumbnail
 
 const cardContainer = (forShare:boolean, scale:number) => css`
   border-radius: 10px;
-  width: 90%;
+  width: 85%;
   min-height: 120px;
   margin-bottom: 3%;
   margin-top: 1%;
