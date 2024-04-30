@@ -1,13 +1,15 @@
 import { dummyCard } from '@/assets/data/dummyCard'
 import Text from '@/components/shared/Text'
 import Flex from '@/components/shared/Flex'
-import { frontCardState, backCardState } from '@/stores/card'
+import { frontCardState, backCardState, isFrontState } from '@/stores/card'
 import { colors } from '@/styles/colorPalette'
 import styled from '@emotion/styled'
-import { useRecoilState } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import { EditRegular, Guest24Regular } from '@fluentui/react-icons'
 import Spacing from '@/components/shared/Spacing'
 import { BooleanStateType } from '@/types/commonType'
+import { useEffect, useState } from 'react'
+import { CardType } from '@/types/cardType'
 
 const CardInfo = (props: { name: string; value: string }) => {
   const { name, value } = props
@@ -26,8 +28,14 @@ const CardInfo = (props: { name: string; value: string }) => {
 
 const InfoSection = (props: BooleanStateType) => {
   const { setValue } = props
-  // const [card, setCard] = useRecoilState(frontCardState)
-  const card = dummyCard[0]
+  const isFront = useRecoilValue(isFrontState)
+  const frontCard = useRecoilValue(frontCardState)
+  const backCard = useRecoilValue(backCardState)
+  const [card, setCard] = useState<CardType>(frontCard)
+
+  useEffect(() => {
+    setCard(isFront ? frontCard : backCard)
+  }, [isFront, frontCard, backCard])
 
   return (
     <Flex direction="column">
