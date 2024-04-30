@@ -18,14 +18,7 @@ const AppCard = () => {
     if (isLoading) return <Spinner label="로딩 중..." />
     if (isCard) return <MyCardDetail />
     if (writeInfo)
-      return (
-        <WriteCardInfo
-          onSubmit={isDone => {
-            setIsCard(isDone)
-          }}
-          isEnglish={false}
-        />
-      )
+      return <WriteCardInfo setIsCard={setIsCard} isEnglish={false} />
     if (camera) return <PhotoReg isMyCard={isCard} />
     return <EmptyCard />
   }

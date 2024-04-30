@@ -12,14 +12,7 @@ const WebCard = () => {
   const renderContent = () => {
     if (isCard) return <WebMyCard isCard={isCard} />
     if (writeInfo)
-      return (
-        <WriteCardInfo
-          isEnglish={false}
-          onSubmit={isDone => {
-            setIsCard(isDone)
-          }}
-        />
-      )
+      return <WriteCardInfo isEnglish={false} setIsCard={setIsCard} />
     return <WebEmptyCard />
   }
 
