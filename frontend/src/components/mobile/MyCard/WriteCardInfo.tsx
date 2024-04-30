@@ -7,13 +7,16 @@ import { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { css } from '@emotion/react'
 import { Button } from '@fluentui/react-components'
 import { writeInfoState } from '@/stores/emptyCard'
-import { useSetRecoilState } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { userState } from '@/stores/user'
+
+import axios from 'axios'
 
 const WriteCardInfo = ({
   onSubmit,
   isEnglish,
 }: {
-  onSubmit: (cardInput: cardInput) => void
+  onSubmit: (isDone: boolean) => void
   isEnglish: boolean
 }) => {
   const [cardInputs, setCardInputs] = useState({
@@ -30,9 +33,12 @@ const WriteCardInfo = ({
     domainUrl: '',
   })
 
+  const userId = useRecoilValue(userState).userId
+
   const setWriteInfo = useSetRecoilState(writeInfoState)
 
   const [dirty, setDirty] = useState<Partial<cardInput>>({})
+  const [changed, setChanged] = useState(false)
 
   const handleCardInputs = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setCardInputs(prevCardInputs => ({
@@ -47,6 +53,41 @@ const WriteCardInfo = ({
       [e.target.name]: 'true',
     }))
   }, [])
+
+  function sendCardInfo(cardInput: cardInput) {
+    const url = `https://k10s208.p.ssafy.io/cud/api/my-card/${userId}`
+
+    axios
+      .post(url, {
+        name: cardInput.name,
+        company:
+          cardInput.company.length === 0
+            ? '포스코인터네셔널'
+            : cardInput.company,
+        department: cardInput.department,
+        position: cardInput.position,
+        email: cardInput.email,
+        landlineNumber: cardInput.landlineNumber,
+        phoneNumber: cardInput.phoneNumber,
+        frontBack: 'FRONT',
+      })
+      .then(response => {
+        setChanged(true)
+        console.log('Success:', response.data) // 성공적으로 데이터가 전송되었을 때의 로직
+      })
+      .catch(error => {
+        setChanged(false)
+        console.error('Error:', error) // 에러 처리 로직
+      })
+  }
+
+  const handleOnSubmit = async (cardInputs: cardInput) => {
+    try {
+      await sendCardInfo(cardInputs)
+    } catch (error) {
+      console.error('Failed to send card info:', error)
+    }
+  }
 
   const errors = useMemo(() => validate(cardInputs), [cardInputs])
 
@@ -174,8 +215,9 @@ const WriteCardInfo = ({
           <Button
             shape="circular"
             disabled={isSubmittable === false}
-            onClick={() => {
-              onSubmit(cardInputs)
+            onClick={async () => {
+              await handleOnSubmit(cardInputs)
+              onSubmit(changed)
             }}
           >
             저장
