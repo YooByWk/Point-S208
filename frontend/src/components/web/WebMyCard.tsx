@@ -18,6 +18,9 @@ import axios from 'axios'
 import { useState, useEffect } from 'react'
 import { useRecoilValue } from 'recoil'
 import { userState } from '@stores/user'
+import WebNewlyAdded from './WebNewlyAdded'
+import CardSection from '../mobile/MyCard/MyCardDetail/CardSection'
+import { colors } from '@/styles/colorPalette'
 
 interface CardInfo {
   card_id: number
@@ -41,7 +44,7 @@ interface DataProps {
   userId: number
   front: CardInfo
   back?: CardInfo
-  list?: CardInfo[]
+  list: CardInfo[]
 }
 
 function useFetchCardData(userId: number | undefined, isCard: boolean) {
@@ -111,6 +114,7 @@ const WebMyCard = ({ isCard }: { isCard: boolean }) => {
           {/* 내용 */}
           <Flex direction="column">
             <div css={boxStyles}>사진</div>
+            <CardSection />
             <Spacing size={20} />
             <Flex direction="column" css={container3Styles}>
               <Flex justify="flex-start" align="center">
@@ -119,21 +123,23 @@ const WebMyCard = ({ isCard }: { isCard: boolean }) => {
               </Flex>
               <Spacing size={20} />
               <Flex>
-                <Text>회사</Text>
-                <Spacing size={30} direction="horizontal" />
-                <Text>{isFront ? data.front.company : data.back!.company}</Text>
+                <Text typography="t6">회사</Text>
+                <Spacing size={60} direction="horizontal" />
+                <Text typography="t6">
+                  {isFront ? data.front.company : data.back!.company}
+                </Text>
               </Flex>
               <Flex>
-                <Text>부서</Text>
-                <Spacing size={30} direction="horizontal" />
-                <Text>
+                <Text typography="t6">부서</Text>
+                <Spacing size={60} direction="horizontal" />
+                <Text typography="t6">
                   {isFront ? data.front.department : data.back!.department}
                 </Text>
               </Flex>
               <Flex>
-                <Text>직책</Text>
-                <Spacing size={30} direction="horizontal" />
-                <Text>
+                <Text typography="t6">직책</Text>
+                <Spacing size={60} direction="horizontal" />
+                <Text typography="t6">
                   {isFront ? data.front.position : data.back!.position}
                 </Text>
               </Flex>
@@ -148,23 +154,25 @@ const WebMyCard = ({ isCard }: { isCard: boolean }) => {
               </Flex>
               <Spacing size={20} />
               <Flex>
-                <Text>이메일</Text>
-                <Spacing size={30} direction="horizontal" />
-                <Text>{isFront ? data.front.email : data.back!.email}</Text>
+                <Text typography="t6">이메일</Text>
+                <Spacing size={40} direction="horizontal" />
+                <Text typography="t6">
+                  {isFront ? data.front.email : data.back!.email}
+                </Text>
               </Flex>
               <Flex>
-                <Text>유선전화</Text>
-                <Spacing size={30} direction="horizontal" />
-                <Text>
+                <Text typography="t6">유선전화</Text>
+                <Spacing size={20} direction="horizontal" />
+                <Text typography="t6">
                   {isFront
                     ? data.front.landlineNumber
                     : data.back!.landlineNumber}
                 </Text>
               </Flex>
               <Flex>
-                <Text>휴대전화</Text>
-                <Spacing size={30} direction="horizontal" />
-                <Text>
+                <Text typography="t6">휴대전화</Text>
+                <Spacing size={20} direction="horizontal" />
+                <Text typography="t6">
                   {isFront ? data.front.phoneNumber : data.back!.phoneNumber}
                 </Text>
               </Flex>
@@ -188,7 +196,20 @@ const WebMyCard = ({ isCard }: { isCard: boolean }) => {
           {/* 내용 */}
           <Flex direction="column">
             {/* for문으로 카드 리스트 돌리기 */}
-            <div css={boxStyles}>카드</div>
+            {data.list.length === 0 ? (
+              <>
+                <Spacing size={20} />
+                <Text textAlign="center" typography="t7" css={boxStyles}>
+                  새로 추가된 명함이 없습니다.
+                </Text>
+              </>
+            ) : (
+              data.list.map((card, index) => (
+                <div key={index} css={boxStyles}>
+                  <WebNewlyAdded card={card} />
+                </div>
+              ))
+            )}
           </Flex>
         </Flex>
       </Flex>
@@ -201,7 +222,7 @@ export default WebMyCard
 const containerStyles = css`
   padding-top: 10px;
   padding-right: 10px;
-  border-right: 1px solid black;
+  border-right: 1px solid ${colors.themeGray};
 `
 
 const container2Styles = css`
@@ -210,11 +231,9 @@ const container2Styles = css`
 `
 
 const container3Styles = css`
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid ${colors.themeGray};
 `
 
 const boxStyles = css`
-  width: 48vw;
-  height: 45vh;
-  border: 1px solid black;
+  width: 47vw;
 `
