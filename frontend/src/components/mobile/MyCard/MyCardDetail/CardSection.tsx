@@ -9,29 +9,57 @@ import {
   PopoverTrigger,
   PopoverSurface,
 } from '@fluentui/react-components'
-import { useCallback, useState } from 'react'
-import { useRecoilValue } from 'recoil'
+import { useCallback } from 'react'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import {
   ErrorCircle20Regular,
   ArrowHookUpLeft28Regular,
 } from '@fluentui/react-icons'
 import Flex from '@/components/shared/Flex'
+import { isFrontState, isRealState } from '@/stores/card'
+import { frontCardState, backCardState } from '@/stores/card'
+import MyDigitalCard from '../MyDigitalCard'
+
+const CardComponent = () => {
+  const isReal = useRecoilValue(isRealState)
+  const isFront = useRecoilValue(isFrontState)
+  const frontCard = useRecoilValue(frontCardState)
+  const backCard = useRecoilValue(backCardState)
+  const dummyUrl =
+    'https://1drv.ms/i/c/60d1136c8e1eeac5/IQPtHI8a_PwASK5IZLcow2yZAdjLhrrPZqV_cjryVMdkpRA?width=150&height=120'
+
+  return (
+    <>
+      {isReal ? (
+        isFront ? (
+          <RealCard $url={dummyUrl} />
+        ) : (
+          <RealCard $url={dummyUrl} />
+        )
+      ) : isFront ? (
+        <MyDigitalCard cardInfo={frontCard} border={false} />
+      ) : (
+        <MyDigitalCard cardInfo={backCard} border={false} />
+      )}
+    </>
+  )
+}
 
 const CardSection = () => {
   const theme = useRecoilValue(themeState)
-  const [isRealCard, setIsRealCard] = useState(true)
-  const [isKorCard, setIsKorCard] = useState(true)
+  const [isReal, setIsReal] = useRecoilState(isRealState)
+  const [isFront, setIsFront] = useRecoilState(isFrontState)
   const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setIsRealCard(e.currentTarget.checked)
+    setIsReal(e.currentTarget.checked)
   }, [])
 
   return (
     <Container $theme={theme}>
       <SwitchBtn>
         <Switch
-          checked={isRealCard}
+          checked={isReal}
           onChange={onChange}
-          css={switchStyle(isRealCard)}
+          css={switchStyle(isReal)}
         />
         <Flex align="center">
           <Popover withArrow>
@@ -45,24 +73,14 @@ const CardSection = () => {
         </Flex>
       </SwitchBtn>
       <Wrap>
-        <Card $isFront={false}>
-          <img
-            src="https://1drv.ms/i/c/60d1136c8e1eeac5/IQPtHI8a_PwASK5IZLcow2yZAdjLhrrPZqV_cjryVMdkpRA?width=150&height=120"
-            alt="frontCard"
-          />
-        </Card>
-        <Card $isFront={true}>
-          <img
-            src="https://1drv.ms/i/c/60d1136c8e1eeac5/IQPtHI8a_PwASK5IZLcow2yZAdjLhrrPZqV_cjryVMdkpRA?width=150&height=120"
-            alt="frontCard"
-          />
-        </Card>
+        <Card $isFront={false}>{CardComponent()}</Card>
+        <Card $isFront={true}>{CardComponent()}</Card>
       </Wrap>
       <ArrowHookUpLeft28Regular
         css={changeStyle}
-        onClick={() => setIsKorCard(!isKorCard)}
+        onClick={() => setIsFront(!isFront)}
       />
-      <Desc>{isKorCard ? '국문' : '영문'}</Desc>
+      <Desc>{isFront ? '국문' : '영문'}</Desc>
     </Container>
   )
 }
@@ -99,10 +117,13 @@ const Card = styled.div<{ $isFront: boolean }>`
     props.$isFront
       ? `left: 0; bottom: 0;`
       : `right: 0; filter: brightness(50%);`}
+`
 
-  img {
-    width: 100%;
-  }
+const RealCard = styled.div<{ $url: string }>`
+  width: 100%;
+  height: 100%;
+  background: url(${props => props.$url});
+  background-size: cover;
 `
 
 const SwitchBtn = styled.div`
@@ -124,15 +145,13 @@ const Desc = styled.div`
 
 // css
 
-const switchStyle = (isRealCard: boolean) => css`
+const switchStyle = (isReal: boolean) => css`
   .fui-Switch__indicator {
-    background-color: ${isRealCard
+    background-color: ${isReal
       ? colors.themeText
       : colors.themeTextInverted} !important;
 
-    color: ${isRealCard
-      ? colors.themeTextInverted
-      : colors.themeText} !important;
+    color: ${isReal ? colors.themeTextInverted : colors.themeText} !important;
   }
 `
 

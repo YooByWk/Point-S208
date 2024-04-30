@@ -1,7 +1,7 @@
 import { dummyCard } from '@/assets/data/dummyCard'
 import Text from '@/components/shared/Text'
 import Flex from '@/components/shared/Flex'
-import { cardState } from '@/stores/card'
+import { frontCardState, backCardState } from '@/stores/card'
 import { colors } from '@/styles/colorPalette'
 import styled from '@emotion/styled'
 import { useRecoilState } from 'recoil'
@@ -26,7 +26,7 @@ const CardInfo = (props: { name: string; value: string }) => {
 
 const InfoSection = (props: BooleanStateType) => {
   const { setValue } = props
-  // const [card, setCard] = useRecoilState(cardState)
+  // const [card, setCard] = useRecoilState(frontCardState)
   const card = dummyCard[0]
 
   return (
