@@ -1,8 +1,9 @@
+import { Outlet } from "react-router-dom";
 
 const AppAlbum = () => {
   return (
     <div>
-      모바일 명함 지갑
+      <Outlet/>
     </div>
   );
 };
