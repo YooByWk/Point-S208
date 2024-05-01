@@ -22,10 +22,11 @@ interface CardListProps {
   cards: CardType[]
   isTeam?: boolean
   parentisLoading?: boolean
+  handleAdd?: () => void
 }
 
 
-const CardList = ({parentisLoading=false,cardList, cards, isTeam, }:CardListProps) => {
+const CardList = ({parentisLoading=false,cardList, cards, isTeam,handleAdd }:CardListProps) => {
   
   const [isPageChanged, setPageChanged] = useRecoilState(pageChanged)
 
@@ -101,7 +102,8 @@ const CardList = ({parentisLoading=false,cardList, cards, isTeam, }:CardListProp
         <Spacing size={40} direction="vertical" />
       </Flex>
       <div css={buttonCss}>
-       {selectedCards.length > 0 ?  <LargeButton text="명함 공유" width="80%" onClick={handleShare} /> : <LargeButton text="명함 추가" width='80%' onClick={()=> console.log('명함추가버튼')}/> }
+       {selectedCards.length > 0 ?  <LargeButton text="명함 공유" width="80%" onClick={handleShare} /> :
+        <LargeButton text="명함 추가" width='80%' onClick={handleAdd}/> }
       </div> </>) :
       <>
       

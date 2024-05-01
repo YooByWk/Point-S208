@@ -15,31 +15,27 @@ import LargeButton from '@/components/shared/LargeButton';
 import Flex from '@/components/shared/Flex';
 import  Text  from '@shared/Text';
 import Spacing from '@/components/shared/Spacing';
+import AddCard from '@/components/mobile/MyAlbum/AddCard';
+
+// import { useData, useTeamsUserCredential } from '@microsoft/teamsfx-react'
 
 
 const AlbumList = () => {
   // 내 명함 리스트
   const userId = useRecoilValue(userState).userId
   
-  // const [apiCardsList, setApiCardsList] = useState([{CardType: ''}]);
-
   const { data, fetchNextPage, hasNextPage, isError, isFetchingNextPage } = useInfiniteQuery({
     queryKey: ['fetchMyAlbum'],
     queryFn: ({ pageParam = 0 }) => fetchMyAlbum(userId as number, pageParam),
-    // getNextPageParam: (lastPage,) => lastPage.length > 0 ? lastPage.length : false,
     getNextPageParam: (lastPage, allPages) => 
     {
       return lastPage.length > 0 ? allPages.length  : undefined},
-    // getNextPageParam: (lastPage) => lastPage.data.length >= 10 ? lastPage.data.length : false,
     initialPageParam: 0, 
   });
   
-  // const cardList: CardListType = dummyCardList
-  // const cards: CardType[] = cardList[0].cards 
-
   const cards = data?.pages.flatMap(page => page) || []
 
-  
+  // console.log(useData)
   useEffect(()=> {
     const handleScroll = () => {
       if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) return
@@ -52,27 +48,37 @@ const AlbumList = () => {
     return () => window.removeEventListener('scroll', handleScroll)
   },[fetchNextPage, hasNextPage, data])
   
-  
+  const [isAddCard, setIsAddCard] = useState(false)
+  const handleAdd = () => {
+    setIsAddCard(!isAddCard)
+  }
   return (
-    <div>
-      {cards.length > 0 ?<CardList 
-        // cardList={cardList} 
-        cards={cards} 
-        isTeam={false}
-      />:
-      <Flex direction='column' justify='center' align='center' css={nullDivCss}>
-        <Text>지갑에 등록된 명함이 없습니다.</Text>
-        <button onClick={()=> console.log(userId)}>아이디 확인 </button>
-        <Spacing size={40} direction='vertical'/>
-        <LargeButton
-          text='명함 추가'
-          width='80vw'
-          height='100px'
-        />
-      </Flex>
-      }
-      {isFetchingNextPage &&  <div css={SpinnerCss}><Spinner  /></div>}
-    </div>
+    <>
+      <div>
+        {cards.length > 0 ?<CardList
+          // cardList={cardList}
+          cards={cards}
+          isTeam={false}
+          handleAdd={handleAdd}
+        />:
+        <Flex direction='column' justify='center' align='center' css={nullDivCss}>
+          <Text>지갑에 등록된 명함이 없습니다.</Text>
+          <button onClick={()=> console.log(userId)}>아이디 확인 </button>
+          
+          <Spacing size={40} direction='vertical'/>
+          <LargeButton
+            text='명함 추가'
+            width='80vw'
+            height='100px'
+            onClick={handleAdd}
+          />
+        </Flex>
+        }
+        {isFetchingNextPage &&  <div css={SpinnerCss}><Spinner  /></div>}
+      
+      </div>
+      {isAddCard && <AddCard isAddCard={isAddCard} setIsAddCard={setIsAddCard}/>}
+    </>
   );
 };
 
