@@ -11,13 +11,17 @@ import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { Spinner } from '@fluentui/react-components';
 import { css } from '@emotion/react';
+import LargeButton from '@/components/shared/LargeButton';
+import Flex from '@/components/shared/Flex';
+import  Text  from '@shared/Text';
+import Spacing from '@/components/shared/Spacing';
 
 
 const AlbumList = () => {
   // 내 명함 리스트
   const userId = useRecoilValue(userState).userId
   
-  const [apiCardsList, setApiCardsList] = useState([{CardType: ''}]);
+  // const [apiCardsList, setApiCardsList] = useState([{CardType: ''}]);
 
   const { data, fetchNextPage, hasNextPage, isError, isFetchingNextPage } = useInfiniteQuery({
     queryKey: ['fetchMyAlbum'],
@@ -51,11 +55,22 @@ const AlbumList = () => {
   
   return (
     <div>
-      <CardList 
+      {cards.length > 0 ?<CardList 
         // cardList={cardList} 
         cards={cards} 
         isTeam={false}
-      />
+      />:
+      <Flex direction='column' justify='center' align='center' css={nullDivCss}>
+        <Text>지갑에 등록된 명함이 없습니다.</Text>
+        <button onClick={()=> console.log(userId)}>아이디 확인 </button>
+        <Spacing size={40} direction='vertical'/>
+        <LargeButton
+          text='명함 추가'
+          width='80vw'
+          height='100px'
+        />
+      </Flex>
+      }
       {isFetchingNextPage &&  <div css={SpinnerCss}><Spinner  /></div>}
     </div>
   );
@@ -68,3 +83,9 @@ const SpinnerCss = css`
   /* position: fixed; */
   /* bottom: 50vh; */
 `;
+
+const nullDivCss = css`
+  height:100%;
+  padding-bottom: 10vh;
+
+`

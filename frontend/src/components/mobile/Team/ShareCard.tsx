@@ -10,7 +10,9 @@ import Spacing from '@/components/shared/Spacing'
 import type { CardType } from '@/types/cardType'
 import CardThumbnail from '@/components/shared/CardThumbnail'
 import MultiSelectBar from '@/components/shared/MultiSelectBar'
-import { tokens } from '@fluentui/react-components';
+import { tokens } from '@fluentui/react-components'
+import { useRecoilState } from 'recoil'
+import { pageChanged } from '@stores/team'
 
 interface AddTeamProps {
   cards: CardType[]
@@ -20,8 +22,9 @@ interface AddTeamProps {
   setSelectedCards: (cards: number[]) => void
   setIsShare: (isShare: boolean) => void
   isShare: boolean
+  setIsPageChanged: (isPageChanged: boolean) => void
+  isPageChanged: boolean
 }
-
 
 const ShareCard = ({
   cards,
@@ -30,23 +33,31 @@ const ShareCard = ({
   setSelectedCards,
   setIsShare,
   isShare,
+  setIsPageChanged,
+  isPageChanged,
 }: AddTeamProps) => {
+  
   
   const handleBackArrow = () => {
     console.log('뒤로가기 버튼 클릭')
     setIsShare(!isShare)
+    setIsPageChanged(!isPageChanged)
   }
+
+  
   
   return (
     <div>
-      <Flex direction='row' onClick={handleBackArrow} css={arrowContainer}>
-      <ArrowLeft24Regular />
-      <Spacing size={10} direction='horizontal'/> 
-      <Text typography='t7'>뒤로가기</Text>
-      </Flex >
-      <Spacing size={10} direction='vertical'/> 
-      <Text typography="t5" bold={true} css={textCss}>공유할 명함을 선택해주세요</Text>
-      <Spacing  size={10} />
+      <Flex direction="row" onClick={handleBackArrow} css={arrowContainer}>
+        <ArrowLeft24Regular />
+        <Spacing size={10} direction="horizontal" />
+        <Text typography="t7">뒤로가기</Text>
+      </Flex>
+      <Spacing size={10} direction="vertical" />
+      <Text typography="t5" bold={true} css={textCss}>
+        공유할 명함을 선택해주세요
+      </Text>
+      <Spacing size={10} />
       <SearchBox
         value="공유할 명함 검색 로직"
         placeholder="공유할 명함 검색"
@@ -55,19 +66,18 @@ const ShareCard = ({
         sortIcon={false}
         width="100%"
       />
-      <Spacing  size={5} />
-      
+      <Spacing size={5} />
+
       <MultiSelectBar
         selectedCards={selectedCards}
         allCards={cards}
         setSelectedCards={setSelectedCards}
       />
-      <Spacing  size={5} />
+      <Spacing size={5} />
       <Flex direction="column" justify="center" align="center">
         {cards.map(card => {
           return (
             <div css={cardContainer} onClick={() => onselect}>
-              
               <CardThumbnail
                 cardInfo={card}
                 key={card.cardId}
@@ -83,7 +93,12 @@ const ShareCard = ({
       <div css={btnContainer}>
         <LargeButton
           text="공유하기"
-          onClick={() => console.log('공유하기 버튼 클릭. 선택된 카드의 아이디 : ', selectedCards)}
+          onClick={() =>
+            console.log(
+              '공유하기 버튼 클릭. 선택된 카드의 아이디 : ',
+              selectedCards,
+            )
+          }
         />
       </div>
     </div>
@@ -93,7 +108,7 @@ const ShareCard = ({
 export default ShareCard
 
 const textCss = css`
-padding-left: 5vw;
+  padding-left: 5vw;
 `
 
 const cardContainer = css`
@@ -102,7 +117,6 @@ const cardContainer = css`
   flex-direction: column;
   /* justify-content: center; */
   align-items: center;
-  
 `
 
 const btnContainer = css`
@@ -110,12 +124,11 @@ const btnContainer = css`
   position: fixed;
   bottom: 0;
   height: 50px;
-  background-color: ${tokens.colorNeutralBackground1}; 
+  background-color: ${tokens.colorNeutralBackground1};
 `
 
 const arrowContainer = css`
   width: fit-content;
   margin-top: 2vh;
   padding-left: 5vw;
-  
 `

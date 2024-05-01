@@ -36,6 +36,7 @@ export default function App() {
   }, [setTheme, themeString])
 
   useData(async () => {
+    console.log(user)
     if (teamsUserCredential) {
       const userInfo = await teamsUserCredential.getUserInfo()
       setUser({

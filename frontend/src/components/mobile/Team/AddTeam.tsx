@@ -19,6 +19,7 @@ const AddTeam = ({ setIsWrite, isWrite }: AddTeamProps) => {
   const [teamName, setTeamName] = useState('')
   const [teamSearchValue, setTeamSearchValue] = useState('')
   const [selectedMember, setSelectedMember] = useState([]) // userType 으로 수정하기
+  
   const handleTeamNameInput = (e: any) => {
     setTeamName(e.target.value)
     if (teamName.length > 0) {

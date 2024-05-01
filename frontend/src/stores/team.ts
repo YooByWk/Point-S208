@@ -21,3 +21,8 @@ export const hasSelectedTeam = selector({
   }
 })
 
+export const pageChanged = atom<boolean>({
+  key: 'pageChanged',
+  default: false,
+})
+
