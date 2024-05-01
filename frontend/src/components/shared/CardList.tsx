@@ -14,17 +14,22 @@ import LargeButton from './LargeButton'
 import ShareCard from '@/components/mobile/Team/ShareCard'
 import { useParams } from 'react-router-dom'
 import { tokens } from '@fluentui/react-components'
+import { useRecoilState } from 'recoil'
+import { pageChanged } from '@stores/team'
 
 interface CardListProps {
   cardList? : CardListType
   cards: CardType[]
   isTeam?: boolean
   parentisLoading?: boolean
+  handleAdd?: () => void
 }
 
 
-const CardList = ({parentisLoading=false,cardList, cards, isTeam, }:CardListProps) => {
+const CardList = ({parentisLoading=false,cardList, cards, isTeam,handleAdd }:CardListProps) => {
   
+  const [isPageChanged, setPageChanged] = useRecoilState(pageChanged)
+
   const [searchValue, setSearchValue] = useState('')
   const [selectedCards, setSelectedCards] = useState<number[]>([]) 
   const [isShare, setIsShare] = useState(false)  // 공유창 여닫는 state
@@ -54,7 +59,18 @@ const CardList = ({parentisLoading=false,cardList, cards, isTeam, }:CardListProp
         : [...prev, cardId],
     )
   }
-
+  
+  const handleBtn = () => {
+    setPageChanged(!isPageChanged)
+    console.log('isPageChanged: ', isPageChanged);
+  }
+  
+  const handleShare  = () => {
+    handleBtn()
+    setIsShare(!isShare)
+    console.log('isShare: ', isShare)
+  }
+  
   return (
   <>
      {!isShare? (
@@ -86,7 +102,8 @@ const CardList = ({parentisLoading=false,cardList, cards, isTeam, }:CardListProp
         <Spacing size={40} direction="vertical" />
       </Flex>
       <div css={buttonCss}>
-       {<LargeButton text="명함 공유" width="80%" onClick={()=>setIsShare(!isShare)}/>}
+       {selectedCards.length > 0 ?  <LargeButton text="명함 공유" width="80%" onClick={handleShare} /> :
+        <LargeButton text="명함 추가" width='80%' onClick={handleAdd}/> }
       </div> </>) :
       <>
       
@@ -98,6 +115,8 @@ const CardList = ({parentisLoading=false,cardList, cards, isTeam, }:CardListProp
         setSelectedCards={setSelectedCards}
         setIsShare={setIsShare}
         isShare={isShare}
+        setIsPageChanged={setPageChanged}
+        isPageChanged={isPageChanged}
       />
       </>}
     </>
