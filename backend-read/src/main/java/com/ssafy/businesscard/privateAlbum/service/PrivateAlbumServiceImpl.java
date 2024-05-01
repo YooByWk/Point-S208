@@ -1,9 +1,9 @@
 package com.ssafy.businesscard.privateAlbum.service;
 
 import com.ssafy.businesscard.mycard.repository.BusinesscardRepository;
+import com.ssafy.businesscard.privateAlbum.dto.FilterCardResponseDto;
 import com.ssafy.businesscard.privateAlbum.dto.FilterListResponseDto;
 import com.ssafy.businesscard.privateAlbum.dto.PrivateAlbumResponseDto;
-import com.ssafy.businesscard.privateAlbum.entity.Filter;
 import com.ssafy.businesscard.privateAlbum.entity.PrivateAlbum;
 import com.ssafy.businesscard.privateAlbum.entity.PrivateAlbumMember;
 import com.ssafy.businesscard.privateAlbum.repository.FilterRepository;
@@ -89,29 +89,48 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
 
     //필터 목록 조회
     public List<FilterListResponseDto> getFilter(Long userId){
-
-        List<Filter> filters = filterRepository.findByPrivateAlbumMemberList_User_UserId(userId);
-//        List<PrivateAlbumMember> filters = privateAlbumMemberRepository.
-        List<FilterListResponseDto> filterListResponseDtoList = new ArrayList<>();
+        List<PrivateAlbumMember> privateAlbumMembers = privateAlbumMemberRepository.findByUser_userId(userId);
+        List<FilterListResponseDto> filterListResponseDtoList = privateAlbumMembers.stream()
+                .map(privateAlbumMember -> new FilterListResponseDto(
+                        privateAlbumMember.getFilter().getFilterId(),
+                        privateAlbumMember.getFilter().getFilterName()
+                ))
+                .collect(Collectors.toList());
 
         return filterListResponseDtoList;
+    }
 
-//        for (Filter filter : filters) {
-//            FilterListResponseDto filterListResponseDto = null;
-//            filterListResponseDto.filterId(filter.getFilterId());
-//            FilterListResponseDto filterListResponseDto = new FilterListResponseDto();
-//            filterListResponseDto.setFilterId(filter.getFilterId());
-//            filterListResponseDto.setFilterName(filter.getFilterName());
-//
-//            List<PrivateAlbum> privateAlbums = new ArrayList<>();
-//            for (PrivateAlbumMember privateAlbumMember : filter.getPrivateAlbumMemberList()) {
-//                privateAlbums.add(privateAlbumMember.getPrivateAlbum());
-//            }
-//            filterListResponseDto.setPrivateAlbumList(privateAlbums);
-//
-//            filterListResponseDtoList.add(filterListResponseDto);
-//        }
-//
-//        return filterListResponseDtoList;
+    //필터 별 명함 조회
+    @Override
+    public FilterCardResponseDto getFilterCard(Long userId, Long filterId){
+        //filterId와 userId가 일치하는 privateAlbumId를 찾고 privateAlbumId에 해당하는 카드 Id의 해당하는 카드들을 저장
+        List<PrivateAlbumMember> members = privateAlbumMemberRepository.findByFilter_FilterIdAndUser_UserId(filterId, userId);
+
+        List<PrivateAlbumResponseDto> cards = members.stream()
+                .filter(member -> member.getPrivateAlbum() != null) // null뭐시기 에러떠서 추가
+                .map(member -> member.getPrivateAlbum())
+                .map(album -> album.getBusinesscard())
+                .filter(bc -> bc != null) // null뭐시기 에러떠서 추가
+                .map(bc -> PrivateAlbumResponseDto.builder()
+                        .cardId(bc.getCardId())
+                        .name(bc.getName())
+                        .company(bc.getCompany())
+                        .position(bc.getPosition())
+                        .rank(bc.getRank())
+                        .email(bc.getEmail())
+                        .landlineNumber(bc.getLandlineNumber())
+                        .faxNumber(bc.getFaxNumber())
+                        .phoneNumber(bc.getPhoneNumber())
+                        .address(bc.getAddress())
+                        .realPicture(bc.getRealPicture())
+                        .frontBack(bc.getFrontBack())
+                        .domainUrl(bc.getDomainUrl())
+                        .build())
+                .collect(Collectors.toList());
+
+        return FilterCardResponseDto.builder()
+                .filterId(filterId)
+                .cardList(cards)
+                .build();
     }
 }

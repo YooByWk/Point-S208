@@ -1,6 +1,7 @@
 package com.ssafy.businesscard.privateAlbum.controller;
 
 import com.ssafy.businesscard.global.utils.MessageUtils;
+import com.ssafy.businesscard.privateAlbum.dto.FilterCardResponseDto;
 import com.ssafy.businesscard.privateAlbum.dto.FilterListResponseDto;
 import com.ssafy.businesscard.privateAlbum.dto.PrivateAlbumListDto;
 import com.ssafy.businesscard.privateAlbum.dto.PrivateAlbumResponseDto;
@@ -45,6 +46,13 @@ public class PrivateAlbumController {
     public ResponseEntity<List<FilterListResponseDto>> getFilter(@PathVariable("user_id")Long userId){
         List<FilterListResponseDto> list = privateAlbumService.getFilter(userId);
         return ResponseEntity.ok().body(MessageUtils.success(list).getDataBody());
+    }
+
+    //필터별 명함 조회
+    @GetMapping("/my-album/{user_id}/filter/{filter_id}")
+    public ResponseEntity<FilterCardResponseDto> getFilterCard(@PathVariable("user_id")Long userId, @PathVariable("filter_id")Long filterId){
+        FilterCardResponseDto filterCardResponseDto = privateAlbumService.getFilterCard(userId, filterId);
+        return ResponseEntity.ok().body(MessageUtils.success(filterCardResponseDto).getDataBody());
     }
 
 
