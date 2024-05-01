@@ -3,7 +3,11 @@ package com.ssafy.businesscard.privateAlbum.service;
 import com.ssafy.businesscard.mycard.repository.BusinesscardRepository;
 import com.ssafy.businesscard.privateAlbum.dto.FilterListResponseDto;
 import com.ssafy.businesscard.privateAlbum.dto.PrivateAlbumResponseDto;
+import com.ssafy.businesscard.privateAlbum.entity.Filter;
 import com.ssafy.businesscard.privateAlbum.entity.PrivateAlbum;
+import com.ssafy.businesscard.privateAlbum.entity.PrivateAlbumMember;
+import com.ssafy.businesscard.privateAlbum.repository.FilterRepository;
+import com.ssafy.businesscard.privateAlbum.repository.PrivateAlbumMemberRepository;
 import com.ssafy.businesscard.privateAlbum.repository.PrivateAlbumRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +30,8 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
 
     private final PrivateAlbumRepository privateAlbumRepository;
     private final BusinesscardRepository businesscardRepository;
+    private final PrivateAlbumMemberRepository privateAlbumMemberRepository;
+    private final FilterRepository filterRepository;
 
     //명함 지갑 목록 조회
     @Override
@@ -84,6 +90,28 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
     //필터 목록 조회
     public List<FilterListResponseDto> getFilter(Long userId){
 
-        return null;
+        List<Filter> filters = filterRepository.findByPrivateAlbumMemberList_User_UserId(userId);
+//        List<PrivateAlbumMember> filters = privateAlbumMemberRepository.
+        List<FilterListResponseDto> filterListResponseDtoList = new ArrayList<>();
+
+        return filterListResponseDtoList;
+
+//        for (Filter filter : filters) {
+//            FilterListResponseDto filterListResponseDto = null;
+//            filterListResponseDto.filterId(filter.getFilterId());
+//            FilterListResponseDto filterListResponseDto = new FilterListResponseDto();
+//            filterListResponseDto.setFilterId(filter.getFilterId());
+//            filterListResponseDto.setFilterName(filter.getFilterName());
+//
+//            List<PrivateAlbum> privateAlbums = new ArrayList<>();
+//            for (PrivateAlbumMember privateAlbumMember : filter.getPrivateAlbumMemberList()) {
+//                privateAlbums.add(privateAlbumMember.getPrivateAlbum());
+//            }
+//            filterListResponseDto.setPrivateAlbumList(privateAlbums);
+//
+//            filterListResponseDtoList.add(filterListResponseDto);
+//        }
+//
+//        return filterListResponseDtoList;
     }
 }

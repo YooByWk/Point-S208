@@ -34,7 +34,7 @@ public class Businesscard extends BaseTimeEntity {
     @Column(name = "department", length = 30)
     private String department;
 
-    @Column(name = "email", unique = true, nullable = false, length = 100)
+    @Column(name = "email", length = 100)
     private String email;
 
     @Column(name = "landline_number", length = 30)
