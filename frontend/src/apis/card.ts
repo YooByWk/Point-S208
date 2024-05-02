@@ -1,4 +1,4 @@
-import { EditCardType, WriteCardType } from '@/types/cardInput'
+import { deleteCardType, EditCardType, WriteCardType } from '@/types/cardInput'
 import { authRequest } from '@/utils/requestMethod'
 
 const url = '/cud/api/my-card'
@@ -24,6 +24,14 @@ export const writeMyCard = async (params: WriteCardType) => {
 export const editMyCard = async (params: EditCardType) => {
   return authRequest
     .patch(`${url}/${params.userId}/${params.cardId}`, params.data)
+    .then(res => res.data)
+    .catch(err => console.log(err))
+}
+
+// 내 명함 삭제
+export const deleteMyCard = async (params: deleteCardType) => {
+  return authRequest
+    .delete(`${url}/${params.userId}`)
     .then(res => res.data)
     .catch(err => console.log(err))
 }

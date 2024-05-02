@@ -4,8 +4,8 @@ import { PersonBoard32Filled, Phone32Regular } from '@fluentui/react-icons'
 import Flex from '@shared/Flex'
 import Text from '@shared/Text'
 import Spacing from '@shared/Spacing'
-import CardSection from '../../mobile/MyCard/MyCardDetail/CardSection'
-import { colors } from '@/styles/colorPalette'
+import { colors } from '@styles/colorPalette'
+import WebCardSection from './WebCardSection'
 
 interface CardInfo {
   card_id: number
@@ -42,8 +42,9 @@ const WebMyCardInfo = ({
   return (
     <>
       <Flex direction="column">
-        <div css={boxStyles}>사진</div>
-        <CardSection />
+        <div css={boxStyles}>
+          <WebCardSection />
+        </div>
         <Spacing size={20} />
         <Flex direction="column" css={container3Styles}>
           <Flex justify="flex-start" align="center">
@@ -103,7 +104,7 @@ const WebMyCardInfo = ({
               {isFront ? data.front.phoneNumber : data.back!.phoneNumber}
             </Text>
           </Flex>
-          <Spacing size={20} />
+          <Spacing size={10} />
         </Flex>
       </Flex>
     </>

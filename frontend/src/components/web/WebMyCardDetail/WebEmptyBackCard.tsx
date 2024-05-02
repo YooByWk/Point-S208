@@ -37,10 +37,12 @@ interface DataProps {
 }
 
 const WebEmptyBackCard = ({
+  setIsCard,
   isFront,
   setIsFront,
   data,
 }: {
+  setIsCard: (isCard: boolean) => void
   isFront: boolean
   setIsFront: (isFront: boolean) => void
   data: DataProps
@@ -60,7 +62,12 @@ const WebEmptyBackCard = ({
     <>
       <Flex justify="center">
         <Flex direction="column" css={containerStyles}>
-          <WebTopBar isFront={isFront} setIsFront={setIsFront} />
+          <WebTopBar
+            isFront={isFront}
+            setIsFront={setIsFront}
+            setIsCard={setIsCard}
+            setEditOpen={() => {}}
+          />
           <Spacing size={10} />
           <div css={boxStyles}>
             <Card text="500px" children={children()} />

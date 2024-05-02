@@ -21,3 +21,7 @@ export type WriteCardType = {
 export type EditCardType = {
   cardId: number
 } & WriteCardType
+
+export type deleteCardType = {
+  userId: number | undefined
+}
