@@ -3,6 +3,8 @@ package com.ssafy.businesscard.mycard.dto;
 import com.ssafy.businesscard.mycard.entity.Businesscard;
 import lombok.Builder;
 
+import java.util.List;
+
 @Builder
 public record MycardResponseDto(
         Long cardId,
