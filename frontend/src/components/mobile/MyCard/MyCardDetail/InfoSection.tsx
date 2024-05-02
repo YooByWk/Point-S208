@@ -1,15 +1,18 @@
-import { dummyCard } from '@/assets/data/dummyCard'
+/** @jsxImportSource @emotion/react */
 import Text from '@/components/shared/Text'
 import Flex from '@/components/shared/Flex'
 import { frontCardState, backCardState, isFrontState } from '@/stores/card'
 import { colors } from '@/styles/colorPalette'
 import styled from '@emotion/styled'
-import { useRecoilValue } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { EditRegular, Guest24Regular } from '@fluentui/react-icons'
 import Spacing from '@/components/shared/Spacing'
 import { BooleanStateType } from '@/types/commonType'
 import { useEffect, useState } from 'react'
 import { CardType } from '@/types/cardType'
+import { Edit20Regular } from '@fluentui/react-icons'
+import { css } from '@emotion/react'
+import { writeInfoState } from '@/stores/emptyCard'
 
 const CardInfo = (props: { name: string; value: string }) => {
   const { name, value } = props
@@ -28,6 +31,7 @@ const CardInfo = (props: { name: string; value: string }) => {
 
 const InfoSection = (props: BooleanStateType) => {
   const { setValue } = props
+  const setWriteInfo = useSetRecoilState(writeInfoState)
   const isFront = useRecoilValue(isFrontState)
   const frontCard = useRecoilValue(frontCardState)
   const backCard = useRecoilValue(backCardState)
@@ -38,53 +42,67 @@ const InfoSection = (props: BooleanStateType) => {
   }, [isFront, frontCard, backCard])
 
   return (
-    <Flex direction="column">
-      <Wrap>
-        <Text typography="t5" bold={true}>
-          {card.name}
-        </Text>
-        <Text typography="t7">
-          {card.position} / {card.department}
-        </Text>
-        <Edit onClick={() => setValue(true)}>
-          <EditRegular />
-          <Text typography="t8">수정</Text>
-        </Edit>
-      </Wrap>
+    <>
+      {(isFront && frontCard.cardId) || (!isFront && backCard.cardId) ? (
+        <Flex direction="column">
+          <Wrap>
+            <Text typography="t5" bold={true}>
+              {card.name}
+            </Text>
+            <Text typography="t7">
+              {card.position} / {card.department}
+            </Text>
+            <Edit onClick={() => setValue(true)}>
+              <EditRegular />
+              <Text typography="t8">수정</Text>
+            </Edit>
+          </Wrap>
 
-      <BreackLine />
+          <BreackLine />
 
-      <Wrap>
-        <Flex align="center">
-          <Guest24Regular />
-          <Spacing size={10} direction="horizontal" />
-          <Text typography="t8" bold={true}>
-            명함 정보
-          </Text>
+          <Wrap>
+            <Flex align="center">
+              <Guest24Regular />
+              <Spacing size={10} direction="horizontal" />
+              <Text typography="t8" bold={true}>
+                명함 정보
+              </Text>
+            </Flex>
+            <CardInfo name={'회사'} value={card.company} />
+            <CardInfo name={'부서'} value={card.department} />
+            <CardInfo name={'직책'} value={card.position} />
+          </Wrap>
+
+          <BreackLine />
+
+          <Wrap>
+            <Flex align="center">
+              <Guest24Regular />
+              <Spacing size={10} direction="horizontal" />
+              <Text typography="t8" bold={true}>
+                연락처
+              </Text>
+            </Flex>
+            <CardInfo name={'이메일'} value={card.email} />
+            <CardInfo name={'유선전화'} value={card.landlineNumber} />
+            <CardInfo name={'휴대전화'} value={card.phoneNumber} />
+          </Wrap>
+
+          <BreackLine />
         </Flex>
-        <CardInfo name={'회사'} value={card.company} />
-        <CardInfo name={'부서'} value={card.department} />
-        <CardInfo name={'직책'} value={card.position} />
-      </Wrap>
-
-      <BreackLine />
-
-      <Wrap>
-        <Flex align="center">
-          <Guest24Regular />
-          <Spacing size={10} direction="horizontal" />
-          <Text typography="t8" bold={true}>
-            연락처
-          </Text>
+      ) : (
+        <Flex
+          justify="end"
+          align="center"
+          onClick={() => setWriteInfo(true)}
+          css={WriteStyle}
+        >
+          <Edit20Regular />
+          <Spacing size={12} direction="horizontal" />
+          <Text typography="t8">직접 입력</Text>
         </Flex>
-        <CardInfo name={'이메일'} value={card.email} />
-        <CardInfo name={'휴대전화'} value={card.phoneNumber} />
-        <CardInfo name={'팩스'} value={card.faxNumber} />
-        <CardInfo name={'주소'} value={card.address} />
-      </Wrap>
-
-      <BreackLine />
-    </Flex>
+      )}
+    </>
   )
 }
 
@@ -114,4 +132,11 @@ const Edit = styled.div`
   align-items: center;
   height: 100%;
   gap: 5px;
+`
+
+// css
+
+const WriteStyle = css`
+  padding: 10px;
+  background-color: ${colors.themeTextInverted};
 `

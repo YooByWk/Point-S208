@@ -1,4 +1,4 @@
-import { WriteCardType } from '@/types/cardInput'
+import { EditCardType, WriteCardType } from '@/types/cardInput'
 import { authRequest } from '@/utils/requestMethod'
 
 const url = '/cud/api/my-card'
@@ -16,6 +16,14 @@ export const fetchMyCard = async (userId: number) => {
 export const writeMyCard = async (params: WriteCardType) => {
   return authRequest
     .post(`${url}/${params.userId}`, params.data)
+    .then(res => res.data)
+    .catch(err => console.log(err))
+}
+
+// 내 명함 수정
+export const editMyCard = async (params: EditCardType) => {
+  return authRequest
+    .patch(`${url}/${params.userId}/${params.cardId}`, params.data)
     .then(res => res.data)
     .catch(err => console.log(err))
 }

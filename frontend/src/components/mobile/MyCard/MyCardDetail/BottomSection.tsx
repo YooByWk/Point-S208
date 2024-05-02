@@ -16,10 +16,16 @@ import {
 } from '@fluentui/react-components'
 import { useState } from 'react'
 import { useRecoilValue } from 'recoil'
+import { backCardState, frontCardState, isFrontState } from '@/stores/card'
+import { BooleanStateType } from '@/types/commonType'
 
-const BottomSection = () => {
+const BottomSection = (props: BooleanStateType) => {
+  const { setValue } = props
   const theme = useRecoilValue(themeState)
-  const [isRealCard, setIsRealCard] = useState(false)
+  const isFront = useRecoilValue(isFrontState)
+  const frontCard = useRecoilValue(frontCardState)
+  const backCard = useRecoilValue(backCardState)
+  const card = isFront ? frontCard : backCard
   const [openItems, setOpenItems] = useState(['0'])
   const handleToggle: AccordionToggleEventHandler<string> = (event, data) => {
     setOpenItems(data.openItems)
@@ -68,8 +74,8 @@ const BottomSection = () => {
       <Spacing size={12} />
 
       <Flex justify="space-around">
-        <Button shape="circular" onClick={() => {}}>
-          {isRealCard ? '재등록' : '명함 촬영'}
+        <Button shape="circular" onClick={() => setValue(true)}>
+          {card.realPicture ? '재등록' : '명함 촬영'}
         </Button>
         <Button shape="circular" onClick={() => {}}>
           명함 공유

@@ -22,7 +22,7 @@ const EmptyCard = () => {
   }
 
   return (
-    <>
+    <div style={{ height: '100vh' }}>
       <div css={container}>
         <Card text="80vw" children={children()} />
       </div>
@@ -53,7 +53,7 @@ const EmptyCard = () => {
           <Text typography="t7">직접 입력</Text>
         </Flex>
       </Flex>
-    </>
+    </div>
   )
 }
 
