@@ -79,7 +79,9 @@ const WriteCardInfo = ({
         name: cardInputs.name,
         company:
           cardInputs.company.length === 0
-            ? '포스코인터네셔널'
+            ? isEnglish
+              ? 'POSCO INTERNATIONAL'
+              : '포스코인터네셔널'
             : cardInputs.company,
         department: cardInputs.department,
         position: cardInputs.position,
@@ -259,7 +261,8 @@ function validate(cardInput: cardInput) {
   return errors
 }
 
+export default WriteCardInfo
+
 const formContainerStyles = css`
   padding: 24px;
 `
-export default WriteCardInfo
