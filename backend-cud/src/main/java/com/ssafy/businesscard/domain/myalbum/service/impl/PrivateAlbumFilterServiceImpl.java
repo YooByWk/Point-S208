@@ -6,7 +6,7 @@ import com.ssafy.businesscard.global.exception.GlobalExceptionHandler;
 import com.ssafy.businesscard.domain.myalbum.entity.PrivateAlbumMember;
 import com.ssafy.businesscard.domain.myalbum.repository.PrivateAlbumFilterRepository;
 import com.ssafy.businesscard.domain.myalbum.repository.PrivateAlbumMemberRepository;
-import com.ssafy.businesscard.domain.myalbum.repository.PrivateAlbumRepository;
+import com.ssafy.businesscard.domain.myalbum.repository.privateAlbum.PrivateAlbumRepository;
 import com.ssafy.businesscard.domain.myalbum.service.PrivateAlbumFilterService;
 import com.ssafy.businesscard.domain.user.entity.User;
 import com.ssafy.businesscard.domain.user.repository.UserRepository;
