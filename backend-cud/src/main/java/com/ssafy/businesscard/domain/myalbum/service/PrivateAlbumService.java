@@ -9,4 +9,6 @@ public interface PrivateAlbumService {
     void addFilter(Long userId, Long cardId, List<CardAddFilterRequest> request);
 
     void updateCard(Long userId, Long cardId, UpdateCardRequest request);
+
+    void deleteCard(Long userId, Long cardId);
 }

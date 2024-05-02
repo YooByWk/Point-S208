@@ -7,9 +7,10 @@ import com.ssafy.businesscard.domain.myalbum.dto.request.CardAddFilterRequest;
 import com.ssafy.businesscard.domain.myalbum.dto.request.UpdateCardRequest;
 import com.ssafy.businesscard.domain.myalbum.entity.PrivateAlbum;
 import com.ssafy.businesscard.domain.myalbum.entity.PrivateAlbumMember;
+import com.ssafy.businesscard.domain.myalbum.mapper.PrivateAlbumMapper;
 import com.ssafy.businesscard.domain.myalbum.repository.PrivateAlbumFilterRepository;
 import com.ssafy.businesscard.domain.myalbum.repository.PrivateAlbumMemberRepository;
-import com.ssafy.businesscard.domain.myalbum.repository.PrivateAlbumRepository;
+import com.ssafy.businesscard.domain.myalbum.repository.privateAlbum.PrivateAlbumRepository;
 import com.ssafy.businesscard.domain.myalbum.service.PrivateAlbumService;
 import com.ssafy.businesscard.domain.user.entity.User;
 import com.ssafy.businesscard.domain.user.repository.UserRepository;
@@ -27,6 +28,7 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
 
     private final UserRepository userRepository;
     private final BusinesscardRepository businesscardRepository;
+    private final PrivateAlbumMapper privateAlbumMapper;
     private final PrivateAlbumFilterRepository privateAlbumFilterRepository;
     private final PrivateAlbumRepository privateAlbumRepository;
     private final PrivateAlbumMemberRepository privateAlbumMemberRepository;
@@ -59,15 +61,18 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
         }
     }
 
+    // 명함지갑 명함 수정
     @Override
     public void updateCard(Long userId, Long cardId, UpdateCardRequest request) {
+        Businesscard businesscard = privateAlbumMapper.toEntity(request);
+        businesscardRepository.save(businesscard);
+    }
+
+    @Override
+    public void deleteCard(Long userId, Long cardId) {
         PrivateAlbum privateAlbum = privateAlbumRepository.findByUser_userIdAndBusinesscard_CardId(userId, cardId);
-        Businesscard businesscard = privateAlbum.getBusinesscard();
-        businesscardRepository.save(Businesscard.builder()
-                        .cardId()
-                        .name()
-                        .company()
-                        .position()
-                .build());
+        List<PrivateAlbum> privateAlbumList = privateAlbumRepository
+                .findByUser_userIdAndBusinesscard_email(privateAlbum.getUser().getUserId(), privateAlbum.getBusinesscard().getEmail());
+        System.out.println(privateAlbumList);
     }
 }

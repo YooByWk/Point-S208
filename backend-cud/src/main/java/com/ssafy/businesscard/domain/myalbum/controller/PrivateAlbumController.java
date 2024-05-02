@@ -37,7 +37,16 @@ public class PrivateAlbumController {
                                                    @PathVariable("cardId") Long cardId,
                                                    @RequestBody UpdateCardRequest request){
         privateAlbumService.updateCard(userId, cardId, request);
-        log.info("Update Card : {}", request);
+        log.info("Update Card : {} 명함이 수정되었습니다.", request);
         return ResponseEntity.ok().body(MessageUtils.success("명함이 수정되었습니다."));
+    }
+
+    // 명함지갑에서 명함 삭제
+    @DeleteMapping("/{userId}/{cardId}")
+    public ResponseEntity<MessageUtils> deleteCard(@PathVariable("userId") Long userId,
+                                                   @PathVariable("cardId") Long cardId) {
+        privateAlbumService.deleteCard(userId, cardId);
+        log.info("Delete Card : {} 명함이 명함지갑에서 삭제되었습니다.", cardId);
+        return ResponseEntity.ok().body(MessageUtils.success("명함지갑에서 명함이 삭제되었습니다."));
     }
 }
