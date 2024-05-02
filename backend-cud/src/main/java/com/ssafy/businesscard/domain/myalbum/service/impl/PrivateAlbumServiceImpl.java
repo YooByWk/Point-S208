@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -69,10 +70,12 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
     }
 
     @Override
+    @Transactional
     public void deleteCard(Long userId, Long cardId) {
         PrivateAlbum privateAlbum = privateAlbumRepository.findByUser_userIdAndBusinesscard_CardId(userId, cardId);
+        System.out.println("privateAlbum : " + privateAlbum);
         List<PrivateAlbum> privateAlbumList = privateAlbumRepository
                 .findByUser_userIdAndBusinesscard_email(privateAlbum.getUser().getUserId(), privateAlbum.getBusinesscard().getEmail());
-        System.out.println(privateAlbumList);
+        privateAlbumRepository.deleteAll(privateAlbumList);
     }
 }
