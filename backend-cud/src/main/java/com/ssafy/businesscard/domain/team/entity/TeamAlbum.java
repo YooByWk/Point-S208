@@ -5,6 +5,8 @@ import com.ssafy.businesscard.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Builder
@@ -28,4 +30,8 @@ public class TeamAlbum {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "teamAlbum" ,cascade = CascadeType.ALL)
+    private List<TeamAlbumDetail> teamAlbumDetail;
+
 }

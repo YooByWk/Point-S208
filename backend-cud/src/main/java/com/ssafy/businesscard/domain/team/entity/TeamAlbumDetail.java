@@ -24,4 +24,5 @@ public class TeamAlbumDetail {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "card_id")
     private Businesscard businesscard;
+
 }
