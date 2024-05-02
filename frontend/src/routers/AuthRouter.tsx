@@ -11,6 +11,8 @@ import WebAlbum from '@/pages/web/WebAlbum'
 import WebTeam from '@/pages/web/WebTeam'
 import { Route, Routes } from 'react-router-dom'
 import AppAlbumList from '@/components/mobile/MyAlbum/AlbumList'
+import RegisterCard from '@/components/mobile/MyAlbum/RegisterCard'
+import AlbumCardDetail from '@/components/mobile/MyAlbum/MyAlbumDetail/AlbumCardDetail'
 
 const AuthRouter = () => {
   const width = useWindowSize()
@@ -24,8 +26,10 @@ const AuthRouter = () => {
       ) : (
         <Route path="/myAlbum" element={<AppAlbum />}>
           <Route index element={<AppAlbumList />} />
-          {/* <Route path=':teamId' element={<CardList />}/>  */}
-          <Route path=":teamId" element={<TeamDetail />} />
+          <Route path='register/:userId' element={<RegisterCard/>} />
+          <Route path=':userId/:cardId' element={<AlbumCardDetail/>} />
+          {/* <Route path=':cardId' element={<CardDetail />} /> */}
+          {/* <Route path=":teamId" element={<TeamDetail />} /> */}
         </Route>
       )}
       {width >= 768 ? (
