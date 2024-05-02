@@ -9,10 +9,9 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ssafy
       MYSQL_DATABASE: bscard
-      MYSQL_USER: root
-      MYSQL_PASSWORD: ssafy
     ports:
       - "3306:3306"
+  
 
   jenkins:
     user: root
