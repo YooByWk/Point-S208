@@ -1,3 +1,4 @@
+import { WriteCardType } from '@/types/cardInput'
 import { authRequest } from '@/utils/requestMethod'
 
 const CudUrl = '/cud/api/my-album'
@@ -11,4 +12,13 @@ export const fetchMyAlbum = async (userId: number,page: number) => {
     .get(`${ReadUrl}/list/${userId}/${page}`)
     .then(res => res.data)
     .catch(err => console.log(err))
+}
+
+// 명함 등록
+
+export const RegisterOtherCard = async (params: WriteCardType) => {
+  return authRequest
+  .post(`${CudUrl}/${params.userId}`, params.data)
+  .then(res => res.data)
+  .catch(err => console.log(err))
 }

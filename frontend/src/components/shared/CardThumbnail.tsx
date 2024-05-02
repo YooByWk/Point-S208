@@ -14,6 +14,9 @@ import {
   ShareAndroid24Filled,
   Delete24Filled,
 } from '@fluentui/react-icons'
+import { useNavigate } from 'react-router-dom'
+import { useRecoilValue } from 'recoil'
+import { userState } from '@/stores/user'
 ///
 ///
 interface CardThumbnailProps {
@@ -58,16 +61,19 @@ const CardThumbnail = ({
     event.stopPropagation()
     console.log('삭제 : ', cardInfo)
   }
-
+  const userId = useRecoilValue(userState).userId
+  
+  const navigate = useNavigate()
   return (
     <div
       css={cardContainer( forShare, scale)}
       onClick={() => {
-        if (forShare) {
+        if (forShare) { // 공유하기 화면 이하에서는 명함 썸네일 전체가 선택여부가 되도록
           setIsChecked(!isChecked)
           onSelect(cardInfo.cardId)
         } else {
-          console.log(cardInfo.name, '님의 명함')
+          console.log(cardInfo, '님의 명함')
+          navigate(`/myAlbum/${userId}/${cardInfo.cardId}`)
         }
       }}
     >
