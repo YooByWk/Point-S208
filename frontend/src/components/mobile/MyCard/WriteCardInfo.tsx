@@ -65,7 +65,7 @@ const WriteCardInfo = ({
     mutationFn: writeMyCard,
     onSuccess(result) {
       console.log('등록 성공', result)
-      setIsCard(true)
+      setWriteInfo(false)
     },
     onError(error) {
       console.error('등록 실패:', error)

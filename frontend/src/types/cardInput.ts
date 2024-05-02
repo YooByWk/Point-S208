@@ -17,3 +17,7 @@ export type WriteCardType = {
   userId: number
   data: cardInput
 }
+
+export type EditCardType = {
+  cardId: number
+} & WriteCardType

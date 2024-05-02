@@ -1,10 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import Flex from '@/components/shared/Flex'
-import { cameraState } from '@/stores/emptyCard'
 import styled from '@emotion/styled'
 import { useEffect, useRef, useState } from 'react'
-import { useSetRecoilState } from 'recoil'
 import {
   Dismiss20Filled,
   Circle48Regular,
@@ -13,11 +11,12 @@ import {
 } from '@fluentui/react-icons'
 import Text from '@/components/shared/Text'
 import { colors } from '@/styles/colorPalette'
+import { PhotoAddType } from '@/types/cameraType'
+import ScrollToTop from '@/utils/scrollToTop'
 
-const PhotoAddReg = (props: { isFront: boolean }) => {
+const PhotoAddReg = (props: PhotoAddType) => {
   // KOR Card Registration or ENG Card Registration
-  const { isFront } = props
-  const setCamera = useSetRecoilState(cameraState)
+  const { isFront, setValue } = props
   const fileInput = useRef<HTMLInputElement | null>(null)
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const [imgSrc, setImgSrc] = useState<string | null>(null)
@@ -76,10 +75,14 @@ const PhotoAddReg = (props: { isFront: boolean }) => {
     getCameraStream()
   }, [imgSrc])
 
+  useEffect(() => {
+    ScrollToTop()
+  }, [])
+
   return (
     <Flex direction="column" style={{ height: '100vh' }}>
       <Top>
-        <Dismiss20Filled onClick={() => setCamera(false)} />
+        <Dismiss20Filled onClick={() => setValue(false)} />
       </Top>
       <Flex justify="center" css={imgSrc ? '' : photoStyle}>
         {imgSrc ? (

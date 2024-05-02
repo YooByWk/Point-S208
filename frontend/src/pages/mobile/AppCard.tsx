@@ -10,10 +10,11 @@ import { Spinner } from '@fluentui/react-components'
 import { useQuery } from '@tanstack/react-query'
 import { userState } from '@/stores/user'
 import { fetchMyCard } from '@/apis/card'
-import { backCardState, frontCardState } from '@/stores/card'
+import { backCardState, frontCardState, isFrontState } from '@/stores/card'
 
 const AppCard = () => {
   const [isCard, setIsCard] = useState(false)
+  const isFront = useRecoilValue(isFrontState)
   const writeInfo = useRecoilValue(writeInfoState)
   const camera = useRecoilValue(cameraState)
   const userId = useRecoilValue(userState).userId as number
@@ -26,19 +27,19 @@ const AppCard = () => {
   })
 
   useEffect(() => {
-    if (!isLoading) {
-      data?.front && setFrontCard(data.front)
-      data?.back && setBackCard(data.back)
+    if (!isLoading && (data?.front || data?.back)) {
+      if (data?.front) setFrontCard(data.front)
+      if (data?.back) setBackCard(data.back)
       setIsCard(true)
     }
-  }, [data, isLoading, setBackCard, setFrontCard])
+  }, [data, isLoading, setBackCard, setFrontCard, writeInfo])
 
   const renderContent = () => {
     if (isLoading) return <Spinner label="로딩 중..." />
-    if (isCard) return <MyCardDetail />
     if (writeInfo)
-      return <WriteCardInfo setIsCard={setIsCard} isEnglish={false} />
+      return <WriteCardInfo setIsCard={setIsCard} isEnglish={!isFront} />
     if (camera) return <PhotoReg isMyCard={isCard} />
+    if (isCard) return <MyCardDetail />
     return <EmptyCard />
   }
 

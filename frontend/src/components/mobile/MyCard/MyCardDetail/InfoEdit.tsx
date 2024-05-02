@@ -1,17 +1,26 @@
-import { dummyCard } from '@/assets/data/dummyCard'
 import Flex from '@/components/shared/Flex'
 import Spacing from '@/components/shared/Spacing'
 import Text from '@/components/shared/Text'
 import TextField from '@/components/shared/TextField'
 import { BooleanStateType } from '@/types/commonType'
-import { ChangeEvent, useCallback, useState } from 'react'
+import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import { Dismiss24Filled } from '@fluentui/react-icons'
 import { Button } from '@fluentui/react-components'
 import ScrollToTop from '@/utils/scrollToTop'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { backCardState, frontCardState, isFrontState } from '@/stores/card'
+import { CardType } from '@/types/cardType'
+import { useMutation } from '@tanstack/react-query'
+import { editMyCard } from '@/apis/card'
+import { userState } from '@/stores/user'
 
 const InfoEdit = (props: BooleanStateType) => {
   const { setValue } = props
-  const [editInfo, setEditInfo] = useState(dummyCard[0])
+  const isFront = useRecoilValue(isFrontState)
+  const [frontCard, setFrontCard] = useRecoilState(frontCardState)
+  const [backCard, setBackCard] = useRecoilState(backCardState)
+  const [editInfo, setEditInfo] = useState<CardType>(frontCard)
+  const userId = useRecoilValue(userState).userId as number
 
   const handleCardInfo = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setEditInfo(prev => ({
@@ -20,11 +29,37 @@ const InfoEdit = (props: BooleanStateType) => {
     }))
   }, [])
 
+  const { mutate } = useMutation({
+    mutationKey: ['editMyCard'],
+    mutationFn: editMyCard,
+    onSuccess(result) {
+      console.log('명함 수정 성공', result)
+      isFront ? setFrontCard(editInfo) : setBackCard(editInfo)
+      setValue(false)
+    },
+    onError(error) {
+      console.error('명함 수정 실패:', error)
+    },
+  })
+
   const onSubmit = () => {
-    console.log('내 명함 수정 api 보내기')
+    let params = {
+      userId: userId,
+      cardId: editInfo.cardId,
+      data: editInfo,
+    }
+    console.log(params)
+
+    mutate(params)
   }
 
-  ScrollToTop()
+  useEffect(() => {
+    setEditInfo(isFront ? frontCard : backCard)
+  }, [isFront, frontCard, backCard])
+
+  useEffect(() => {
+    ScrollToTop()
+  }, [])
 
   return (
     <Flex direction="column" style={{ padding: '24px' }}>
@@ -86,6 +121,16 @@ const InfoEdit = (props: BooleanStateType) => {
       <Spacing size={16} />
 
       <TextField
+        label="유선전화"
+        type="landlineNumber"
+        name="landlineNumber"
+        onChange={handleCardInfo}
+        value={editInfo.landlineNumber}
+      />
+
+      <Spacing size={32} />
+
+      <TextField
         label="휴대전화"
         type="phoneNumber"
         name="phoneNumber"
@@ -94,26 +139,6 @@ const InfoEdit = (props: BooleanStateType) => {
       />
 
       <Spacing size={16} />
-
-      <TextField
-        label="팩스"
-        type="faxNumber"
-        name="faxNumber"
-        onChange={handleCardInfo}
-        value={editInfo.faxNumber}
-      />
-
-      <Spacing size={16} />
-
-      <TextField
-        label="주소"
-        type="address"
-        name="address"
-        onChange={handleCardInfo}
-        value={editInfo.address}
-      />
-
-      <Spacing size={32} />
 
       <Flex justify="space-around">
         <Button

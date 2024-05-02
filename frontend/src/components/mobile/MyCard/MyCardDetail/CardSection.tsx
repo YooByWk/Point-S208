@@ -9,7 +9,7 @@ import {
   PopoverTrigger,
   PopoverSurface,
 } from '@fluentui/react-components'
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import {
   ErrorCircle20Regular,
@@ -24,30 +24,34 @@ const CardComponent = (isFront: boolean) => {
   const isReal = useRecoilValue(isRealState)
   const frontCard = useRecoilValue(frontCardState)
   const backCard = useRecoilValue(backCardState)
+  const card = isFront ? frontCard : backCard
   const dummyUrl =
     'https://1drv.ms/i/c/60d1136c8e1eeac5/IQPtHI8a_PwASK5IZLcow2yZAdjLhrrPZqV_cjryVMdkpRA?width=150&height=120'
 
-  return (
-    <>
-      {isReal ? (
-        isFront ? (
-          <RealCard $url={dummyUrl} />
-        ) : (
-          <RealCard $url={dummyUrl} />
-        )
-      ) : isFront ? (
-        <MyDigitalCard cardInfo={frontCard} scale={1} border={false} />
-      ) : (
-        <MyDigitalCard cardInfo={backCard} scale={1} border={false} />
-      )}
-    </>
-  )
+  if (isReal) {
+    return card.cardId ? (
+      <RealCard $url={dummyUrl} />
+    ) : (
+      <NoCard>
+        {isFront ? '국문 명함을 추가해주세요' : '영문 명함을 추가해주세요'}
+      </NoCard>
+    )
+  } else {
+    return card.cardId ? (
+      <MyDigitalCard cardInfo={card} scale={1} border={false} />
+    ) : (
+      <NoCard>
+        {isFront ? '국문 명함을 추가해주세요' : '영문 명함을 추가해주세요'}
+      </NoCard>
+    )
+  }
 }
 
 const CardSection = () => {
   const theme = useRecoilValue(themeState)
   const [isReal, setIsReal] = useRecoilState(isRealState)
   const [isFront, setIsFront] = useRecoilState(isFrontState)
+  const frontCard = useRecoilValue(frontCardState)
   const onChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setIsReal(e.currentTarget.checked)
@@ -55,25 +59,34 @@ const CardSection = () => {
     [setIsReal],
   )
 
+  useEffect(() => {
+    !frontCard.realPicture && setIsReal(false)
+  }, [])
+
   return (
     <Container $theme={theme}>
-      <SwitchBtn>
-        <Switch
-          checked={isReal}
-          onChange={onChange}
-          css={switchStyle(isReal)}
-        />
-        <Flex align="center">
-          <Popover withArrow>
-            <PopoverTrigger disableButtonEnhancement>
-              <ErrorCircle20Regular css={errorCircleStyle} />
-            </PopoverTrigger>
-            <PopoverSurface tabIndex={-1} css={popoverStyle}>
-              실물명함과 디지털명함을 교차 선택합니다.
-            </PopoverSurface>
-          </Popover>
-        </Flex>
-      </SwitchBtn>
+      {frontCard.realPicture ? (
+        <SwitchBtn>
+          <Switch
+            checked={isReal}
+            onChange={onChange}
+            css={switchStyle(isReal)}
+          />
+          <Flex align="center">
+            <Popover withArrow>
+              <PopoverTrigger disableButtonEnhancement>
+                <ErrorCircle20Regular css={errorCircleStyle} />
+              </PopoverTrigger>
+              <PopoverSurface tabIndex={-1} css={popoverStyle}>
+                실물명함과 디지털명함을 교차 선택합니다.
+              </PopoverSurface>
+            </Popover>
+          </Flex>
+        </SwitchBtn>
+      ) : (
+        ''
+      )}
+
       <Wrap>
         <Card $isFront={false}>{CardComponent(!isFront)}</Card>
         <Card $isFront={true}>{CardComponent(isFront)}</Card>
@@ -127,6 +140,17 @@ const RealCard = styled.div<{ $url: string }>`
   height: 100%;
   background: url(${props => props.$url});
   background-size: cover;
+`
+
+const NoCard = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #242424;
+  border-radius: 10px;
+  color: #fff;
 `
 
 const SwitchBtn = styled.div`

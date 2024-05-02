@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react'
+import { BooleanStateType } from './commonType'
 
 export type SwipeableImgType = {
   frontImgSrc: string
@@ -6,3 +7,7 @@ export type SwipeableImgType = {
   isFront: boolean
   setIsFront: Dispatch<SetStateAction<boolean>>
 }
+
+export type PhotoAddType = {
+  isFront: boolean
+} & BooleanStateType
