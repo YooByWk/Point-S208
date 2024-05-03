@@ -38,3 +38,8 @@ export const isRealState = atom({
   key: 'isRealState',
   default: true,
 })
+
+export const isFirstCardState = atom({
+  key: 'isFirstCardState',
+  default: true,
+})

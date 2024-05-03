@@ -10,13 +10,20 @@ import { Spinner } from '@fluentui/react-components'
 import { useQuery } from '@tanstack/react-query'
 import { userState } from '@/stores/user'
 import { fetchMyCard } from '@/apis/card'
-import { backCardState, frontCardState, isFrontState } from '@/stores/card'
+import {
+  backCardState,
+  frontCardState,
+  isFirstCardState,
+  isFrontState,
+} from '@/stores/card'
+import PhotoAddReg from '@/components/mobile/MyCard/PhotoCardInfo/PhotoAddReg'
 
 const AppCard = () => {
   const [isCard, setIsCard] = useState(false)
   const isFront = useRecoilValue(isFrontState)
   const writeInfo = useRecoilValue(writeInfoState)
   const camera = useRecoilValue(cameraState)
+  const isFirstCard = useRecoilValue(isFirstCardState)
   const userId = useRecoilValue(userState).userId as number
   const setFrontCard = useSetRecoilState(frontCardState)
   const setBackCard = useSetRecoilState(backCardState)
@@ -32,13 +39,17 @@ const AppCard = () => {
       if (data?.back) setBackCard(data.back)
       setIsCard(true)
     }
-  }, [data, isLoading, setBackCard, setFrontCard, writeInfo])
+  }, [data, isLoading, setBackCard, setFrontCard, writeInfo, camera])
 
   const renderContent = () => {
-    if (isLoading) return <Spinner label="로딩 중..." />
+    if (isLoading)
+      return <Spinner label="로딩 중..." style={{ height: '100vh' }} />
     if (writeInfo)
       return <WriteCardInfo setIsCard={setIsCard} isEnglish={!isFront} />
-    if (camera) return <PhotoReg isMyCard={isCard} />
+    if (camera)
+      return (
+        <>{isFirstCard ? <PhotoReg isMyCard={true} /> : <PhotoAddReg />}</>
+      )
     if (isCard) return <MyCardDetail />
     return <EmptyCard />
   }

@@ -14,11 +14,15 @@ import {
 import Text from '@/components/shared/Text'
 import { colors } from '@/styles/colorPalette'
 import SwipeableImg from './SwipeableImg'
+import { isFirstCardState } from '@/stores/card'
+import { useMutation } from '@tanstack/react-query'
+import { postOCR } from '@/apis/card'
 
 const PhotoReg = (props: { isMyCard: boolean }) => {
   // My Card Registration or Other people's Card Registration
   const { isMyCard } = props
   const setCamera = useSetRecoilState(cameraState)
+  const setIsFirstCard = useSetRecoilState(isFirstCardState)
   const fileInput = useRef<HTMLInputElement | null>(null)
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const [frontImgSrc, setFrontImgSrc] = useState<string | null>(null)
@@ -76,13 +80,52 @@ const PhotoReg = (props: { isMyCard: boolean }) => {
     }
   }
 
+  const { mutate } = useMutation({
+    mutationKey: ['postOCR'],
+    mutationFn: postOCR,
+    onSuccess(result) {
+      console.log('등록 성공', result)
+      if (isMyCard) {
+        console.log('내 카드 등록 api요청 만들기')
+      } else {
+        console.log('남 카드 등록 api요청 만들기')
+      }
+      setIsFirstCard(false)
+      setCamera(false)
+    },
+    onError(error) {
+      console.error('등록 실패:', error)
+    },
+  })
+
   const requestApi = () => {
-    // 등록 성공하면 setCamera(false) 변경
-    if (isMyCard) {
-      console.log('내 카드 등록 api요청 만들기')
-    } else {
-      console.log('남 카드 등록 api요청 만들기')
+    const ImgOcr = (img: string) => {
+      const formData = new FormData()
+
+      formData.append('file', img)
+
+      formData.append(
+        'message',
+        new Blob(
+          [
+            JSON.stringify({
+              version: 'V2',
+              requestId: 'string',
+              timestamp: 0,
+              images: [{ format: 'JPG', name: 'string' }],
+            }),
+          ],
+          {
+            type: 'application/json',
+          },
+        ),
+      )
+
+      mutate(formData)
     }
+
+    frontImgSrc && ImgOcr(frontImgSrc)
+    backImgSrc && ImgOcr(backImgSrc)
   }
 
   useEffect(() => {

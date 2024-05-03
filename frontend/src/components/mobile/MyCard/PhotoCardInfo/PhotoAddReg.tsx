@@ -11,12 +11,17 @@ import {
 } from '@fluentui/react-icons'
 import Text from '@/components/shared/Text'
 import { colors } from '@/styles/colorPalette'
-import { PhotoAddType } from '@/types/cameraType'
 import ScrollToTop from '@/utils/scrollToTop'
+import { useMutation } from '@tanstack/react-query'
+import { postOCR } from '@/apis/card'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { isFrontState } from '@/stores/card'
+import { cameraState } from '@/stores/emptyCard'
 
-const PhotoAddReg = (props: PhotoAddType) => {
+const PhotoAddReg = () => {
   // KOR Card Registration or ENG Card Registration
-  const { isFront, setValue } = props
+  const isFront = useRecoilValue(isFrontState)
+  const setCamera = useSetRecoilState(cameraState)
   const fileInput = useRef<HTMLInputElement | null>(null)
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const [imgSrc, setImgSrc] = useState<string | null>(null)
@@ -62,12 +67,47 @@ const PhotoAddReg = (props: PhotoAddType) => {
     }
   }
 
+  const { mutate } = useMutation({
+    mutationKey: ['postOCR'],
+    mutationFn: postOCR,
+    onSuccess(result) {
+      console.log('등록 성공', result)
+      if (isFront) {
+        console.log('국문 카드 등록 api 요청 만들기')
+      } else {
+        console.log('영문 카드 등록 api 요청 만들기')
+      }
+      setCamera(false)
+    },
+    onError(error) {
+      console.error('등록 실패:', error)
+    },
+  })
+
   const requestApi = () => {
-    // 등록 성공하면 setCamera(false) 변경
-    if (isFront) {
-      console.log('국문 카드 등록 api 요청 만들기')
-    } else {
-      console.log('영문 카드 등록 api 요청 만들기')
+    if (imgSrc) {
+      const formData = new FormData()
+
+      formData.append('file', imgSrc)
+
+      formData.append(
+        'message',
+        new Blob(
+          [
+            JSON.stringify({
+              version: 'V2',
+              requestId: 'string',
+              timestamp: 0,
+              images: [{ format: 'JPG', name: 'string' }],
+            }),
+          ],
+          {
+            type: 'application/json',
+          },
+        ),
+      )
+
+      mutate(formData)
     }
   }
 
@@ -82,7 +122,7 @@ const PhotoAddReg = (props: PhotoAddType) => {
   return (
     <Flex direction="column" style={{ height: '100vh' }}>
       <Top>
-        <Dismiss20Filled onClick={() => setValue(false)} />
+        <Dismiss20Filled onClick={() => setCamera(false)} />
       </Top>
       <Flex justify="center" css={imgSrc ? '' : photoStyle}>
         {imgSrc ? (

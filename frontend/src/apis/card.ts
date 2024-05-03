@@ -12,7 +12,7 @@ export const fetchMyCard = async (userId: number) => {
     .catch(err => console.log(err))
 }
 
-// 내 명함 등록
+// 내 명함 직접 작성 등록
 export const writeMyCard = async (params: WriteCardType) => {
   return authRequest
     .post(`${url}/${params.userId}`, params.data)
@@ -32,6 +32,14 @@ export const editMyCard = async (params: EditCardType) => {
 export const deleteMyCard = async (params: deleteCardType) => {
   return authRequest
     .delete(`${url}/${params.userId}`)
+    .then(res => res.data)
+    .catch(err => console.log(err))
+}
+
+// OCR 추출
+export const postOCR = async (data: FormData) => {
+  return authRequest
+    .post(`/ocr/process_ocr`, data)
     .then(res => res.data)
     .catch(err => console.log(err))
 }

@@ -18,6 +18,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { userState } from '@/stores/user'
 import { useMutation } from '@tanstack/react-query'
 import { writeMyCard } from '@/apis/card'
+import { isFirstCardState } from '@/stores/card'
 
 const WriteCardInfo = ({
   setIsCard,
@@ -43,6 +44,7 @@ const WriteCardInfo = ({
   const userId = useRecoilValue(userState).userId
 
   const setWriteInfo = useSetRecoilState(writeInfoState)
+  const setIsFirstCard = useSetRecoilState(isFirstCardState)
 
   const [dirty, setDirty] = useState<Partial<cardInput>>({})
 
@@ -66,6 +68,7 @@ const WriteCardInfo = ({
     onSuccess(result) {
       console.log('등록 성공', result)
       setWriteInfo(false)
+      setIsFirstCard(false)
     },
     onError(error) {
       console.error('등록 실패:', error)
