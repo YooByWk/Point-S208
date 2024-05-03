@@ -26,12 +26,12 @@ public class PrivateAlbum extends BaseTimeEntity {
     private boolean favorite = false;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "card_id")
     private Businesscard businesscard;
 

@@ -18,12 +18,14 @@ import com.ssafy.businesscard.domain.user.entity.User;
 import com.ssafy.businesscard.domain.user.repository.UserRepository;
 import com.ssafy.businesscard.global.exception.GlobalExceptionHandler;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PrivateAlbumServiceImpl implements PrivateAlbumService {
@@ -101,7 +103,8 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
                             .orElseThrow(() -> new GlobalExceptionHandler.UserException(
                                     GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_FILTER
                             ));
-            PrivateAlbum privateAlbum = privateAlbumRepository.findByUser_userIdAndBusinesscard_CardId(userId, cardId);
+            PrivateAlbum privateAlbum = privateAlbumRepository.
+                      findByUser_userIdAndBusinesscard_cardId(userId, cardId);
             privateAlbumMemberRepository.save(PrivateAlbumMember.builder()
                             .filter(filter)
                             .user(user)
@@ -112,16 +115,34 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
 
     // 명함지갑 명함 수정
     @Override
+    @Transactional
     public void updateCard(Long userId, Long cardId, CardRequest request) {
-        Businesscard businesscard = privateAlbumMapper.toEntity(request);
-        businesscardRepository.save(businesscard);
+        PrivateAlbum privateAlbum = privateAlbumRepository.findByUser_userIdAndBusinesscard_cardId(userId, cardId);
+        Businesscard card = privateAlbum.getBusinesscard();
+        businesscardRepository.save(Businesscard.builder()
+                        .cardId(card.getCardId())
+                        .name(request.name())
+                        .company(request.company())
+                        .position(request.position())
+                        .rank(request.rank())
+                        .department(request.department())
+                        .email(request.email())
+                        .landlineNumber(request.landlineNumber())
+                        .faxNumber(request.faxNumber())
+                        .phoneNumber(request.phoneNumber())
+                        .address(request.address())
+                        .realPicture(request.realPicture())
+                        .frontBack(request.frontBack())
+                        .domainUrl(request.domainUrl())
+                .build());
+
     }
 
     // 명함지갑 명함 삭제
     @Override
     @Transactional
     public void deleteCard(Long userId, Long cardId) {
-        PrivateAlbum privateAlbum = privateAlbumRepository.findByUser_userIdAndBusinesscard_CardId(userId, cardId);
+        PrivateAlbum privateAlbum = privateAlbumRepository.findByUser_userIdAndBusinesscard_cardId(userId, cardId);
         System.out.println("privateAlbum : " + privateAlbum);
         List<PrivateAlbum> privateAlbumList = privateAlbumRepository
                 .findByUser_userIdAndBusinesscard_email(privateAlbum.getUser().getUserId(), privateAlbum.getBusinesscard().getEmail());
