@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface BusinesscardRepository extends JpaRepository<Businesscard, Long> {
     List<MycardResponseDto> findByUser_UserId(Long userId);
+    List<Businesscard> findAllByNameContainingOrCompanyContaining(String name, String company);
 }

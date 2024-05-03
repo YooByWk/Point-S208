@@ -26,4 +26,6 @@ public class TeamsController {
         return ResponseEntity.ok().body(MessageUtils.success(list).getDataBody());
     }
 
+    //팀 명함
+
 }
