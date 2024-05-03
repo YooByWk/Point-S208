@@ -28,7 +28,7 @@ public class Businesscard extends BaseTimeEntity {
     @Column(name = "position", length = 100)
     private String position;
 
-    @Column(name = "rank", length = 30)
+    @Column(name = "job", length = 30)
     private String rank;
 
     @Column(name = "department", length = 30)
