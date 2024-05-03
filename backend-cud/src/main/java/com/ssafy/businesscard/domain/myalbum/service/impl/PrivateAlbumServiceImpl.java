@@ -4,7 +4,7 @@ import com.ssafy.businesscard.domain.card.entity.Businesscard;
 import com.ssafy.businesscard.domain.card.entity.Filter;
 import com.ssafy.businesscard.domain.card.repository.BusinesscardRepository;
 import com.ssafy.businesscard.domain.myalbum.dto.request.CardAddFilterRequest;
-import com.ssafy.businesscard.domain.myalbum.dto.request.UpdateCardRequest;
+import com.ssafy.businesscard.domain.myalbum.dto.request.CardRequest;
 import com.ssafy.businesscard.domain.myalbum.entity.PrivateAlbum;
 import com.ssafy.businesscard.domain.myalbum.entity.PrivateAlbumMember;
 import com.ssafy.businesscard.domain.myalbum.mapper.PrivateAlbumMapper;
@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +32,13 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
     private final PrivateAlbumFilterRepository privateAlbumFilterRepository;
     private final PrivateAlbumRepository privateAlbumRepository;
     private final PrivateAlbumMemberRepository privateAlbumMemberRepository;
+
+    // 명함 등록
+    @Override
+    public void registCard(Long userId, CardRequest request) {
+        Businesscard businesscard = privateAlbumMapper.toEntity(request);
+        businesscardRepository.save(businesscard);
+    }
 
     // 명함에 필터 추가
     @Override
@@ -64,7 +70,7 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
 
     // 명함지갑 명함 수정
     @Override
-    public void updateCard(Long userId, Long cardId, UpdateCardRequest request) {
+    public void updateCard(Long userId, Long cardId, CardRequest request) {
         Businesscard businesscard = privateAlbumMapper.toEntity(request);
         businesscardRepository.save(businesscard);
     }
