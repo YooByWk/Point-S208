@@ -159,42 +159,42 @@ import numpy as np
 
   
  
-import cv2
-import numpy as np
-import tensorflow as tf
+# import cv2
+# import numpy as np
+# import tensorflow as tf
 
-# 객체 감지 모델 로드
-model = tf.keras.models.load_model('card_detection_model.h5')
+# # 객체 감지 모델 로드
+# model = tf.keras.models.load_model('card_detection_model.h5')
 
-# 입력 이미지 로드
-image = cv2.imread('src/backgroundcard.jpg')
+# # 입력 이미지 로드
+# image = cv2.imread('src/backgroundcard.jpg')
 
-# 이미지 크기 조정 및 전처리
-resized_image = cv2.resize(image, (256, 256))
-preprocessed_image = resized_image / 255.0  # 정규화
+# # 이미지 크기 조정 및 전처리
+# resized_image = cv2.resize(image, (256, 256))
+# preprocessed_image = resized_image / 255.0  # 정규화
 
-# 객체 감지 수행
-predictions = model.predict(np.expand_dims(preprocessed_image, axis=0))
+# # 객체 감지 수행
+# predictions = model.predict(np.expand_dims(preprocessed_image, axis=0))
 
-# 신뢰도 임계값 설정
-confidence_threshold = 0.5
+# # 신뢰도 임계값 설정
+# confidence_threshold = 0.5
 
-# predictions 배열의 구조 확인
-print(predictions.shape)
-print(predictions)
+# # predictions 배열의 구조 확인
+# print(predictions.shape)
+# print(predictions)
 
-# 예측 결과 처리
-for prediction in predictions[0]:  # 첫 번째 차원이 배치 크기를 나타내는 경우
-    # class_index = int(prediction[4])
-    class_index = int(prediction[0][0])
-    # confidence = prediction[2]
-    confidence = prediction[0][0]
+# # 예측 결과 처리
+# for prediction in predictions[0]:  # 첫 번째 차원이 배치 크기를 나타내는 경우
+#     # class_index = int(prediction[4])
+#     class_index = int(prediction[0][0])
+#     # confidence = prediction[2]
+#     confidence = prediction[0][0]
     
-    if class_index == 0 and confidence > confidence_threshold:
-        box = prediction[0:4] * [image.shape[1], image.shape[0], image.shape[1], image.shape[0]]
-        (startX, startY, endX, endY) = box.astype("int")
-        business_card = image[startY:endY, startX:endX]
-        cv2.imwrite('business_card_extracted.jpg', business_card)
+#     if class_index == 0 and confidence > confidence_threshold:
+#         box = prediction[0:4] * [image.shape[1], image.shape[0], image.shape[1], image.shape[0]]
+#         (startX, startY, endX, endY) = box.astype("int")
+#         business_card = image[startY:endY, startX:endX]
+#         cv2.imwrite('business_card_extracted.jpg', business_card)
 
   
 
