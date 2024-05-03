@@ -11,15 +11,20 @@ import {
 } from '@fluentui/react-icons'
 import Text from '@/components/shared/Text'
 import { colors } from '@/styles/colorPalette'
-import { PhotoAddType } from '@/types/cameraType'
 import ScrollToTop from '@/utils/scrollToTop'
+import { useMutation } from '@tanstack/react-query'
+import { postOCR } from '@/apis/card'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { isFrontState } from '@/stores/card'
+import { cameraState } from '@/stores/emptyCard'
 
-const PhotoAddReg = (props: PhotoAddType) => {
+const PhotoAddReg = () => {
   // KOR Card Registration or ENG Card Registration
-  const { isFront, setValue } = props
+  const isFront = useRecoilValue(isFrontState)
+  const setCamera = useSetRecoilState(cameraState)
   const fileInput = useRef<HTMLInputElement | null>(null)
   const videoRef = useRef<HTMLVideoElement | null>(null)
-  const [imgSrc, setImgSrc] = useState<string | null>(null)
+  const [imgSrc, setImgSrc] = useState<File | null>(null)
 
   const getCameraStream = async () => {
     try {
@@ -43,8 +48,12 @@ const PhotoAddReg = (props: PhotoAddType) => {
       const ctx = canvas.getContext('2d')
       if (ctx) {
         ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height)
-        const imageDataURL = canvas.toDataURL('image/png')
-        setImgSrc(imageDataURL)
+        canvas.toBlob(blob => {
+          if (blob) {
+            const file = new File([blob], 'capture.png', { type: 'image/png' })
+            setImgSrc(file)
+          }
+        }, 'image/png')
       }
     }
   }
@@ -52,22 +61,66 @@ const PhotoAddReg = (props: PhotoAddType) => {
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null
     if (file) {
-      const reader = new FileReader()
-
-      reader.onload = function (e) {
-        setImgSrc(e.target?.result as string)
-      }
-
-      reader.readAsDataURL(file)
+      setImgSrc(file)
     }
   }
 
-  const requestApi = () => {
-    // 등록 성공하면 setCamera(false) 변경
-    if (isFront) {
-      console.log('국문 카드 등록 api 요청 만들기')
+  const renderImage = () => {
+    if (imgSrc) {
+      const objectURL = URL.createObjectURL(imgSrc)
+      return <img src={objectURL} alt="Captured" width={'80%'} />
     } else {
-      console.log('영문 카드 등록 api 요청 만들기')
+      return <video ref={videoRef} autoPlay playsInline width={'80%'} />
+    }
+  }
+
+  const { mutate } = useMutation({
+    mutationKey: ['postOCR'],
+    mutationFn: postOCR,
+    onSuccess(result) {
+      console.log('등록 성공', result)
+      if (result) {
+        const data = result.images[0].nameCard.result
+        console.log(data)
+        let cardInfo = {
+          name: data.name?.[0].text || '',
+          company: data.company?.[0].text || '',
+          position: data.position?.[0].text || '',
+          rank: data.rank?.[0].text || '',
+          department: data.department?.[0].text || '',
+          email: data.email?.[0].text || '',
+          landlineNumber: data.landlineNumber?.[0].text || '',
+          faxNumber: data.faxNumber?.[0].text || '',
+          phoneNumber: data.mobile?.[0].text || '',
+          address: data.address?.[0].text || '',
+          domainUrl: data.domainUrl?.[0].text || '',
+        }
+        // cardInfo를 params로 명함 등록 api 요청
+      }
+      setCamera(false)
+    },
+    onError(error) {
+      console.error('등록 실패:', error)
+    },
+  })
+
+  const requestApi = () => {
+    if (imgSrc) {
+      const formData = new FormData()
+
+      formData.append('file', imgSrc)
+
+      formData.append(
+        'message',
+        JSON.stringify({
+          version: 'V2',
+          requestId: 'string',
+          timestamp: 0,
+          images: [{ format: 'JPG', name: 'string' }],
+        }),
+      )
+
+      mutate(formData)
     }
   }
 
@@ -82,14 +135,10 @@ const PhotoAddReg = (props: PhotoAddType) => {
   return (
     <Flex direction="column" style={{ height: '100vh' }}>
       <Top>
-        <Dismiss20Filled onClick={() => setValue(false)} />
+        <Dismiss20Filled onClick={() => setCamera(false)} />
       </Top>
       <Flex justify="center" css={imgSrc ? '' : photoStyle}>
-        {imgSrc ? (
-          <img src={imgSrc} alt="Captured" width={'80%'} />
-        ) : (
-          <video ref={videoRef} autoPlay playsInline width={'80%'} />
-        )}
+        {renderImage()}
       </Flex>
       {imgSrc ? (
         <>

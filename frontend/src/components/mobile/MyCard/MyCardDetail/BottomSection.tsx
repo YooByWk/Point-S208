@@ -15,13 +15,13 @@ import {
   Button,
 } from '@fluentui/react-components'
 import { useState } from 'react'
-import { useRecoilValue } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { backCardState, frontCardState, isFrontState } from '@/stores/card'
-import { BooleanStateType } from '@/types/commonType'
+import { cameraState } from '@/stores/emptyCard'
 
-const BottomSection = (props: BooleanStateType) => {
-  const { setValue } = props
+const BottomSection = () => {
   const theme = useRecoilValue(themeState)
+  const setCamera = useSetRecoilState(cameraState)
   const isFront = useRecoilValue(isFrontState)
   const frontCard = useRecoilValue(frontCardState)
   const backCard = useRecoilValue(backCardState)
@@ -74,7 +74,7 @@ const BottomSection = (props: BooleanStateType) => {
       <Spacing size={12} />
 
       <Flex justify="space-around">
-        <Button shape="circular" onClick={() => setValue(true)}>
+        <Button shape="circular" onClick={() => setCamera(true)}>
           {card.realPicture ? '재등록' : '명함 촬영'}
         </Button>
         <Button shape="circular" onClick={() => {}}>
