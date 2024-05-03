@@ -41,7 +41,7 @@ const WebMyAlbumList = ({ selectedCards }: { selectedCards: number[] }) => {
         fetchNextPage()
       }
     }
-    
+
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [fetchNextPage, hasNextPage, data])
@@ -139,5 +139,6 @@ const gridStyles = css`
   grid-gap: 20px;
 `
 const boxStyles = css`
-  height: calc(100% - 30px);
+  padding-top: 100px;
+  padding-bottom: 50px;
 `
