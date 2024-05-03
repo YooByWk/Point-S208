@@ -40,28 +40,17 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
     @Override
     @Transactional
     public String registCard(Long userId, CardRequest request) {
-//        System.out.println("resgistCard 로직 시작 ---------------------------");
         User user = userRepository.findById(userId).orElseThrow(() -> new GlobalExceptionHandler.UserException(
                 GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_USER
         ));
-//        System.out.println("유저 정보 User : " + user);
-        Businesscard businesscard = privateAlbumMapper.toEntity(request);
-//        System.out.println("businesscard : " + businesscard);
-        boolean check = checkCard(userId, businesscard);
-//        System.out.println("check : " + check);
 
-        if (check) {
-            Businesscard card = businesscardRepository.findByEmailAndFrontBack(businesscard.getEmail(), businesscard.getFrontBack());
-//            System.out.println("card : " + card);
-            PrivateAlbumRequest privateAlbumRequest = PrivateAlbumRequest.builder()
-                    .user(user)
-                    .businesscard(card)
-                    .favorite(false)
-                    .build();
-            return addPrivateAlbum(privateAlbumRequest);
+        Businesscard businesscard = privateAlbumMapper.toEntity(request);
+
+        if (isCardExist(userId, businesscard) ) {
+            return "이미 등록된 명함입니다.";
         } else {
             businesscardRepository.save(businesscard);
-//            System.out.println("businesscard" + businesscard);
+            System.out.println("businesscard : " + businesscard);
             PrivateAlbumRequest privateAlbumRequest = PrivateAlbumRequest.builder()
                     .user(user)
                     .businesscard(businesscard)
@@ -69,38 +58,28 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
                     .build();
             return addPrivateAlbum(privateAlbumRequest);
         }
-//        System.out.println("resgistCard 로직 끝 ---------------------------");
     }
 
     // 명함 중복 검사
-    private boolean checkCard(Long userId, Businesscard businesscard) {
-        Businesscard card = businesscardRepository.findCardByEmail(userId, businesscard.getEmail());
-        System.out.println("명함 중복 검사 card : " + card);
-        if (card == null) {
-            return false;
-        } else {
-            return true;
+    private boolean isCardExist(Long userId, Businesscard businesscard) {
+        List<PrivateAlbum> privateAlbumList = privateAlbumRepository.findAllByUser_userId(userId);
+        for (PrivateAlbum privateAlbum : privateAlbumList) {
+            if (privateAlbum.getBusinesscard().getEmail().equals(businesscard.getEmail())) {
+                return true;
+            }
         }
+        return false;
     }
 
 
     private String addPrivateAlbum(PrivateAlbumRequest request) {
-//        System.out.println("addPrivateAlbum 로직 시작 -----------------------------");
-//        System.out.println("request : " + request);
-        PrivateAlbum privateAlbum = privateAlbumRepository.findByUser_userIdAndBusinesscard_CardId(
-                request.user().getUserId(), request.businesscard().getCardId()
-        );
-        if (privateAlbum == null) {
-            privateAlbumRepository.save(PrivateAlbum.builder()
-                    .user(request.user())
-                    .businesscard(request.businesscard())
-                    .favorite(request.favorite())
-                    .build());
-            return "등록 성공";
-        } else {
-            return "존재하는 명함";
-        }
-//        System.out.println("addPrivateAlbum 로직 끝 -----------------------------");
+        privateAlbumRepository.save(PrivateAlbum.builder()
+                .user(request.user())
+                .businesscard(request.businesscard())
+                .favorite(request.favorite())
+                .build());
+        return "등록 성공";
+
     }
 
     // 명함에 필터 추가
