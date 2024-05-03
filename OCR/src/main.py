@@ -12,7 +12,7 @@ import os
 from fastapi.middleware.cors import CORSMiddleware
 
 
-from transformers import DetrImageProcessor, DetrForObjectDetection
+# from transformers import DetrImageProcessor, DetrForObjectDetection
 import torch
 from PIL import Image
 import requests
