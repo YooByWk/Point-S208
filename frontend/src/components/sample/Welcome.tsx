@@ -38,8 +38,6 @@ export function Welcome(props: { showFunction?: boolean; environment?: string })
   const { loading, data, error } = useData(async () => {
     if (teamsUserCredential) {
       const userInfo = await teamsUserCredential.getUserInfo();
-      console.log(userInfo)
-      console.log("setting--------------------", )
       return userInfo;
     }
   });
