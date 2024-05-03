@@ -141,21 +141,21 @@ print(data)
 
 
 
-from transformers import AutoModelForImageSegmentation, AutoFeatureExtractor
-from tensorflow.keras.models import load_model
+# from transformers import AutoModelForImageSegmentation, AutoFeatureExtractor
+# from tensorflow.keras.models import load_model
 
 import torch
 from PIL import Image, ImageDraw
 import requests
 import numpy as np
 
-from tensorflow.keras.layers import Conv2DTranspose
-from tensorflow.keras.utils import CustomObjectScope
+# from tensorflow.keras.layers import Conv2DTranspose
+# from tensorflow.keras.utils import CustomObjectScope
 
 
-from huggingface_hub import notebook_login
+# from huggingface_hub import notebook_login
 
-notebook_login()
+# notebook_login()
 
   
  
