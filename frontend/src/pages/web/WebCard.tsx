@@ -12,7 +12,7 @@ const WebCard = () => {
 
   const renderContent = () => {
     if (writeInfo)
-      return <WriteCardInfo isEnglish={isEnglish} setIsCard={setIsCard} />
+      return <WriteCardInfo isEnglish={isEnglish} setIsCard={setIsCard} refetch={() => {}}/>
     if (isCard)
       return (
         <WebMyCard

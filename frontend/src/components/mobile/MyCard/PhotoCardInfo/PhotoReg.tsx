@@ -25,8 +25,8 @@ const PhotoReg = (props: { isMyCard: boolean }) => {
   const setIsFirstCard = useSetRecoilState(isFirstCardState)
   const fileInput = useRef<HTMLInputElement | null>(null)
   const videoRef = useRef<HTMLVideoElement | null>(null)
-  const [frontImgSrc, setFrontImgSrc] = useState<string | null>(null)
-  const [backImgSrc, setBackImgSrc] = useState<string | null>(null)
+  const [frontImgSrc, setFrontImgSrc] = useState<File | null>(null)
+  const [backImgSrc, setBackImgSrc] = useState<File | null>(null)
   const [isFront, setIsFront] = useState<boolean>(true)
   const isImgSrc: boolean =
     (isFront && frontImgSrc) || (!isFront && backImgSrc) ? true : false
@@ -53,12 +53,16 @@ const PhotoReg = (props: { isMyCard: boolean }) => {
       const ctx = canvas.getContext('2d')
       if (ctx) {
         ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height)
-        const imageDataURL = canvas.toDataURL('image/png')
-        if (isFront) {
-          setFrontImgSrc(imageDataURL)
-        } else {
-          setBackImgSrc(imageDataURL)
-        }
+        canvas.toBlob(blob => {
+          if (blob) {
+            const file = new File([blob], 'capture.png', { type: 'image/png' })
+            if (isFront) {
+              setFrontImgSrc(file)
+            } else {
+              setBackImgSrc(file)
+            }
+          }
+        }, 'image/png')
       }
     }
   }
@@ -66,18 +70,23 @@ const PhotoReg = (props: { isMyCard: boolean }) => {
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null
     if (file) {
-      const reader = new FileReader()
-
-      reader.onload = function (e) {
-        if (isFront) {
-          setFrontImgSrc(e.target?.result as string)
-        } else {
-          setBackImgSrc(e.target?.result as string)
-        }
+      if (isFront) {
+        setFrontImgSrc(file)
+      } else {
+        setBackImgSrc(file)
       }
-
-      reader.readAsDataURL(file)
     }
+  }
+
+  const renderImage = () => {
+    const imgSrc = isFront ? frontImgSrc : backImgSrc
+    const objectURL = imgSrc && URL.createObjectURL(imgSrc)
+
+    return objectURL ? (
+      <img src={objectURL} alt="Captured" width="80%" />
+    ) : (
+      <video ref={videoRef} autoPlay playsInline width="80%" />
+    )
   }
 
   const { mutate } = useMutation({
@@ -85,10 +94,23 @@ const PhotoReg = (props: { isMyCard: boolean }) => {
     mutationFn: postOCR,
     onSuccess(result) {
       console.log('등록 성공', result)
-      if (isMyCard) {
-        console.log('내 카드 등록 api요청 만들기')
-      } else {
-        console.log('남 카드 등록 api요청 만들기')
+      if (result) {
+        const data = result.images[0].nameCard.result
+        console.log(data)
+        let cardInfo = {
+          name: data.name?.[0].text || '',
+          company: data.company?.[0].text || '',
+          position: data.position?.[0].text || '',
+          rank: data.rank?.[0].text || '',
+          department: data.department?.[0].text || '',
+          email: data.email?.[0].text || '',
+          landlineNumber: data.landlineNumber?.[0].text || '',
+          faxNumber: data.faxNumber?.[0].text || '',
+          phoneNumber: data.mobile?.[0].text || '',
+          address: data.address?.[0].text || '',
+          domainUrl: data.domainUrl?.[0].text || '',
+        }
+        // cardInfo를 params로 명함 등록 api 요청
       }
       setIsFirstCard(false)
       setCamera(false)
@@ -99,26 +121,19 @@ const PhotoReg = (props: { isMyCard: boolean }) => {
   })
 
   const requestApi = () => {
-    const ImgOcr = (img: string) => {
+    const ImgOcr = (imgSrc: File) => {
       const formData = new FormData()
 
-      formData.append('file', img)
+      formData.append('file', imgSrc)
 
       formData.append(
         'message',
-        new Blob(
-          [
-            JSON.stringify({
-              version: 'V2',
-              requestId: 'string',
-              timestamp: 0,
-              images: [{ format: 'JPG', name: 'string' }],
-            }),
-          ],
-          {
-            type: 'application/json',
-          },
-        ),
+        JSON.stringify({
+          version: 'V2',
+          requestId: 'string',
+          timestamp: 0,
+          images: [{ format: 'JPG', name: 'string' }],
+        }),
       )
 
       mutate(formData)
@@ -145,14 +160,8 @@ const PhotoReg = (props: { isMyCard: boolean }) => {
             isFront={isFront}
             setIsFront={setIsFront}
           />
-        ) : isImgSrc ? (
-          <img
-            src={isFront ? (frontImgSrc as string) : (backImgSrc as string)}
-            alt="Captured"
-            width={'80%'}
-          />
         ) : (
-          <video ref={videoRef} autoPlay playsInline width={'80%'} />
+          renderImage()
         )}
       </Flex>
       {isImgSrc ? (

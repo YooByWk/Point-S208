@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import WriteCardInfo from '@components/mobile/MyCard/WriteCardInfo'
 import EmptyCard from '@components/mobile/MyCard/EmptyCard'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { cameraState, writeInfoState } from '@stores/emptyCard'
 import PhotoReg from '@components/mobile/MyCard/PhotoCardInfo/PhotoReg'
 import MyCardDetail from '@components/mobile/MyCard/MyCardDetail/MyCardDetail'
@@ -23,12 +23,12 @@ const AppCard = () => {
   const isFront = useRecoilValue(isFrontState)
   const writeInfo = useRecoilValue(writeInfoState)
   const camera = useRecoilValue(cameraState)
-  const isFirstCard = useRecoilValue(isFirstCardState)
+  const [isFirstCard, setIsFirstCard] = useRecoilState(isFirstCardState)
   const userId = useRecoilValue(userState).userId as number
   const setFrontCard = useSetRecoilState(frontCardState)
   const setBackCard = useSetRecoilState(backCardState)
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ['fetchMyCard'],
     queryFn: () => fetchMyCard(userId),
   })
@@ -38,18 +38,24 @@ const AppCard = () => {
       if (data?.front) setFrontCard(data.front)
       if (data?.back) setBackCard(data.back)
       setIsCard(true)
+    } else {
+      setIsFirstCard(true)
     }
-  }, [data, isLoading, setBackCard, setFrontCard, writeInfo, camera])
+  }, [data, isLoading, setBackCard, setFrontCard, setIsFirstCard])
 
   const renderContent = () => {
     if (isLoading)
       return <Spinner label="로딩 중..." style={{ height: '100vh' }} />
     if (writeInfo)
-      return <WriteCardInfo setIsCard={setIsCard} isEnglish={!isFront} />
-    if (camera)
       return (
-        <>{isFirstCard ? <PhotoReg isMyCard={true} /> : <PhotoAddReg />}</>
+        <WriteCardInfo
+          setIsCard={setIsCard}
+          isEnglish={!isFront}
+          refetch={refetch}
+        />
       )
+    if (camera)
+      return <>{isFirstCard ? <PhotoReg isMyCard={true} /> : <PhotoAddReg />}</>
     if (isCard) return <MyCardDetail />
     return <EmptyCard />
   }

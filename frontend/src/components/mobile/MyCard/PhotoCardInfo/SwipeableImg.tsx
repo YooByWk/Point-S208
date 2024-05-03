@@ -12,9 +12,11 @@ const SwipeableImg = (props: SwipeableImgType) => {
     trackMouse: true,
   })
 
+  const objectURL = URL.createObjectURL(isFront ? frontImgSrc : backImgSrc)
+
   return (
     <Container {...handlers}>
-      <Img src={isFront ? frontImgSrc : backImgSrc} alt="Captured" />
+      <Img src={objectURL} alt="Captured" />
     </Container>
   )
 }

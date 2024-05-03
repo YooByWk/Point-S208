@@ -23,9 +23,11 @@ import { isFirstCardState } from '@/stores/card'
 const WriteCardInfo = ({
   setIsCard,
   isEnglish,
+  refetch,
 }: {
   setIsCard: Dispatch<SetStateAction<boolean>>
   isEnglish: boolean
+  refetch: any
 }) => {
   const [cardInputs, setCardInputs] = useState({
     name: '',
@@ -69,6 +71,7 @@ const WriteCardInfo = ({
       console.log('등록 성공', result)
       setWriteInfo(false)
       setIsFirstCard(false)
+      refetch()
     },
     onError(error) {
       console.error('등록 실패:', error)

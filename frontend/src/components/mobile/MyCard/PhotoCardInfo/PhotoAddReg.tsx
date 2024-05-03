@@ -24,7 +24,7 @@ const PhotoAddReg = () => {
   const setCamera = useSetRecoilState(cameraState)
   const fileInput = useRef<HTMLInputElement | null>(null)
   const videoRef = useRef<HTMLVideoElement | null>(null)
-  const [imgSrc, setImgSrc] = useState<string | null>(null)
+  const [imgSrc, setImgSrc] = useState<File | null>(null)
 
   const getCameraStream = async () => {
     try {
@@ -48,8 +48,12 @@ const PhotoAddReg = () => {
       const ctx = canvas.getContext('2d')
       if (ctx) {
         ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height)
-        const imageDataURL = canvas.toDataURL('image/png')
-        setImgSrc(imageDataURL)
+        canvas.toBlob(blob => {
+          if (blob) {
+            const file = new File([blob], 'capture.png', { type: 'image/png' })
+            setImgSrc(file)
+          }
+        }, 'image/png')
       }
     }
   }
@@ -57,13 +61,16 @@ const PhotoAddReg = () => {
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null
     if (file) {
-      const reader = new FileReader()
+      setImgSrc(file)
+    }
+  }
 
-      reader.onload = function (e) {
-        setImgSrc(e.target?.result as string)
-      }
-
-      reader.readAsDataURL(file)
+  const renderImage = () => {
+    if (imgSrc) {
+      const objectURL = URL.createObjectURL(imgSrc)
+      return <img src={objectURL} alt="Captured" width={'80%'} />
+    } else {
+      return <video ref={videoRef} autoPlay playsInline width={'80%'} />
     }
   }
 
@@ -72,10 +79,23 @@ const PhotoAddReg = () => {
     mutationFn: postOCR,
     onSuccess(result) {
       console.log('등록 성공', result)
-      if (isFront) {
-        console.log('국문 카드 등록 api 요청 만들기')
-      } else {
-        console.log('영문 카드 등록 api 요청 만들기')
+      if (result) {
+        const data = result.images[0].nameCard.result
+        console.log(data)
+        let cardInfo = {
+          name: data.name?.[0].text || '',
+          company: data.company?.[0].text || '',
+          position: data.position?.[0].text || '',
+          rank: data.rank?.[0].text || '',
+          department: data.department?.[0].text || '',
+          email: data.email?.[0].text || '',
+          landlineNumber: data.landlineNumber?.[0].text || '',
+          faxNumber: data.faxNumber?.[0].text || '',
+          phoneNumber: data.mobile?.[0].text || '',
+          address: data.address?.[0].text || '',
+          domainUrl: data.domainUrl?.[0].text || '',
+        }
+        // cardInfo를 params로 명함 등록 api 요청
       }
       setCamera(false)
     },
@@ -92,19 +112,12 @@ const PhotoAddReg = () => {
 
       formData.append(
         'message',
-        new Blob(
-          [
-            JSON.stringify({
-              version: 'V2',
-              requestId: 'string',
-              timestamp: 0,
-              images: [{ format: 'JPG', name: 'string' }],
-            }),
-          ],
-          {
-            type: 'application/json',
-          },
-        ),
+        JSON.stringify({
+          version: 'V2',
+          requestId: 'string',
+          timestamp: 0,
+          images: [{ format: 'JPG', name: 'string' }],
+        }),
       )
 
       mutate(formData)
@@ -125,11 +138,7 @@ const PhotoAddReg = () => {
         <Dismiss20Filled onClick={() => setCamera(false)} />
       </Top>
       <Flex justify="center" css={imgSrc ? '' : photoStyle}>
-        {imgSrc ? (
-          <img src={imgSrc} alt="Captured" width={'80%'} />
-        ) : (
-          <video ref={videoRef} autoPlay playsInline width={'80%'} />
-        )}
+        {renderImage()}
       </Flex>
       {imgSrc ? (
         <>

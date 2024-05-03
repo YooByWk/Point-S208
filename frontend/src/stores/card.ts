@@ -41,5 +41,5 @@ export const isRealState = atom({
 
 export const isFirstCardState = atom({
   key: 'isFirstCardState',
-  default: true,
+  default: false,
 })
