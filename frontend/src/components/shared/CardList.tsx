@@ -3,7 +3,6 @@
 import type { CardType } from '@/types/cardType'
 import type { CardListType } from '@/types/CardListType'
 import CardThumbnail from './CardThumbnail'
-import { dummyCardList } from '@/assets/data/dummyCardList'
 import Flex from '@/components/shared/Flex'
 import SearchBox from '@/components/shared/SearchBox'
 import { useState } from 'react'
@@ -16,6 +15,8 @@ import { useParams } from 'react-router-dom'
 import { tokens } from '@fluentui/react-components'
 import { useRecoilState } from 'recoil'
 import { pageChanged } from '@stores/team'
+import { dummyCardList } from '@/assets/data/dummyCardList'
+import { ExternalCardListType } from '@/types/ExternalCard'
 
 interface CardListProps {
   cardList?: CardListType
@@ -74,6 +75,14 @@ const CardList = ({
     setIsShare(!isShare)
     console.log('isShare: ', isShare)
   }
+  
+  
+  const [searchResults, setSearchResults] = useState<ExternalCardListType | undefined>(undefined);
+  const handleResult = (data: ExternalCardListType) => {
+    if (data) {
+      setSearchResults(data)
+    }
+  }
 
   return (
     <>
@@ -81,19 +90,26 @@ const CardList = ({
         <>
           <SearchBox
             value={searchValue}
-            onChange={(e: any) => setSearchValue(e.target.value)}
+            onChange={(e) => {
+              if (e.target.value !== undefined) {
+                setSearchValue(e.target.value)
+              }
+            }
+          }
+          onSearch={handleResult}
             placeholder={isTeam ? '팀 명함 검색' : '명함 검색'}
             memberIcon={isTeam ? true : false}
             spacing={false}
+            
           />
-          <Spacing size={20} />
+          <Spacing size={15} />
           <MultiSelectBar
             selectedCards={selectedCards}
             allCards={cards}
             setSelectedCards={setSelectedCards}
           />
           <Flex direction="column" justify="center" align="center">
-            {cards
+            {(searchResults !== undefined && searchResults.length > 0 && searchValue !== undefined && searchValue.trim() !== '' ? searchResults : cards)
               .filter(card => card)
               .map(card => {
                 return (

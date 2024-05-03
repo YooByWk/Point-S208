@@ -18,8 +18,8 @@ import Spacing from '@/components/shared/Spacing'
 import AddCard from '@/components/mobile/MyAlbum/AddCard'
 import SearchBox from '@/components/shared/SearchBox'
 
-// import { useData, useTeamsUserCredential } from '@microsoft/teamsfx-react'
 import { dummyCard } from '@/assets/data/dummyCard';
+import { ExternalCardListType, ExternalCardType } from '@/types/ExternalCard';
 
 const AlbumList = () => {
   // 내 명함 리스트
@@ -41,7 +41,7 @@ const AlbumList = () => {
     })
 
   const cards = data?.pages.flatMap(page => page) || []
-
+//
   useEffect(() => {
     const handleScroll = () => {
       if (
@@ -53,29 +53,38 @@ const AlbumList = () => {
         fetchNextPage()
       }
     }
+    
+    
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [fetchNextPage, hasNextPage, data])
-
+// 
   const [isAddCard, setIsAddCard] = useState(false)
   const handleAdd = () => {
     setIsAddCard(!isAddCard)
   }
-  
-const [testValue, setTestValue] = useState(0)
+//
+const [searchValue, setSearchValue] = useState('')
 
-const [result, setResult] = useState()
-const handleResult = (data: any) => {
-  
-}
+const [searchResults, setSearchResults] = useState<ExternalCardListType | undefined>(undefined);
+
 const dummyList: CardListType = dummyCardList
   return (
     <>
+    <button onClick={()=>console.log(searchResults)}>asdf</button>
       {/*  */}
-      <SearchBox
-        value={testValue}
-        onChange={(e) => setTestValue(e.target.value)}
-      />
+      {/* <SearchBox
+        value={searchValue}
+        onChange={(e) => {
+          if (e.target.value !== undefined) {
+            setSearchValue(e.target.value)
+          }
+        }
+      }
+        onSearch={handleResult}
+      /> */}
+      { searchValue.trim() !== '' && searchResults !== undefined &&  searchResults.length > 0  && searchResults[0] !== undefined || searchValue.length > 0 ? 
+    (searchResults?.map((res) => <p>{res.name}</p>)) : (
       <div>
         {cards.length > 0 && cards[0] !== undefined ? (
           <CardList
@@ -108,7 +117,7 @@ const dummyList: CardListType = dummyCardList
             <Spinner />
           </div>
         )}
-      </div>
+      </div>)}
       {isAddCard && (
         <AddCard isAddCard={isAddCard} setIsAddCard={setIsAddCard} />
       )}

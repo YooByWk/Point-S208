@@ -17,10 +17,11 @@ import {
 import { useNavigate } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import { userState } from '@/stores/user'
+import { ExternalCardType } from '@/types/ExternalCard'
 ///
 ///
 interface CardThumbnailProps {
-  cardInfo: CardType
+  cardInfo: CardType | ExternalCardType
   onSelect: (cardId: number) => void
   selectedCards: number[]
   forShare?: boolean
