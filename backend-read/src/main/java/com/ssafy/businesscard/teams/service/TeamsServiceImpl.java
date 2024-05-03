@@ -1,7 +1,6 @@
 package com.ssafy.businesscard.teams.service;
 
 import com.ssafy.businesscard.privateAlbum.dto.PrivateAlbumResponseDto;
-import com.ssafy.businesscard.privateAlbum.entity.PrivateAlbum;
 import com.ssafy.businesscard.teams.dto.TeamListResponseDto;
 import com.ssafy.businesscard.teams.dto.TeamMemberListResponseDto;
 import com.ssafy.businesscard.teams.entity.TeamAlbum;
@@ -11,6 +10,7 @@ import com.ssafy.businesscard.teams.repository.TeamAlbumDetailRepository;
 import com.ssafy.businesscard.teams.repository.TeamAlbumMemberRepository;
 import com.ssafy.businesscard.teams.repository.TeamAlbumRepository;
 import com.ssafy.businesscard.teams.repository.TeamMemberRepository;
+import com.ssafy.businesscard.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -84,7 +85,18 @@ public class TeamsServiceImpl implements TeamsService{
 
     //팀의 팀원 조회
     @Override
-    public List<TeamMemberListResponseDto> getTeamMemberList(Long teamAlbumId){
-        return null;
+    public List<TeamMemberListResponseDto> getTeamMemberList(Long userId, Long teamAlbumId){
+        List<TeamMemberListResponseDto> teamMembers = new ArrayList<>();
+        //me
+        TeamMember me = teamMemberRepository.findByUser_userIdAndTeamAlbum_TeamAlbumId(userId, teamAlbumId);
+        if (me != null) {
+            teamMembers.add(new TeamMemberListResponseDto(me.getUser().getUserId(), me.getUser().getEmail(), me.getUser().getName()));
+        }
+        //other member
+        List<TeamMember> otherMembers = teamMemberRepository.findByTeamAlbum_TeamAlbumIdAndUser_UserIdNot(teamAlbumId, userId);
+        for (TeamMember member : otherMembers) {
+            teamMembers.add(new TeamMemberListResponseDto(member.getUser().getUserId(), member.getUser().getEmail(), member.getUser().getName()));
+        }
+        return teamMembers;
     }
 }

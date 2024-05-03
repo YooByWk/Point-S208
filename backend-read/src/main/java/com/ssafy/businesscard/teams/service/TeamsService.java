@@ -9,5 +9,5 @@ import java.util.List;
 public interface TeamsService {
     public List<TeamListResponseDto> getTeamList(Long userId);
     public List<PrivateAlbumResponseDto> getTeamAlbumList(Long teamAlbumId, int page);
-    public List<TeamMemberListResponseDto> getTeamMemberList(Long teamAlbumId);
+    public List<TeamMemberListResponseDto> getTeamMemberList(Long userId, Long teamAlbumId);
 }

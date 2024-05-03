@@ -36,9 +36,9 @@ public class TeamsController {
     }
 
     //팀의 팀원 조회
-    @GetMapping("/teams/{team_album_id}/member")
-    public ResponseEntity<?> getTeamMemberList(@PathVariable("team_album_id")Long teamAlbumId){
-        List<TeamMemberListResponseDto> dtos = teamsService.getTeamMemberList(teamAlbumId);
+    @GetMapping("/teams/{user_id}/member/{team_album_id}")
+    public ResponseEntity<?> getTeamMemberList(@PathVariable("user_id")Long userId, @PathVariable("team_album_id")Long teamAlbumId){
+        List<TeamMemberListResponseDto> dtos = teamsService.getTeamMemberList(userId, teamAlbumId);
         return ResponseEntity.ok().body(MessageUtils.success(dtos));
     }
 }
