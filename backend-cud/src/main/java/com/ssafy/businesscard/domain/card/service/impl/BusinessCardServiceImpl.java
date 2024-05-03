@@ -1,6 +1,7 @@
 package com.ssafy.businesscard.domain.card.service.impl;
 
 import com.ssafy.businesscard.domain.card.dto.response.OCRResponse;
+import com.ssafy.businesscard.domain.card.entity.Businesscard;
 import com.ssafy.businesscard.domain.card.repository.BusinesscardRepository;
 import com.ssafy.businesscard.domain.card.service.BusinessCardService;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,24 @@ public class BusinessCardServiceImpl implements BusinessCardService {
                 .retrieve()
                 .bodyToMono(OCRResponse.class);
         System.out.println("webClient : " + webClient.get());
+
+
+    }
+
+    // 명함 중복 검사
+    @Override
+    public boolean checkCard(Businesscard businesscard) {
+        System.out.println("checkcard 로직 시작 -------------------------------");
+        System.out.println("chekcard : " + businesscard);
+        List<Businesscard> card = businesscardRepository.findByEmail(businesscard.getEmail());
+        System.out.println("card : " + card);
+        if (card.isEmpty()) {
+            System.out.println("checkcard 로직 끝 -----------------------------------");
+            return false;
+        } else {
+            System.out.println("checkcard 로직 끝 -----------------------------------");
+            return true;
+        }
 
 
     }

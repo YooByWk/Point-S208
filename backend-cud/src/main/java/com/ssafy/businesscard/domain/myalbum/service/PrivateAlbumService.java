@@ -6,7 +6,7 @@ import com.ssafy.businesscard.domain.myalbum.dto.request.CardRequest;
 import java.util.List;
 
 public interface PrivateAlbumService {
-    void registCard(Long userId, CardRequest request);
+    String registCard(Long userId, CardRequest request);
     void addFilter(Long userId, Long cardId, List<CardAddFilterRequest> request);
 
     void updateCard(Long userId, Long cardId, CardRequest request);
