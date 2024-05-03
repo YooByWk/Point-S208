@@ -36,7 +36,7 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
     //명함 지갑 목록 조회
     @Override
     public List<PrivateAlbumResponseDto> getAlbumList(Long userId, int page){
-        int size = 10;
+        int size = 12;
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("businesscard.cardId").descending());
         Page<PrivateAlbum> albumPage = privateAlbumRepository.findByUser_userId(userId, pageable);
