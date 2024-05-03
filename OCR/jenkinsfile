@@ -1,6 +1,13 @@
 def component = [
     'ocr': true,
-
+    'alertmanager': false,
+    'prometheus': false,
+    'grafana': false,
+    'prometheus_nginx_exporter': false,
+    'cadvisor': false,
+    'db':false,
+    'backend-cud':false,
+    'backend-read':false
 ]
 
 // 파일 복사 작업을 수행하는 함수 정의
