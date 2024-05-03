@@ -114,17 +114,7 @@ services:
 #      - jenkins-network
 
 
-  front:
-    container_name: front
-    image: junwon1131/s208-front:latest
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    restart: unless-stopped
-    ports:
-      - "35000:35000"
-    networks:
-      - jenkins-network
+ 
 
   backend-cud:
     container_name: backend-cud
