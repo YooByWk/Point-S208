@@ -221,6 +221,5 @@ import numpy as np
 #             f"{round(score.item(), 3)} at location {box}"
 #     )
 
-
 if __name__ == "__main__":
     uvicorn.run(api, host="0.0.0.0", port=8000)
