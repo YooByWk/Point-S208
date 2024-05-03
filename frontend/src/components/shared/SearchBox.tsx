@@ -1,13 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import { Field, tokens, SearchBox as FluentSearchBox } from '@fluentui/react-components'
 import { css } from '@emotion/react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import Flex from './Flex'
 import PeopleFilterSortIcons from './PeopleFilterSortIcons';
 import { colors } from '@/styles/colorPalette';
 import Spacing  from '@/components/shared/Spacing';
 import { SearchRegular } from '@fluentui/react-icons';
+import { searchMyAlbumCard } from '@/apis/album';
+import { useQuery } from '@tanstack/react-query';
 interface SearchBoxProps {
   placeholder?: string
   onChange?: (e: any) => void
@@ -32,7 +34,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   filterIcon,
   memberIcon,
   onChange,
-  value,
+  value, // 검색어
   sortIcon,
   spacing = true,
   width,
@@ -40,7 +42,6 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   bgColor=''
 }) => {
   const handleKeyDown = (e: any): void => {
-    // console.log(e)
     if (e.key === 'Enter') {
       console.log('submit', value)
       // handleSubmit()
@@ -49,9 +50,23 @@ const SearchBox: React.FC<SearchBoxProps> = ({
     }
   }
   
-
+// 검색 로직
+ const { data } = useQuery({
+  
+  queryKey: ['searchMyAlbumCard', value],
+  queryFn: () => searchMyAlbumCard(value),
+ })
+ 
+  useEffect(() => {
+    console.log('검색어', value)
+    console.log('검색결과', data)
+    
+  }, [value, data])
+  
+  
   return (
     <div>
+      {/* <p>{data?data:'없는디'}</p> */}
       {/* <Spacing size={10} direction='vertical'/> */}
       <Flex justify="space-between" align="center" direction="row"
       css={mainContainerCss}>

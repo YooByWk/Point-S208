@@ -128,7 +128,8 @@ const btnContainer = css`
 `
 
 const arrowContainer = css`
-  width: fit-content;
-  margin-top: 2vh;
-  padding-left: 5vw;
+  /* width: fit-content; */
+  /* padding-left: 15px; */
+  margin-left: 10px;
+  margin-top: 10px;
 `

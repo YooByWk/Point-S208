@@ -37,6 +37,7 @@ export default function App() {
 
   useData(async () => {
     if (teamsUserCredential) {
+      console.log('teamsUserCredential', teamsUserCredential)
       const userInfo = await teamsUserCredential.getUserInfo()
       setUser({
         name: userInfo.displayName,
