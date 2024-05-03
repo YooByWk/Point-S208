@@ -41,6 +41,7 @@ const WebMyAlbumList = ({ selectedCards }: { selectedCards: number[] }) => {
         fetchNextPage()
       }
     }
+    
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [fetchNextPage, hasNextPage, data])
