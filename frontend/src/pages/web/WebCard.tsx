@@ -1,9 +1,9 @@
 import { writeInfoState } from '@stores/emptyCard'
 import { useRecoilValue } from 'recoil'
 import { useState } from 'react'
-import WebEmptyCard from '@components/web/WebEmptyCard'
+import WebEmptyCard from '@components/web/WebCard/WebEmptyCard'
 import WriteCardInfo from '@components/mobile/MyCard/WriteCardInfo'
-import WebMyCard from '@/components/web/WebMyCard'
+import WebMyCard from '@components/web/WebCard/WebMyCard'
 
 const WebCard = () => {
   const [isCard, setIsCard] = useState(true)
@@ -12,7 +12,13 @@ const WebCard = () => {
 
   const renderContent = () => {
     if (writeInfo)
-      return <WriteCardInfo isEnglish={isEnglish} setIsCard={setIsCard} refetch={() => {}}/>
+      return (
+        <WriteCardInfo
+          isEnglish={isEnglish}
+          setIsCard={setIsCard}
+          refetch={() => {}}
+        />
+      )
     if (isCard)
       return (
         <WebMyCard

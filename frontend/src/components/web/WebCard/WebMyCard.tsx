@@ -13,7 +13,7 @@ import WebMyCardInfo from './WebMyCardDetail/WebMyCardInfo'
 import WebNewlyAddedCard from './WebMyCardDetail/WebNewlyAddedCard'
 import WebEmptyBackCard from './WebMyCardDetail/WebEmptyBackCard'
 import WebEmptyCard from './WebEmptyCard'
-import InfoEdit from '../mobile/MyCard/MyCardDetail/InfoEdit'
+import InfoEdit from '../../mobile/MyCard/MyCardDetail/InfoEdit'
 import { backCardState, frontCardState } from '@/stores/card'
 
 interface CardInfo {
@@ -41,7 +41,11 @@ interface DataProps {
   list: CardInfo[]
 }
 
-function useFetchCardData(userId: number | undefined, isCard: boolean) {
+function useFetchCardData(
+  userId: number | undefined,
+  isCard: boolean,
+  editOpen: boolean,
+) {
   const [data, setData] = useState<DataProps | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
@@ -66,7 +70,7 @@ function useFetchCardData(userId: number | undefined, isCard: boolean) {
     }
 
     fetchData()
-  }, [userId, isCard, setFrontCard, setBackCard])
+  }, [userId, isCard, setFrontCard, setBackCard, editOpen])
 
   return { data, loading, error }
 }
@@ -81,9 +85,9 @@ const WebMyCard = ({
   setIsEnglish: (isFront: boolean) => void
 }) => {
   const userId = useRecoilValue(userState).userId
-  const { data, loading, error } = useFetchCardData(userId, isCard)
-  const [isFront, setIsFront] = useState(true)
   const [editOpen, setEditOpen] = useState(false)
+  const { data, loading, error } = useFetchCardData(userId, isCard, editOpen)
+  const [isFront, setIsFront] = useState(true)
 
   if (loading) return <div>Loading...</div>
   if (error) return <div>Error loading data!</div>
@@ -104,6 +108,7 @@ const WebMyCard = ({
     return <WebEmptyCard />
   }
   if (editOpen) return <InfoEdit value={editOpen} setValue={setEditOpen} />
+
   console.log(data)
 
   return (
