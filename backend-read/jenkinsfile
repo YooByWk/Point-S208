@@ -180,7 +180,7 @@ pipeline {
             steps {
                 script {
                     component.each { entry ->
-                        if (entry.value) {
+                          if (entry.value && entry.key != 'mysql')  {
                             def var = entry.key
                             try {
                                 sh "docker-compose -f docker-compose.yml -p develop-server up -d ${var.toLowerCase()}"
