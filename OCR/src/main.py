@@ -44,7 +44,7 @@ print('secret   '+CLIENT_SECRET)
 # CORS 미들웨어 설정
 api.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://example.com", "https://example2.com"],  # 여기에 허용할 출처를 명시합니다.
+    allow_origins=["*"],  # 여기에 허용할 출처를 명시합니다.
     allow_credentials=True,
     allow_methods=["*"],  # 허용할 HTTP 메소드
     allow_headers=["*"],  # 허용할 헤더
