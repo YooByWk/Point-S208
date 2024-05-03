@@ -6,14 +6,12 @@ import uvicorn
 from fastapi import FastAPI, File, UploadFile , HTTPException,Form,Request
 from fastapi.responses import JSONResponse
 import requests
-import uuid
 import time
 import os
 from fastapi.middleware.cors import CORSMiddleware
 
 
 # from transformers import DetrImageProcessor, DetrForObjectDetection
-import torch
 from PIL import Image
 import requests
 
