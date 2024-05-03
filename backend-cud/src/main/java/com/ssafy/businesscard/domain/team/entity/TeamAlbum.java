@@ -23,12 +23,9 @@ public class TeamAlbum {
     @Column(name = "team_name", length = 100)
     private String teamName;
 
-    @Column(name = "team_owner")
-    private String teamOwner;
-
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "team_owner")
     private User user;
 
     @OneToMany(mappedBy = "teamAlbum" ,cascade = CascadeType.ALL)

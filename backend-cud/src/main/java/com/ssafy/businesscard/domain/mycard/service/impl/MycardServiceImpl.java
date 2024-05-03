@@ -35,7 +35,7 @@ public class MycardServiceImpl implements MycardService {
                     .landlineNumber(registRequest.landlineNumber())
                     .phoneNumber(registRequest.phoneNumber())
                     .realPicture(registRequest.realPicture())
-                    .digitalPicture(registRequest.digitalPicture())
+                    .digitalPicture("digital")
                     .frontBack(registRequest.frontBack())
                     .user(user)
                     .build());
@@ -50,7 +50,7 @@ public class MycardServiceImpl implements MycardService {
                     .landlineNumber(registRequest.landlineNumber())
                     .phoneNumber(registRequest.phoneNumber())
                     .realPicture(registRequest.realPicture())
-                    .digitalPicture(registRequest.digitalPicture())
+                    .digitalPicture("digital")
                     .frontBack(registRequest.frontBack())
                     .user(user)
                     .build());

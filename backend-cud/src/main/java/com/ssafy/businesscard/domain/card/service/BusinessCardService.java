@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface BusinessCardService {
     void register(Long userId, List<MultipartFile> cardImages);
-    boolean checkCard(Businesscard businesscard);
 }
