@@ -23,11 +23,10 @@ public class PrivateAlbumController {
 
     // 명함 추가
     @PostMapping("/{userId}")
-    public ResponseEntity<MessageUtils> registCard(@PathVariable("userId") Long userId,
+    public ResponseEntity<?> registCard(@PathVariable("userId") Long userId,
                                                    @RequestBody CardRequest request) {
-        privateAlbumService.registCard(userId, request);
-        log.info("Regist Card : {}" , request);
-        return ResponseEntity.ok().body(MessageUtils.success("명함이 등록되었습니다."));
+//        log.info("Regist Card : {}" , request);
+        return ResponseEntity.ok().body(MessageUtils.success(privateAlbumService.registCard(userId, request)));
     }
 
     // 명함에 필터 추가

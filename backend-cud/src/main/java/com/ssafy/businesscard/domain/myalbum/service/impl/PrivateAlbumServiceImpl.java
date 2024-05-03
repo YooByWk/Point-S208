@@ -3,8 +3,10 @@ package com.ssafy.businesscard.domain.myalbum.service.impl;
 import com.ssafy.businesscard.domain.card.entity.Businesscard;
 import com.ssafy.businesscard.domain.card.entity.Filter;
 import com.ssafy.businesscard.domain.card.repository.BusinesscardRepository;
+import com.ssafy.businesscard.domain.card.service.BusinessCardService;
 import com.ssafy.businesscard.domain.myalbum.dto.request.CardAddFilterRequest;
 import com.ssafy.businesscard.domain.myalbum.dto.request.CardRequest;
+import com.ssafy.businesscard.domain.myalbum.dto.request.PrivateAlbumRequest;
 import com.ssafy.businesscard.domain.myalbum.entity.PrivateAlbum;
 import com.ssafy.businesscard.domain.myalbum.entity.PrivateAlbumMember;
 import com.ssafy.businesscard.domain.myalbum.mapper.PrivateAlbumMapper;
@@ -32,12 +34,60 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
     private final PrivateAlbumFilterRepository privateAlbumFilterRepository;
     private final PrivateAlbumRepository privateAlbumRepository;
     private final PrivateAlbumMemberRepository privateAlbumMemberRepository;
+    private final BusinessCardService businessCardService;
 
-    // 명함 등록
+    // 명함 지갑에 명함 등록
     @Override
-    public void registCard(Long userId, CardRequest request) {
+    @Transactional
+    public String registCard(Long userId, CardRequest request) {
+//        System.out.println("resgistCard 로직 시작 ---------------------------");
+        User user = userRepository.findById(userId).orElseThrow(() -> new GlobalExceptionHandler.UserException(
+                GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_USER
+        ));
+//        System.out.println("유저 정보 User : " + user);
         Businesscard businesscard = privateAlbumMapper.toEntity(request);
-        businesscardRepository.save(businesscard);
+//        System.out.println("businesscard : " + businesscard);
+        boolean check = businessCardService.checkCard(businesscard);
+//        System.out.println("check : " + check);
+
+        if (check) {
+            Businesscard card = businesscardRepository.findByEmailAndFrontBack(businesscard.getEmail(), businesscard.getFrontBack());
+//            System.out.println("card : " + card);
+            PrivateAlbumRequest privateAlbumRequest = PrivateAlbumRequest.builder()
+                    .user(user)
+                    .businesscard(card)
+                    .favorite(false)
+                    .build();
+            return addPrivateAlbum(privateAlbumRequest);
+        } else {
+            businesscardRepository.save(businesscard);
+//            System.out.println("businesscard" + businesscard);
+            PrivateAlbumRequest privateAlbumRequest = PrivateAlbumRequest.builder()
+                    .user(user)
+                    .businesscard(businesscard)
+                    .favorite(false)
+                    .build();
+            return addPrivateAlbum(privateAlbumRequest);
+        }
+//        System.out.println("resgistCard 로직 끝 ---------------------------");
+    }
+    private String addPrivateAlbum(PrivateAlbumRequest request) {
+//        System.out.println("addPrivateAlbum 로직 시작 -----------------------------");
+//        System.out.println("request : " + request);
+        PrivateAlbum privateAlbum = privateAlbumRepository.findByUser_userIdAndBusinesscard_CardId(
+                request.user().getUserId(), request.businesscard().getCardId()
+        );
+        if (privateAlbum == null) {
+            privateAlbumRepository.save(PrivateAlbum.builder()
+                    .user(request.user())
+                    .businesscard(request.businesscard())
+                    .favorite(request.favorite())
+                    .build());
+            return "등록 성공";
+        } else {
+            return "존재하는 명함";
+        }
+//        System.out.println("addPrivateAlbum 로직 끝 -----------------------------");
     }
 
     // 명함에 필터 추가
@@ -75,6 +125,7 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
         businesscardRepository.save(businesscard);
     }
 
+    // 명함지갑 명함 삭제
     @Override
     @Transactional
     public void deleteCard(Long userId, Long cardId) {
