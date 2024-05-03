@@ -1,10 +1,13 @@
+import WebTeamHeader from '@/components/web/WebTeam/WebTeamHeader'
+import WebTeamList from '@/components/web/WebTeam/WebTeamList'
 
 const WebTeam = () => {
   return (
     <div>
-      웹 팀 명함
+      <WebTeamHeader />
+      <WebTeamList />
     </div>
-  );
-};
+  )
+}
 
-export default WebTeam;
+export default WebTeam
