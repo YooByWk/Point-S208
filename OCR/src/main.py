@@ -105,38 +105,38 @@ async def process_ocr(file: bytes = File(...), message: str = Form(...)):
 #         # 실패시 HTTPException 대신 JSONResponse를 사용하여 오류 메시지 반환
 #         return JSONResponse(content={"error": "OCR 서비스 처리 실패", "details": response.text}, status_code=response.status_code)
 
-HUGGINGFACEHUB_API_TOKEN = secrets["HUGGINGFACEHUB_API_TOKEN"]  
-print('tokkkkkkkkk  '+HUGGINGFACEHUB_API_TOKEN)
+# HUGGINGFACEHUB_API_TOKEN = secrets["HUGGINGFACEHUB_API_TOKEN"]  
+# print('tokkkkkkkkk  '+HUGGINGFACEHUB_API_TOKEN)
 
-import json
-import requests
-import time
-import cv2
+# import json
+# import requests
+# import time
+# import cv2
  
  
-# token_access = "<your token access>"
+# # token_access = "<your token access>"
 
-headers = {"Authorization": f"Bearer {HUGGINGFACEHUB_API_TOKEN}"}
+# headers = {"Authorization": f"Bearer {HUGGINGFACEHUB_API_TOKEN}"}
 
-API_URL = "https://api-inference.huggingface.co/models/facebook/detr-resnet-50"
+# API_URL = "https://api-inference.huggingface.co/models/facebook/detr-resnet-50"
 
-def query(filename):
-    with open(filename, "rb") as f:
-        data = f.read()
-    while True:
-      try:
-          time.sleep(1)
-          response = requests.request("POST", API_URL, headers=headers, data=data)
-          break
+# def query(filename):
+#     with open(filename, "rb") as f:
+#         data = f.read()
+#     while True:
+#       try:
+#           time.sleep(1)
+#           response = requests.request("POST", API_URL, headers=headers, data=data)
+#           break
 
-      except Exception:
-          continue
+#       except Exception:
+#           continue
 
-    return json.loads(response.content.decode("utf-8"))
+#     return json.loads(response.content.decode("utf-8"))
 
-data = query("savana.jpg")
+# data = query("savana.jpg")
 
-print(data)
+# print(data)
 
 
 
@@ -145,10 +145,10 @@ print(data)
 # from transformers import AutoModelForImageSegmentation, AutoFeatureExtractor
 # from tensorflow.keras.models import load_model
 
-import torch
-from PIL import Image, ImageDraw
-import requests
-import numpy as np
+# import torch
+# from PIL import Image, ImageDraw
+# import requests
+# import numpy as np
 
 # from tensorflow.keras.layers import Conv2DTranspose
 # from tensorflow.keras.utils import CustomObjectScope
