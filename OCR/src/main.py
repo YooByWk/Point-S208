@@ -115,6 +115,7 @@ import requests
 import time
 import cv2
  
+ 
 # token_access = "<your token access>"
 
 headers = {"Authorization": f"Bearer {HUGGINGFACEHUB_API_TOKEN}"}
