@@ -1,20 +1,13 @@
 def component = [
     'ocr': true,
-    'alertmanager': false,
-    'prometheus': false,
-    'grafana': false,
-    'prometheus_nginx_exporter': false,
-    'cadvisor': false,
-    'db':false,
-    'backend-cud':false,
-    'backend-read':false
+
 ]
 
 // 파일 복사 작업을 수행하는 함수 정의
 def fileCopy() {
     // 파일 복사 작업 수행
-    sh 'cp /var/jenkins_home/workspace/ocr/submodule/secrets.json /var/jenkins_home/workspace/back-ocr/OCR/src'
-// sh 'cp /var/jenkins_home/workspace/fullerting/submodule/.env /var/jenkins_home/workspace/fullerting/frontend'
+//     sh 'cp /var/jenkins_home/workspace/ocr/submodule/application.yml /var/jenkins_home/workspace/backend-read/OCR/src'
+
 }
 
 pipeline {
@@ -39,6 +32,7 @@ pipeline {
     }
 
     stages {
+
         stage('Checkout') {
             steps {
                 script {
@@ -100,18 +94,19 @@ pipeline {
                     sh 'pwd'
                     sh 'ls -al'
 
-                        component.each { entry ->
+                   component.each { entry ->
                 if (entry.value) {
                     def component_name = entry.key
                     // 지정된 컴포넌트만 빌드
                     sh "/var/jenkins_home/bin/docker-compose -f docker-compose.yml build ${component_name}"
                 }
-
+            }
+            
                     fileCopy()
 
-                        }
                 }
             }
+        }
 
         stage('Docker Login') {
             steps {
@@ -127,26 +122,26 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'Docker-hub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh 'pwd'
                     sh 'ls -al'
-                    dir('OCR')///////////
-                    {
-                        echo 'innn ocrrrrrrr'
-                        sh 'pwd'
-                        sh 'ls -al'
-                    //                         sh 'cat '
-                    }
-                    dir('OCR/src')///////////
-                    {
-                        sh 'pwd'
-                        sh 'ls -al'
-                        sh 'cat main.py'
-                        //
-                        // sh 'python3 main.py'
-
-                    // sh 'python main.py'
-                    }
+//                     dir('OCR')///////////
+//                     {
+//                         echo 'innn ocrrrrrrr'
+//                         sh 'pwd'
+//                         sh 'ls -al'
+//                     //                         sh 'cat '
+//                     }
+//                     dir('OCR/src')///////////
+//                     {
+//                         sh 'pwd'
+//                         sh 'ls -al'
+//                         sh 'cat main.py'
+//                         //
+//                         // sh 'python3 main.py'
+//
+//                         // sh 'python main.py'
+//                     }
                     sh 'ls -al'
                     // 특정 서비스만 푸시
-                    sh 'docker-compose -f docker-compose.yml push ocr'
+                    sh 'docker-compose -f docker-compose.yml push backend-read'
                 }
             }
         }
@@ -163,22 +158,20 @@ pipeline {
             steps {
                 script {
                     component.each { entry ->
-                            //                         if (entry.value && entry.key != 'redis') {
+                        if (entry.value && entry.key != 'redis') {
                             def var = entry.key
                             sh "docker-compose -f docker-compose.yml -p develop-server pull ${var.toLowerCase()}"
-                    //                         }
+                        }
                     }
                 }
             }
         }
 
-        stage('Stop and Remove OCR Service') {
+        stage('Stop and Remove backend-read Service') {
                 steps {
                     script {
-                        // OCR 서비스 정지
-                        sh 'docker-compose -f docker-compose.yml -p develop-server stop ocr'
-                        // OCR 서비스 삭제. 이미 정지된 상태라면 "No stopped containers" 메시지가 나타날 수 있으나, 이는 문제되지 않음.
-                        sh 'docker-compose -f docker-compose.yml -p develop-server rm -f ocr'
+                        sh 'docker-compose -f docker-compose.yml -p develop-server stop backend-read'
+                        sh 'docker-compose -f docker-compose.yml -p develop-server rm -f backend-read'
                     }
                 }
         }
@@ -186,48 +179,47 @@ pipeline {
         stage('Up') {
             steps {
                 script {
-                    // component.each { entry ->
-                    //     if (entry.value) {
-                    //         def var = entry.key
-                    //         try {
-                    //             sh "docker-compose -f docker-compose.yml -p develop-server up -d ${var.toLowerCase()}"
-                    //         } catch (Exception e) {
-                    //             // 'docker compose up -d' 명령이 실패한 경우
-                    //             echo "Failed to up. Starting 'docker compose start'..."
-                    //             sh "docker-compose -f docker-compose.yml -p develop-server restart ${var.toLowerCase()}"
-                    //         }
-                    //     }
-                    // }
-                    sh "docker-compose -f docker-compose.yml -p develop-server up -d ocr"
-
+                    component.each { entry ->
+                          if (entry.value && entry.key != 'mysql')  {
+                            def var = entry.key
+                            try {
+                                sh "docker-compose -f docker-compose.yml -p develop-server up -d ${var.toLowerCase()}"
+                            } catch (Exception e) {
+                                // 'docker compose up -d' 명령이 실패한 경우
+                                echo "Failed to up. Starting 'docker compose start'..."
+                                sh "docker-compose -f docker-compose.yml -p develop-server restart ${var.toLowerCase()}"
+                            }
+                        }
+                    }
                     sh 'pwd'
                     sh 'ls -al'
 
-                     dir('OCR')///////////
-                    {
-                        echo 'innn ocrrrrrrr'
-                        sh 'pwd'
-                        sh 'ls -al'
-                    //                         sh 'cat '
-                    }
+//                      dir('OCR')///////////
+//                     {
+//                         echo 'innn ocrrrrrrr'
+//                         sh 'pwd'
+//                         sh 'ls -al'
+//                     //                         sh 'cat '
+//                     }
+
 
                 }
             }
         }
-        }
-    //
-    //     post {
-    //         always {
-    //             script {
-    //                 def Author_ID = sh(script: 'git show -s --pretty=%an', returnStdout: true).trim()
-    //                 def Author_Name = sh(script: 'git show -s --pretty=%ae', returnStdout: true).trim()
-    //                 mattermostSend(color: 'good',
-    //                     message: "빌드 ${currentBuild.currentResult}: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)",
-    //                     endpoint: 'https://meeting.ssafy.com/hooks/pbwfpcrqgff1zr8fmjzq7iukfr',
-    //                     channel: 'C102-jenkins'
-    //             )
-    //             }
-    //         }
-    //     }
     }
+//
+//     post {
+//         always {
+//             script {
+//                 def Author_ID = sh(script: 'git show -s --pretty=%an', returnStdout: true).trim()
+//                 def Author_Name = sh(script: 'git show -s --pretty=%ae', returnStdout: true).trim()
+//                 mattermostSend(color: 'good',
+//                     message: "빌드 ${currentBuild.currentResult}: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)",
+//                     endpoint: 'https://meeting.ssafy.com/hooks/pbwfpcrqgff1zr8fmjzq7iukfr',
+//                     channel: 'C102-jenkins'
+//             )
+//             }
+//         }
+//     }
+
 }
