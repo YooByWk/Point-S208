@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
 import { fetchMyAlbum } from '@/apis/album'
-// import { dummyCardList } from '@/assets/data/dummyCardList';
+import { dummyCardList } from '@/assets/data/dummyCardList';
 import CardList from '@/components/shared/CardList'
 import { userState } from '@/stores/user'
 import { CardListType } from '@/types/CardListType'
@@ -16,8 +16,10 @@ import Flex from '@/components/shared/Flex'
 import Text from '@shared/Text'
 import Spacing from '@/components/shared/Spacing'
 import AddCard from '@/components/mobile/MyAlbum/AddCard'
+import SearchBox from '@/components/shared/SearchBox'
 
 // import { useData, useTeamsUserCredential } from '@microsoft/teamsfx-react'
+import { dummyCard } from '@/assets/data/dummyCard';
 
 const AlbumList = () => {
   // 내 명함 리스트
@@ -60,10 +62,20 @@ const AlbumList = () => {
     setIsAddCard(!isAddCard)
   }
   
+const [testValue, setTestValue] = useState(0)
 
+const [result, setResult] = useState()
+const handleResult = (data: any) => {
+  
+}
+const dummyList: CardListType = dummyCardList
   return (
     <>
       {/*  */}
+      <SearchBox
+        value={testValue}
+        onChange={(e) => setTestValue(e.target.value)}
+      />
       <div>
         {cards.length > 0 && cards[0] !== undefined ? (
           <CardList

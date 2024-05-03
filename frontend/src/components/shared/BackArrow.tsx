@@ -36,8 +36,8 @@ const BackArrow = () => {
 export default BackArrow
 
 const topContainer = css`
-  margin-top: 5%;
-  margin-left: 5%;
+  margin-top: 10px;
+  margin-left: 15px;
 `
 const container = css`
   /* width: fit-content; */
