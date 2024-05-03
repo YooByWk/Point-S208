@@ -147,7 +147,7 @@ pipeline {
 //                     }
                     sh 'ls -al'
                     // 특정 서비스만 푸시
-                    sh 'docker-compose -f docker-compose.yml push backend-read'
+                    sh 'docker-compose -f docker-compose.yml push ocr'
                 }
             }
         }
@@ -173,11 +173,11 @@ pipeline {
             }
         }
 
-        stage('Stop and Remove backend-read Service') {
+        stage('Stop and Remove ocr  Service') {
                 steps {
                     script {
-                        sh 'docker-compose -f docker-compose.yml -p develop-server stop backend-read'
-                        sh 'docker-compose -f docker-compose.yml -p develop-server rm -f backend-read'
+                        sh 'docker-compose -f docker-compose.yml -p develop-server stop ocr'
+                        sh 'docker-compose -f docker-compose.yml -p develop-server rm -f ocr'
                     }
                 }
         }
