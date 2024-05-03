@@ -2,7 +2,7 @@ package com.ssafy.businesscard.domain.myalbum.controller;
 
 
 import com.ssafy.businesscard.domain.myalbum.dto.request.CardAddFilterRequest;
-import com.ssafy.businesscard.domain.myalbum.dto.request.UpdateCardRequest;
+import com.ssafy.businesscard.domain.myalbum.dto.request.CardRequest;
 import com.ssafy.businesscard.domain.myalbum.service.PrivateAlbumService;
 import com.ssafy.businesscard.global.utils.MessageUtils;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +21,15 @@ public class PrivateAlbumController {
 
     private final PrivateAlbumService privateAlbumService;
 
+    // 명함 추가
+    @PostMapping("/{userId}")
+    public ResponseEntity<MessageUtils> registCard(@PathVariable("userId") Long userId,
+                                                   @RequestBody CardRequest request) {
+        privateAlbumService.registCard(userId, request);
+        log.info("Regist Card : {}" , request);
+        return ResponseEntity.ok().body(MessageUtils.success("명함이 등록되었습니다."));
+    }
+
     // 명함에 필터 추가
     @PostMapping("/{userId}/{cardId}")
     public ResponseEntity<MessageUtils> addFilter(@PathVariable("userId") Long userId,
@@ -35,7 +44,7 @@ public class PrivateAlbumController {
     @PatchMapping("/{userId}/{cardId}")
     public ResponseEntity<MessageUtils> cardUpdate(@PathVariable("userId") Long userId,
                                                    @PathVariable("cardId") Long cardId,
-                                                   @RequestBody UpdateCardRequest request){
+                                                   @RequestBody CardRequest request){
         privateAlbumService.updateCard(userId, cardId, request);
         log.info("Update Card : {} 명함이 수정되었습니다.", request);
         return ResponseEntity.ok().body(MessageUtils.success("명함이 수정되었습니다."));

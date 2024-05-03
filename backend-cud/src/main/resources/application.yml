@@ -7,7 +7,7 @@ spring:
 #    url: jdbc:mariadb://stg-yswa-kr-practice-db-master.mariadb.database.azure.com:3306/s10p31s208?serverTimezone=UTC&Unicode=true&characterEncoding=utf8
 #    username: S10P31S208
 #    password: HGsiyybsmb
-    url: jdbc:mysql://k10s208.p.ssafy.io:3306/s10p31s208
+    url: jdbc:mysql://k10s208.p.ssafy.io:3306/bscard
     username: root
     password: ssafy
   jackson:
