@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PrivateAlbumMemberRepository extends JpaRepository<PrivateAlbumMember, Long> {
-    PrivateAlbumMember findByUser_userIdAndFilter_filterId(Long userId, Long filterId);
+
 }

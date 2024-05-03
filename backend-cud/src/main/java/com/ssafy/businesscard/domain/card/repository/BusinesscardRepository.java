@@ -8,10 +8,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface BusinesscardRepository extends JpaRepository<Businesscard, Long>, BusinesscardCustomRepository{
+public interface BusinesscardRepository extends JpaRepository<Businesscard, Long>{
     Optional<Businesscard> findByUser_userIdAndFrontBack(Long userId, Businesscard.Status frontBack);
     Businesscard findByUser_userIdAndCardId(Long userId, Long cardId);
     List<Businesscard> findAllByUser_userId(Long userId);
-    List<Businesscard> findByEmail(String email);
-    Businesscard findByEmailAndFrontBack(String email, Businesscard.Status frontBack);
 }

@@ -71,7 +71,7 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
         return false;
     }
 
-
+    // 명함 지갑에 명함 등록 로직
     private String addPrivateAlbum(PrivateAlbumRequest request) {
         privateAlbumRepository.save(PrivateAlbum.builder()
                 .user(request.user())
