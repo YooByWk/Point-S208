@@ -11,7 +11,6 @@ import Flex from '@shared/Flex'
 import Text from '@shared/Text'
 import Spacing from '@shared/Spacing'
 import AddCard from '@components/mobile/MyAlbum/AddCard'
-import CardThumbnail from '@/components/shared/CardThumbnail'
 import WebCardThumbnail from '@/components/shared/WebCardThumbnail'
 
 const WebMyAlbumList = ({ selectedCards }: { selectedCards: number[] }) => {
