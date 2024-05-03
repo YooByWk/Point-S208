@@ -47,7 +47,7 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
 //        System.out.println("유저 정보 User : " + user);
         Businesscard businesscard = privateAlbumMapper.toEntity(request);
 //        System.out.println("businesscard : " + businesscard);
-        boolean check = businessCardService.checkCard(businesscard);
+        boolean check = checkCard(userId, businesscard);
 //        System.out.println("check : " + check);
 
         if (check) {
@@ -71,6 +71,19 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
         }
 //        System.out.println("resgistCard 로직 끝 ---------------------------");
     }
+
+    // 명함 중복 검사
+    private boolean checkCard(Long userId, Businesscard businesscard) {
+        Businesscard card = businesscardRepository.findCardByEmail(userId, businesscard.getEmail());
+        System.out.println("명함 중복 검사 card : " + card);
+        if (card == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
     private String addPrivateAlbum(PrivateAlbumRequest request) {
 //        System.out.println("addPrivateAlbum 로직 시작 -----------------------------");
 //        System.out.println("request : " + request);
