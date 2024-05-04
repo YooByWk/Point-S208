@@ -13,6 +13,8 @@ services:
       - "9091:8080"
     container_name: cadvisor
     restart: always
+    networks:
+      - jenkins-network
 
   prometheus:
     image: prom/prometheus:v2.20.1
