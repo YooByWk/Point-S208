@@ -1,3 +1,15 @@
+
+def component = [
+    'ocr': true,
+    'mysql':false,
+    'backend-cud':true,
+    'backend-read':true,
+    'prometheus':false,
+    'grafana':false,
+    'alertmanager':false,
+
+]
+
 pipeline {
     agent any
     environment {
