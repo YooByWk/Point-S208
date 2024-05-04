@@ -25,6 +25,9 @@ FROM azul/zulu-openjdk:17
 
 WORKDIR /app
 
+# stress 툴 설치
+RUN apt-get update && apt-get install -y stress && rm -rf /var/lib/apt/lists/*
+
 
 # 빌드 결과물을 이전 단계에서 복사
 COPY --from=build /app/build/libs/*.jar /app/back.jar
