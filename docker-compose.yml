@@ -75,7 +75,7 @@ services:
        
 networks:
   jenkins-network:
-    external: true
+    # external: true
 
 
 volumes:

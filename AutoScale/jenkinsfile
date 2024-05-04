@@ -24,7 +24,6 @@ pipeline {
     }
 
     stages {
-
         stage('Docker 로그인') {
             steps {
                 // Docker Hub 크리덴셜을 사용하여 Docker에 로그인
@@ -45,7 +44,7 @@ pipeline {
                     }
                 }
             }
-        } 
+        }
 
         stage('Deploy') {
             steps {
