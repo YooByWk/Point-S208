@@ -212,6 +212,24 @@ pipeline {
                 }
             }
         }
+        stage('Run Other Pipeline') {
+            steps {
+                script {
+                    // 다른 파이프라인 실행
+                    build 'back-autoscale'
+                }
+            }
+        }
+        
+        stage('Run Other Pipeline') {
+            steps {
+                script {
+                    // 다른 파이프라인 실행
+                    build 'back-autoscale'
+                }
+            }
+        }
+
     }
 //
 //     post {
