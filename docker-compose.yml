@@ -1,41 +1,18 @@
 version: '3.8'
 
 services:
-
-  jenkins:
-    user: root
-    image: junwon1131/jenkins:lts
-    build:
-      context: ./jenkins
-      dockerfile: Dockerfile
-    ports:
-      - "8081:8080"  # Jenkins 웹 인터페이스 포트
-      - "50000:50000"  # Jenkins 에이전트 연결 포트
+ 
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.39.3
     volumes:
-      - jenkins_home:/var/jenkins_home  # Jenkins 데이터를 저장할 볼륨
-      - /var/run/docker.sock:/var/run/docker.sock
-
-  ocr:
-    container_name: ocr
-    image: junwon1131/s208-ocr:latest
-    build:
-      context: ./OCR
-      dockerfile: Dockerfile
-    restart: unless-stopped
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
     ports:
-      - "8000:8000"
-    networks:
-      - jenkins-network
-    # volumes:
-      # - /var/jenkins_home/workspace/back-ocr/submodule/secrets.json:/app/secrets.json
-
-
-
-  redis:
-    image: redis:latest
-    container_name: redis
-    ports:
-      - "6379:6379"
+      - "9091:8080"
+    container_name: cadvisor
+    restart: always
 
   prometheus:
     image: prom/prometheus:v2.20.1
