@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService{
         List<UserInfoResponseDto> dtos = new ArrayList<>();
 
         for (User user : users) {
-            dtos.add(new UserInfoResponseDto(user.getName(), user.getEmail()));
+            dtos.add(new UserInfoResponseDto(user.getUserId(), user.getName(), user.getEmail()));
         }
         return dtos;
     }
