@@ -1,0 +1,47 @@
+pipeline {
+    agent any
+    environment {
+        // 환경변수 설정
+        DOCKER_USER_ID = 'junwon1131'
+        DOCKER_HUB_CREDENTIALS_ID = 'Docker-hub'
+        GITHUB_CREDENTIALS_ID = 'Github-access-token'
+        GITLAB_CREDENTIALS_ID = 'GitLab-access-token-username'
+        REPO = 's10-final/S10P31S208'
+        GIT_REPO = 'https://github.com/junwon9824/businesscard_submodule.git'
+        ORG_GRADLE_JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64'
+    }
+
+    stages {
+
+        stage('Docker 로그인') {
+            steps {
+                // Docker Hub 크리덴셜을 사용하여 Docker에 로그인
+                withCredentials([usernamePassword(credentialsId: 'Docker-hub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    sh 'echo $DOCKER_PASSWORD | docker login --username $DOCKER_USER --password-stdin'
+                }
+            }
+        }
+
+        stage('Pull') {
+            steps {
+                script {
+                    component.each { entry ->
+                        if (entry.value && entry.key != 'redis') {
+                            def var = entry.key
+                            sh "docker-compose -f docker-compose.yml -p develop-server pull ${var.toLowerCase()}"
+                        }
+                    }
+                }
+            }
+        } 
+
+        stage('Deploy') {
+            steps {
+                script {
+                    // Docker Swarm으로 스택 배포
+                    sh 'docker stack deploy -c docker-compose.yml develop-server'
+                }
+            }
+        }
+    }
+}
