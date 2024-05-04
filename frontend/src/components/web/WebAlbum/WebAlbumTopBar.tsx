@@ -90,7 +90,11 @@ const WebAlbumTopBar = (props: Partial<TabListProps>) => {
 export default WebAlbumTopBar
 
 const boxStyles = css`
+  position: fixed;
   padding: 5px 24px;
+  width: 100%;
+  background-color: ${colors.themeTextInverted};
+  z-index: 1000;
 `
 
 const iconStyles = css`

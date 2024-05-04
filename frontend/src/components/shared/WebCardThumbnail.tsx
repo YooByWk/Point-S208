@@ -58,7 +58,7 @@ const WebCardThumbnail = ({
   const navigate = useNavigate()
   return (
     <>
-      <Flex direction="row" justify="space-around" align="center" css={content}>
+      <Flex direction="row" justify="center" align="center" css={content}>
         <div
           onClick={() => {
             if (forShare) {
