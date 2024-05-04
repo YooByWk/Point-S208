@@ -46,6 +46,7 @@ public class UserServiceImpl implements UserService{
     //user 정보 검색
     @Override
     public List<UserInfoResponseDto> searchUser(String info){
+
         List<User> users = userRepository.findAllByNameContainingOrEmailContaining(info, info);
         List<UserInfoResponseDto> dtos = new ArrayList<>();
 
