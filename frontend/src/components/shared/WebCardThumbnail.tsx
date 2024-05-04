@@ -1,39 +1,39 @@
 /** @jsxImportSource @emotion/react */
 import { useState } from 'react'
 import type { CardType } from '@/types/cardType'
-import Flex from '@/components/shared/Flex'
+import Flex from '@shared/Flex'
 import { css } from '@emotion/react'
-import Spacing from '@/components/shared/Spacing'
-import { Checkbox } from '@fluentui/react-components'
+import Spacing from '@shared/Spacing'
+import { Checkbox, Image } from '@fluentui/react-components'
 import {
   Star24Regular,
   Star24Filled,
   ShareAndroid24Filled,
   Delete24Filled,
 } from '@fluentui/react-icons'
-import { useNavigate } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
-import { userState } from '@/stores/user'
-///
-///
+import { useSetRecoilState } from 'recoil'
+import { selectedCardState } from '@stores/card'
+
 interface CardThumbnailProps {
   cardInfo: CardType
-  onSelect: (cardId: number) => void
   selectedCards: number[]
-  forShare?: boolean
-  scale?: number
+  setIsDetail: (isDetail: boolean) => void
 }
 
 const WebCardThumbnail = ({
   cardInfo,
-  onSelect,
   selectedCards,
-  forShare = false,
-  scale = 1,
+  setIsDetail,
 }: CardThumbnailProps) => {
   const [isfavorite, setIsFavorite] = useState(false)
   const [isChecked, setIsChecked] = useState(false)
   const isSelected = selectedCards.includes(cardInfo.cardId)
+  const setSelectedCardState = useSetRecoilState(selectedCardState)
+
+  const handleDetailSelect = () => {
+    setIsDetail(true)
+    setSelectedCardState(cardInfo)
+  }
 
   const handleCheck = () => {
     setIsChecked(!isChecked)
@@ -53,53 +53,31 @@ const WebCardThumbnail = ({
   const handleDelete = () => {
     console.log('삭제 : ', cardInfo)
   }
-  const userId = useRecoilValue(userState).userId
 
-  const navigate = useNavigate()
   return (
     <>
       <Flex direction="row" justify="center" align="center" css={content}>
-        <div
-          onClick={() => {
-            if (forShare) {
-              // 공유하기 화면 이하에서는 명함 썸네일 전체가 선택여부가 되도록
-              setIsChecked(!isChecked)
-              onSelect(cardInfo.cardId)
-            } else {
-              console.log(cardInfo, '님의 명함')
-              navigate(`/myAlbum/${userId}/${cardInfo.cardId}`)
-            }
-          }}
-          css={imgContainerStyles}
-        >
-          <img
-            src={
-              cardInfo.realPicture
-                ? cardInfo.realPicture
-                : cardInfo.digitalPicture
-            }
-            alt="card"
-          />
+        <div onClick={handleDetailSelect} css={imgContainerStyles}>
+          <Image fit="contain" src={cardInfo.realPicture} alt="card" />
         </div>
-        {!forShare && (
-          <Flex direction="column" justify="space-around" align="center">
-            <Spacing size={10} />
-            <Checkbox
-              shape="circular"
-              label=""
-              onClick={handleCheck}
-              css={checkboxStyles}
-            />
-            <Spacing size={10} />
-            {isfavorite ? (
-              <Star24Filled css={iconCss} onClick={handleFavorite} />
-            ) : (
-              <Star24Regular css={i} onClick={handleFavorite} />
-            )}
-            <ShareAndroid24Filled css={i} onClick={handleShare} />
-            <Delete24Filled css={i} onClick={handleDelete} />
-          </Flex>
-        )}
+
+        <Flex direction="column" justify="space-around" align="center">
+          <Spacing size={10} />
+          <Checkbox
+            shape="circular"
+            label=""
+            onClick={handleCheck}
+            css={checkboxStyles}
+          />
+          <Spacing size={10} />
+          {isfavorite ? (
+            <Star24Filled css={iconCss} onClick={handleFavorite} />
+          ) : (
+            <Star24Regular css={i} onClick={handleFavorite} />
+          )}
+          <ShareAndroid24Filled css={i} onClick={handleShare} />
+          <Delete24Filled css={i} onClick={handleDelete} />
+        </Flex>
       </Flex>
     </>
   )
