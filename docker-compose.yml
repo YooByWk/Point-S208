@@ -15,7 +15,6 @@ services:
       - jenkins_home:/var/jenkins_home  # Jenkins 데이터를 저장할 볼륨
       - /var/run/docker.sock:/var/run/docker.sock
 
-
   ocr:
     container_name: ocr
     image: junwon1131/s208-ocr:latest
