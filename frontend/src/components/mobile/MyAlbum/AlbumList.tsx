@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
 import { fetchMyAlbum } from '@/apis/album'
-import { dummyCardList } from '@/assets/data/dummyCardList';
+import { dummyCardList } from '@/assets/data/dummyCardList'
 import CardList from '@/components/shared/CardList'
 import { userState } from '@/stores/user'
 import { CardListType } from '@/types/CardListType'
@@ -18,8 +18,8 @@ import Spacing from '@/components/shared/Spacing'
 import AddCard from '@/components/mobile/MyAlbum/AddCard'
 import SearchBox from '@/components/shared/SearchBox'
 
-import { dummyCard } from '@/assets/data/dummyCard';
-import { ExternalCardListType, ExternalCardType } from '@/types/ExternalCard';
+import { dummyCard } from '@/assets/data/dummyCard'
+import { ExternalCardListType, ExternalCardType } from '@/types/ExternalCard'
 
 const AlbumList = () => {
   // 내 명함 리스트
@@ -34,14 +34,11 @@ const AlbumList = () => {
           ? allPages.length
           : undefined
       },
-      // getNextPageParam: (lastPage, allPages) =>
-      // {
-      //   return lastPage.length > 0 ? allPages.length  : undefined},
       initialPageParam: 0,
     })
 
-  const cards = data?.pages.flatMap(page => page) || []
-//
+  let cards = data?.pages.flatMap(page => page) || [] // 명함 리스트
+  //
   useEffect(() => {
     const handleScroll = () => {
       if (
@@ -53,71 +50,74 @@ const AlbumList = () => {
         fetchNextPage()
       }
     }
-    
-    
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [fetchNextPage, hasNextPage, data])
-// 
+  //
   const [isAddCard, setIsAddCard] = useState(false)
   const handleAdd = () => {
     setIsAddCard(!isAddCard)
   }
-//
-const [searchValue, setSearchValue] = useState('')
+  //
+  const [searchValue, setSearchValue] = useState('')
 
-const [searchResults, setSearchResults] = useState<ExternalCardListType | undefined>(undefined);
+  const [searchResults, setSearchResults] = useState<
+    ExternalCardListType | undefined
+  >(undefined)
+  const [user, setUser] = useRecoilState(userState)
 
-const dummyList: CardListType = dummyCardList
   return (
     <>
-    <button onClick={()=>console.log(searchResults)}>asdf</button>
-      {/*  */}
-      {/* <SearchBox
-        value={searchValue}
-        onChange={(e) => {
-          if (e.target.value !== undefined) {
-            setSearchValue(e.target.value)
-          }
+      <button
+        onClick={() =>
+          setUser({
+            name: '유 병욱',
+            email: 'tls1919@ssafys208.onmicrosoft.com',
+            userId: 3,
+          })
         }
-      }
-        onSearch={handleResult}
-      /> */}
-      { searchValue.trim() !== '' && searchResults !== undefined &&  searchResults.length > 0  && searchResults[0] !== undefined || searchValue.length > 0 ? 
-    (searchResults?.map((res) => <p>{res.name}</p>)) : (
-      <div>
-        {cards.length > 0 && cards[0] !== undefined ? (
-          <CardList
-            // cardList={cardList}
-            cards={cards}
-            isTeam={false}
-            handleAdd={handleAdd}
-          />
-        ) : (
-          <Flex
-            direction="column"
-            justify="center"
-            align="center"
-            css={nullDivCss}
-          >
-            <Text>지갑에 등록된 명함이 없습니다.</Text>
-            <button onClick={() => console.log(userId)}>아이디 확인 </button>
-
-            <Spacing size={40} direction="vertical" />
-            <LargeButton
-              text="명함 추가"
-              width="80vw"
-              height="100px"
-              onClick={handleAdd}
+      >
+        로컬 전용 아이디 하드코딩 : 수정하기
+      </button>
+      {(searchValue.trim() !== '' &&
+        searchResults !== undefined &&
+        searchResults.length > 0 &&
+        searchResults[0] !== undefined) ||
+      searchValue.length > 0 ? (
+        searchResults?.map(res => <p>{res.name}</p>)
+      ) : (
+        <div>
+          {cards.length > 0 && cards[0] !== undefined ? (
+            <CardList
+              cards={cards}
+              isTeam={false}
+              handleAdd={handleAdd}
             />
-          </Flex>
-        )}
-        {isFetchingNextPage && (
-          <div css={SpinnerCss}>
-            <Spinner />
-          </div>
-        )}
-      </div>)}
+          ) : (
+            <Flex
+              direction="column"
+              justify="center"
+              align="center"
+              css={nullDivCss}
+            >
+              <Text>지갑에 등록된 명함이 없습니다.</Text>
+              <button onClick={() => console.log(userId)}>아이디 확인 </button>
+              <Spacing size={40} direction="vertical" />
+              <LargeButton
+                text="명함 추가"
+                width="80vw"
+                height="100px"
+                onClick={handleAdd}
+              />
+            </Flex>
+          )}
+          {isFetchingNextPage && (
+            <div css={SpinnerCss}>
+              <Spinner />
+            </div>
+          )}
+        </div>
+      )}
       {isAddCard && (
         <AddCard isAddCard={isAddCard} setIsAddCard={setIsAddCard} />
       )}

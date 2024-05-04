@@ -5,12 +5,13 @@ import { useState, useEffect } from 'react'
 
 import Flex from './Flex'
 import PeopleFilterSortIcons from './PeopleFilterSortIcons';
-import { colors } from '@/styles/colorPalette';
-import Spacing  from '@/components/shared/Spacing';
+
 import { SearchRegular } from '@fluentui/react-icons';
 import { searchMyAlbumCard } from '@/apis/album';
 import { useQuery } from '@tanstack/react-query';
 import { ExternalCardListType } from '@/types/ExternalCard';
+import { searchUser } from '@/apis/team';
+import { UserListType } from '@/types/userType';
 interface SearchBoxProps {
   placeholder?: string
   onChange?: (e: any) => void
@@ -22,7 +23,9 @@ interface SearchBoxProps {
   value: string | number
   width?: string
   bgColor?: string
-  onSearch: (value: ExternalCardListType ) => void
+  onSearch: (value: ExternalCardListType | UserListType ) => void
+  isSearchingMember?: boolean
+  isInTeam?: boolean
 }
 
 
@@ -43,6 +46,8 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   lefticon=true,
   bgColor='',
   onSearch,
+  isSearchingMember=false,
+  isInTeam=false
 }) => {
   // const handleKeyDown = (e: any): void => {
   //   if (e.key === 'Enter') {
@@ -55,8 +60,9 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   
 // 검색 로직
  const { data } = useQuery({
-  queryKey: ['searchMyAlbumCard', value],
-  queryFn: () => searchMyAlbumCard(value),
+  
+  queryKey: isSearchingMember? ['searchUser', value] : ['searchMyAlbumCard', value],
+  queryFn: () => isSearchingMember ? searchUser(value) : searchMyAlbumCard(value),
   enabled: value !== '',
  })
  

@@ -11,8 +11,7 @@ import type { CardType } from '@/types/cardType'
 import CardThumbnail from '@/components/shared/CardThumbnail'
 import MultiSelectBar from '@/components/shared/MultiSelectBar'
 import { tokens } from '@fluentui/react-components'
-import { useRecoilState } from 'recoil'
-import { pageChanged } from '@stores/team'
+
 
 interface AddTeamProps {
   cards: CardType[]
@@ -37,7 +36,6 @@ const ShareCard = ({
   isPageChanged,
 }: AddTeamProps) => {
   
-  
   const handleBackArrow = () => {
     console.log('뒤로가기 버튼 클릭')
     setIsShare(!isShare)
@@ -59,6 +57,7 @@ const ShareCard = ({
       </Text>
       <Spacing size={10} />
       <SearchBox
+        onSearch={() => {}}
         value="공유할 명함 검색 로직"
         placeholder="공유할 명함 검색"
         memberIcon={false}

@@ -15,8 +15,9 @@ import { useParams } from 'react-router-dom'
 import { tokens } from '@fluentui/react-components'
 import { useRecoilState } from 'recoil'
 import { pageChanged } from '@stores/team'
-import { dummyCardList } from '@/assets/data/dummyCardList'
 import { ExternalCardListType } from '@/types/ExternalCard'
+import { ExternalCardType } from '@/types/ExternalCard';
+import { UserListType, UserType } from '@/types/userType'
 
 interface CardListProps {
   cardList?: CardListType
@@ -78,12 +79,20 @@ const CardList = ({
   
   
   const [searchResults, setSearchResults] = useState<ExternalCardListType | undefined>(undefined);
-  const handleResult = (data: ExternalCardListType) => {
-    if (data) {
-      setSearchResults(data)
-    }
-  }
+  
+  // const handleResult = (data: ExternalCardListType) => {
+  //   if (data) {
+  //     setSearchResults(data)
+  //   }
+  // }
 
+  const handleResult = (data: ExternalCardListType | UserListType) => {
+    if (Array.isArray(data) && data.length > 0 && 'cardId' in data[0]) {
+      setSearchResults(data as ExternalCardListType);
+    } 
+  }
+  
+  
   return (
     <>
       {!isShare ? (
@@ -110,8 +119,8 @@ const CardList = ({
           />
           <Flex direction="column" justify="center" align="center">
             {(searchResults !== undefined && searchResults.length > 0 && searchValue !== undefined && searchValue.trim() !== '' ? searchResults : cards)
-              .filter(card => card)
-              .map(card => {
+              .filter((card: ExternalCardType | CardType) => card)
+              .map((card: ExternalCardType | CardType) => {
                 return (
                   <CardThumbnail
                     cardInfo={card}
