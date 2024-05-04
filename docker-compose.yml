@@ -41,6 +41,8 @@ services:
     image: prom/prometheus:v2.20.1
     volumes:
       - /etc/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - /etc/prometheus/rules.yml:/etc/prometheus/rules.yml
+
     ports:
       - "9090:9090"
     networks:
