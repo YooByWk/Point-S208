@@ -97,7 +97,7 @@ const MainContainer = (props: MainContainerProps) => css`
   width: 245px;
   height: 135px;
   border-radius: 10px;
-  border: ${props.border ? '2px solid ' + colors.black : 'none'};
+  border: ${props.border ? '1px solid ' + colors.black : 'none'};
   display: flex;
   flex-direction: column;
   justify-content: space-between;

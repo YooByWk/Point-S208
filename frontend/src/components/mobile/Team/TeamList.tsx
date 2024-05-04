@@ -38,11 +38,11 @@ const TeamList = () => {
         return (
           <TeamCard
             teamInfo={team}
-            key={team.teamId}
+            key={team.teamAlbumId}
             onClick={ () =>  {
-              console.log('팀 클릭', team.teamId)
+              console.log('팀 클릭', team.teamAlbumId)
                setSelectedTeam(team)
-              navigate(`/myTeam/${team.teamId}`)
+              navigate(`/myTeam/${team.teamAlbumId}`)
             }}
           />
         )

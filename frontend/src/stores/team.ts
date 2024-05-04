@@ -3,7 +3,7 @@ import { TeamListType} from '@/types/TeamListType';
 
 const defaultSelectedTeam = {
   teamName: '',
-  teamId: NaN ,
+  teamAlbumId: NaN ,
   teamSize: NaN,
   cardSize: NaN,
 }

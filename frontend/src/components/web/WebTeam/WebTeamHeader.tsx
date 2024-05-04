@@ -8,6 +8,7 @@ import { Filter32Regular, ArrowSort28Regular } from '@fluentui/react-icons'
 
 const WebTeamHeader = () => {
   const [keyword, setKeyword] = useState('')
+  console.log(keyword)
 
   return (
     <Container>
@@ -32,7 +33,11 @@ const Container = styled.div`
   justify-content: end;
   align-items: center;
   gap: 20px;
-  margin: 20px;
+  margin: 20px 40px;
+
+  button > span {
+    font-size: 16px;
+  }
 `
 
 // css

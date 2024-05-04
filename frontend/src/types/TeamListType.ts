@@ -1,6 +1,6 @@
 export type TeamListType = {
   teamName: string
-  teamId: number
+  teamAlbumId: number
   teamSize: number
   cardSize: number
 }
