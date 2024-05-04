@@ -1,9 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import {
-  ShareAndroid24Filled,
   Delete24Filled,
-  ChevronDownRegular,
   ArrowDownload24Filled,
   ArrowSort24Filled,
   Filter24Filled,
@@ -11,12 +9,6 @@ import {
 import Flex from '@shared/Flex'
 import Text from '@shared/Text'
 import {
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  MenuPopover,
-  MenuTrigger,
   Checkbox,
   SearchBox,
   TabList,
@@ -53,27 +45,9 @@ const WebAlbumTopBar = (props: Partial<TabListProps>) => {
           <Text>나의 명함 지갑</Text>
           <Flex align="center">
             <Checkbox shape="circular" label="" />
-            <Menu>
-              <MenuTrigger disableButtonEnhancement>
-                <MenuButton
-                  appearance="transparent"
-                  icon={<ChevronDownRegular />}
-                />
-              </MenuTrigger>
-
-              <MenuPopover>
-                <MenuList>
-                  <MenuItem>전체 선택</MenuItem>
-                  <MenuItem>전체 취소</MenuItem>
-                </MenuList>
-              </MenuPopover>
-            </Menu>
             <Text typography="t9" color="themeMainBlue">
               0개 선택됨
             </Text>
-            <Button appearance="transparent" size="small" css={buttonStyles}>
-              <ShareAndroid24Filled />
-            </Button>
             <Button appearance="transparent" size="small" css={buttonStyles}>
               <ArrowDownload24Filled />
             </Button>
