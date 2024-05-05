@@ -21,7 +21,7 @@ import { UserListType, UserType } from '@/types/userType'
 
 interface CardListProps {
   cardList?: CardListType
-  cards: CardType[]
+  cards: CardType[] 
   isTeam?: boolean
   parentisLoading?: boolean
   handleAdd?: () => void

@@ -21,8 +21,6 @@ interface TeamCardProps {
 }
 const TeamCard = ({ teamInfo,onClick }: TeamCardProps) => {
   const [isHover, setIsHover] = useState(false)
-  console.log(teamInfo,'팀정보')
-  console.log(teamInfo.teamAlbumId,'앨범아이디')
   
   return (
     <div css={container}>

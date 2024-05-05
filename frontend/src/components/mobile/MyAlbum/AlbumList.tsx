@@ -24,6 +24,8 @@ import { ExternalCardListType, ExternalCardType } from '@/types/ExternalCard'
 const AlbumList = () => {
   // 내 명함 리스트
   const userId = useRecoilValue(userState).userId
+  const [user, setUser] = useRecoilState(userState)
+  const [searchValue, setSearchValue] = useState('')
 
   const { data, fetchNextPage, hasNextPage, isError, isFetchingNextPage } =
     useInfiniteQuery({
@@ -59,12 +61,10 @@ const AlbumList = () => {
     setIsAddCard(!isAddCard)
   }
   //
-  const [searchValue, setSearchValue] = useState('')
 
   const [searchResults, setSearchResults] = useState<
     ExternalCardListType | undefined
   >(undefined)
-  const [user, setUser] = useRecoilState(userState)
 
   return (
     <>

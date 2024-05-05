@@ -67,8 +67,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
  })
  
   useEffect(() => {
-    console.log('검색어', value)
-    console.log('검색결과', data)
+    console.log('검색결과 - 수정하기 :', data)
     if (data && onSearch) {
       onSearch(data)
     } 

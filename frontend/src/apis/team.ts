@@ -29,9 +29,9 @@ export const fetchTeamList = async (userId:number) => {
  * @param userInput
  * @returns 팀 명함 검색 목록
  */
-export const fetchTeamCards = async ( teamAlbumId:number, page:number) => {
+export const fetchTeamCardsList = async ( teamAlbumId:number, page:number) => {
   return authRequest
-  .get(`${ReadUrl}/card/${teamAlbumId}/${page}` )
+  .get(`${ReadUrl}/${teamAlbumId}/${page}` )
   .then(res => res.data)
   .catch(err => console.log(err))
 }
@@ -40,6 +40,13 @@ export const fetchTeamCards = async ( teamAlbumId:number, page:number) => {
 export const CreateTeam = async (params: any) => {
   return authRequest
   .post(`/cud/api/team`, params)
+  .then(res => res.data)
+  .catch(err => console.log(err))
+}
+
+export const fetchTeamMember = async (teamAlbumId: number, userId: number) => {
+  return authRequest
+  .get(`${ReadUrl}/${userId}/member/${teamAlbumId}`)
   .then(res => res.data)
   .catch(err => console.log(err))
 }

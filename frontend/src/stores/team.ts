@@ -26,3 +26,8 @@ export const pageChanged = atom<boolean>({
   default: false,
 })
 
+
+export const isLookingMemberState = atom<boolean>({
+  key: 'isLookingMember',
+  default: false,
+})

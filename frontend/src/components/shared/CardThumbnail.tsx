@@ -38,7 +38,6 @@ const CardThumbnail = ({
   const [isfavorite, setIsFavorite] = useState(false)
   const [isChecked, setIsChecked] = useState(false)
   const isSelected = selectedCards.includes(cardInfo.cardId)
-
   const handleCheck = (event: React.MouseEvent) => {
     event.stopPropagation()
     setIsChecked(!isChecked)
@@ -74,7 +73,7 @@ const CardThumbnail = ({
           onSelect(cardInfo.cardId)
         } else {
           console.log(cardInfo, '님의 명함')
-          navigate(`/myAlbum/${userId}/${cardInfo.cardId}`)
+          navigate(`/myAlbum/${userId}/${cardInfo.cardId}`, { state: { cardInfo } })
         }
       }}
     >

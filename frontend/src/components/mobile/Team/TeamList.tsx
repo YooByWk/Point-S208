@@ -32,13 +32,12 @@ const TeamList = () => {
   //   queryKey: ['fetchTeamList', userId],
   //   queryFn: () => fetchTeamList(userId as number),
   // })
-  //디버그용
+  //디버그용 : 수정하기
   const {data,isLoading} = useQuery<TeamListType[]>({
     queryKey: ['fetchTeamList', ],
     queryFn: () => fetchTeamList(4),
   })
   const teamList: TeamListType[] = data || []
-  console.log(teamList,'리스트')
   if (isLoading) {
     return <Flex direction='column' justify='center' align='center' style={{height:'100vh'}}>
       <Spinner />
@@ -74,7 +73,6 @@ const TeamList = () => {
         value={searchValue}
         onChange={(e: any) => {
           setSearchValue(e.target.value)
-          console.log(searchValue, '검색어 확인')
         }}
         memberIcon={false}
         placeholder="팀 검색"
@@ -85,9 +83,8 @@ const TeamList = () => {
           teamInfo={team}
           key={team.teamAlbumId}
           onClick={() =>  {
-            console.log('팀 클릭', team.teamAlbumId)
             setSelectedTeam(team)
-            navigate(`/myTeam/${team.teamAlbumId}`)
+            navigate(`/myTeam/${team.teamAlbumId}`, {state: team})
           }}/>))}
       <Spacing size={30} direction="vertical" />
       <div css={buttonCss}>
