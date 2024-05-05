@@ -44,7 +44,7 @@ services:
     ports:
       - "9113:9113"  
     networks:
-      - jenkins-network
+      - develop-server_jenkins-network  # 네트워크 수정
     command:
       - "-nginx.scrape-uri=https://k10s208.p.ssafy.io//basic_status"
 
