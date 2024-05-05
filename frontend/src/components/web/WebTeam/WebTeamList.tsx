@@ -5,8 +5,11 @@ import { Add48Filled } from '@fluentui/react-icons'
 import { useMemo } from 'react'
 import WebTeamCard from './WebTeamCard'
 import { dummyTeamList } from '@/assets/data/dummyTeamList'
+import { useSetRecoilState } from 'recoil'
+import { selectedTeamIdState } from '@/stores/team'
 
 const WebTeamList = () => {
+  const setSelectedTeamId = useSetRecoilState(selectedTeamIdState)
   const width = useWindowSize() - 390 - 17
   const teamList = dummyTeamList
 
@@ -21,11 +24,11 @@ const WebTeamList = () => {
   return (
     <Container $marginInline={marginInline}>
       {teamList.map((item, idx) => (
-        <Box key={idx}>
+        <Box key={idx} $isAdd={false} onClick={() => setSelectedTeamId(item)}>
           <WebTeamCard item={item} />
         </Box>
       ))}
-      <Box onClick={() => {}}>
+      <Box onClick={() => {}} $isAdd={true}>
         <Add48Filled />
       </Box>
     </Container>
@@ -43,9 +46,9 @@ const Container = styled.div<{ $marginInline: number }>`
   gap: 50px;
 `
 
-const Box = styled.div`
+const Box = styled.div<{ $isAdd: boolean }>`
   display: flex;
-  justify-content: space-between;
+  justify-content: ${props => (props.$isAdd ? 'center' : 'space-between')};
   align-items: center;
   width: 390px;
   height: 215px;

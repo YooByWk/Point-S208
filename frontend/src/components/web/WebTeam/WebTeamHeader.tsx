@@ -7,15 +7,15 @@ import { useState } from 'react'
 import { Filter32Regular, ArrowSort28Regular } from '@fluentui/react-icons'
 
 const WebTeamHeader = () => {
-  const [keyword, setKeyword] = useState('')
-  console.log(keyword)
+  const [value, setValue] = useState('')
+  console.log(value)
 
   return (
     <Container>
       <SearchBox
         placeholder="팀 이름을 검색해 주세요"
-        onChange={(e: any) => setKeyword(e.target.value)}
-        css={searchBoxStyle}
+        appearance="underline"
+        onChange={(e: any) => setValue(e.target.value)}
       />
       <LargeButton text="팀 추가" width="20vw" onClick={() => {}} />
       <Filter32Regular />
@@ -38,10 +38,4 @@ const Container = styled.div`
   button > span {
     font-size: 16px;
   }
-`
-
-// css
-
-const searchBoxStyle = css`
-  border: none;
 `
