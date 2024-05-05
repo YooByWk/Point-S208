@@ -25,6 +25,15 @@ services:
     networks:
       - jenkins-network
 
+  autoscale-api:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      FLASK_ENV: development
+    volumes:
+      - .:/app
+      
   # backend-cud:
   #   container_name: backend-cud
   #   image: junwon1131/s208-backend-cud:latest
