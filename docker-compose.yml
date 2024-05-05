@@ -23,6 +23,8 @@ networks:
     external: true
   develop-server_default:
     external: true
+    name: develop-server_default
+    attachable: true
 
 volumes:
   jenkins_home:
