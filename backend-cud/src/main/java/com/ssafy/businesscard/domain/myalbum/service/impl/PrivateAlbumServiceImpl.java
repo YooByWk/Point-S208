@@ -3,7 +3,6 @@ package com.ssafy.businesscard.domain.myalbum.service.impl;
 import com.ssafy.businesscard.domain.card.entity.Businesscard;
 import com.ssafy.businesscard.domain.card.entity.Filter;
 import com.ssafy.businesscard.domain.card.repository.BusinesscardRepository;
-import com.ssafy.businesscard.domain.card.service.BusinessCardService;
 import com.ssafy.businesscard.domain.myalbum.dto.request.CardAddFilterRequest;
 import com.ssafy.businesscard.domain.myalbum.dto.request.CardRequest;
 import com.ssafy.businesscard.domain.myalbum.dto.request.PrivateAlbumRequest;
@@ -36,7 +35,6 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
     private final PrivateAlbumFilterRepository privateAlbumFilterRepository;
     private final PrivateAlbumRepository privateAlbumRepository;
     private final PrivateAlbumMemberRepository privateAlbumMemberRepository;
-    private final BusinessCardService businessCardService;
 
     // 명함 지갑에 명함 등록
     @Override

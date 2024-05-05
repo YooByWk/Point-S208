@@ -4,6 +4,6 @@ import com.ssafy.businesscard.domain.team.dto.request.TeamAlbumRegistRequest;
 
 public interface TeamService {
 
-    void regist(TeamAlbumRegistRequest teamAlbumRegistRequest);
+    String create(Long userId, TeamAlbumRegistRequest teamAlbumRegistRequest);
 
 }

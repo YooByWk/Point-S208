@@ -10,10 +10,7 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface PrivateAlbumMapper {
-    PrivateAlbumMapper INSTANCE = Mappers.getMapper(PrivateAlbumMapper.class);
-    Businesscard toEntity(CardRequest cardRequest);
 
-    @Mapping(source = "businesscard.cardId", target = "cardId")
-    CardRequest fromEntity(Businesscard businesscard);
+    Businesscard toEntity(CardRequest cardRequest);
 
 }

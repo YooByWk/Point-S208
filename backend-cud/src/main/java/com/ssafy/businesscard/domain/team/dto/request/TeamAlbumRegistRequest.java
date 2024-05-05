@@ -4,8 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record TeamAlbumRegistRequest(
-          String teamName,
-          String teamOwner
+          String teamName
 ) {
 
 
