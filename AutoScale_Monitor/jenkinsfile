@@ -1,4 +1,3 @@
-
 def component = [
     'ocr': false,
     'mysql':false,
@@ -43,7 +42,7 @@ pipeline {
                     component.each { entry ->
                         if (entry.value && entry.key != 'redis') {
                             def var = entry.key
-                            sh "docker-compose -f docker-compose-monitor.yml -p develop-server-monitor pull ${var.toLowerCase()}"
+                            sh "docker-compose -f docker-compose-monitor.yml pull ${var.toLowerCase()}"
                         }
                     }
                 }
