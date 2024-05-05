@@ -23,7 +23,6 @@ networks:
     external: true
   develop-server_default:
     external:
-      name: develop-server_default
       attachable: true
 
 volumes:
