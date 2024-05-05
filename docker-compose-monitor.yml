@@ -14,7 +14,7 @@ services:
     ports:
       - "9100:9100"
     networks:
-      - jenkins-network
+      - develop-server_jenkins-network  # 네트워크 수정
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:v0.39.3
@@ -26,7 +26,7 @@ services:
     ports:
       - "9091:8080"
     networks:
-      - jenkins-network
+      - develop-server_jenkins-network  # 네트워크 수정
 
   prometheus:
     image: prom/prometheus:v2.20.1
@@ -37,7 +37,7 @@ services:
     ports:
       - "9090:9090"
     networks:
-      - jenkins-network
+      - develop-server_jenkins-network  # 네트워크 수정
 
   prometheus_nginx_exporter:
     image: nginx/nginx-prometheus-exporter:latest
@@ -55,7 +55,7 @@ services:
     ports:
       - "3000:3000"
     networks:
-      - jenkins-network
+      - develop-server_jenkins-network  # 네트워크 수정
 
   alertmanager:
     image: prom/alertmanager:v0.21.0
@@ -67,7 +67,7 @@ services:
     ports:
       - '9093:9093'
     networks:
-      - jenkins-network
+      - develop-server_jenkins-network  # 네트워크 수정
 
 # networks:
 #   jenkins-network:
