@@ -1,6 +1,25 @@
 version: '3.8'
 
 services:
+  node-exporter:
+    image: prom/node-exporter:v1.1.2
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    deploy:
+      mode: global
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 128M
+    ports:
+      - "9100:9100"
+      
  
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:v0.39.3
