@@ -69,7 +69,7 @@ services:
     networks:
       - jenkins-network
 
-networks:
-  jenkins-network:
-    name: jenkins-network
-    driver: overlay
+# networks:
+#   jenkins-network:
+#     name: jenkins-network
+#     driver: overlay
