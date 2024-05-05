@@ -19,7 +19,9 @@ services:
           memory: 128M
     ports:
       - "9100:9100"
-      
+    networks:
+      - jenkins-network
+
  
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:v0.39.3
