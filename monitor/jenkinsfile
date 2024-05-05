@@ -3,7 +3,8 @@ def component = [
     'prometheus': true,
     'grafana': true,
     'prometheus_nginx_exporter': true,
-    'cadvisor' :true
+    'cadvisor' :true,
+    'node-exporter':true
 ]
 
 // 파일 복사 작업을 수행하는 함수 정의
