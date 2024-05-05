@@ -11,8 +11,8 @@ import type { CardType } from '@/types/cardType'
 import CardThumbnail from '@/components/shared/CardThumbnail'
 import MultiSelectBar from '@/components/shared/MultiSelectBar'
 import { tokens } from '@fluentui/react-components'
-import { useRecoilState } from 'recoil'
-import { pageChanged } from '@stores/team'
+import { ExternalCardListType, ExternalCardType } from '@/types/ExternalCard'
+import { UserListType } from '@/types/userType'
 
 interface AddTeamProps {
   cards: CardType[]
@@ -36,16 +36,21 @@ const ShareCard = ({
   setIsPageChanged,
   isPageChanged,
 }: AddTeamProps) => {
-  
-  
   const handleBackArrow = () => {
-    console.log('뒤로가기 버튼 클릭')
     setIsShare(!isShare)
     setIsPageChanged(!isPageChanged)
   }
 
-  
-  
+  const [searchValue, setSearchValue] = useState('')
+  const [searchResults, setSearchResults] = useState<
+    ExternalCardListType | undefined
+  >(undefined)
+
+  const handleResult = (data: ExternalCardListType | UserListType) => {
+    if (Array.isArray(data) && data.length > 0 && 'cardId' in data[0]) {
+      setSearchResults(data as ExternalCardListType)
+    }
+  }
   return (
     <div>
       <Flex direction="row" onClick={handleBackArrow} css={arrowContainer}>
@@ -59,7 +64,13 @@ const ShareCard = ({
       </Text>
       <Spacing size={10} />
       <SearchBox
-        value="공유할 명함 검색 로직"
+        onChange={e => {
+          if (e.target.value !== undefined) {
+            setSearchValue(e.target.value)
+          }
+        }}
+        onSearch={handleResult}
+        value={searchValue}
         placeholder="공유할 명함 검색"
         memberIcon={false}
         filterIcon={false}
@@ -75,27 +86,37 @@ const ShareCard = ({
       />
       <Spacing size={5} />
       <Flex direction="column" justify="center" align="center">
-        {cards.map(card => {
-          return (
-            <div css={cardContainer} onClick={() => onselect}>
-              <CardThumbnail
-                cardInfo={card}
-                key={card.cardId}
-                onSelect={handleCardSelect}
-                selectedCards={selectedCards}
-                scale={1}
-                forShare={true}
-              />
-            </div>
+        {(searchResults !== undefined &&
+        searchResults.length > 0 &&
+        searchValue !== undefined &&
+        searchValue.trim() !== ''
+          ? searchResults
+          : cards
+        )
+          .filter((card: ExternalCardType | CardType) =>
+            cards.find(c => c.cardId === card.cardId),
           )
-        })}
+          .map((card: ExternalCardType | CardType) => {
+            return (
+              <div css={cardContainer} onClick={() => onselect}>
+                <CardThumbnail
+                  cardInfo={card}
+                  key={card.cardId}
+                  onSelect={handleCardSelect}
+                  selectedCards={selectedCards}
+                  scale={1}
+                  forShare={true}
+                />
+              </div>
+            )
+          })}
       </Flex>
       <div css={btnContainer}>
         <LargeButton
           text="공유하기"
           onClick={() =>
             console.log(
-              '공유하기 버튼 클릭. 선택된 카드의 아이디 : ',
+              '공유하기 버튼 클릭. 선택된 카드의 아이디 : 수정하기',
               selectedCards,
             )
           }

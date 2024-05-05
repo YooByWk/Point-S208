@@ -5,22 +5,27 @@ import { useState, useEffect } from 'react'
 
 import Flex from './Flex'
 import PeopleFilterSortIcons from './PeopleFilterSortIcons';
-import { colors } from '@/styles/colorPalette';
-import Spacing  from '@/components/shared/Spacing';
+
 import { SearchRegular } from '@fluentui/react-icons';
 import { searchMyAlbumCard } from '@/apis/album';
 import { useQuery } from '@tanstack/react-query';
+import { ExternalCardListType } from '@/types/ExternalCard';
+import { searchUser } from '@/apis/team';
+import { UserListType } from '@/types/userType';
 interface SearchBoxProps {
   placeholder?: string
   onChange?: (e: any) => void
   memberIcon?: boolean
   filterIcon?: boolean
   sortIcon?: boolean
-  value: string | number
   spacing? : boolean
-  width?: string
   lefticon?: boolean
+  value: string | number
+  width?: string
   bgColor?: string
+  onSearch: (value: ExternalCardListType | UserListType ) => void
+  isSearchingMember?: boolean
+  isInTeam?: boolean
 }
 
 
@@ -39,29 +44,35 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   spacing = true,
   width,
   lefticon=true,
-  bgColor=''
+  bgColor='',
+  onSearch,
+  isSearchingMember=false,
+  isInTeam=false
 }) => {
-  const handleKeyDown = (e: any): void => {
-    if (e.key === 'Enter') {
-      console.log('submit', value)
-      // handleSubmit()
-    } else {
-      console.log('not enter', value)
-    }
-  }
+  // const handleKeyDown = (e: any): void => {
+  //   if (e.key === 'Enter') {
+  //     // console.log('submit', value)
+  //     // handleSubmit()
+  //   } else {
+  //     // console.log('not enter', value)
+  //   }
+  // }
   
 // 검색 로직
  const { data } = useQuery({
   
-  queryKey: ['searchMyAlbumCard', value],
-  queryFn: () => searchMyAlbumCard(value),
+  queryKey: isSearchingMember? ['searchUser', value] : ['searchMyAlbumCard', value],
+  queryFn: () => isSearchingMember ? searchUser(value) : searchMyAlbumCard(value),
+  enabled: value !== '',
  })
  
   useEffect(() => {
-    console.log('검색어', value)
-    console.log('검색결과', data)
+    console.log('검색결과 - 수정하기 :', data)
+    if (data && onSearch) {
+      onSearch(data)
+    } 
     
-  }, [value, data])
+  }, [value, data, onSearch])
   
   
   return (
@@ -74,7 +85,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
           <FluentSearchBox
             size='large'
             placeholder={placeholder}
-            onKeyDown={handleKeyDown}
+            // onKeyDown={handleKeyDown}
             onChange={onChange}
             css={searchBoxCss(bgColor)}
             appearance='filled-darker'

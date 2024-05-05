@@ -3,3 +3,5 @@ export type UserType = {
   name: string
   email: string
 }
+
+export type UserListType = UserType[]

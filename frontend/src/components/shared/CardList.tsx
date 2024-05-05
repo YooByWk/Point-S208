@@ -3,7 +3,6 @@
 import type { CardType } from '@/types/cardType'
 import type { CardListType } from '@/types/CardListType'
 import CardThumbnail from './CardThumbnail'
-import { dummyCardList } from '@/assets/data/dummyCardList'
 import Flex from '@/components/shared/Flex'
 import SearchBox from '@/components/shared/SearchBox'
 import { useState } from 'react'
@@ -16,10 +15,13 @@ import { useParams } from 'react-router-dom'
 import { tokens } from '@fluentui/react-components'
 import { useRecoilState } from 'recoil'
 import { pageChanged } from '@stores/team'
+import { ExternalCardListType } from '@/types/ExternalCard'
+import { ExternalCardType } from '@/types/ExternalCard';
+import { UserListType, UserType } from '@/types/userType'
 
 interface CardListProps {
   cardList?: CardListType
-  cards: CardType[]
+  cards: CardType[] 
   isTeam?: boolean
   parentisLoading?: boolean
   handleAdd?: () => void
@@ -40,7 +42,7 @@ const CardList = ({
 
   // 공유창에서 선택한 명함을 저장하는 state를 별도로? //
 
-  const { teamId } = useParams() // 팀인 경우에만 사용하게 해야함 : 수정하기
+  const { teamAlbumId } = useParams() // 팀인 경우에만 사용하게 해야함 : 수정하기
 
   // 내 명함 목록인 경우
   /* 
@@ -74,28 +76,51 @@ const CardList = ({
     setIsShare(!isShare)
     console.log('isShare: ', isShare)
   }
+  
+  
+  const [searchResults, setSearchResults] = useState<ExternalCardListType | undefined>(undefined);
+  
+  // const handleResult = (data: ExternalCardListType) => {
+  //   if (data) {
+  //     setSearchResults(data)
+  //   }
+  // }
 
+  const handleResult = (data: ExternalCardListType | UserListType) => {
+    if (Array.isArray(data) && data.length > 0 && 'cardId' in data[0]) {
+      setSearchResults(data as ExternalCardListType);
+    } 
+  }
+  
+  
   return (
     <>
       {!isShare ? (
         <>
           <SearchBox
             value={searchValue}
-            onChange={(e: any) => setSearchValue(e.target.value)}
+            onChange={(e) => {
+              if (e.target.value !== undefined) {
+                setSearchValue(e.target.value)
+              }
+            }
+          }
+          onSearch={handleResult}
             placeholder={isTeam ? '팀 명함 검색' : '명함 검색'}
             memberIcon={isTeam ? true : false}
             spacing={false}
+            
           />
-          <Spacing size={20} />
+          <Spacing size={15} />
           <MultiSelectBar
             selectedCards={selectedCards}
             allCards={cards}
             setSelectedCards={setSelectedCards}
           />
           <Flex direction="column" justify="center" align="center">
-            {cards
-              .filter(card => card)
-              .map(card => {
+            {(searchResults !== undefined && searchResults.length > 0 && searchValue !== undefined && searchValue.trim() !== '' ? searchResults : cards)
+              .filter((card: ExternalCardType | CardType) => card)
+              .map((card: ExternalCardType | CardType) => {
                 return (
                   <CardThumbnail
                     cardInfo={card}

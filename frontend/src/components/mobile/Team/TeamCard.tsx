@@ -22,8 +22,6 @@ interface TeamCardProps {
 const TeamCard = ({ teamInfo,onClick }: TeamCardProps) => {
   const [isHover, setIsHover] = useState(false)
   
-
-  
   return (
     <div css={container}>
       <div css={bg} onClick={onClick}>

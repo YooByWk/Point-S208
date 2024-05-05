@@ -13,7 +13,13 @@ import Spacing from '@shared/Spacing'
 import AddCard from '@components/mobile/MyAlbum/AddCard'
 import WebCardThumbnail from '@/components/shared/WebCardThumbnail'
 
-const WebMyAlbumList = ({ selectedCards }: { selectedCards: number[] }) => {
+const WebMyAlbumList = ({
+  selectedCards,
+  setIsDetail,
+}: {
+  selectedCards: number[]
+  setIsDetail: (isDetail: boolean) => void
+}) => {
   const userId = useRecoilValue(userState).userId
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
@@ -65,10 +71,8 @@ const WebMyAlbumList = ({ selectedCards }: { selectedCards: number[] }) => {
                     <WebCardThumbnail
                       cardInfo={card}
                       key={card.cardId}
-                      onSelect={function (cardId: number): void {
-                        throw new Error('Function not implemented.')
-                      }}
                       selectedCards={[]}
+                      setIsDetail={setIsDetail}
                     />
                   )
                 })}

@@ -4,61 +4,93 @@ import Spacing from '@/components/shared/Spacing'
 import TeamCard from '@/components/mobile/Team/TeamCard'
 import SearchBox from '@/components/shared/SearchBox'
 import { useState } from 'react'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import * as teamState from '@/stores/team'
 import { css } from '@emotion/react'
 import LargeButton from '@/components/shared/LargeButton'
 import AddTeam from '@/components/mobile/Team/AddTeam'
-import { tokens } from '@fluentui/react-components';
+import { Spinner, tokens } from '@fluentui/react-components';
 import { useNavigate, useParams } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
+import { fetchTeamList } from '@/apis/team'
+import { userState } from '@/stores/user'
+import Flex from '@/components/shared/Flex'
+import Text from '@/components/shared/Text'
+import { TeamListType } from '@/types/TeamListType'
 
 
 const TeamList = () => {
   const [searchValue, setSearchValue] = useState('')
   const [isWrite, setIsWrite] = useState(false)
   const [selectedTeam, setSelectedTeam] = useRecoilState(
-    teamState.selectedTeamIdState,
+    teamState.selectedTeamAlbumIdState,
   )
   const navigate = useNavigate()
+  const userId = useRecoilValue(userState).userId
+  // 원본
+  // const {data,isLoading} = useQuery({
+  //   queryKey: ['fetchTeamList', userId],
+  //   queryFn: () => fetchTeamList(userId as number),
+  // })
+  //디버그용 : 수정하기
+  const {data,isLoading} = useQuery<TeamListType[]>({
+    queryKey: ['fetchTeamList', ],
+    queryFn: () => fetchTeamList(4),
+  })
+  const teamList: TeamListType[] = data || []
+  if (isLoading) {
+    return <Flex direction='column' justify='center' align='center' style={{height:'100vh'}}>
+      <Spinner />
+      <Text>로딩중...</Text></Flex>
+  }
+  
+  if (isWrite) {
+    return (
+      <AddTeam 
+        isWrite={isWrite}
+        setIsWrite={setIsWrite}
+      />
+    )
+  }
+  
+  if ( !data || data.length === 0 ) {
+    return (
+      <Flex direction='column' justify='center' align='center' style={{height:'100vh'}}>
+        <Text>팀이 없습니다. </Text>
+        <Text>팀을 생성해주세요. </Text>
+        <Spacing size={20} direction='vertical'></Spacing>
+        <LargeButton text='팀 추가' onClick={() => setIsWrite(!isWrite)} />
+      </Flex>
+    )
+  }
+  
+  
   return (
     <>
-    {!isWrite ? <>
+    <button onClick={()=>console.log(teamList, data)}>sdfa</button>
       <SearchBox
+        onSearch={() => {}}
         value={searchValue}
         onChange={(e: any) => {
           setSearchValue(e.target.value)
-          console.log(searchValue, '검색어 확인')
         }}
         memberIcon={false}
         placeholder="팀 검색"
       />
       <Spacing size={30}/>
-      {/* <MyDigitalCard  cardInfo={CardDummy} scale={1} /> */}
-      {dummyTeamList.map(team => {
-        return (
-          <TeamCard
-            teamInfo={team}
-            key={team.teamAlbumId}
-            onClick={ () =>  {
-              console.log('팀 클릭', team.teamAlbumId)
-               setSelectedTeam(team)
-              navigate(`/myTeam/${team.teamAlbumId}`)
-            }}
-          />
-        )
-      })}
-      
+      {teamList.map(team => (
+        <TeamCard
+          teamInfo={team}
+          key={team.teamAlbumId}
+          onClick={() =>  {
+            setSelectedTeam(team)
+            navigate(`/myTeam/${team.teamAlbumId}`, {state: team})
+          }}/>))}
       <Spacing size={30} direction="vertical" />
       <div css={buttonCss}>
-      <LargeButton text='팀 추가' width='80%' onClick={() =>setIsWrite(true)} />
-        </div>
-    </> :
-    <AddTeam 
-      isWrite={isWrite}
-      setIsWrite={setIsWrite}
-    />
-  }
-  </>
+        <LargeButton text='팀 추가' width='80%' onClick={() => setIsWrite(true)} />
+      </div>
+    </>
   )
 }
 

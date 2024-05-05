@@ -17,10 +17,11 @@ import {
 import { useNavigate } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import { userState } from '@/stores/user'
+import { ExternalCardType } from '@/types/ExternalCard'
 ///
 ///
 interface CardThumbnailProps {
-  cardInfo: CardType
+  cardInfo: CardType | ExternalCardType
   onSelect: (cardId: number) => void
   selectedCards: number[]
   forShare?: boolean
@@ -37,7 +38,6 @@ const CardThumbnail = ({
   const [isfavorite, setIsFavorite] = useState(false)
   const [isChecked, setIsChecked] = useState(false)
   const isSelected = selectedCards.includes(cardInfo.cardId)
-
   const handleCheck = (event: React.MouseEvent) => {
     event.stopPropagation()
     setIsChecked(!isChecked)
@@ -73,7 +73,7 @@ const CardThumbnail = ({
           onSelect(cardInfo.cardId)
         } else {
           console.log(cardInfo, '님의 명함')
-          navigate(`/myAlbum/${userId}/${cardInfo.cardId}`)
+          navigate(`/myAlbum/${userId}/${cardInfo.cardId}`, { state: { cardInfo } })
         }
       }}
     >

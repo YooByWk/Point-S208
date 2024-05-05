@@ -43,3 +43,8 @@ export const isFirstCardState = atom({
   key: 'isFirstCardState',
   default: false,
 })
+
+export const selectedCardState = atom<CardType>({
+  key: 'selectedCardState',
+  default: defaultCard,
+})

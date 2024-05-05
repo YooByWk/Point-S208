@@ -7,14 +7,23 @@ import { css } from '@emotion/react'
 
 
 
+interface BackArrowProps {
+  onClick?: () => void
+
+}
+
 /**
  *
  * @returns 뒤로가기 버튼
  */
-const BackArrow = () => {
+const BackArrow = ({onClick}:BackArrowProps) => {
   const navigate = useNavigate()
   const handleBackArrow = (e:any) => {
     console.log('뒤로가기 버튼 클릭')
+    if(onClick){
+      onClick()
+      return
+    }
     e.stopPropagation()
     navigate(-1)
   }

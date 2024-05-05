@@ -8,15 +8,15 @@ const defaultSelectedTeam = {
   cardSize: NaN,
 }
 
-export const selectedTeamIdState = atom<TeamListType>({
-  key: 'selectedTeamIdState',
+export const selectedTeamAlbumIdState = atom<TeamListType>({
+  key: 'selectedTeamAlbumIdState',
   default: defaultSelectedTeam,
 })
 
 export const hasSelectedTeam = selector({
   key: 'hasSelectedTeam',
   get: ({get}) => {
-    const selectedTeam = get(selectedTeamIdState)
+    const selectedTeam = get(selectedTeamAlbumIdState)
     return selectedTeam.teamName !== ''
   }
 })
@@ -26,3 +26,8 @@ export const pageChanged = atom<boolean>({
   default: false,
 })
 
+
+export const isLookingMemberState = atom<boolean>({
+  key: 'isLookingMember',
+  default: false,
+})

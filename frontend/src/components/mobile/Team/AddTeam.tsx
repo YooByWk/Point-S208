@@ -8,18 +8,29 @@ import LargeButton from '@/components/shared/LargeButton'
 import { css } from '@emotion/react'
 import Spacing from '@/components/shared/Spacing'
 import { Input as FluentInput, tokens } from '@fluentui/react-components'
-
+import { UserListType, UserType } from '@/types/userType'
+import MemberThumbnail from './MemberThumbnail'
+import { useRecoilValue } from 'recoil'
+import { userState } from '@/stores/user'
 interface AddTeamProps {
   setIsWrite: (isWrite: boolean) => void
   isWrite: boolean
 }
 
 const AddTeam = ({ setIsWrite, isWrite }: AddTeamProps) => {
+  const userId = useRecoilValue(userState).userId
   const [step, setStep] = useState(1)
   const [teamName, setTeamName] = useState('')
   const [teamSearchValue, setTeamSearchValue] = useState('')
-  const [selectedMember, setSelectedMember] = useState([]) // userType 으로 수정하기
-  
+  const [SearchResults, setSearchResults] = useState<UserType[]>([])
+  const [selectedMember, setSelectedMember] = useState<UserType[]>([])
+
+  const handleResult = (data: UserListType) => {
+    if (data) {
+      setSearchResults(data)
+    }
+  }
+
   const handleTeamNameInput = (e: any) => {
     setTeamName(e.target.value)
     if (teamName.length > 0) {
@@ -36,7 +47,22 @@ const AddTeam = ({ setIsWrite, isWrite }: AddTeamProps) => {
   }
 
   const handleSearch = () => {
-    console.log('검색버튼 클릭', teamSearchValue)
+  }
+  
+  const handleMemberCheck = (user: UserType) => {
+    if (!selectedMember.some(member => member.userId === user.userId)) {
+      setSelectedMember(prev => [...prev, user])
+    }
+  }
+  // 아이콘 버튼에서 선택 해제용으로 사용
+  const handleMemberUnCheck = (user: UserType) => {
+    setSelectedMember(prev =>
+      prev.filter(member => member.userId !== user.userId),
+    )
+  }
+  // 선택 확인
+  const isMember = (user: UserType) => {
+    return selectedMember.some(member => member.userId === user.userId)
   }
 
   return (
@@ -116,7 +142,7 @@ const AddTeam = ({ setIsWrite, isWrite }: AddTeamProps) => {
               </Text>
               <Spacing size={20} direction="vertical" />
               <Text bold={true} typography="t8">
-                명함을 공유할 사람의 이름 또는 메일을 입력합니다.
+                팀원으로 추가할 사람을 선택해주세요.
               </Text>
               <Spacing size={20} direction="vertical" />
               <Flex
@@ -126,9 +152,17 @@ const AddTeam = ({ setIsWrite, isWrite }: AddTeamProps) => {
                 css={searchCss}
               >
                 <SearchBox
+                  onSearch={handleResult} // 검색 로직 넣기
                   value={teamSearchValue}
+                  isSearchingMember={true}
                   onChange={(e: any) => {
-                    setTeamSearchValue(e.target.value)
+                    if (e.target.value !== undefined) {
+                      setTeamSearchValue(e.target.value)
+                    }
+                    if (e.target.value === undefined) {
+                      setTeamSearchValue('')
+                      setSearchResults([])
+                    }
                   }}
                   lefticon={false}
                   bgColor="colorNeutralBackground3"
@@ -139,6 +173,43 @@ const AddTeam = ({ setIsWrite, isWrite }: AddTeamProps) => {
                 />
                 <LargeButton text="검색" onClick={handleSearch} width="10vw" />
               </Flex>
+              <Spacing size={20} direction="vertical" />
+              {SearchResults === undefined || SearchResults.length > 0 ? (
+                SearchResults.map(user => {
+                  if (user.userId !== userId) {
+                    return (
+                      <MemberThumbnail
+                        user={user}
+                        onClick={e => {
+                          e.stopPropagation()
+                          handleMemberCheck(user)
+                        }}
+                        isSelected={isMember(user)}
+                      />
+                    )
+                  } else {
+                    return <></>
+                  }
+                })
+              ) : (
+                <>
+                  <Text typography="t8" bold={true}>
+                    선택된 구성원
+                  </Text>
+                  {selectedMember.map(user => {
+                    return (
+                      <MemberThumbnail
+                        user={user}
+                        onIconClick={e => {
+                          e.stopPropagation()
+                          handleMemberUnCheck(user)
+                        }}
+                        isSelected={isMember(user)}
+                      />
+                    )
+                  })}
+                </>
+              )}
             </Flex>
 
             <Flex css={step2BtnContainer} justify="flex-end">
@@ -159,7 +230,12 @@ const AddTeam = ({ setIsWrite, isWrite }: AddTeamProps) => {
                   }}
                 />
               ) : (
-                <LargeButton text="완료" width="35vw" disabled={true} />
+                <LargeButton
+                  text="완료"
+                  width="35vw"
+                  disabled={true}
+                  onClick={() => console.log('팀 추가 -멤버 포함 : 수정하기')}
+                />
               )}
             </Flex>
           </Flex>
@@ -180,6 +256,7 @@ const inputCss = css`
   /* margin-left: 5%; */
   background-color: ${tokens.colorNeutralBackground1Hover} !important;
 `
+
 const Step1mainContainerCss = css`
   margin-top: 2vh;
   padding-left: 5%;
@@ -191,11 +268,11 @@ const Step1mainContainerCss = css`
   }
 
   .step1-exit {
-    animation: fadeOut 1.0s;
+    animation: fadeOut 1s;
   }
 
   .step2-enter {
-    animation: fadeIn 2.0s;
+    animation: fadeIn 2s;
   }
 
   .step2-exit {
