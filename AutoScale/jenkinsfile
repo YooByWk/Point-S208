@@ -7,6 +7,7 @@ def component = [
     'prometheus':false,
     'grafana':false,
     'alertmanager':false,
+    'autoscale-api':true
 
 ]
 
