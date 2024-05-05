@@ -69,7 +69,6 @@ services:
     networks:
       - develop-server_jenkins-network  # 네트워크 수정
 
-# networks:
-#   jenkins-network:
-#     name: jenkins-network
-#     driver: overlay
+networks:
+  develop-server_jenkins-network:  # 네트워크 정의
+    driver: overlay
