@@ -22,8 +22,8 @@ networks:
   jenkins-network:
     external: true
   develop-server_default:
-    external:
-      attachable: true
+    external: true
+
 
 volumes:
   jenkins_home:
