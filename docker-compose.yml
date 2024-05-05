@@ -26,7 +26,10 @@ services:
       - jenkins-network
 
   autoscale-api:
-    build: .
+    build: 
+      context: ./AutoScale
+
+
     ports:
       - "5000:5000"
     environment:
