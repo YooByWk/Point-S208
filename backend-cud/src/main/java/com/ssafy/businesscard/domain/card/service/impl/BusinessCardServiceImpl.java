@@ -1,7 +1,5 @@
 package com.ssafy.businesscard.domain.card.service.impl;
 
-import com.ssafy.businesscard.domain.card.dto.response.OCRResponse;
-import com.ssafy.businesscard.domain.card.entity.Businesscard;
 import com.ssafy.businesscard.domain.card.repository.BusinesscardRepository;
 import com.ssafy.businesscard.domain.card.service.BusinessCardService;
 import lombok.RequiredArgsConstructor;
