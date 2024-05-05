@@ -42,7 +42,7 @@ const CardList = ({
 
   // 공유창에서 선택한 명함을 저장하는 state를 별도로? //
 
-  const { teamId } = useParams() // 팀인 경우에만 사용하게 해야함 : 수정하기
+  const { teamAlbumId } = useParams() // 팀인 경우에만 사용하게 해야함 : 수정하기
 
   // 내 명함 목록인 경우
   /* 

@@ -4,7 +4,7 @@ import CardList from '@/components/shared/CardList'
 
 
 const TeamRouter = () => {
-  const { teamId } = useParams()
+  const { teamAlbumId } = useParams()
   return (
     <Routes>
       {/* <Route path="/" element={<CardList />} /> */}

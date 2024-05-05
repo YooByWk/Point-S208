@@ -23,7 +23,7 @@ const TeamList = () => {
   const [searchValue, setSearchValue] = useState('')
   const [isWrite, setIsWrite] = useState(false)
   const [selectedTeam, setSelectedTeam] = useRecoilState(
-    teamState.selectedTeamIdState,
+    teamState.selectedTeamAlbumIdState,
   )
   const navigate = useNavigate()
   const userId = useRecoilValue(userState).userId
@@ -83,11 +83,11 @@ const TeamList = () => {
       {teamList.map(team => (
         <TeamCard
           teamInfo={team}
-          key={team.teamId}
+          key={team.teamAlbumId}
           onClick={() =>  {
-            console.log('팀 클릭', team.teamId)
+            console.log('팀 클릭', team.teamAlbumId)
             setSelectedTeam(team)
-            navigate(`/myTeam/${team.teamId}`)
+            navigate(`/myTeam/${team.teamAlbumId}`)
           }}/>))}
       <Spacing size={30} direction="vertical" />
       <div css={buttonCss}>

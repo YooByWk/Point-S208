@@ -29,9 +29,9 @@ export const fetchTeamList = async (userId:number) => {
  * @param userInput
  * @returns 팀 명함 검색 목록
  */
-export const fetchTeamCards = async ( teamId:number, page:number) => {
+export const fetchTeamCards = async ( teamAlbumId:number, page:number) => {
   return authRequest
-  .get(`${ReadUrl}/card/${teamId}/${page}` )
+  .get(`${ReadUrl}/card/${teamAlbumId}/${page}` )
   .then(res => res.data)
   .catch(err => console.log(err))
 }

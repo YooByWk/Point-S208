@@ -3,20 +3,20 @@ import { TeamListType} from '@/types/TeamListType';
 
 const defaultSelectedTeam = {
   teamName: '',
-  teamId: NaN ,
+  teamAlbumId: NaN ,
   teamSize: NaN,
   cardSize: NaN,
 }
 
-export const selectedTeamIdState = atom<TeamListType>({
-  key: 'selectedTeamIdState',
+export const selectedTeamAlbumIdState = atom<TeamListType>({
+  key: 'selectedTeamAlbumIdState',
   default: defaultSelectedTeam,
 })
 
 export const hasSelectedTeam = selector({
   key: 'hasSelectedTeam',
   get: ({get}) => {
-    const selectedTeam = get(selectedTeamIdState)
+    const selectedTeam = get(selectedTeamAlbumIdState)
     return selectedTeam.teamName !== ''
   }
 })
