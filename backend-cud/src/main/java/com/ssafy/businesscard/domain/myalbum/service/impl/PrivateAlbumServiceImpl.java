@@ -134,6 +134,7 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
                         .realPicture(request.realPicture())
                         .frontBack(request.frontBack())
                         .domainUrl(request.domainUrl())
+                        .memo(request.memo())
                 .build());
 
     }

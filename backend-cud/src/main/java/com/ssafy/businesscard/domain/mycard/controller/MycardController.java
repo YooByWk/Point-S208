@@ -17,12 +17,12 @@ public class MycardController {
 
     private final MycardService mycardService;
 
-    // 내 명함 직접 입력으로 등록 및 재등록
+    // 내 명함 등록 및 재등록
     @PostMapping("/{userId}")
-    public ResponseEntity<MessageUtils> register(@PathVariable("userId") Long userId,
+    public ResponseEntity<MessageUtils> regist(@PathVariable("userId") Long userId,
                                                  @RequestBody MycardRegistRequest registRequest) {
         log.info("[Register Card] : {}", registRequest.toString());
-        mycardService.registerCard(userId, registRequest);
+        mycardService.registCard(userId, registRequest);
         return ResponseEntity.ok().body(MessageUtils.success("명함이 등록되었습니다."));
     }
 

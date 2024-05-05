@@ -21,10 +21,13 @@ public class MycardServiceImpl implements MycardService {
 
     // 내 명함 직접 입력으로 등록
     @Override
-    public void registerCard(Long userId, MycardRegistRequest registRequest) {
+    public void registCard(Long userId, MycardRegistRequest registRequest) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_USER));
-        Optional<Businesscard> myBusinessCard = businesscardRepository.findByUser_userIdAndFrontBack(userId, registRequest.frontBack());
+                .orElseThrow(() -> new GlobalExceptionHandler.UserException(
+                        GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_USER));
+        Optional<Businesscard> myBusinessCard = businesscardRepository.findByUser_userIdAndFrontBack(
+                userId, registRequest.frontBack());
+        // 명함이 존재하지 않으면 신규 등록
         if (myBusinessCard.isEmpty()) {
             businesscardRepository.save(Businesscard.builder()
                     .name(registRequest.name())
@@ -35,11 +38,11 @@ public class MycardServiceImpl implements MycardService {
                     .landlineNumber(registRequest.landlineNumber())
                     .phoneNumber(registRequest.phoneNumber())
                     .realPicture(registRequest.realPicture())
-                    .digitalPicture("digital")
+                    .digitalPicture(registRequest.digitalPicture())
                     .frontBack(registRequest.frontBack())
                     .user(user)
                     .build());
-        } else {
+        } else { // 명함이 존재한다면 재등록
             businesscardRepository.save(Businesscard.builder()
                     .cardId(myBusinessCard.get().getCardId())
                     .name(registRequest.name())
@@ -50,7 +53,7 @@ public class MycardServiceImpl implements MycardService {
                     .landlineNumber(registRequest.landlineNumber())
                     .phoneNumber(registRequest.phoneNumber())
                     .realPicture(registRequest.realPicture())
-                    .digitalPicture("digital")
+                    .digitalPicture(registRequest.digitalPicture())
                     .frontBack(registRequest.frontBack())
                     .user(user)
                     .build());

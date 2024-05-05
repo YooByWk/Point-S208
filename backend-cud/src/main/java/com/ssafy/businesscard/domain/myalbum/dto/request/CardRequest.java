@@ -18,6 +18,7 @@ public record CardRequest(
         String address,
         String realPicture,
         Businesscard.Status frontBack,
-        String domainUrl
+        String domainUrl,
+        String memo
 ) {
 }
