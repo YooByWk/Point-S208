@@ -1,0 +1,84 @@
+version: '3.8'
+
+services:
+  node-exporter:
+    image: prom/node-exporter:v1.1.2
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    deploy:
+      mode: global
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 128M
+    ports:
+      - "9100:9100"
+    networks:
+      - jenkins-network
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.39.3
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    ports:
+      - "9091:8080"
+    container_name: cadvisor
+    restart: always
+    networks:
+      - jenkins-network
+
+  prometheus:
+    image: prom/prometheus:v2.20.1
+    volumes:
+      - /etc/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - /etc/prometheus/alert_rules.yml:/etc/prometheus/alert_rules.yml
+      - /etc/prometheus/alert_rules.yml:/etc/prometheus/alert_read_rules.yml
+      # - /etc/prometheus/alert_rules.yml:/etc/prometheus/alert_cud_rules.yml
+
+    ports:
+      - "9090:9090"
+    networks:
+      - jenkins-network
+
+  prometheus_nginx_exporter:
+    image: nginx/nginx-prometheus-exporter:latest
+    ports:
+      - "9113:9113"  # Nginx exporter가 노출하는 포트
+    networks:
+      - jenkins-network
+    command:
+      - "-nginx.scrape-uri=https://k10s208.p.ssafy.io//basic_status"
+
+  grafana:
+    image: grafana/grafana:latest
+    depends_on:
+      - prometheus
+    ports:
+      - "3000:3000"
+    networks:
+      - jenkins-network
+
+  alertmanager:
+    image: prom/alertmanager:v0.21.0
+    volumes:
+      - /etc/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--web.listen-address=:9093'
+    ports:
+      - '9093:9093'
+    networks:
+      - jenkins-network
+
+networks:
+  jenkins-network:
+    driver: bridge
