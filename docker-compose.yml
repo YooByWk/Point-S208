@@ -26,6 +26,9 @@ services:
       - jenkins-network
 
   autoscale-api:
+    container_name: autoscale-api
+    image: junwon1131/s208-autoscale-api:latest
+
     build: 
       context: ./AutoScale
 
