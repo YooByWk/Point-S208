@@ -47,25 +47,31 @@ pipeline {
             }
         }
 
-       
-stage('Deploy') {
+       stage('Deploy') {
     steps {
         script {
-            // 네트워크 존재 여부 확인
-            def networkExist = sh(script: 'docker network inspect develop-server_default > /dev/null 2>&1; echo $?', returnStdout: true).trim()
+            // 네트워크 이름
+            def networkName = 'develop-server_default'
 
-            // 네트워크가 존재하지 않으면 생성
-            if (networkExist != '0') {
-                sh 'docker network create develop-server_default'
-            } else {
-                echo 'Network already exists. Skipping network creation.'
+            // 네트워크 존재 여부 확인
+            def networkExist = sh(script: "docker network inspect $networkName > /dev/null 2>&1; echo $?", returnStdout: true).trim()
+
+            // 네트워크가 존재하면 제거
+            if (networkExist == '0') {
+                echo "Removing existing network: $networkName"
+                sh "docker network rm $networkName"
             }
+
+            // 새로운 네트워크 생성
+            echo "Creating network: $networkName"
+            sh "docker network create $networkName"
 
             // Docker Swarm으로 스택 배포
             sh 'docker stack deploy -c docker-compose.yml --with-registry-auth develop-server'
         }
     }
 }
+
 
     }
 }
