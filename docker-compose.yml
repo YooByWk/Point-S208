@@ -1,18 +1,7 @@
 version: '3.8'
 
 services:
- 
-  # ocr:
-  #   container_name: ocr
-  #   image: junwon1131/s208-ocr:latest
-  #   build:
-  #     context: ./OCR
-  #     dockerfile: Dockerfile
-  #   restart: unless-stopped
-  #   ports:
-  #     - "8000:8000"
-  #   networks:
-  #     - jenkins-network
+  
  
   ocr:
     image: junwon1131/s208-ocr:latest
@@ -26,7 +15,7 @@ services:
       - jenkins-network
 
   autoscale-api:
-    container_name: autoscale-api
+    # container_name: autoscale-api
     image: junwon1131/s208-autoscale-api:latest
 
     build: 
@@ -39,18 +28,7 @@ services:
       FLASK_ENV: development
     volumes:
       - .:/app
-      
-  # backend-cud:
-  #   container_name: backend-cud
-  #   image: junwon1131/s208-backend-cud:latest
-  #   build:
-  #     context: ./backend-cud
-  #     dockerfile: Dockerfile
-  #   restart: unless-stopped
-  #   ports:
-  #     - "8080:8080"
-  #   networks:
-  #     - jenkins-network
+       
  
  
   backend-cud:
@@ -75,18 +53,7 @@ services:
       - "8082:8080"
     networks:
       - jenkins-network
-
-  # backend-read:
-  #   container_name: backend-read
-  #   image: junwon1131/s208-backend-read:latest
-  #   build:
-  #     context: ./backend-read
-  #     dockerfile: Dockerfile
-  #   restart: unless-stopped
-  #   ports:
-  #     - "8082:8080"
-  #   networks:
-  #     - jenkins-network
+ 
        
 networks:
   jenkins-network:
