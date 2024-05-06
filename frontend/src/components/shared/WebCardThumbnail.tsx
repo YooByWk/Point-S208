@@ -4,15 +4,30 @@ import type { CardType } from '@/types/cardType'
 import Flex from '@shared/Flex'
 import { css } from '@emotion/react'
 import Spacing from '@shared/Spacing'
-import { Checkbox, Image } from '@fluentui/react-components'
+import {
+  Button,
+  Checkbox,
+  Dialog,
+  DialogActions,
+  DialogBody,
+  DialogSurface,
+  DialogTitle,
+  DialogTrigger,
+  Image,
+} from '@fluentui/react-components'
 import {
   Star24Regular,
   Star24Filled,
   ShareAndroid24Filled,
   Delete24Filled,
 } from '@fluentui/react-icons'
-import { useSetRecoilState } from 'recoil'
-import { selectedCardState } from '@stores/card'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { isRefreshedAlbumState, selectedCardState } from '@stores/card'
+import { colors } from '@/styles/colorPalette'
+import { useNavigate } from 'react-router-dom'
+import { useMutation } from '@tanstack/react-query'
+import { deleteMyAlbumCard } from '@/apis/album'
+import { userState } from '@/stores/user'
 
 interface CardThumbnailProps {
   cardInfo: CardType
@@ -28,7 +43,22 @@ const WebCardThumbnail = ({
   const [isfavorite, setIsFavorite] = useState(false)
   const [isChecked, setIsChecked] = useState(false)
   const isSelected = selectedCards.includes(cardInfo.cardId)
+  const navigate = useNavigate()
   const setSelectedCardState = useSetRecoilState(selectedCardState)
+  const [isRefreshed, setIsRefreshed] = useRecoilState(isRefreshedAlbumState)
+  const userId = useRecoilValue(userState).userId
+
+  const { mutate } = useMutation({
+    mutationKey: ['deleteMyAlbumCard'],
+    mutationFn: deleteMyAlbumCard,
+    onSuccess(result) {
+      console.log('삭제 성공', result)
+      setIsRefreshed(!isRefreshed)
+    },
+    onError(error) {
+      console.error('삭제 실패:', error)
+    },
+  })
 
   const handleDetailSelect = () => {
     setIsDetail(true)
@@ -51,14 +81,18 @@ const WebCardThumbnail = ({
   }
 
   const handleDelete = () => {
-    console.log('삭제 : ', cardInfo)
+    mutate({ userId: userId, cardId: cardInfo.cardId })
   }
 
   return (
     <>
       <Flex direction="row" justify="center" align="center" css={content}>
         <div onClick={handleDetailSelect} css={imgContainerStyles}>
-          <Image fit="contain" src={cardInfo.realPicture} alt="card" />
+          <Image
+            fit="contain"
+            src={cardInfo.realPicture}
+            alt={`${cardInfo.name}'s card`}
+          />
         </div>
 
         <Flex direction="column" justify="space-around" align="center">
@@ -76,7 +110,32 @@ const WebCardThumbnail = ({
             <Star24Regular css={i} onClick={handleFavorite} />
           )}
           <ShareAndroid24Filled css={i} onClick={handleShare} />
-          <Delete24Filled css={i} onClick={handleDelete} />
+          <Dialog modalType="alert">
+            <DialogTrigger disableButtonEnhancement>
+              <Delete24Filled />
+            </DialogTrigger>
+            <DialogSurface>
+              <DialogBody>
+                <DialogTitle>명함을 삭제하시겠습니까?</DialogTitle>
+                <DialogActions>
+                  <DialogTrigger disableButtonEnhancement>
+                    <Button
+                      shape="circular"
+                      css={buttonStyles}
+                      onClick={handleDelete}
+                    >
+                      삭제
+                    </Button>
+                  </DialogTrigger>
+                  <DialogTrigger disableButtonEnhancement>
+                    <Button shape="circular" css={buttonStyles2}>
+                      취소
+                    </Button>
+                  </DialogTrigger>
+                </DialogActions>
+              </DialogBody>
+            </DialogSurface>
+          </Dialog>
         </Flex>
       </Flex>
     </>
@@ -103,4 +162,13 @@ const imgContainerStyles = css`
   width: 263px;
   height: 150px;
   border: 1px solid black;
+`
+
+const buttonStyles = css`
+  background-color: #f00;
+  color: white;
+`
+const buttonStyles2 = css`
+  background-color: ${colors.poscoSilver};
+  color: white;
 `

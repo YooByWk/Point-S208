@@ -11,6 +11,7 @@ export interface cardInput {
   address?: string
   domainUrl?: string
   frontBack?: string
+  memo?: string
 }
 
 export type WriteCardType = {
@@ -24,4 +25,15 @@ export type EditCardType = {
 
 export type deleteCardType = {
   userId: number | undefined
+}
+
+export type editAlbumCardType = {
+  userId: number | undefined
+  cardId: number | undefined
+  data: cardInput
+}
+
+export type deleteAlbumCardType = {
+  userId: number | undefined
+  cardId: number | undefined
 }

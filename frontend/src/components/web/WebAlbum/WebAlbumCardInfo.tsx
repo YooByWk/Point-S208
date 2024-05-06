@@ -102,7 +102,15 @@ const WebAlbumCardInfo = () => {
             <Flex>
               <Text typography="t6">웹사이트</Text>
               <Spacing size={20} direction="horizontal" />
-              <Text typography="t6">{selectedCard.domainUrl}</Text>
+              <Text typography="t6">
+                <a
+                  href={`https://${selectedCard.domainUrl}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {selectedCard.domainUrl}
+                </a>
+              </Text>
             </Flex>
           )}
           {selectedCard.address && (

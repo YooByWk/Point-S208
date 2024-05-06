@@ -12,6 +12,8 @@ import Text from '@shared/Text'
 import Spacing from '@shared/Spacing'
 import AddCard from '@components/mobile/MyAlbum/AddCard'
 import WebCardThumbnail from '@/components/shared/WebCardThumbnail'
+import { isRefreshedAlbumState } from '@/stores/card'
+import { CardType } from '@/types/cardType'
 
 const WebMyAlbumList = ({
   selectedCards,
@@ -21,8 +23,10 @@ const WebMyAlbumList = ({
   setIsDetail: (isDetail: boolean) => void
 }) => {
   const userId = useRecoilValue(userState).userId
+  const isRefreshed = useRecoilValue(isRefreshedAlbumState)
+  const [cards, setCards] = useState<CardType[]>([])
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
     useInfiniteQuery({
       queryKey: ['fetchMyAlbum'],
       queryFn: ({ pageParam = 0 }) => fetchMyAlbum(userId as number, pageParam),
@@ -34,7 +38,16 @@ const WebMyAlbumList = ({
       initialPageParam: 0,
     })
 
-  const cards = data?.pages.flatMap(page => page) || []
+  useEffect(() => {
+    if (data) {
+      setCards(data.pages.flatMap(page => page) || [])
+    }
+  }, [data])
+
+  useEffect(() => {
+    console.log('refetch data')
+    refetch()
+  }, [isRefreshed, refetch])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -50,7 +63,7 @@ const WebMyAlbumList = ({
 
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [fetchNextPage, hasNextPage, data])
+  }, [fetchNextPage, hasNextPage, data, isRefreshed])
 
   const [isAddCard, setIsAddCard] = useState(false)
 
