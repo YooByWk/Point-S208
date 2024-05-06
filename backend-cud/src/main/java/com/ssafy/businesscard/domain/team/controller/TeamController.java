@@ -1,5 +1,6 @@
 package com.ssafy.businesscard.domain.team.controller;
 
+import com.ssafy.businesscard.domain.card.dto.request.CardRequest;
 import com.ssafy.businesscard.domain.team.dto.request.TeamAlbumRegistRequest;
 import com.ssafy.businesscard.domain.team.service.TeamService;
 import com.ssafy.businesscard.global.utils.MessageUtils;
@@ -41,6 +42,15 @@ public class TeamController {
                                     @PathVariable("teamId") Long teamId) {
         String result = teamService.delete(userId, teamId);
         log.info("[Delete Team] : {}", result);
+        return ResponseEntity.ok().body(MessageUtils.success(result));
+    }
+
+    // 팀 명함지갑에 명함 등록
+    @PostMapping("/{teamAlbumId}")
+    public ResponseEntity<?> registCard(@PathVariable("teamAlbumId") Long teamAlbumId,
+                                        @RequestBody CardRequest request) {
+        String result = teamService.registCard(teamAlbumId, request);
+        log.info("[Regist Card] : {}", request);
         return ResponseEntity.ok().body(MessageUtils.success(result));
     }
 

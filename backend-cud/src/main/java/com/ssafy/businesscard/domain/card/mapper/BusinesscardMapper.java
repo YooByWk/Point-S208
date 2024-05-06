@@ -1,11 +1,11 @@
-package com.ssafy.businesscard.domain.myalbum.mapper;
+package com.ssafy.businesscard.domain.card.mapper;
 
 import com.ssafy.businesscard.domain.card.entity.Businesscard;
 import com.ssafy.businesscard.domain.card.dto.request.CardRequest;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface PrivateAlbumMapper {
+public interface BusinesscardMapper {
 
     Businesscard toEntity(CardRequest cardRequest);
 

@@ -9,7 +9,7 @@ import com.ssafy.businesscard.domain.card.dto.request.MemoRequest;
 import com.ssafy.businesscard.domain.myalbum.dto.request.PrivateAlbumRequest;
 import com.ssafy.businesscard.domain.myalbum.entity.PrivateAlbum;
 import com.ssafy.businesscard.domain.myalbum.entity.PrivateAlbumMember;
-import com.ssafy.businesscard.domain.myalbum.mapper.PrivateAlbumMapper;
+import com.ssafy.businesscard.domain.card.mapper.BusinesscardMapper;
 import com.ssafy.businesscard.domain.myalbum.repository.PrivateAlbumFilterRepository;
 import com.ssafy.businesscard.domain.myalbum.repository.PrivateAlbumMemberRepository;
 import com.ssafy.businesscard.domain.myalbum.repository.privateAlbum.PrivateAlbumRepository;
@@ -32,7 +32,7 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
 
     private final UserRepository userRepository;
     private final BusinesscardRepository businesscardRepository;
-    private final PrivateAlbumMapper privateAlbumMapper;
+    private final BusinesscardMapper businesscardMapper;
     private final PrivateAlbumFilterRepository privateAlbumFilterRepository;
     private final PrivateAlbumRepository privateAlbumRepository;
     private final PrivateAlbumMemberRepository privateAlbumMemberRepository;
@@ -45,7 +45,7 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
                 GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_USER
         ));
 
-        Businesscard businesscard = privateAlbumMapper.toEntity(request);
+        Businesscard businesscard = businesscardMapper.toEntity(request);
 
         if (isCardExist(userId, businesscard) ) {
             return "이미 등록된 명함입니다.";
@@ -78,7 +78,7 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
                 .businesscard(request.businesscard())
                 .favorite(request.favorite())
                 .build());
-        return "등록 성공";
+        return "명함이 등록되었습니다.";
 
     }
 
