@@ -25,4 +25,14 @@ public class TeamFilterController {
         log.info("[Create Filter] : {}", request.filterName());
         return ResponseEntity.ok().body(MessageUtils.success("필터가 생성되었습니다."));
     }
+
+    // 필터 이름 편집
+    @PatchMapping("/{teamId}/filter/{filterId}")
+    public ResponseEntity<MessageUtils> update(@PathVariable("teamId") Long teamAlbumId,
+                                               @PathVariable("filterId") Long filterId,
+                                               @RequestBody FilterRequest request) {
+        teamFilterService.update(teamAlbumId, filterId, request);
+        log.info("[Update Filter] : {}", request);
+        return ResponseEntity.ok().body(MessageUtils.success("필터가 수정되었습니다."));
+    }
 }

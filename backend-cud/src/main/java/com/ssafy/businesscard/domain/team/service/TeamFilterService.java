@@ -4,4 +4,6 @@ import com.ssafy.businesscard.domain.card.dto.request.FilterRequest;
 
 public interface TeamFilterService {
     void create(Long teamAlbumId, FilterRequest request);
+
+    void update(Long teamAlbumId, Long filterId, FilterRequest request);
 }

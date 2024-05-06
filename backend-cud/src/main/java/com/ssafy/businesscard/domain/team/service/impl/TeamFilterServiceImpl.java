@@ -51,4 +51,13 @@ public class TeamFilterServiceImpl implements TeamFilterService {
                 .teamAlbum(teamAlbum)
                 .build());
     }
+
+    // 필터 이름 편집
+    @Override
+    public void update(Long teamAlbumId, Long filterId, FilterRequest request) {
+        teamAlbumFilterRepository.save(Filter.builder()
+                .filterId(filterId)
+                .filterName(request.filterName())
+                .build());
+    }
 }
