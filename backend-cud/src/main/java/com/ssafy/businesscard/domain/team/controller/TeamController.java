@@ -54,4 +54,13 @@ public class TeamController {
         return ResponseEntity.ok().body(MessageUtils.success(result));
     }
 
+    // 팀 명함지갑에 등록된 명함 수정
+    @PatchMapping("/{teamId}/card/{cardId}")
+    public ResponseEntity<MessageUtils> updateCard(@PathVariable("teamId") Long teamAlbumId,
+                                        @PathVariable("cardId") Long cardId,
+                                        @RequestBody CardRequest request) {
+        teamService.updateCard(teamAlbumId, cardId, request);
+        log.info("[Update Card] : {}", request);
+        return ResponseEntity.ok().body(MessageUtils.success("명함이 수정되었습니다."));
+    }
 }

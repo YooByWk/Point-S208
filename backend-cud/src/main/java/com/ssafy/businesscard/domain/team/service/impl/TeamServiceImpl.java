@@ -59,17 +59,6 @@ public class TeamServiceImpl implements TeamService {
         }
     }
 
-
-    // 팀 명함지갑 생성시 그룹상세에 등록
-    private String addTeamAlbumDetail(TeamAlbumDetailRequest teamAlbumDetailRequest) {
-        teamAlbumDetailRepository.save(TeamAlbumDetail.builder()
-                .teamAlbum(teamAlbumDetailRequest.teamAlbum())
-                .businesscard(teamAlbumDetailRequest.businesscard())
-                .memo(teamAlbumDetailRequest.memo())
-                .build());
-        return "okay";
-    }
-
     // 팀 명함지갑 생성시 팀 구성원에 등록
     private String addTeamMember(TeamMemberRequest teamMemberRequest) {
         teamMemberRepository.save(TeamMember.builder()
@@ -146,6 +135,7 @@ public class TeamServiceImpl implements TeamService {
 
     }
 
+
     // 명함 중복 검사
     private boolean isCardExist(Long teamAlbumId, Businesscard businesscard) {
         List<TeamAlbumDetail> teamAlbumDetailList = teamAlbumDetailRepository.findAllByTeamAlbum_teamAlbumId(teamAlbumId);
@@ -166,6 +156,29 @@ public class TeamServiceImpl implements TeamService {
                 .memo(request.memo())
                 .build());
         return "명함이 등록되었습니다.";
+    }
+
+    // 팀 명함지갑에 명함 수정
+    @Override
+    public void updateCard(Long teamAlbumId, Long cardId, CardRequest request) {
+        TeamAlbumDetail teamAlbumDetail = teamAlbumDetailRepository.findByTeamAlbum_teamAlbumIdAndBusinesscard_CardId(
+                teamAlbumId, cardId);
+        businesscardRepository.save(Businesscard.builder()
+                .cardId(teamAlbumDetail.getBusinesscard().getCardId())
+                .name(request.name())
+                .company(request.company())
+                .position(request.position())
+                .rank(request.rank())
+                .department(request.department())
+                .email(request.email())
+                .landlineNumber(request.landlineNumber())
+                .faxNumber(request.faxNumber())
+                .phoneNumber(request.phoneNumber())
+                .address(request.address())
+                .realPicture(request.realPicture())
+                .frontBack(request.frontBack())
+                .domainUrl(request.domainUrl())
+                .build());
     }
 
     private User findUser(Long userId) {
