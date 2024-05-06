@@ -46,15 +46,14 @@ pipeline {
                 }
             }
         }
-
-       stage('Deploy') {
+stage('Deploy') {
     steps {
         script {
             // 네트워크 이름
             def networkName = 'develop-server_default'
 
             // 네트워크 존재 여부 확인
-            def networkExist = sh(script: "docker network inspect $networkName > /dev/null 2>&1; echo $?", returnStdout: true).trim()
+            def networkExist = sh(script: "docker network inspect $networkName > /dev/null 2>&1; echo \$?", returnStdout: true).trim()
 
             // 네트워크가 존재하면 제거
             if (networkExist == '0') {
@@ -71,6 +70,7 @@ pipeline {
         }
     }
 }
+
 
 
     }
