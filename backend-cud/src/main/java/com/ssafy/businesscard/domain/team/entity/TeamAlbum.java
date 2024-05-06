@@ -33,4 +33,5 @@ public class TeamAlbum {
 
     @OneToMany(mappedBy = "teamAlbum", cascade = CascadeType.ALL)
     private List<TeamMember> teamMembers;
+
 }

@@ -12,8 +12,8 @@ import com.ssafy.businesscard.domain.team.entity.TeamAlbumDetail;
 import com.ssafy.businesscard.domain.team.entity.TeamMember;
 import com.ssafy.businesscard.domain.team.repository.TeamAlbumDetailRepository;
 import com.ssafy.businesscard.domain.team.repository.TeamMemberRepository;
-import com.ssafy.businesscard.domain.team.repository.TeamRepository;
-import com.ssafy.businesscard.domain.team.service.TeamService;
+import com.ssafy.businesscard.domain.team.repository.TeamAlbumRepository;
+import com.ssafy.businesscard.domain.team.service.TeamAlbumService;
 import com.ssafy.businesscard.domain.user.entity.User;
 import com.ssafy.businesscard.domain.user.repository.UserRepository;
 import com.ssafy.businesscard.global.exception.GlobalExceptionHandler;
@@ -27,10 +27,10 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class TeamServiceImpl implements TeamService {
+public class TeamAlbumServiceImpl implements TeamAlbumService {
 
     private final UserRepository userRepository;
-    private final TeamRepository teamRepository;
+    private final TeamAlbumRepository teamAlbumRepository;
     private final BusinesscardMapper businesscardMapper;
     private final BusinesscardRepository businesscardRepository;
     private final TeamAlbumDetailRepository teamAlbumDetailRepository;
@@ -41,9 +41,9 @@ public class TeamServiceImpl implements TeamService {
     @Transactional
     public String create(Long userId, TeamAlbumRegistRequest teamAlbumRegistRequest) {
         User user = findUser(userId);
-        TeamAlbum checkTeamAlbum = teamRepository.findByUser_userIdAndTeamName(userId, teamAlbumRegistRequest.teamName());
+        TeamAlbum checkTeamAlbum = teamAlbumRepository.findByUser_userIdAndTeamName(userId, teamAlbumRegistRequest.teamName());
         if (checkTeamAlbum == null) {
-            TeamAlbum teamAlbum = teamRepository.save(TeamAlbum.builder()
+            TeamAlbum teamAlbum = teamAlbumRepository.save(TeamAlbum.builder()
                     .teamName(teamAlbumRegistRequest.teamName())
                     .user(user)
                     .build());
@@ -85,7 +85,7 @@ public class TeamServiceImpl implements TeamService {
         TeamAlbum teamAlbum = findTeam(teamId);
 
         if (teamAlbum.getUser().equals(user)) {
-            teamRepository.save(TeamAlbum.builder()
+            teamAlbumRepository.save(TeamAlbum.builder()
                     .teamAlbumId(teamAlbum.getTeamAlbumId())
                     .teamName(teamAlbumRegistRequest.teamName())
                     .user(user)
@@ -104,7 +104,7 @@ public class TeamServiceImpl implements TeamService {
         User user = findUser(userId);
         TeamAlbum teamAlbum = findTeam(teamId);
         if (teamAlbum.getUser().equals(user)) {
-            teamRepository.delete(teamAlbum);
+            teamAlbumRepository.delete(teamAlbum);
             return "팀 명함지갑이 삭제되었습니다.";
         } else {
             return "Owner가 아닙니다.";
@@ -115,7 +115,7 @@ public class TeamServiceImpl implements TeamService {
     @Override
     @Transactional
     public String registCard(Long teamAlbumId, CardRequest request) {
-        TeamAlbum teamAlbum = teamRepository.findById(teamAlbumId)
+        TeamAlbum teamAlbum = teamAlbumRepository.findById(teamAlbumId)
                 .orElseThrow(() -> new GlobalExceptionHandler.UserException(
                         GlobalExceptionHandler.UserErrorCode.NOT_EXITSTS_TEAM
                 ));
@@ -198,7 +198,7 @@ public class TeamServiceImpl implements TeamService {
     }
 
     private TeamAlbum findTeam(Long teamId) {
-        TeamAlbum teamAlbum = teamRepository.findById(teamId).orElseThrow(() -> new GlobalExceptionHandler.UserException(
+        TeamAlbum teamAlbum = teamAlbumRepository.findById(teamId).orElseThrow(() -> new GlobalExceptionHandler.UserException(
                 GlobalExceptionHandler.UserErrorCode.NOT_EXITSTS_TEAM
         ));
         return teamAlbum;

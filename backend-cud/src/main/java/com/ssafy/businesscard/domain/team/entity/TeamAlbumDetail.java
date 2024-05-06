@@ -4,6 +4,9 @@ import com.ssafy.businesscard.domain.card.entity.Businesscard;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Builder
@@ -27,5 +30,8 @@ public class TeamAlbumDetail {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "card_id")
     private Businesscard businesscard;
+
+    @OneToMany(mappedBy = "teamAlbumDetail", cascade = CascadeType.ALL)
+    List<TeamAlbumMember> teamAlbumMemberList = new ArrayList<>();
 
 }

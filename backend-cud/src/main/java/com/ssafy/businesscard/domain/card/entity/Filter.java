@@ -1,6 +1,7 @@
 package com.ssafy.businesscard.domain.card.entity;
 
 import com.ssafy.businesscard.domain.myalbum.entity.PrivateAlbumMember;
+import com.ssafy.businesscard.domain.team.entity.TeamAlbumMember;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,4 +27,6 @@ public class Filter {
     @OneToMany(mappedBy = "filter", cascade = CascadeType.ALL)
     private List<PrivateAlbumMember> privateAlbumMemberList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "filter", cascade = CascadeType.ALL)
+    private List<TeamAlbumMember> teamAlbumMemberList = new ArrayList<>();
 }

@@ -2,6 +2,7 @@ package com.ssafy.businesscard.domain.myalbum.service.impl;
 
 import com.ssafy.businesscard.domain.card.dto.request.FilterRequest;
 import com.ssafy.businesscard.domain.card.entity.Filter;
+import com.ssafy.businesscard.domain.card.mapper.FilterMapper;
 import com.ssafy.businesscard.global.exception.GlobalExceptionHandler;
 import com.ssafy.businesscard.domain.myalbum.entity.PrivateAlbumMember;
 import com.ssafy.businesscard.domain.myalbum.repository.PrivateAlbumFilterRepository;
@@ -19,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class PrivateAlbumFilterServiceImpl implements PrivateAlbumFilterService {
 
     private final UserRepository userRepository;
-    private final PrivateAlbumRepository privateAlbumRepository;
     private final PrivateAlbumFilterRepository privateAlbumFilterRepository;
     private final PrivateAlbumMemberRepository privateAlbumMemberRepository;
 
