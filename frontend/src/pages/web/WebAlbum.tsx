@@ -25,9 +25,10 @@ const WebAlbum = () => {
 
     return (
       <>
-        <WebAlbumTopBar />
+        <WebAlbumTopBar selectedCards={selectedCards} />
         <WebMyAlbumList
           selectedCards={selectedCards}
+          setSelectedCards={setSelectedCards}
           setIsDetail={setIsDetail}
         />
       </>

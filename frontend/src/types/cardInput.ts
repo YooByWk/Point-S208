@@ -37,3 +37,9 @@ export type deleteAlbumCardType = {
   userId: number | undefined
   cardId: number | undefined
 }
+
+export type editMemoType = {
+  userId: number | undefined
+  cardId: number | undefined
+  data: { memo: string }
+}

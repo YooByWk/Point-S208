@@ -17,9 +17,11 @@ import { CardType } from '@/types/cardType'
 
 const WebMyAlbumList = ({
   selectedCards,
+  setSelectedCards,
   setIsDetail,
 }: {
   selectedCards: number[]
+  setSelectedCards: React.Dispatch<React.SetStateAction<number[]>>
   setIsDetail: (isDetail: boolean) => void
 }) => {
   const userId = useRecoilValue(userState).userId
@@ -68,7 +70,15 @@ const WebMyAlbumList = ({
   const [isAddCard, setIsAddCard] = useState(false)
 
   const handleAdd = () => {
-    setIsAddCard(!isAddCard)
+    console.log('이미지로 명함 추가')
+  }
+
+  const handleCardSelect = (cardId: number) => {
+    setSelectedCards(prev =>
+      prev.includes(cardId)
+        ? prev.filter(id => id !== cardId)
+        : [...prev, cardId],
+    )
   }
 
   return (
@@ -86,16 +96,13 @@ const WebMyAlbumList = ({
                       key={card.cardId}
                       selectedCards={[]}
                       setIsDetail={setIsDetail}
+                      onSelect={handleCardSelect}
                     />
                   )
                 })}
             </div>
             <div css={buttonCss}>
-              {selectedCards.length > 0 ? (
-                <LargeButton text="명함 공유" width="80%" onClick={() => {}} />
-              ) : (
-                <LargeButton text="명함 추가" width="80%" onClick={handleAdd} />
-              )}
+              <LargeButton text="명함 추가" width="80%" onClick={handleAdd} />
             </div>
           </>
         ) : (

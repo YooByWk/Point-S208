@@ -24,7 +24,6 @@ import {
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { isRefreshedAlbumState, selectedCardState } from '@stores/card'
 import { colors } from '@/styles/colorPalette'
-import { useNavigate } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
 import { deleteMyAlbumCard } from '@/apis/album'
 import { userState } from '@/stores/user'
@@ -33,17 +32,18 @@ interface CardThumbnailProps {
   cardInfo: CardType
   selectedCards: number[]
   setIsDetail: (isDetail: boolean) => void
+  onSelect: (cardId: number) => void
 }
 
 const WebCardThumbnail = ({
   cardInfo,
   selectedCards,
   setIsDetail,
+  onSelect,
 }: CardThumbnailProps) => {
   const [isfavorite, setIsFavorite] = useState(false)
   const [isChecked, setIsChecked] = useState(false)
   const isSelected = selectedCards.includes(cardInfo.cardId)
-  const navigate = useNavigate()
   const setSelectedCardState = useSetRecoilState(selectedCardState)
   const [isRefreshed, setIsRefreshed] = useRecoilState(isRefreshedAlbumState)
   const userId = useRecoilValue(userState).userId
@@ -67,7 +67,7 @@ const WebCardThumbnail = ({
 
   const handleCheck = () => {
     setIsChecked(!isChecked)
-    // onSelect(cardInfo.cardId)
+    onSelect(cardInfo.cardId)
   }
 
   const handleFavorite = () => {
@@ -86,7 +86,7 @@ const WebCardThumbnail = ({
 
   return (
     <>
-      <Flex direction="row" justify="center" align="center" css={content}>
+      <Flex justify="center" align="center" css={content}>
         <div onClick={handleDetailSelect} css={imgContainerStyles}>
           <Image
             fit="contain"

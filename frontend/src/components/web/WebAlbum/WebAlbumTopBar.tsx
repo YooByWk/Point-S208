@@ -13,13 +13,12 @@ import {
   SearchBox,
   TabList,
   Tab,
-  TabListProps,
   Button,
 } from '@fluentui/react-components'
 import Spacing from '@/components/shared/Spacing'
 import { colors } from '@/styles/colorPalette'
 
-const WebAlbumTopBar = (props: Partial<TabListProps>) => {
+const WebAlbumTopBar = ({ selectedCards }: { selectedCards: number[] }) => {
   return (
     <>
       <Flex direction="column" css={boxStyles}>
@@ -27,13 +26,13 @@ const WebAlbumTopBar = (props: Partial<TabListProps>) => {
           <SearchBox appearance="underline" placeholder="명함 검색" />
           <Flex align="center">
             <ArrowSort24Filled css={iconStyles} />
-            <TabList {...props} defaultSelectedValue="newly">
+            <TabList defaultSelectedValue="newly">
               <Tab value="newly">최신순</Tab>
               <Tab value="name">이름순</Tab>
               <Tab value="company">회사명순</Tab>
             </TabList>
             <Filter24Filled css={iconStyles} />
-            <TabList {...props} defaultSelectedValue="none">
+            <TabList defaultSelectedValue="none">
               <Tab value="none">필터 없음</Tab>
               <Tab value="stared">즐겨찾기 한 명함</Tab>
               <Tab value="received">받은 명함</Tab>
@@ -46,7 +45,7 @@ const WebAlbumTopBar = (props: Partial<TabListProps>) => {
           <Flex align="center">
             <Checkbox shape="circular" label="" />
             <Text typography="t9" color="themeMainBlue">
-              0개 선택됨
+              {selectedCards.length}개 선택됨
             </Text>
             <Button appearance="transparent" size="small" css={buttonStyles}>
               <ArrowDownload24Filled />

@@ -5,15 +5,28 @@ import Spacing from '@shared/Spacing'
 import Text from '@shared/Text'
 import { useEffect, useRef, useState } from 'react'
 import { colors } from '@/styles/colorPalette'
-import InfoEdit from '../../mobile/MyCard/MyCardDetail/InfoEdit'
 import WebAlbumCardInfo from './WebAlbumCardInfo'
 import WebAlbumDetailTopBar from './WebAlbumDetailTopBar'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { selectedCardState } from '@/stores/card'
-import { tokens } from '@fluentui/react-components'
-import TextButton from '@/components/shared/TextButton'
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogBody,
+  DialogContent,
+  DialogSurface,
+  DialogTrigger,
+  Field,
+  Textarea,
+  TextareaProps,
+  tokens,
+} from '@fluentui/react-components'
 
 import { Edit16Filled } from '@fluentui/react-icons'
+import { useMutation } from '@tanstack/react-query'
+import { editMyAlbumMemo } from '@/apis/album'
+import { userState } from '@/stores/user'
 
 declare global {
   interface Window {
@@ -36,13 +49,15 @@ const WebAlbumDetail = ({
   editOpen: boolean
   setEditOpen: (isDetail: boolean) => void
 }) => {
-  const selectedCard = useRecoilValue(selectedCardState)
+  const [selectedCard, setSelectedCard] = useRecoilState(selectedCardState)
   const mapContainer = useRef(null)
   const [positionArr, setPositionArr] = useState<LatLng>({
     y: 37.3891408885668,
     x: 126.644442676851,
     loc: '포스코인터네셔널 송도본사',
   })
+  const [editMemo, setEditMemo] = useState(selectedCard.memo)
+  const userId = useRecoilValue(userState).userId as number
 
   useEffect(() => {
     const script = document.createElement('script')
@@ -111,6 +126,36 @@ const WebAlbumDetail = ({
     }
   }, [selectedCard.address])
 
+  const { mutate } = useMutation({
+    mutationKey: ['editMyAlbumMemo'],
+    mutationFn: editMyAlbumMemo,
+    onSuccess(result) {
+      console.log('수정 성공', result)
+    },
+    onError(error) {
+      console.error('수정 실패:', error)
+    },
+  })
+
+  const handleSubmit = (ev: React.FormEvent) => {
+    ev.preventDefault()
+
+    let params = {
+      userId: userId,
+      cardId: selectedCard.cardId,
+      data: {
+        memo: editMemo,
+      },
+    }
+    mutate(params)
+
+    setSelectedCard(prev => ({ ...prev, memo: editMemo }))
+  }
+
+  const onChange: TextareaProps['onChange'] = (ev, data) => {
+    setEditMemo(data.value)
+  }
+
   return (
     <>
       <Flex justify="center">
@@ -139,13 +184,46 @@ const WebAlbumDetail = ({
             <Spacing size={20} />
             <Flex justify="space-between">
               <Text typography="t6">메모</Text>
-              <TextButton
-                onClick={() => {
-                  // TODO: 메모 수정 로직
-                }}
-              >
-                <Edit16Filled /> 수정
-              </TextButton>
+
+              <Dialog modalType="non-modal">
+                <DialogTrigger disableButtonEnhancement>
+                  <Button shape="circular">
+                    <Text typography="t7">
+                      <Edit16Filled /> 수정
+                    </Text>
+                  </Button>
+                </DialogTrigger>
+                <DialogSurface aria-describedby={undefined}>
+                  <form onSubmit={handleSubmit}>
+                    <DialogBody>
+                      <DialogContent>
+                        <Field label="메모 수정">
+                          <Textarea
+                            appearance="outline"
+                            onChange={onChange}
+                            value={editMemo}
+                            resize="both"
+                          />
+                        </Field>
+                      </DialogContent>
+                      <DialogActions>
+                        <DialogTrigger disableButtonEnhancement>
+                          <Button appearance="secondary" shape="circular">
+                            취소
+                          </Button>
+                        </DialogTrigger>
+                        <Button
+                          type="submit"
+                          appearance="primary"
+                          shape="circular"
+                        >
+                          수정
+                        </Button>
+                      </DialogActions>
+                    </DialogBody>
+                  </form>
+                </DialogSurface>
+              </Dialog>
             </Flex>
 
             <div css={memoBoxStyles}>
