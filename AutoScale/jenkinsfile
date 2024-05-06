@@ -47,7 +47,7 @@ pipeline {
                             def var = entry.key
                             sh "docker-compose -f docker-compose.yml -p develop-server build ${var.toLowerCase()}"
                             sh "docker tag develop-server_${var.toLowerCase()} $DOCKER_USER_ID/${var.toLowerCase()}:latest"
-                            sh "docker push $DOCKER_USER_ID/${var.toLowerCase()}:latest"
+                            sh "docker push ${var.toLowerCase()}:latest"
                         }
                     }
                 }
