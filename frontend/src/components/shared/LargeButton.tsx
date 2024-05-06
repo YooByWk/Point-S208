@@ -6,6 +6,7 @@ import { CSSProperties } from 'react'
 import Text from '@/components/shared/Text'
 import { css } from '@emotion/react'
 import Flex from './Flex'
+import { Typography, typographyMap } from '@styles/typography'
 interface ButtonProps {
   text: string
   onClick?: () => void
@@ -13,6 +14,7 @@ interface ButtonProps {
   height?:   string
   disabled?: boolean
   secondary?: boolean
+  typography?: Typography
 }
 /**
  * @param 
@@ -32,7 +34,8 @@ const LargeButton: React.FC<ButtonProps> = ({
   width,
   height,
   disabled,
-  secondary
+  secondary,
+  typography='t6'
 }) => {
   return (
     <Flex  justify='center' css={searchBoxContainerCss} >
@@ -47,6 +50,7 @@ const LargeButton: React.FC<ButtonProps> = ({
           bold={false}
           textAlign="center"
           style={{ color: colors.white }}
+          typography={typography}
         >
           {text}
         </Text>

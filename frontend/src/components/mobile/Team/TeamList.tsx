@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import { dummyTeamList } from '@/assets/data/dummyTeamList'
 import Spacing from '@/components/shared/Spacing'
 import TeamCard from '@/components/mobile/Team/TeamCard'
 import SearchBox from '@/components/shared/SearchBox'
@@ -10,7 +9,7 @@ import { css } from '@emotion/react'
 import LargeButton from '@/components/shared/LargeButton'
 import AddTeam from '@/components/mobile/Team/AddTeam'
 import { Spinner, tokens } from '@fluentui/react-components';
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { fetchTeamList } from '@/apis/team'
 import { userState } from '@/stores/user'
@@ -26,7 +25,7 @@ const TeamList = () => {
     teamState.selectedTeamAlbumIdState,
   )
   const navigate = useNavigate()
-  const userId = useRecoilValue(userState).userId
+  // const userId = useRecoilValue(userState).userId
   // 원본
   // const {data,isLoading} = useQuery({
   //   queryKey: ['fetchTeamList', userId],

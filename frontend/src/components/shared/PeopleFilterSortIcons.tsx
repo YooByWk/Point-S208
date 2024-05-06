@@ -5,11 +5,10 @@ import {
   ArrowSort28Regular,
 } from '@fluentui/react-icons'
 import Flex from '@shared/Flex'
-import { useNavigate } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 import { isLookingMemberState } from '@/stores/team'
-import { tokens } from '@fluentui/react-components'
-import { colors } from '@/styles/colorPalette'
+import FilterIconModal from '@/components/mobile/MyAlbum/Filter/FilterIconModal'
+
 
 interface PeopleFilterSortIconsProps {
   memberIcon?: boolean
@@ -41,11 +40,18 @@ const PeopleFilterSortIcons:React.FC<PeopleFilterSortIconsProps> = (
           console.log('isLookingMember: ', isLookingMember);
         }}
       />: null}
-      {filterIcon? <Filter32Regular
-        onClick={() => {
-          console.log('필터')
-        }}
-      />: null}
+      
+      
+      {filterIcon? 
+      <FilterIconModal 
+      icon={<Filter32Regular/>}
+      dialogTitle='명함 필터'
+      
+      />
+
+      
+      : 
+      null}
       {sortIcon ?<ArrowSort28Regular
         onClick={() => {
           console.log('정렬')

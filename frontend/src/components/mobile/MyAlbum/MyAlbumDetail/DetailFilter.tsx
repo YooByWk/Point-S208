@@ -1,0 +1,102 @@
+/** @jsxImportSource @emotion/react */
+
+import { FilterListType, FilterType } from '@/types/FilterType'
+import { css } from '@emotion/react'
+// import { useQuery } from '@tanstack/react-query'
+// import  { useState } from 'react'
+import Flex from '@shared/Flex'
+import { tokens } from '@fluentui/react-components'
+import { Dismiss16Filled } from '@fluentui/react-icons'
+import { colors } from '@/styles/colorPalette'
+import DetailAddFilterModal from '@/components/mobile/MyAlbum/MyAlbumDetail/DetailAddFilterModal'
+
+const DetailFilter = ({cardId}:{cardId: number}) => {
+  // const [tags, setTags] = useState<string[]>([])
+  // 필터 정보 불러오는 곳 - useQuery 사용 : 수정하기
+
+  // 우선 더미 데이터로 대체
+  const dummyData: FilterListType = [
+    {
+      filterId: 1,
+      filterName: 'Filter 1asdasdasdasd',
+    },
+    {
+      filterId: 2,
+      filterName: 'Filter 2',
+    },
+    {
+      filterId: 3,
+      filterName: 'Filter 3',
+    },
+  ]
+
+  // 필터 추가하는 곳 - useMutation 사용
+
+  return (
+    <Flex direction="column" align="center">
+      <Flex justify="flex-start" align="center" css={container}>
+        {dummyData.map((filter: FilterType, index: number) => {
+          return (
+            <Flex
+              align="center"
+              key={index}
+              css={tagStyle}
+              justify="space-between"
+            >
+              <Dismiss16Filled
+                css={iconCss}
+                onClick={() => console.log('이 명함에서 필터 제거 : 수정하기')}
+              />
+              {filter.filterName}
+            </Flex>
+          )
+        })}
+        <div css={addIconCss}>
+          <DetailAddFilterModal
+          icon={<Dismiss16Filled/>}
+            cardId={cardId}
+            onClick={() => {
+              console.log('필터 목록 보여주기: 수정하기')
+            }}
+            dialogContent="필터 추가하기 : 수정"
+            dialogTitle="명함에 태그 추가하기"
+
+          />
+        </div>
+      </Flex>
+    </Flex>
+  )
+}
+
+export default DetailFilter
+
+const container = css`
+  /* margin-bottom: 5vh; */
+  background-color: ${tokens.colorNeutralBackground2};
+  height: fit-content;
+  border-radius: 10px;
+  margin: 5%;
+  width: 95vw;
+`
+const addIconCss = css`
+  margin-left: 2.5vw;
+  border-radius: 100%;
+  background-color: ${tokens.colorNeutralBackground3Selected};
+  color: ${colors.themeText};
+`
+const iconCss = css`
+  min-width: 16px;
+`
+const tagStyle = css`
+  background-color: ${tokens.colorNeutralBackground3Selected};
+  color: ${colors.themeText};
+  margin: 5px;
+  padding: 5px;
+  border: 0.5px solid ${tokens.colorNeutralBackground3Hover};
+  border-radius: 15px;
+  width: 10ch;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: center;
+`

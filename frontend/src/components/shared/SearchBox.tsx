@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
-import { Field, tokens, SearchBox as FluentSearchBox } from '@fluentui/react-components'
+import {  tokens, SearchBox as FluentSearchBox } from '@fluentui/react-components'
 import { css } from '@emotion/react'
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 
 import Flex from './Flex'
 import PeopleFilterSortIcons from './PeopleFilterSortIcons';

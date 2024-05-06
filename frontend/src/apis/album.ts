@@ -1,3 +1,4 @@
+import { CreateFilterType } from '@/types/FilterType'
 import {
   deleteAlbumCardType,
   editAlbumCardType,
@@ -53,4 +54,50 @@ export const deleteMyAlbumCard = async (params: deleteAlbumCardType) => {
     .delete(`${CudUrl}/${params.userId}/${params.cardId}`)
     .then(res => res.data)
     .catch(err => console.log(err))
+}
+
+
+export const fetchFilter = async (userId: number) => {
+  return authRequest
+  .get(`${ReadUrl}/${userId}/filter`)
+  .then(res => res.data)
+  .catch(err => console.log(err))
+}
+
+export const createFilter = async (params:CreateFilterType) => {
+  return authRequest
+  .post(`${CudUrl}/${params.userId}/filter`, {filterName: params.filterName})
+  .then(res => res.data)
+  .catch(err => console.log(err))
+}
+
+//
+export const fetchCardByFilter = async (userId: number, filterId: number) => {
+  return authRequest
+  .get(`${ReadUrl}/${userId}/filter/${filterId}`)
+  .then(res => res.data)
+  .catch(err => console.log(err))
+}
+
+// 내 명함지갑 중 한개 명함이 가지고있는 필터는 어떻게?
+
+export const addFilterToCard = async (userId: number, cardId: number, filterId: number) => {
+  return authRequest
+  .post(`${CudUrl}/${userId}/${cardId}` , {params: {filterId}})
+  .then(res => res.data)
+  .catch(err => console.log(err))
+}
+
+export const editFilter = async(userId: number, filterId: number, filterName: string) => {
+  return authRequest
+  .patch(`${CudUrl}/${userId}/filter/${filterId}`, {filterName: filterName})
+  .then(res => res.data)
+  .catch(err => console.log(err))
+}
+
+export const deleteFilter = async (userId: number, filterId: number) => {
+  return authRequest
+  .delete(`${CudUrl}/${userId}/filter/${filterId}`)
+  .then(res => res.data)
+  .catch(err => console.log(err))
 }
