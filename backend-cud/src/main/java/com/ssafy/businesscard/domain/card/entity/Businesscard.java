@@ -62,9 +62,6 @@ public class Businesscard extends BaseTimeEntity {
     @Column(name = "domain_url", length = 100)
     private String domainUrl;
 
-    @Column(name = "memo", length = 100)
-    private String memo;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

@@ -25,6 +25,8 @@ public class PrivateAlbum extends BaseTimeEntity {
     @Builder.Default
     private boolean favorite = false;
 
+    @Column(name = "memo", length = 100)
+    private String memo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

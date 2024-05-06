@@ -51,7 +51,6 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
             return "이미 등록된 명함입니다.";
         } else {
             businesscardRepository.save(businesscard);
-            System.out.println("businesscard : " + businesscard);
             PrivateAlbumRequest privateAlbumRequest = PrivateAlbumRequest.builder()
                     .user(user)
                     .businesscard(businesscard)
@@ -151,20 +150,26 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
     // 명함에 메모 등록 및 수정
     @Override
     public String cardMemo(Long userId, Long cardId, MemoRequest request) {
-        Businesscard businesscard = businesscardRepository.findById(cardId)
-                .orElseThrow(() -> new GlobalExceptionHandler.UserException(
-                GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_CARD
-        ));
-
-        log.info("[Memo] : {}", businesscard.getMemo());
+        PrivateAlbum privateAlbum = privateAlbumRepository.findByUser_userIdAndBusinesscard_cardId(userId, cardId);
+        log.info("[Memo] : {}", privateAlbum.getMemo());
         // 메모가 없다면 메모 등록
-        if (businesscard.getMemo() == null) {
-            businesscard.setMemo(request.memo());
-            businesscardRepository.save(businesscard);
+        if (privateAlbum.getMemo() == null) {
+            privateAlbumRepository.save(PrivateAlbum.builder()
+                            .privateAlbumId(privateAlbum.getPrivateAlbumId())
+                            .businesscard(privateAlbum.getBusinesscard())
+                            .user(privateAlbum.getUser())
+                            .favorite(privateAlbum.isFavorite())
+                            .memo(request.memo())
+                    .build());
             return "메모가 등록되었습니다.";
         } else { // 메모가 있다면 메모 수정
-          businesscard.setMemo(request.memo());
-          businesscardRepository.save(businesscard);
+            privateAlbumRepository.save(PrivateAlbum.builder()
+                    .privateAlbumId(privateAlbum.getPrivateAlbumId())
+                    .businesscard(privateAlbum.getBusinesscard())
+                    .user(privateAlbum.getUser())
+                    .favorite(privateAlbum.isFavorite())
+                    .memo(request.memo())
+                    .build());
           return "메모가 수정되었습니다.";
         }
     }

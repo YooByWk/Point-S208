@@ -17,6 +17,9 @@ public class TeamAlbumDetail {
     @Column(name = "team_album_detail_id")
     private Long teamAlbumDetailId;
 
+    @Column(name = "memo", length = 100)
+    private String memo;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_album_id")
     private TeamAlbum teamAlbum;
