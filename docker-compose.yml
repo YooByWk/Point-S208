@@ -32,15 +32,12 @@ services:
       - jenkins-network
 
   autoscale-api:
-    image: junwon1131/s208-autoscale-api:latest
-    build: 
-      context: ./AutoScale
+    image: junwon1131/autoscale-api:latest
+     
     ports:
       - "5000:5000"
     environment:
       FLASK_ENV: development
-    volumes:
-      - .:/app
     networks:
       - jenkins-network
     deploy:
