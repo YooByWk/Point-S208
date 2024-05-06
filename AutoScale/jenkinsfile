@@ -1,7 +1,7 @@
 
 def component = [
     'ocr': true,
-    'mysql':false,
+    'mysql':true,
     'backend-cud':true,
     'backend-read':true,
     'prometheus':false,
