@@ -14,4 +14,6 @@ public interface TeamService {
     String registCard(Long teamAlbumId, CardRequest request);
 
     void updateCard(Long teamAlbumId, Long cardId, CardRequest request);
+
+    void deleteCard(Long teamAlbumId, Long cardId);
 }

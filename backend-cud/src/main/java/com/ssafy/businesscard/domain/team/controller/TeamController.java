@@ -63,4 +63,13 @@ public class TeamController {
         log.info("[Update Card] : {}", request);
         return ResponseEntity.ok().body(MessageUtils.success("명함이 수정되었습니다."));
     }
+
+    // 팀 명함지갑에 등록된 명함 삭제
+    @DeleteMapping("/{teamId}/card/{cardId}")
+    public ResponseEntity<MessageUtils> deleteCard(@PathVariable("teamId") Long teamAlbumId,
+                                                   @PathVariable("cardId") Long cardId) {
+        teamService.deleteCard(teamAlbumId, cardId);
+        log.info("[Delete Card] : {}", cardId);
+        return ResponseEntity.ok().body(MessageUtils.success("명함이 삭제되었습니다."));
+    }
 }

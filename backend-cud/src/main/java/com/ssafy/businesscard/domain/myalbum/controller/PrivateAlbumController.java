@@ -67,6 +67,6 @@ public class PrivateAlbumController {
                                                    @PathVariable("cardId") Long cardId) {
         privateAlbumService.deleteCard(userId, cardId);
         log.info("Delete Card : {} 명함이 명함지갑에서 삭제되었습니다.", cardId);
-        return ResponseEntity.ok().body(MessageUtils.success("명함지갑에서 명함이 삭제되었습니다."));
+        return ResponseEntity.ok().body(MessageUtils.success("명함이 삭제되었습니다."));
     }
 }

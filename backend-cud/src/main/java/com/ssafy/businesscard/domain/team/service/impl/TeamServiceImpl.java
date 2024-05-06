@@ -181,6 +181,15 @@ public class TeamServiceImpl implements TeamService {
                 .build());
     }
 
+    // 팀 명함지갑에서 명함 삭제
+    @Override
+    public void deleteCard(Long teamAlbumId, Long cardId) {
+        TeamAlbumDetail teamAlbumDetail = teamAlbumDetailRepository.findByTeamAlbum_teamAlbumIdAndBusinesscard_CardId(
+                teamAlbumId, cardId
+        );
+        teamAlbumDetailRepository.delete(teamAlbumDetail);
+    }
+
     private User findUser(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new GlobalExceptionHandler.UserException(
                 GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_USER

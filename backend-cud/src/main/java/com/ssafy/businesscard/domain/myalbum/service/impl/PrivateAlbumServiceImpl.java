@@ -141,7 +141,7 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
     @Transactional
     public void deleteCard(Long userId, Long cardId) {
         PrivateAlbum privateAlbum = privateAlbumRepository.findByUser_userIdAndBusinesscard_cardId(userId, cardId);
-        System.out.println("privateAlbum : " + privateAlbum);
+
         List<PrivateAlbum> privateAlbumList = privateAlbumRepository.findByUser_userIdAndBusinesscard_email(
                 privateAlbum.getUser().getUserId(), privateAlbum.getBusinesscard().getEmail());
         privateAlbumRepository.deleteAll(privateAlbumList);
