@@ -5,6 +5,7 @@ import com.ssafy.businesscard.domain.card.entity.Filter;
 import com.ssafy.businesscard.domain.card.repository.BusinesscardRepository;
 import com.ssafy.businesscard.domain.myalbum.dto.request.CardAddFilterRequest;
 import com.ssafy.businesscard.domain.myalbum.dto.request.CardRequest;
+import com.ssafy.businesscard.domain.myalbum.dto.request.MemoRequest;
 import com.ssafy.businesscard.domain.myalbum.dto.request.PrivateAlbumRequest;
 import com.ssafy.businesscard.domain.myalbum.entity.PrivateAlbum;
 import com.ssafy.businesscard.domain.myalbum.entity.PrivateAlbumMember;
@@ -132,7 +133,6 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
                         .realPicture(request.realPicture())
                         .frontBack(request.frontBack())
                         .domainUrl(request.domainUrl())
-                        .memo(request.memo())
                 .build());
 
     }
@@ -143,8 +143,29 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
     public void deleteCard(Long userId, Long cardId) {
         PrivateAlbum privateAlbum = privateAlbumRepository.findByUser_userIdAndBusinesscard_cardId(userId, cardId);
         System.out.println("privateAlbum : " + privateAlbum);
-        List<PrivateAlbum> privateAlbumList = privateAlbumRepository
-                .findByUser_userIdAndBusinesscard_email(privateAlbum.getUser().getUserId(), privateAlbum.getBusinesscard().getEmail());
+        List<PrivateAlbum> privateAlbumList = privateAlbumRepository.findByUser_userIdAndBusinesscard_email(
+                privateAlbum.getUser().getUserId(), privateAlbum.getBusinesscard().getEmail());
         privateAlbumRepository.deleteAll(privateAlbumList);
+    }
+
+    // 명함에 메모 등록 및 수정
+    @Override
+    public String cardMemo(Long userId, Long cardId, MemoRequest request) {
+        Businesscard businesscard = businesscardRepository.findById(cardId)
+                .orElseThrow(() -> new GlobalExceptionHandler.UserException(
+                GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_CARD
+        ));
+
+        log.info("[Memo] : {}", businesscard.getMemo());
+        // 메모가 없다면 메모 등록
+        if (businesscard.getMemo() == null) {
+            businesscard.setMemo(request.memo());
+            businesscardRepository.save(businesscard);
+            return "메모가 등록되었습니다.";
+        } else { // 메모가 있다면 메모 수정
+          businesscard.setMemo(request.memo());
+          businesscardRepository.save(businesscard);
+          return "메모가 수정되었습니다.";
+        }
     }
 }

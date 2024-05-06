@@ -22,7 +22,7 @@ public class TeamController {
                                                @RequestBody TeamAlbumRegistRequest teamAlbumRegistRequest) {
         log.info("[Create Team] : {}", teamAlbumRegistRequest);
         String result = teamService.create(userId, teamAlbumRegistRequest);
-        return ResponseEntity.ok().body(result);
+        return ResponseEntity.ok().body(MessageUtils.success(result));
     }
 
     // 팀 명함지갑 이름 수정
@@ -32,6 +32,6 @@ public class TeamController {
                                     @RequestBody TeamAlbumRegistRequest teamAlbumRegistRequest) {
         log.info("[Update Team] : {}", teamAlbumRegistRequest);
         String result = teamService.update(userId, teamId, teamAlbumRegistRequest);
-        return ResponseEntity.ok().body(result);
+        return ResponseEntity.ok().body(MessageUtils.success(result));
     }
 }

@@ -3,6 +3,7 @@ package com.ssafy.businesscard.domain.myalbum.controller;
 
 import com.ssafy.businesscard.domain.myalbum.dto.request.CardAddFilterRequest;
 import com.ssafy.businesscard.domain.myalbum.dto.request.CardRequest;
+import com.ssafy.businesscard.domain.myalbum.dto.request.MemoRequest;
 import com.ssafy.businesscard.domain.myalbum.service.PrivateAlbumService;
 import com.ssafy.businesscard.global.utils.MessageUtils;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +26,9 @@ public class PrivateAlbumController {
     @PostMapping("/{userId}")
     public ResponseEntity<?> registCard(@PathVariable("userId") Long userId,
                                                    @RequestBody CardRequest request) {
-//        log.info("Regist Card : {}" , request);
-        return ResponseEntity.ok().body(MessageUtils.success(privateAlbumService.registCard(userId, request)));
+        String result = privateAlbumService.registCard(userId, request);
+        log.info("Regist Card : {}" , request);
+        return ResponseEntity.ok().body(MessageUtils.success(result));
     }
 
     // 명함에 필터 추가
@@ -47,6 +49,16 @@ public class PrivateAlbumController {
         privateAlbumService.updateCard(userId, cardId, request);
         log.info("Update Card : {} 명함이 수정되었습니다.", request);
         return ResponseEntity.ok().body(MessageUtils.success("명함이 수정되었습니다."));
+    }
+
+    // 명함에 메모 등록 및 수정
+    @PostMapping("/{userId}/{cardId}/memo")
+    public ResponseEntity<MessageUtils> cardMemo(@PathVariable("userId") Long userId,
+                                                 @PathVariable("cardId") Long cardId,
+                                                 @RequestBody MemoRequest request) {
+        String result = privateAlbumService.cardMemo(userId, cardId, request);
+        log.info("[Card Memo] : {}", request.memo());
+        return ResponseEntity.ok().body(MessageUtils.success(result));
     }
 
     // 명함지갑에서 명함 삭제

@@ -2,6 +2,7 @@ package com.ssafy.businesscard.domain.myalbum.service;
 
 import com.ssafy.businesscard.domain.myalbum.dto.request.CardAddFilterRequest;
 import com.ssafy.businesscard.domain.myalbum.dto.request.CardRequest;
+import com.ssafy.businesscard.domain.myalbum.dto.request.MemoRequest;
 
 import java.util.List;
 
@@ -12,4 +13,6 @@ public interface PrivateAlbumService {
     void updateCard(Long userId, Long cardId, CardRequest request);
 
     void deleteCard(Long userId, Long cardId);
+
+    String cardMemo(Long userId, Long cardId, MemoRequest request);
 }
