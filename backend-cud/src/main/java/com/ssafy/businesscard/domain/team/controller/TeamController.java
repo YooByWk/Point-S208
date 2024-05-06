@@ -20,8 +20,8 @@ public class TeamController {
     @PostMapping("/{userId}/skip")
     public ResponseEntity<?> create(@PathVariable("userId") Long userId,
                                                @RequestBody TeamAlbumRegistRequest teamAlbumRegistRequest) {
-        log.info("[Create Team] : {}", teamAlbumRegistRequest);
         String result = teamService.create(userId, teamAlbumRegistRequest);
+        log.info("[Create Team] : {}", teamAlbumRegistRequest);
         return ResponseEntity.ok().body(MessageUtils.success(result));
     }
 
@@ -30,8 +30,18 @@ public class TeamController {
     public ResponseEntity<?> update(@PathVariable("userId") Long userId,
                                     @PathVariable("teamId") Long teamId,
                                     @RequestBody TeamAlbumRegistRequest teamAlbumRegistRequest) {
-        log.info("[Update Team] : {}", teamAlbumRegistRequest);
         String result = teamService.update(userId, teamId, teamAlbumRegistRequest);
+        log.info("[Update Team] : {}", teamAlbumRegistRequest);
         return ResponseEntity.ok().body(MessageUtils.success(result));
     }
+
+    // 팀 명함지갑 삭제
+    @DeleteMapping("/{userId}/{teamId}")
+    public ResponseEntity<?> delete(@PathVariable("userId") Long userId,
+                                    @PathVariable("teamId") Long teamId) {
+        String result = teamService.delete(userId, teamId);
+        log.info("[Delete Team] : {}", result);
+        return ResponseEntity.ok().body(MessageUtils.success(result));
+    }
+
 }
