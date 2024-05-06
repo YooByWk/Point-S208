@@ -51,7 +51,7 @@ pipeline {
             steps {
                 script {
                     // Docker Swarm으로 스택 배포
-                    sh 'docker stack deploy -c docker-compose.yml develop-server'
+            sh 'docker stack deploy -c docker-compose.yml --with-registry-auth develop-server'
                 }
             }
         }
