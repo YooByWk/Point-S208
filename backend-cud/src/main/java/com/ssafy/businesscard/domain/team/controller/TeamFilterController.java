@@ -35,4 +35,14 @@ public class TeamFilterController {
         log.info("[Update Filter] : {}", request);
         return ResponseEntity.ok().body(MessageUtils.success("필터가 수정되었습니다."));
     }
+
+    // 필터 삭제
+    @DeleteMapping("/{teamId}/filter/{filterId}")
+    public ResponseEntity<MessageUtils> delete(@PathVariable("teamId") Long teamAlbumId,
+                                               @PathVariable("filterId") Long filterId) {
+        teamFilterService.delete(teamAlbumId, filterId);
+        log.info("[Delete Filter] : {}",filterId);
+        return ResponseEntity.ok().body(MessageUtils.success("필터가 삭제되었습니다."));
+    }
+
 }

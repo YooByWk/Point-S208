@@ -6,4 +6,6 @@ public interface TeamFilterService {
     void create(Long teamAlbumId, FilterRequest request);
 
     void update(Long teamAlbumId, Long filterId, FilterRequest request);
+
+    void delete(Long teamAlbumId, Long filterId);
 }

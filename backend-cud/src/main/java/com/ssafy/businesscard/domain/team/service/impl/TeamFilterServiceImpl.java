@@ -22,7 +22,6 @@ public class TeamFilterServiceImpl implements TeamFilterService {
 
     private final FilterMapper filterMapper;
     private final TeamAlbumRepository teamAlbumRepository;
-    private final TeamAlbumDetailRepository teamAlbumDetailRepository;
     private final TeamAlbumFilterRepository teamAlbumFilterRepository;
     private final TeamAlbumMemberRepository teamAlbumMemberRepository;
 
@@ -41,11 +40,7 @@ public class TeamFilterServiceImpl implements TeamFilterService {
                         GlobalExceptionHandler.UserErrorCode.NOT_EXITSTS_TEAM
                 ));
 
-        Filter filter = teamAlbumFilterRepository.findById(filterId)
-                .orElseThrow(() -> new GlobalExceptionHandler.UserException(
-                        GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_FILTER
-                ));
-
+        Filter filter = findFilter(filterId);
         teamAlbumMemberRepository.save(TeamAlbumMember.builder()
                 .filter(filter)
                 .teamAlbum(teamAlbum)
@@ -59,5 +54,20 @@ public class TeamFilterServiceImpl implements TeamFilterService {
                 .filterId(filterId)
                 .filterName(request.filterName())
                 .build());
+    }
+
+    // 필터 삭제
+    @Override
+    public void delete(Long teamAlbumId, Long filterId) {
+        Filter filter = findFilter(filterId);
+        teamAlbumFilterRepository.delete(filter);
+    }
+
+    private Filter findFilter(Long filterId) {
+        Filter filter = teamAlbumFilterRepository.findById(filterId)
+                .orElseThrow(() -> new GlobalExceptionHandler.UserException(
+                        GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_FILTER
+                ));
+        return filter;
     }
 }
