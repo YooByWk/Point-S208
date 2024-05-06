@@ -46,8 +46,8 @@ public class TeamController {
     }
 
     // 팀 명함지갑에 명함 등록
-    @PostMapping("/{teamAlbumId}")
-    public ResponseEntity<?> registCard(@PathVariable("teamAlbumId") Long teamAlbumId,
+    @PostMapping("/{teamId}")
+    public ResponseEntity<?> registCard(@PathVariable("teamId") Long teamAlbumId,
                                         @RequestBody CardRequest request) {
         String result = teamService.registCard(teamAlbumId, request);
         log.info("[Regist Card] : {}", request);
