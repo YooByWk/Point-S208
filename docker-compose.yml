@@ -15,6 +15,10 @@ services:
       - ./mysql_data:/var/lib/mysql
     networks:
       - jenkins-network
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
 
   ocr:
     image: junwon1131/s208-ocr:latest
@@ -39,6 +43,10 @@ services:
       - .:/app
     networks:
       - jenkins-network
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
        
   backend-cud:
     image: junwon1131/s208-backend-cud:latest
@@ -64,7 +72,7 @@ services:
        
 networks:
   jenkins-network:
-    # external: true
+    driver: overlay
 
 volumes:
   jenkins_home:
