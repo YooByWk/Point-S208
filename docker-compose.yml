@@ -3,15 +3,15 @@ version: '3.8'
 services:
    
   autoscale-api:
-  build:
-    context: ./AutoScale
-  image: autoscale-api:latest # 빌드된 이미지의 이름을 지정합니다.
-  ports:
-    - "5000:5000"
-  environment:
-    FLASK_ENV: development
-  volumes:
-    - .:/app
+    build:
+      context: ./AutoScale
+    image: autoscale-api:latest # 빌드된 이미지의 이름을 지정합니다.
+    ports:
+      - "5000:5000"
+    environment:
+      FLASK_ENV: development
+    volumes:
+      - .:/app
  
  
 
