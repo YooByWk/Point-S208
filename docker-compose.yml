@@ -19,8 +19,7 @@ services:
       - develop-server_default
   
 networks:
-  jenkins-network:
-    external: true
+   
   develop-server_default:
     external: true
 
