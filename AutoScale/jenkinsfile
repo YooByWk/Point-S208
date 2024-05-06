@@ -48,37 +48,27 @@ pipeline {
         }
 
         stage('Deploy') {
-    steps {
-        script {
-            // 네트워크 이름
-            def networkName = 'develop-server_default'
+            steps {
+                script {
+                    def networkName = 'develop-server_default'
+                    def networkExist = sh(script: "docker network ls | grep $networkName | wc -l", returnStdout: true).trim()
 
-            // 네트워크 존재 여부 확인
-            def networkExist = sh(script: "docker network inspect $networkName > /dev/null 2>&1; echo \$?", returnStdout: true).trim()
+                    if (networkExist == '1') {
+                        echo "Removing existing network: $networkName"
+                        def containers = sh(script: "docker network inspect --format='{{range .Containers}}{{.Name}} {{end}}' $networkName", returnStdout: true).trim()
+                        if (containers) {
+                            containers.split().each { container ->
+                                sh "docker network disconnect -f $networkName $container"
+                            }
+                        }
 
-            // 네트워크가 존재하면 제거
-            if (networkExist == '0') {
-                echo "Removing existing network: $networkName"
+                        sh "docker network rm $networkName"
+                    }
 
-                // 네트워크에 연결된 컨테이너를 확인하고 제거
-                def containers = sh(script: "docker network inspect --format='{{range .Containers}}{{.Name}} {{end}}' $networkName", returnStdout: true).trim()
-                containers.split().each { container ->
-                    sh "docker network disconnect -f $networkName $container"
+                    sh 'docker stack deploy -c docker-compose.yml --with-registry-auth develop-server'
                 }
-
-                // 네트워크 제거 시도
-                sh "docker network rm $networkName"
             }
-
-            else{
-                echo 'no network '
-            }
-
-            // Docker Swarm으로 스택 배포
-            sh 'docker stack deploy -c docker-compose.yml --with-registry-auth develop-server'
         }
-    }
-}
 
 
 
