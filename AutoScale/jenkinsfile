@@ -69,10 +69,7 @@ pipeline {
                 // 네트워크 제거 시도
                 sh "docker network rm $networkName"
             }
-
-            // 새로운 네트워크 생성
-            echo "Creating network: $networkName"
-            sh "docker network create $networkName"
+ 
 
             // Docker Swarm으로 스택 배포
             sh 'docker stack deploy -c docker-compose.yml --with-registry-auth develop-server'
