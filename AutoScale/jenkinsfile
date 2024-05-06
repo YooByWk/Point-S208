@@ -1,6 +1,5 @@
 def component = [
-     
-    'autoscale-api':true
+    'autoscale-api': true
 ]
 
 pipeline {
@@ -46,8 +45,29 @@ pipeline {
                         if (entry.value && entry.key != 'redis') {
                             def var = entry.key
                             sh "docker-compose -f docker-compose.yml -p develop-server build ${var.toLowerCase()}"
-                            sh "docker tag develop-server_${var.toLowerCase()} $DOCKER_USER_ID/${var.toLowerCase()}:latest"
-                            sh "docker push ${var.toLowerCase()}:latest"
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Tag and Push Images') {
+            steps {
+                script {
+                    component.each { entry ->
+                        if (entry.value && entry.key != 'redis') {
+                            def var = entry.key
+                            // 빌드된 이미지의 이름을 설정합니다.
+                            def imageName = "develop-server_${var.toLowerCase()}"
+                            // 이미지가 있는지 확인합니다.
+                            if (sh(script: "docker images | grep ${imageName}", returnStatus: true) == 0) {
+                                // 이미지가 존재하면 태그하고 푸시합니다.
+                                sh "docker tag ${imageName} $DOCKER_USER_ID/${var.toLowerCase()}:latest"
+                                sh "docker push $DOCKER_USER_ID/${var.toLowerCase()}:latest"
+                            } else {
+                                // 이미지가 없는 경우 에러를 출력합니다.
+                                error "Error: Image ${imageName} not found."
+                            }
                         }
                     }
                 }
