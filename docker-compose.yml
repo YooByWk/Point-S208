@@ -1,0 +1,81 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ssafy
+      MYSQL_DATABASE: bscard
+      MYSQL_MAX_USER_CONNECTIONS: 1000
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+    networks:
+      - jenkins-network
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+
+  ocr:
+    image: junwon1131/s208-ocr:latest
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+    ports:
+      - "8000:8000"
+    networks:
+      - jenkins-network
+
+  autoscale-api:
+    image: junwon1131/s208-autoscale-api:latest
+    build: 
+      context: ./AutoScale
+    ports:
+      - "5000:5000"
+    environment:
+      FLASK_ENV: development
+    volumes:
+      - .:/app
+    networks:
+      - jenkins-network
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+       
+  backend-cud:
+    image: junwon1131/s208-backend-cud:latest
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+    ports:
+      - "8080:8080"
+    networks:
+      - jenkins-network
+  
+  backend-read:
+    image: junwon1131/s208-backend-read:latest
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+    ports:
+      - "8082:8080"
+    networks:
+      - jenkins-network
+       
+networks:
+  jenkins-network:
+    driver: overlay
+
+volumes:
+  jenkins_home:
+  prometheus_data:
+  grafana_data:
+  secrets:
