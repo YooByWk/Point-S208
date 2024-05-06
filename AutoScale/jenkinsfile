@@ -46,7 +46,8 @@ pipeline {
                 }
             }
         }
-stage('Deploy') {
+
+        stage('Deploy') {
     steps {
         script {
             // 네트워크 이름
@@ -58,6 +59,14 @@ stage('Deploy') {
             // 네트워크가 존재하면 제거
             if (networkExist == '0') {
                 echo "Removing existing network: $networkName"
+
+                // 네트워크에 연결된 컨테이너를 확인하고 제거
+                def containers = sh(script: "docker network inspect --format='{{range .Containers}}{{.Name}} {{end}}' $networkName", returnStdout: true).trim()
+                containers.split().each { container ->
+                    sh "docker network disconnect -f $networkName $container"
+                }
+
+                // 네트워크 제거 시도
                 sh "docker network rm $networkName"
             }
 
@@ -70,6 +79,7 @@ stage('Deploy') {
         }
     }
 }
+
 
 
 
