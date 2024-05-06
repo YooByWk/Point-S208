@@ -21,7 +21,17 @@ public class TeamController {
     public ResponseEntity<?> create(@PathVariable("userId") Long userId,
                                                @RequestBody TeamAlbumRegistRequest teamAlbumRegistRequest) {
         log.info("[Create Team] : {}", teamAlbumRegistRequest);
-        return ResponseEntity.ok().body(teamService.create(userId, teamAlbumRegistRequest));
+        String result = teamService.create(userId, teamAlbumRegistRequest);
+        return ResponseEntity.ok().body(result);
     }
-    
+
+    // 팀 명함지갑 이름 수정
+    @PatchMapping("/{userId}/{teamId}")
+    public ResponseEntity<?> update(@PathVariable("userId") Long userId,
+                                    @PathVariable("teamId") Long teamId,
+                                    @RequestBody TeamAlbumRegistRequest teamAlbumRegistRequest) {
+        log.info("[Update Team] : {}", teamAlbumRegistRequest);
+        String result = teamService.update(userId, teamId, teamAlbumRegistRequest);
+        return ResponseEntity.ok().body(result);
+    }
 }
