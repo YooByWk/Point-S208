@@ -1,8 +1,8 @@
 package com.ssafy.businesscard.domain.myalbum.service;
 
-import com.ssafy.businesscard.domain.myalbum.dto.request.CardAddFilterRequest;
-import com.ssafy.businesscard.domain.myalbum.dto.request.CardRequest;
-import com.ssafy.businesscard.domain.myalbum.dto.request.MemoRequest;
+import com.ssafy.businesscard.domain.card.dto.request.CardAddFilterRequest;
+import com.ssafy.businesscard.domain.card.dto.request.CardRequest;
+import com.ssafy.businesscard.domain.card.dto.request.MemoRequest;
 
 import java.util.List;
 

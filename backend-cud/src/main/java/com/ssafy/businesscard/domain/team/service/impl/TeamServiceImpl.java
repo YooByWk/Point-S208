@@ -70,7 +70,6 @@ public class TeamServiceImpl implements TeamService {
         } else {
             return "Owner가 아닙니다.";
         }
-
     }
 
 

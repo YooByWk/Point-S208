@@ -1,4 +1,4 @@
-package com.ssafy.businesscard.domain.myalbum.dto.request;
+package com.ssafy.businesscard.domain.card.dto.request;
 
 import lombok.Builder;
 
