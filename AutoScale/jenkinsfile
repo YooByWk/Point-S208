@@ -52,10 +52,10 @@ stage('Deploy') {
     steps {
         script {
             // 네트워크 존재 여부 확인
-            def networkExist = sh(script: 'docker network inspect develop-server_default > /dev/null 2>&1; echo $?', returnStatus: true).trim()
+            def networkExist = sh(script: 'docker network inspect develop-server_default > /dev/null 2>&1; echo $?', returnStdout: true).trim()
 
             // 네트워크가 존재하지 않으면 생성
-            if (networkExist != 0) {
+            if (networkExist != '0') {
                 sh 'docker network create develop-server_default'
             } else {
                 echo 'Network already exists. Skipping network creation.'
@@ -66,5 +66,6 @@ stage('Deploy') {
         }
     }
 }
+
     }
 }
