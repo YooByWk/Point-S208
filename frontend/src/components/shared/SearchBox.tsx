@@ -69,19 +69,18 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   enabled: value !== '',
  })
  
-  useEffect(() => {
-    console.log('검색결과 - 수정하기 :', data)
-    if (data && onSearch) {
-      onSearch(data)
-    } 
-    
-  }, [value, data, onSearch])
+ useEffect(() => {
+  console.log('검색결과 - 수정하기 :', data)
+  // console.log(data.length)
+  // if (data === undefined) {return}
+  if (data && onSearch) {
+    onSearch(data)
+  } 
+}, [value, data, onSearch])
   
   
   return (
     <div>
-      {/* <p>{data?data:'없는디'}</p> */}
-      {/* <Spacing size={10} direction='vertical'/> */}
       <Flex justify="space-between" align="center" direction="row"
       css={mainContainerCss}>
         <div  css={searchBoxContainerCss(width? width : '70%')}>

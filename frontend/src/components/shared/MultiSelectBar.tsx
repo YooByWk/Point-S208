@@ -13,11 +13,12 @@ import { css } from '@emotion/react'
 import  Spacing  from '@/components/shared/Spacing';
 import type { CardType } from '@/types/cardType'
 
+
+
 interface MultiSelectBarProps {
   selectedCards: number[]
   allCards: CardType[]
   setSelectedCards: (cards: number[]) => void
-  
 }
 
 const MultiSelectBar = ({selectedCards, allCards, setSelectedCards}:MultiSelectBarProps) => {
@@ -39,6 +40,7 @@ const MultiSelectBar = ({selectedCards, allCards, setSelectedCards}:MultiSelectB
   
   const handleDelete = () => {
     console.log('handleDelete: ',selectedCards);
+    
   }
   
   return (

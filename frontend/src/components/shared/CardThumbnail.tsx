@@ -19,7 +19,9 @@ import { useRecoilValue } from 'recoil'
 import { userState } from '@/stores/user'
 import { ExternalCardType } from '@/types/ExternalCard'
 import EmptyThumbnail from '@/components/shared/EmptyThumbnail'
-import { useMutation } from '@tanstack/react-query'
+import { useDeleteAlbumCard } from '@/hooks/useDeleteAlbumCard'
+import SmallModal from '@/components/shared/SmallModal'
+
 interface CardThumbnailProps {
   cardInfo: CardType | ExternalCardType
   onSelect: (cardId: number) => void
@@ -43,6 +45,7 @@ const CardThumbnail = ({
   const userId = useRecoilValue(userState).userId 
   // const deleteMutation = useDeleteMyAlbumMutation(selectedCards)
   console.log(teamId,userId,'teamId')
+  const deletemutation = useDeleteAlbumCard()
   
 
   
@@ -69,8 +72,8 @@ const CardThumbnail = ({
   const handleDelete = (event: React.MouseEvent) => {
     event.stopPropagation()
     /*  api 호출 */
-    
-    console.log('삭제 : ', cardInfo)
+    deletemutation.mutate(cardInfo.cardId)
+    console.log('삭제 : ', cardInfo.cardId)
   }
   console.log(cardInfo)
   const navigate = useNavigate()
@@ -132,6 +135,13 @@ const CardThumbnail = ({
             )}
             <ShareAndroid24Filled css={i} onClick={handleShare} />
             <Delete24Filled css={i} onClick={handleDelete} />
+            <SmallModal 
+            icon={<Delete24Filled/>}
+            dialogTitle='명함 삭제'
+            dialogContent={`${cardInfo.name}님의 명함을 삭제하시겠습니까?`}
+            onClick={() => handleDelete}
+            actionButtonText='삭제'
+            />
           </Flex>
         )}
       </Flex>

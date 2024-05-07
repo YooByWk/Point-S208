@@ -108,7 +108,7 @@ const FilterIconModal: React.FC<LargeModalProps> = ({
   })
 
   let filterList: FilterListType = useMemo(() => {
-    return data || []
+    return data?.data_body || []
   }, [data])
 
   const handleAddFilter = () => {
@@ -135,7 +135,7 @@ const FilterIconModal: React.FC<LargeModalProps> = ({
     }
   }
   const [filterNames, dispatch] = useReducer(filterNameReducer, {})
-
+  console.log(filterList,'asdasdasdasdasdasd')
   useEffect(() => {
     const initialFilterNames = filterList.reduce((acc, filter) => {
       acc[filter.filterId] = filter.filterName

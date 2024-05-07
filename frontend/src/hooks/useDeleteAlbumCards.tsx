@@ -1,15 +1,15 @@
-import { deleteMyAlbumCardsArray } from "@/apis/album";
+import { deleteMyAlbumCards } from "@/apis/album";
 import { userState } from "@/stores/user";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRecoilValue } from "recoil";
 
-export const useDeleteMyAlbumCardsArrayMutation = (selectedCards :number[]) => {
+export const useDeleteAlbumCards = (selectedCards :number[]) => {
   const userId = useRecoilValue(userState).userId 
   const queryClient = useQueryClient()
   
   return useMutation({
-    mutationKey: ["deleteMyAlbumCardsArray"],
-    mutationFn: () => deleteMyAlbumCardsArray({userId: userId as number, cardIdArray: selectedCards }),
+    mutationKey: ["deleteMyAlbumCards"],
+    mutationFn: () => deleteMyAlbumCards({userId: userId as number, cardIdArray: selectedCards }),
     onSuccess: () => {
       console.log("삭제 성공", selectedCards.length, "개의 명함이 삭제됨");
       queryClient.invalidateQueries({ queryKey: ["fetchMyAlbum"]})    
