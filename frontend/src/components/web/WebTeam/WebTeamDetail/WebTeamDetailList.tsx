@@ -20,7 +20,7 @@ const WebTeamDetailList = ({
 }: {
   selectedCards: number[]
   setIsDetail: (isDetail: boolean) => void
-  setSelectedCards: (selectedCards: number[]) => void
+  setSelectedCards: React.Dispatch<React.SetStateAction<number[]>>
 }) => {
   const selectedTeam = useRecoilValue(selectedTeamAlbumIdState)
 
@@ -61,6 +61,14 @@ const WebTeamDetailList = ({
     setIsAddCard(!isAddCard)
   }
 
+  const handleCardSelect = (cardId: number) => {
+    setSelectedCards(prev =>
+      prev.includes(cardId)
+        ? prev.filter(id => id !== cardId)
+        : [...prev, cardId],
+    )
+  }
+
   return (
     <>
       <div css={boxStyles}>
@@ -72,10 +80,11 @@ const WebTeamDetailList = ({
                 .map(card => {
                   return (
                     <WebCardThumbnail
-                      cardInfo={card}
                       key={card.cardId}
+                      cardInfo={card}
                       selectedCards={selectedCards}
                       setIsDetail={setIsDetail}
+                      onSelect={handleCardSelect}
                     />
                   )
                 })}
