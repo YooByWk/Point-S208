@@ -22,4 +22,7 @@ public class TeamAlbumDetail {
     @ManyToOne
     @JoinColumn(name = "card_id")
     private Businesscard businesscard;
+
+    @Column(name = "memo", length = 100)
+    private String memo;
 }

@@ -56,7 +56,8 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
                         privateAlbum.getBusinesscard().getAddress(),
                         privateAlbum.getBusinesscard().getRealPicture(),
                         privateAlbum.getBusinesscard().getFrontBack(),
-                        privateAlbum.getBusinesscard().getDomainUrl()
+                        privateAlbum.getBusinesscard().getDomainUrl(),
+                        privateAlbum.getMemo()
                         ))
                 .collect(Collectors.toList());
         return responseDtoList;
@@ -83,6 +84,7 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
                     .realPicture(privateAlbum.getBusinesscard().getRealPicture())
                     .frontBack(privateAlbum.getBusinesscard().getFrontBack())
                     .domainUrl(privateAlbum.getBusinesscard().getDomainUrl())
+                    .memo(privateAlbum.getMemo())
                     .build();
         } else {
             throw new NoSuchElementException("카드가 없음");

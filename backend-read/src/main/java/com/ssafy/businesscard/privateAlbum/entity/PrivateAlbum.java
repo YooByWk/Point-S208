@@ -33,4 +33,7 @@ public class PrivateAlbum extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "card_id")
     private Businesscard businesscard;
+
+    @Column(name = "memo", length = 100)
+    private String memo;
 }

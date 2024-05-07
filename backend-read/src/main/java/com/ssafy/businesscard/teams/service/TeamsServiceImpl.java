@@ -1,6 +1,7 @@
 package com.ssafy.businesscard.teams.service;
 
 import com.ssafy.businesscard.privateAlbum.dto.PrivateAlbumResponseDto;
+import com.ssafy.businesscard.privateAlbum.entity.PrivateAlbum;
 import com.ssafy.businesscard.teams.dto.TeamListResponseDto;
 import com.ssafy.businesscard.teams.dto.TeamMemberListResponseDto;
 import com.ssafy.businesscard.teams.entity.TeamAlbum;
@@ -78,7 +79,8 @@ public class TeamsServiceImpl implements TeamsService{
                         teamAlbumDetail.getBusinesscard().getAddress(),
                         teamAlbumDetail.getBusinesscard().getRealPicture(),
                         teamAlbumDetail.getBusinesscard().getFrontBack(),
-                        teamAlbumDetail.getBusinesscard().getDomainUrl()
+                        teamAlbumDetail.getBusinesscard().getDomainUrl(),
+                        teamAlbumDetail.getMemo()
                 )).collect(Collectors.toList());
 
         return responseDtoList;
