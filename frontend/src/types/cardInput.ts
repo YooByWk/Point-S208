@@ -15,7 +15,7 @@ export interface cardInput {
 }
 
 export type WriteCardType = {
-  userId: number
+  userId: number | undefined
   data: cardInput
 }
 
@@ -33,13 +33,18 @@ export type editAlbumCardType = {
   data: cardInput
 }
 
-export type deleteAlbumCardArrayType = {
+export type deleteAlbumCardType = {
   userId: number | undefined
-  cardIdArray: number[] | undefined[]
+  cardId: number | undefined
 }
 
 export type editMemoType = {
   userId: number | undefined
   cardId: number | undefined
   data: { memo: string }
+}
+
+export type deleteAlbumCardArrayType = {
+  userId: number | undefined
+  cardIdArray: number[] | undefined[]
 }

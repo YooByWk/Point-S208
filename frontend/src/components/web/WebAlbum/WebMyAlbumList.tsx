@@ -50,8 +50,12 @@ const WebMyAlbumList = ({
   }, [data, setCards])
 
   useEffect(() => {
+    console.log('refetch')
+    if (cards.length === 1 && cards[0].cardId === 0) {
+      refetch()
+    }
     refetch()
-  }, [isRefreshed, refetch])
+  }, [isRefreshed, refetch, cards])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -108,22 +112,19 @@ const WebMyAlbumList = ({
             </div>
           </>
         ) : (
-          <Flex
-            direction="column"
-            justify="center"
-            align="center"
-            css={nullDivCss}
-          >
-            <Text>지갑에 등록된 명함이 없습니다.</Text>
-
-            <Spacing size={40} direction="vertical" />
-            <LargeButton
-              text="명함 추가"
-              width="80vw"
-              height="50px"
-              onClick={handleAdd}
-            />
-          </Flex>
+          <>
+            <Flex
+              direction="column"
+              justify="center"
+              align="center"
+              css={nullDivCss}
+            >
+              <Text>지갑에 등록된 명함이 없습니다.</Text>
+            </Flex>
+            <div css={buttonCss}>
+              <LargeButton text="명함 추가" width="80%" onClick={handleAdd} />
+            </div>
+          </>
         )}
         {isFetchingNextPage && (
           <div css={SpinnerCss}>
@@ -145,7 +146,7 @@ const SpinnerCss = css`
 `
 
 const nullDivCss = css`
-  height: 100%;
+  height: calc(100% - 150px);
   padding-bottom: 10vh;
 `
 
