@@ -57,6 +57,7 @@ const WebAlbumDetail = ({
     loc: '포스코인터네셔널 송도본사',
   })
   const [editMemo, setEditMemo] = useState(selectedCard.memo)
+  const [modalOpen, setModalOpen] = useState(false)
   const userId = useRecoilValue(userState).userId as number
 
   useEffect(() => {
@@ -185,9 +186,9 @@ const WebAlbumDetail = ({
             <Flex justify="space-between">
               <Text typography="t6">메모</Text>
 
-              <Dialog modalType="non-modal">
+              <Dialog modalType="alert" open={modalOpen}>
                 <DialogTrigger disableButtonEnhancement>
-                  <Button shape="circular">
+                  <Button shape="circular" onClick={() => setModalOpen(true)}>
                     <Text typography="t7">
                       <Edit16Filled /> 수정
                     </Text>
@@ -208,7 +209,11 @@ const WebAlbumDetail = ({
                       </DialogContent>
                       <DialogActions>
                         <DialogTrigger disableButtonEnhancement>
-                          <Button appearance="secondary" shape="circular">
+                          <Button
+                            appearance="secondary"
+                            shape="circular"
+                            onClick={() => setModalOpen(false)}
+                          >
                             취소
                           </Button>
                         </DialogTrigger>
@@ -216,6 +221,7 @@ const WebAlbumDetail = ({
                           type="submit"
                           appearance="primary"
                           shape="circular"
+                          onClick={() => setModalOpen(false)}
                         >
                           수정
                         </Button>

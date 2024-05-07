@@ -1,7 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { fetchMyAlbum } from '@apis/album'
-import { userState } from '@stores/user'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
@@ -12,29 +10,25 @@ import Text from '@shared/Text'
 import Spacing from '@shared/Spacing'
 import AddCard from '@components/mobile/MyAlbum/AddCard'
 import WebCardThumbnail from '@/components/shared/WebCardThumbnail'
-import { isRefreshedAlbumState } from '@/stores/card'
-import { CardType } from '@/types/cardType'
+import { fetchTeamCardsList } from '@/apis/team'
+import { selectedTeamAlbumIdState } from '@/stores/team'
 
-const WebMyAlbumList = ({
-  cards,
-  setCards,
+const WebTeamDetailList = ({
   selectedCards,
-  setSelectedCards,
   setIsDetail,
+  setSelectedCards,
 }: {
-  cards: CardType[]
-  setCards: React.Dispatch<React.SetStateAction<CardType[]>>
   selectedCards: number[]
-  setSelectedCards: React.Dispatch<React.SetStateAction<number[]>>
   setIsDetail: (isDetail: boolean) => void
+  setSelectedCards: React.Dispatch<React.SetStateAction<number[]>>
 }) => {
-  const userId = useRecoilValue(userState).userId
-  const isRefreshed = useRecoilValue(isRefreshedAlbumState)
+  const selectedTeam = useRecoilValue(selectedTeamAlbumIdState)
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
-      queryKey: ['fetchMyAlbum'],
-      queryFn: ({ pageParam = 0 }) => fetchMyAlbum(userId as number, pageParam),
+      queryKey: ['fetchTeamCardsList'],
+      queryFn: ({ pageParam = 0 }) =>
+        fetchTeamCardsList(selectedTeam.teamAlbumId, pageParam),
       getNextPageParam: (lastPage, allPages) => {
         return Array.isArray(lastPage) && lastPage.length > 0
           ? allPages.length
@@ -43,19 +37,7 @@ const WebMyAlbumList = ({
       initialPageParam: 0,
     })
 
-  useEffect(() => {
-    if (data) {
-      setCards(data.pages.flatMap(page => page) || [])
-    }
-  }, [data, setCards])
-
-  useEffect(() => {
-    console.log('refetch')
-    if (cards.length === 1 && cards[0].cardId === 0) {
-      refetch()
-    }
-    refetch()
-  }, [isRefreshed, refetch, cards])
+  const cards = data?.pages.flatMap(page => page.data_body) || []
 
   useEffect(() => {
     const handleScroll = () => {
@@ -71,12 +53,12 @@ const WebMyAlbumList = ({
 
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [fetchNextPage, hasNextPage, data, isRefreshed])
+  }, [fetchNextPage, hasNextPage, data])
 
   const [isAddCard, setIsAddCard] = useState(false)
 
   const handleAdd = () => {
-    console.log('이미지로 명함 추가')
+    setIsAddCard(!isAddCard)
   }
 
   const handleCardSelect = (cardId: number) => {
@@ -98,8 +80,8 @@ const WebMyAlbumList = ({
                 .map(card => {
                   return (
                     <WebCardThumbnail
-                      cardInfo={card}
                       key={card.cardId}
+                      cardInfo={card}
                       selectedCards={selectedCards}
                       setIsDetail={setIsDetail}
                       onSelect={handleCardSelect}
@@ -108,23 +90,30 @@ const WebMyAlbumList = ({
                 })}
             </div>
             <div css={buttonCss}>
-              <LargeButton text="명함 추가" width="80%" onClick={handleAdd} />
+              {selectedCards.length > 0 ? (
+                <LargeButton text="명함 공유" width="80%" onClick={() => {}} />
+              ) : (
+                <LargeButton text="명함 추가" width="80%" onClick={handleAdd} />
+              )}
             </div>
           </>
         ) : (
-          <>
-            <Flex
-              direction="column"
-              justify="center"
-              align="center"
-              css={nullDivCss}
-            >
-              <Text>지갑에 등록된 명함이 없습니다.</Text>
-            </Flex>
-            <div css={buttonCss}>
-              <LargeButton text="명함 추가" width="80%" onClick={handleAdd} />
-            </div>
-          </>
+          <Flex
+            direction="column"
+            justify="center"
+            align="center"
+            css={nullDivCss}
+          >
+            <Text>{selectedTeam.teamName}에 등록된 명함이 없습니다.</Text>
+
+            <Spacing size={40} direction="vertical" />
+            <LargeButton
+              text="명함 추가"
+              width="80vw"
+              height="50px"
+              onClick={handleAdd}
+            />
+          </Flex>
         )}
         {isFetchingNextPage && (
           <div css={SpinnerCss}>
@@ -139,14 +128,14 @@ const WebMyAlbumList = ({
   )
 }
 
-export default WebMyAlbumList
+export default WebTeamDetailList
 
 const SpinnerCss = css`
   padding-bottom: 50px;
 `
 
 const nullDivCss = css`
-  height: calc(100% - 150px);
+  height: 100%;
   padding-bottom: 10vh;
 `
 
@@ -156,8 +145,6 @@ const buttonCss = css`
   bottom: 0px;
   height: 45px;
   background-color: ${tokens.colorNeutralBackground1};
-  /* display: flex; */
-  /* align-items: center; */
 `
 
 const gridStyles = css`
@@ -165,6 +152,7 @@ const gridStyles = css`
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 20px;
 `
+
 const boxStyles = css`
   padding-top: 100px;
   padding-bottom: 50px;

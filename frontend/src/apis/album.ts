@@ -32,9 +32,11 @@ export const RegisterOtherCard = async (params: WriteCardType) => {
 }
 
 // 내 명함지갑 명함 검색
-export const searchMyAlbumCard = async (params:searchType) => {
+export const searchMyAlbumCard = async (params: searchType) => {
   return authRequest
-    .get(`${ReadUrl}/${params.id}/search`, { params: { info: params.userInput } })
+    .get(`${ReadUrl}/${params.id}/search`, {
+      params: { info: params.userInput },
+    })
     .then(res => {
       console.log(res)
       return res.data

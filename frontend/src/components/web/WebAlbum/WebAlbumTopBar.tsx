@@ -10,7 +10,6 @@ import Flex from '@shared/Flex'
 import Text from '@shared/Text'
 import {
   Checkbox,
-  SearchBox,
   TabList,
   Tab,
   Button,
@@ -20,6 +19,9 @@ import {
   DialogBody,
   DialogTitle,
   DialogActions,
+  Popover,
+  PopoverTrigger,
+  PopoverSurface,
 } from '@fluentui/react-components'
 import Spacing from '@/components/shared/Spacing'
 import { colors } from '@/styles/colorPalette'
@@ -31,19 +33,34 @@ import { userState } from '@/stores/user'
 import { isRefreshedAlbumState } from '@/stores/card'
 import { useState } from 'react'
 import * as XLSX from 'xlsx'
+import WebUploadFromFile from './WebUploadFromFile'
+import SearchBox from '@/components/shared/SearchBox'
+import { UserListType } from '@/types/userType'
 
 const WebAlbumTopBar = ({
   allCards,
+  setAllCards,
   selectedCards,
   setSelectedCards,
 }: {
   allCards: CardType[]
+  setAllCards: React.Dispatch<React.SetStateAction<CardType[]>>
   selectedCards: number[]
   setSelectedCards: React.Dispatch<React.SetStateAction<number[]>>
 }) => {
   const userId = useRecoilValue(userState).userId
   const [isRefreshed, setIsRefreshed] = useRecoilState(isRefreshedAlbumState)
   const [modalOpen, setModalOpen] = useState(false)
+  const [searchValue, setSearchValue] = useState('')
+
+  const handleResult = (data: CardType | UserListType) => {
+    if (Array.isArray(data)) {
+      setAllCards(data as CardType[])
+    }
+    if (searchValue.length === 0) {
+      setIsRefreshed(!isRefreshed)
+    }
+  }
 
   const handleSelectAll = () => {
     if (allCards.length === selectedCards.length) {
@@ -125,7 +142,21 @@ const WebAlbumTopBar = ({
     <>
       <Flex direction="column" css={boxStyles}>
         <Flex justify="space-between" align="center">
-          <SearchBox appearance="underline" placeholder="명함 검색" />
+          {/* <SearchBox appearance="underline" placeholder="명함 검색" /> */}
+          <SearchBox
+            onChange={e => {
+              if (e.target.value !== undefined) {
+                setSearchValue(e.target.value)
+              }
+            }}
+            onSearch={handleResult}
+            value={searchValue}
+            placeholder="명함 검색"
+            memberIcon={false}
+            filterIcon={false}
+            sortIcon={false}
+            width="100%"
+          />
           <Flex align="center">
             <ArrowSort24Filled css={iconStyles} />
             <TabList defaultSelectedValue="newly">
@@ -162,25 +193,42 @@ const WebAlbumTopBar = ({
                 {selectedCards.length}개 선택됨
               </Text>
             </div>
-            <Button
-              appearance="transparent"
-              size="small"
-              css={buttonStyles}
-              onClick={handleDownload}
-            >
-              <ArrowDownload24Filled />
-            </Button>
 
-            <Dialog modalType="alert" open={modalOpen}>
-              <DialogTrigger disableButtonEnhancement>
+            <Popover openOnHover={true} mouseLeaveDelay={0.1}>
+              <PopoverTrigger disableButtonEnhancement>
                 <Button
                   appearance="transparent"
                   size="small"
                   css={buttonStyles}
-                  onClick={() => setModalOpen(true)}
+                  onClick={handleDownload}
                 >
-                  <Delete24Filled />
+                  <ArrowDownload24Filled />
                 </Button>
+              </PopoverTrigger>
+
+              <PopoverSurface tabIndex={-1}>
+                <Text typography="t9"> 선택한 명함 엑셀로 다운받기</Text>
+              </PopoverSurface>
+            </Popover>
+
+            <Dialog modalType="alert" open={modalOpen}>
+              <DialogTrigger disableButtonEnhancement>
+                <Popover openOnHover={true} mouseLeaveDelay={0.1}>
+                  <PopoverTrigger disableButtonEnhancement>
+                    <Button
+                      appearance="transparent"
+                      size="small"
+                      css={buttonStyles}
+                      onClick={() => setModalOpen(true)}
+                    >
+                      <Delete24Filled />
+                    </Button>
+                  </PopoverTrigger>
+
+                  <PopoverSurface tabIndex={-1}>
+                    <Text typography="t9"> 선택한 명함 삭제하기</Text>
+                  </PopoverSurface>
+                </Popover>
               </DialogTrigger>
               <DialogSurface>
                 <DialogBody>
@@ -197,7 +245,13 @@ const WebAlbumTopBar = ({
                       삭제
                     </Button>
                     <DialogTrigger disableButtonEnhancement>
-                      <Button shape="circular" css={buttonStyles2}>
+                      <Button
+                        shape="circular"
+                        css={buttonStyles2}
+                        onClick={() => {
+                          setModalOpen(false)
+                        }}
+                      >
                         취소
                       </Button>
                     </DialogTrigger>
@@ -205,6 +259,8 @@ const WebAlbumTopBar = ({
                 </DialogBody>
               </DialogSurface>
             </Dialog>
+
+            <WebUploadFromFile />
           </Flex>
         </Flex>
       </Flex>
