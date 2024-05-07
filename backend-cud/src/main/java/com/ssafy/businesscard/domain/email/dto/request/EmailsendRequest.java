@@ -1,5 +1,7 @@
 package com.ssafy.businesscard.domain.email.dto.request;
 
-public record EmailsendRequest(String recipientEmail) {
+import jakarta.validation.constraints.NotNull;
+
+public record EmailsendRequest(@NotNull String recipientEmail) {
 
 }
