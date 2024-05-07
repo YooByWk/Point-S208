@@ -7,7 +7,6 @@ import com.ssafy.businesscard.global.exception.GlobalExceptionHandler;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.*;
 import org.springframework.stereotype.Service;
 

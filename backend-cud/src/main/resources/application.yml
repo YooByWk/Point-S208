@@ -16,15 +16,16 @@ spring:
   mail:
     default-encoding: UTF-8
     host: smtp.naver.com
-    port: 465
+    port: 587
     username: junwon1131@naver.com
-    password: think1492*
+    password: KNY95F5E68R5
     properties:
       mail:
         debug: true
         smtp.auth: true
         smtp.timeout: 50000
         smtp.starttls.enable: true
+
 
   data:
     redis:
