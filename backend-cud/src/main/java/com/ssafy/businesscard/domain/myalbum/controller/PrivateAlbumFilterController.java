@@ -3,9 +3,11 @@ package com.ssafy.businesscard.domain.myalbum.controller;
 import com.ssafy.businesscard.domain.card.dto.request.FilterRequest;
 import com.ssafy.businesscard.domain.myalbum.service.PrivateAlbumFilterService;
 import com.ssafy.businesscard.global.utils.MessageUtils;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j

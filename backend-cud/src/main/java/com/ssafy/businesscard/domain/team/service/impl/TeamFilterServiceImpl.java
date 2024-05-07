@@ -28,9 +28,21 @@ public class TeamFilterServiceImpl implements TeamFilterService {
     // 필터 생성
     @Override
     public void create(Long teamAlbumId, FilterRequest request) {
-        Filter filter = filterMapper.toEntity(request);
-        teamAlbumFilterRepository.save(filter);
-        saveFilter(teamAlbumId, filter.getFilterId());
+        if (request.filterName().isEmpty()) {
+            throw new GlobalExceptionHandler.UserException(
+                    GlobalExceptionHandler.UserErrorCode.INVALID_FILTER_NAME
+            );
+        } else {
+            teamAlbumFilterRepository.findByFilterName(request.filterName()).ifPresent(
+                    filter -> {throw new GlobalExceptionHandler.UserException(
+                            GlobalExceptionHandler.UserErrorCode.ALREADY_IN_FILTER
+                    );
+            });
+            Filter filter = filterMapper.toEntity(request);
+            teamAlbumFilterRepository.save(filter);
+            saveFilter(teamAlbumId, filter.getFilterId());
+        }
+
     }
 
     // 필터 생성 후 filterId와 TeamAlbumId를 중계 테이블에 저장
