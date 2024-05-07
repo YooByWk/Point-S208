@@ -1,7 +1,10 @@
 package com.ssafy.businesscard.domain.team.service.impl;
 
+import com.ssafy.businesscard.domain.card.dto.request.CardAddFilterRequest;
 import com.ssafy.businesscard.domain.card.dto.request.CardRequest;
+import com.ssafy.businesscard.domain.card.dto.request.MemoRequest;
 import com.ssafy.businesscard.domain.card.entity.Businesscard;
+import com.ssafy.businesscard.domain.card.entity.Filter;
 import com.ssafy.businesscard.domain.card.mapper.BusinesscardMapper;
 import com.ssafy.businesscard.domain.card.repository.BusinesscardRepository;
 import com.ssafy.businesscard.domain.team.dto.request.TeamAlbumDetailRequest;
@@ -9,10 +12,9 @@ import com.ssafy.businesscard.domain.team.dto.request.TeamAlbumRegistRequest;
 import com.ssafy.businesscard.domain.team.dto.request.TeamMemberRequest;
 import com.ssafy.businesscard.domain.team.entity.TeamAlbum;
 import com.ssafy.businesscard.domain.team.entity.TeamAlbumDetail;
+import com.ssafy.businesscard.domain.team.entity.TeamAlbumMember;
 import com.ssafy.businesscard.domain.team.entity.TeamMember;
-import com.ssafy.businesscard.domain.team.repository.TeamAlbumDetailRepository;
-import com.ssafy.businesscard.domain.team.repository.TeamMemberRepository;
-import com.ssafy.businesscard.domain.team.repository.TeamAlbumRepository;
+import com.ssafy.businesscard.domain.team.repository.*;
 import com.ssafy.businesscard.domain.team.service.TeamAlbumService;
 import com.ssafy.businesscard.domain.user.entity.User;
 import com.ssafy.businesscard.domain.user.repository.UserRepository;
@@ -34,6 +36,8 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
     private final BusinesscardMapper businesscardMapper;
     private final BusinesscardRepository businesscardRepository;
     private final TeamAlbumDetailRepository teamAlbumDetailRepository;
+    private final TeamAlbumFilterRepository teamAlbumFilterRepository;
+    private final TeamAlbumMemberRepository teamAlbumMemberRepository;
     private final TeamMemberRepository teamMemberRepository;
 
     // 팀 명함지갑 생성(건너뛰기)
@@ -188,6 +192,55 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
                 teamAlbumId, cardId
         );
         teamAlbumDetailRepository.delete(teamAlbumDetail);
+    }
+
+    // 팀 명함지갑 명함에 필터 추가
+    @Override
+    @Transactional
+    public void addFilter(Long teamAlbumId, Long cardId, List<CardAddFilterRequest> requestList) {
+        TeamAlbum teamAlbum = findTeam(teamAlbumId);
+        List<Long> filterIdList = requestList.stream().map(CardAddFilterRequest::filterId).toList();
+
+        for (Long filterId : filterIdList) {
+            Filter filter = teamAlbumFilterRepository.findById(filterId)
+                    .orElseThrow(() -> new GlobalExceptionHandler.UserException(
+                            GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_FILTER
+                    ));
+            TeamAlbumDetail teamAlbumDetail = teamAlbumDetailRepository.findByTeamAlbum_teamAlbumIdAndBusinesscard_CardId(
+                    teamAlbumId, cardId);
+            teamAlbumMemberRepository.save(TeamAlbumMember.builder()
+                    .filter(filter)
+                    .teamAlbum(teamAlbum)
+                    .teamAlbumDetail(teamAlbumDetail)
+                    .build());
+        }
+    }
+
+    // 팀 명함지갑 명함에 메모 등록 및 수정
+    @Override
+    public String cardMemo(Long teamAlbumId, Long cardId, MemoRequest request) {
+        TeamAlbumDetail teamAlbumDetail = teamAlbumDetailRepository.findByTeamAlbum_teamAlbumIdAndBusinesscard_CardId(
+                teamAlbumId, cardId
+        );
+        // 메모가 없다면 메모 등록
+        if (teamAlbumDetail.getMemo() == null) {
+            teamAlbumDetailRepository.save(TeamAlbumDetail.builder()
+                    .teamAlbumDetailId(teamAlbumDetail.getTeamAlbumDetailId())
+                    .teamAlbum(teamAlbumDetail.getTeamAlbum())
+                    .businesscard(teamAlbumDetail.getBusinesscard())
+                    .memo(request.memo())
+                    .build());
+            return "메모가 등록되었습니다.";
+        } else {
+            teamAlbumDetailRepository.save(TeamAlbumDetail.builder()
+                    .teamAlbumDetailId(teamAlbumDetail.getTeamAlbumDetailId())
+                    .teamAlbum(teamAlbumDetail.getTeamAlbum())
+                    .businesscard(teamAlbumDetail.getBusinesscard())
+                    .memo(request.memo())
+                    .build());
+            return "메모가 수정되었습니다.";
+        }
+
     }
 
     private User findUser(Long userId) {

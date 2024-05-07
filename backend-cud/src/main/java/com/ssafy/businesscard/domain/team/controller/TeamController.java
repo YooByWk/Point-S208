@@ -1,6 +1,8 @@
 package com.ssafy.businesscard.domain.team.controller;
 
+import com.ssafy.businesscard.domain.card.dto.request.CardAddFilterRequest;
 import com.ssafy.businesscard.domain.card.dto.request.CardRequest;
+import com.ssafy.businesscard.domain.card.dto.request.MemoRequest;
 import com.ssafy.businesscard.domain.team.dto.request.TeamAlbumRegistRequest;
 import com.ssafy.businesscard.domain.team.service.TeamAlbumService;
 import com.ssafy.businesscard.global.utils.MessageUtils;
@@ -8,6 +10,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @Slf4j
 @RestController
 @CrossOrigin("*")
@@ -71,5 +76,25 @@ public class TeamController {
         teamAlbumService.deleteCard(teamAlbumId, cardId);
         log.info("[Delete Card] : {}", cardId);
         return ResponseEntity.ok().body(MessageUtils.success("명함이 삭제되었습니다."));
+    }
+
+    // 팀 명함지갑 명함에 필터 추가
+    @PostMapping("/{teamId}/{cardId}")
+    public ResponseEntity<MessageUtils> addFilter(@PathVariable("teamId") Long teamAlbumId,
+                                                  @PathVariable("cardId") Long cardId,
+                                                  @RequestBody List<CardAddFilterRequest> requestList) {
+        teamAlbumService.addFilter(teamAlbumId, cardId, requestList);
+        log.info("[Add Filter] : {}", requestList);
+        return ResponseEntity.ok().body(MessageUtils.success("명함에 필터가 추가되었습니다."));
+    }
+
+    // 팀 명함지갑 명함에 메모 등록 및 수정
+    @PostMapping("/{teamId}/{cardId}/memo")
+    public ResponseEntity<MessageUtils> cardMemo(@PathVariable("teamId") Long teamAlbumId,
+                                                 @PathVariable("cardId") Long cardId,
+                                                 @RequestBody MemoRequest request) {
+        String result = teamAlbumService.cardMemo(teamAlbumId, cardId, request);
+        log.info("[Card Memo] : {}", request.memo());
+        return ResponseEntity.ok().body(MessageUtils.success(result));
     }
 }
