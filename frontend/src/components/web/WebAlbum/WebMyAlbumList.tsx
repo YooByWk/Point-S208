@@ -16,17 +16,20 @@ import { isRefreshedAlbumState } from '@/stores/card'
 import { CardType } from '@/types/cardType'
 
 const WebMyAlbumList = ({
+  cards,
+  setCards,
   selectedCards,
   setSelectedCards,
   setIsDetail,
 }: {
+  cards: CardType[]
+  setCards: React.Dispatch<React.SetStateAction<CardType[]>>
   selectedCards: number[]
   setSelectedCards: React.Dispatch<React.SetStateAction<number[]>>
   setIsDetail: (isDetail: boolean) => void
 }) => {
   const userId = useRecoilValue(userState).userId
   const isRefreshed = useRecoilValue(isRefreshedAlbumState)
-  const [cards, setCards] = useState<CardType[]>([])
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
     useInfiniteQuery({
@@ -44,10 +47,9 @@ const WebMyAlbumList = ({
     if (data) {
       setCards(data.pages.flatMap(page => page) || [])
     }
-  }, [data])
+  }, [data, setCards])
 
   useEffect(() => {
-    console.log('refetch data')
     refetch()
   }, [isRefreshed, refetch])
 
@@ -94,7 +96,7 @@ const WebMyAlbumList = ({
                     <WebCardThumbnail
                       cardInfo={card}
                       key={card.cardId}
-                      selectedCards={[]}
+                      selectedCards={selectedCards}
                       setIsDetail={setIsDetail}
                       onSelect={handleCardSelect}
                     />

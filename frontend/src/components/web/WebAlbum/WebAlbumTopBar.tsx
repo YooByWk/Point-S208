@@ -17,8 +17,28 @@ import {
 } from '@fluentui/react-components'
 import Spacing from '@/components/shared/Spacing'
 import { colors } from '@/styles/colorPalette'
+import { CardType } from '@/types/cardType'
 
-const WebAlbumTopBar = ({ selectedCards }: { selectedCards: number[] }) => {
+const WebAlbumTopBar = ({
+  allCards,
+  selectedCards,
+  setSelectedCards,
+}: {
+  allCards: CardType[]
+  selectedCards: number[]
+  setSelectedCards: React.Dispatch<React.SetStateAction<number[]>>
+}) => {
+  console.log(`all cards: ${allCards.length}`)
+  console.log(`selected cards: ${selectedCards.length}`)
+
+  const handleSelectAll = () => {
+    if (allCards.length === selectedCards.length) {
+      setSelectedCards([])
+    } else {
+      setSelectedCards(allCards.map(card => card.cardId))
+    }
+  }
+
   return (
     <>
       <Flex direction="column" css={boxStyles}>
@@ -43,10 +63,23 @@ const WebAlbumTopBar = ({ selectedCards }: { selectedCards: number[] }) => {
         <Flex justify="space-between" align="center">
           <Text>나의 명함 지갑</Text>
           <Flex align="center">
-            <Checkbox shape="circular" label="" />
-            <Text typography="t9" color="themeMainBlue">
-              {selectedCards.length}개 선택됨
-            </Text>
+            <Checkbox
+              shape="circular"
+              label=""
+              checked={
+                allCards.length === selectedCards.length
+                  ? true
+                  : selectedCards.length > 0
+                  ? 'mixed'
+                  : false
+              }
+              onClick={handleSelectAll}
+            />
+            <div css={wordBoxStyles}>
+              <Text typography="t9" color="themeMainBlue" textAlign="center">
+                {selectedCards.length}개 선택됨
+              </Text>
+            </div>
             <Button appearance="transparent" size="small" css={buttonStyles}>
               <ArrowDownload24Filled />
             </Button>
@@ -77,4 +110,9 @@ const iconStyles = css`
 const buttonStyles = css`
   padding: 0;
   margin: 0;
+`
+
+const wordBoxStyles = css`
+  width: 100px;
+  text-align: center;
 `

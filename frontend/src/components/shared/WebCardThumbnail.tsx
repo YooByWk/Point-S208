@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { CardType } from '@/types/cardType'
 import Flex from '@shared/Flex'
 import { css } from '@emotion/react'
@@ -42,11 +42,18 @@ const WebCardThumbnail = ({
   onSelect,
 }: CardThumbnailProps) => {
   const [isfavorite, setIsFavorite] = useState(false)
-  const [isChecked, setIsChecked] = useState(false)
-  const isSelected = selectedCards.includes(cardInfo.cardId)
+  const [isChecked, setIsChecked] = useState(
+    selectedCards.includes(cardInfo.cardId),
+  )
+
   const setSelectedCardState = useSetRecoilState(selectedCardState)
   const [isRefreshed, setIsRefreshed] = useRecoilState(isRefreshedAlbumState)
   const userId = useRecoilValue(userState).userId
+
+  useEffect(() => {
+    const isChecked = selectedCards.includes(cardInfo.cardId)
+    setIsChecked(isChecked)
+  }, [selectedCards, cardInfo.cardId, setIsChecked])
 
   const { mutate } = useMutation({
     mutationKey: ['deleteMyAlbumCard'],
@@ -96,13 +103,14 @@ const WebCardThumbnail = ({
         </div>
 
         <Flex direction="column" justify="space-around" align="center">
-          <Spacing size={10} />
           <Checkbox
             shape="circular"
             label=""
             onClick={handleCheck}
+            checked={isChecked}
             css={checkboxStyles}
           />
+
           <Spacing size={10} />
           {isfavorite ? (
             <Star24Filled css={iconCss} onClick={handleFavorite} />
@@ -136,6 +144,7 @@ const WebCardThumbnail = ({
               </DialogBody>
             </DialogSurface>
           </Dialog>
+          <Spacing size={10} />
         </Flex>
       </Flex>
     </>
