@@ -2,6 +2,7 @@ package com.ssafy.businesscard.domain.team.service.impl;
 
 import com.ssafy.businesscard.domain.card.dto.request.CardAddFilterRequest;
 import com.ssafy.businesscard.domain.card.dto.request.CardRequest;
+import com.ssafy.businesscard.domain.card.dto.request.MemoRequest;
 import com.ssafy.businesscard.domain.card.entity.Businesscard;
 import com.ssafy.businesscard.domain.card.entity.Filter;
 import com.ssafy.businesscard.domain.card.mapper.BusinesscardMapper;
@@ -213,6 +214,33 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
                     .teamAlbumDetail(teamAlbumDetail)
                     .build());
         }
+    }
+
+    // 팀 명함지갑 명함에 메모 등록 및 수정
+    @Override
+    public String cardMemo(Long teamAlbumId, Long cardId, MemoRequest request) {
+        TeamAlbumDetail teamAlbumDetail = teamAlbumDetailRepository.findByTeamAlbum_teamAlbumIdAndBusinesscard_CardId(
+                teamAlbumId, cardId
+        );
+        // 메모가 없다면 메모 등록
+        if (teamAlbumDetail.getMemo() == null) {
+            teamAlbumDetailRepository.save(TeamAlbumDetail.builder()
+                    .teamAlbumDetailId(teamAlbumDetail.getTeamAlbumDetailId())
+                    .teamAlbum(teamAlbumDetail.getTeamAlbum())
+                    .businesscard(teamAlbumDetail.getBusinesscard())
+                    .memo(request.memo())
+                    .build());
+            return "메모가 등록되었습니다.";
+        } else {
+            teamAlbumDetailRepository.save(TeamAlbumDetail.builder()
+                    .teamAlbumDetailId(teamAlbumDetail.getTeamAlbumDetailId())
+                    .teamAlbum(teamAlbumDetail.getTeamAlbum())
+                    .businesscard(teamAlbumDetail.getBusinesscard())
+                    .memo(request.memo())
+                    .build());
+            return "메모가 수정되었습니다.";
+        }
+
     }
 
     private User findUser(Long userId) {
