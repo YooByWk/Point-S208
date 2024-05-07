@@ -1,5 +1,6 @@
 package com.ssafy.businesscard.teams.service;
 
+import com.ssafy.businesscard.mycard.entity.Businesscard;
 import com.ssafy.businesscard.privateAlbum.dto.PrivateAlbumResponseDto;
 import com.ssafy.businesscard.privateAlbum.entity.PrivateAlbum;
 import com.ssafy.businesscard.teams.dto.TeamListResponseDto;
@@ -7,6 +8,7 @@ import com.ssafy.businesscard.teams.dto.TeamMemberListResponseDto;
 import com.ssafy.businesscard.teams.entity.TeamAlbum;
 import com.ssafy.businesscard.teams.entity.TeamAlbumDetail;
 import com.ssafy.businesscard.teams.entity.TeamMember;
+import com.ssafy.businesscard.teams.mapper.TeamsMapper;
 import com.ssafy.businesscard.teams.repository.TeamAlbumDetailRepository;
 import com.ssafy.businesscard.teams.repository.TeamAlbumMemberRepository;
 import com.ssafy.businesscard.teams.repository.TeamAlbumRepository;
@@ -33,6 +35,7 @@ public class TeamsServiceImpl implements TeamsService{
     private final TeamAlbumMemberRepository teamAlbumMemberRepository;
     private final TeamMemberRepository teamMemberRepository;
     private final TeamAlbumDetailRepository teamAlbumDetailRepository;
+    private final TeamsMapper teamsMapper;
 
     //팀 명함 목록 조회
     @Override
@@ -101,5 +104,14 @@ public class TeamsServiceImpl implements TeamsService{
             teamMembers.add(new TeamMemberListResponseDto(member.getUser().getUserId(), member.getUser().getEmail(), member.getUser().getName()));
         }
         return teamMembers;
+    }
+
+    //엑셀로 내보내기용 팀 명함 목록조회
+    @Override
+    public List<PrivateAlbumResponseDto> getTeamAlbumAllList(Long teamAlbumId){
+        List<TeamAlbumDetail> teamAlbumDetails = teamAlbumDetailRepository.findByTeamAlbum_TeamAlbumId(teamAlbumId);
+        List<Businesscard> businesscards = teamAlbumDetails.stream().map(bc -> bc.getBusinesscard()).toList();
+        List<PrivateAlbumResponseDto> dtos = businesscards.stream().map(teamsMapper::toDto).toList();
+        return dtos;
     }
 }
