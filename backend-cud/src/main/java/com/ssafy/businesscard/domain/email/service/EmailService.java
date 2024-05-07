@@ -70,6 +70,7 @@ public class EmailService {
         }
 
     }
+
     public String toEmailString(Businesscard businesscard) {
         StringBuilder sb = new StringBuilder();
         sb.append("이름: ").append(businesscard.getName()).append("<br>");
