@@ -11,7 +11,7 @@ import {
 import Text from '@shared/Text'
 import Input from '@shared/Input'
 import { createFilter } from '@/apis/album'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 
 const AddFilter = ({
@@ -25,13 +25,14 @@ const AddFilter = ({
   handleModalOpen: () => void
 }) => {
   const [filterNameInput, setFilterNameInput] = useState('')
-
+  const queryClient = useQueryClient()
   const { mutate } = useMutation({
     mutationKey: ['createFilter', userId, filterNameInput],
     mutationFn: () => createFilter({userId:userId, filterName:filterNameInput}),
     onSuccess(res) {
       console.log(res)
       handleAddFilter()
+      queryClient.invalidateQueries({queryKey : ['fetchFilterList']})
     },
     onError(err) {
       console.log(err)

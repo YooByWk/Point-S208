@@ -15,6 +15,7 @@ import {
   DialogActions,
   DialogContent,
   Button,
+  tokens,
 } from '@fluentui/react-components'
 import Text from '@shared/Text'
 import Input from '@shared/Input'
@@ -74,9 +75,10 @@ const Filter = ({
 }) => {
   return (
     <Flex direction="row" justify="center" align="center">
-      <Text>{filterName}</Text>
+      <Text typography='t7'>{filterName}</Text>
       <Spacing size={30} direction="horizontal" />
       <Edit16Filled onClick={onClick} />
+      <Spacing size={15} direction="horizontal" />
       <Delete16Filled onClick={()=>onDelete(filterId, filterName)}/>
     </Flex>
   )
@@ -155,6 +157,7 @@ const FilterIconModal: React.FC<LargeModalProps> = ({
       editFilter(userId, filterId, filterName),
     onSuccess() {
       queryClient.invalidateQueries({ queryKey: ['fetchFilterList'] })
+      // queryClient.invalidateQueries()
     },
   })
   
@@ -167,7 +170,6 @@ const FilterIconModal: React.FC<LargeModalProps> = ({
   })
   
   const handleFilterNameSave = (filterId: number) => {
-    console.log(filterNames[filterId])
     let editData = {
       userId: userId as number,
       filterId: filterId,
@@ -192,7 +194,7 @@ const FilterIconModal: React.FC<LargeModalProps> = ({
   return (
     <Dialog modalType="alert" open={isModalOpen}>
       <DialogTrigger disableButtonEnhancement>
-        <div onClick={handleModalOpen}>{icon}</div>
+        <div onClick={handleModalOpen} >{icon}</div>
       </DialogTrigger>
       <DialogSurface>
         {isAddFilter ? (
@@ -202,21 +204,22 @@ const FilterIconModal: React.FC<LargeModalProps> = ({
             userId={userId as number}
           />
         ) : (
-          <DialogBody>
+          <DialogBody css={bodyCss}>
             <DialogTitle>
               <Flex align="center" justify="space-between">
                 {dialogTitle}
                 {filterList !== undefined && (
                   <Flex>
                     <Add16Filled
-                      onClick={() => {
+                    color={tokens.colorBrandForeground1}
+                    onClick={() => {
                         setIsAddFilter(!isAddFilter)
                       }}
                     />
-
                   </Flex>
                 )}
               </Flex>
+              <hr />
             </DialogTitle>
             <DialogContent>
               {
@@ -277,4 +280,9 @@ export default FilterIconModal
 
 const btnCss = css`
   height: 48px;
+`
+
+const bodyCss = css`
+  height: 60vh;
+  overflow-y: scroll;
 `

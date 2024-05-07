@@ -6,12 +6,13 @@ import { css } from '@emotion/react'
 // import  { useState } from 'react'
 import Flex from '@shared/Flex'
 import { tokens } from '@fluentui/react-components'
-import { Dismiss16Filled } from '@fluentui/react-icons'
+import { Dismiss16Filled, Add16Filled } from '@fluentui/react-icons'
 import { colors } from '@/styles/colorPalette'
 import DetailAddFilterModal from '@/components/mobile/MyAlbum/MyAlbumDetail/DetailAddFilterModal'
+import { useState } from 'react'
 
-const DetailFilter = ({cardId}:{cardId: number}) => {
-  // const [tags, setTags] = useState<string[]>([])
+const DetailFilter = ({ cardId }: { cardId: number }) => {
+  const [filters, setFilters] = useState<string[]>([])
   // 필터 정보 불러오는 곳 - useQuery 사용 : 수정하기
 
   // 우선 더미 데이터로 대체
@@ -45,7 +46,7 @@ const DetailFilter = ({cardId}:{cardId: number}) => {
             >
               <Dismiss16Filled
                 css={iconCss}
-                onClick={() => console.log('이 명함에서 필터 제거 : 수정하기')}
+                onClick={() => {}}
               />
               {filter.filterName}
             </Flex>
@@ -53,14 +54,13 @@ const DetailFilter = ({cardId}:{cardId: number}) => {
         })}
         <div css={addIconCss}>
           <DetailAddFilterModal
-          icon={<Dismiss16Filled/>}
+            icon={<Add16Filled />}
             cardId={cardId}
             onClick={() => {
               console.log('필터 목록 보여주기: 수정하기')
             }}
             dialogContent="필터 추가하기 : 수정"
             dialogTitle="명함에 태그 추가하기"
-
           />
         </div>
       </Flex>

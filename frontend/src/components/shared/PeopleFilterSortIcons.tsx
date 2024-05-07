@@ -8,6 +8,7 @@ import Flex from '@shared/Flex'
 import { useRecoilState } from 'recoil'
 import { isLookingMemberState } from '@/stores/team'
 import FilterIconModal from '@/components/mobile/MyAlbum/Filter/FilterIconModal'
+import { tokens } from '@fluentui/react-components'
 
 
 interface PeopleFilterSortIconsProps {

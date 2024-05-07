@@ -16,7 +16,7 @@ import { Button } from '@fluentui/react-components'
 import { writeInfoState } from '@/stores/emptyCard'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { userState } from '@/stores/user'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { RegisterOtherCard } from '@/apis/album'
 import { useNavigate } from 'react-router-dom'
 
@@ -38,7 +38,7 @@ const RegisterOtherCardInfo = ({isEnglish}: {
   const userId = useRecoilValue(userState).userId
   const navigate = useNavigate()
   const [dirty, setDirty] = useState<Partial<cardInput>>({})
-
+  const queryClient = useQueryClient()
   const handleCardInputs = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setCardInputs(prevCardInputs => ({
       ...prevCardInputs,
@@ -58,6 +58,8 @@ const RegisterOtherCardInfo = ({isEnglish}: {
     mutationFn: RegisterOtherCard,
     onSuccess: res => {
       console.log('명함 등록 성공', res)
+      queryClient.invalidateQueries({queryKey: ['fetchMyAlbum']})
+      navigate(-1)
     },
     onError: error => {
       console.log('error: ', error)

@@ -12,6 +12,8 @@ import { useQuery } from '@tanstack/react-query';
 import { ExternalCardListType } from '@/types/ExternalCard';
 import { searchUser } from '@/apis/team';
 import { UserListType } from '@/types/userType';
+import { useRecoilValue } from 'recoil';
+import { userState } from '@/stores/user';
 interface SearchBoxProps {
   placeholder?: string
   onChange?: (e: any) => void
@@ -49,6 +51,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   isSearchingMember=false,
   isInTeam=false
 }) => {
+  const userId = useRecoilValue(userState).userId
   // const handleKeyDown = (e: any): void => {
   //   if (e.key === 'Enter') {
   //     // console.log('submit', value)
@@ -62,7 +65,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
  const { data } = useQuery({
   
   queryKey: isSearchingMember? ['searchUser', value] : ['searchMyAlbumCard', value],
-  queryFn: () => isSearchingMember ? searchUser(value) : searchMyAlbumCard(value),
+  queryFn: () => isSearchingMember ? searchUser(value) : userId &&  searchMyAlbumCard({id: userId, userInput: value}) ,
   enabled: value !== '',
  })
  

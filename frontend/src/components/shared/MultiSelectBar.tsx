@@ -32,7 +32,11 @@ const MultiSelectBar = ({selectedCards, allCards, setSelectedCards}:MultiSelectB
   
   const handleDownload = () => {
     console.log('handleDownload: ', selectedCards);
+    // id로 카드 정보 가져오기
+    const selectedCardDetails: CardType[] = allCards.filter(card => selectedCards.includes(card.cardId));
+    console.log('selectedCardDetails: ', selectedCardDetails);
   }
+  
   const handleDelete = () => {
     console.log('handleDelete: ',selectedCards);
   }

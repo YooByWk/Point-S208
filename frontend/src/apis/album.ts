@@ -5,11 +5,11 @@ import {
   editMemoType,
   WriteCardType,
 } from '@/types/cardInput'
+import { searchType } from '@/types/searchType'
 import { authRequest } from '@/utils/requestMethod'
 
 const CudUrl = '/cud/api/my-album'
 const ReadUrl = '/read/api/my-album'
-const CardSearchUrl = '/read/api/card/search'
 
 export const fetchMyAlbum = async (userId: number, page: number) => {
   console.log('페이지: ', page)
@@ -31,9 +31,9 @@ export const RegisterOtherCard = async (params: WriteCardType) => {
 }
 
 // 내 명함지갑 명함 검색
-export const searchMyAlbumCard = async (userInput: string | number) => {
+export const searchMyAlbumCard = async (params:searchType) => {
   return authRequest
-    .get(`${CardSearchUrl}`, { params: { info: userInput } })
+    .get(`${ReadUrl}/${params.id}/search`, { params: { info: params.userInput } })
     .then(res => {
       console.log(res)
       return res.data
