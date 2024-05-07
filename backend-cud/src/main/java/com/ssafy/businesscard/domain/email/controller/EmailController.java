@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/my-card")
+@RequestMapping("/api")
 @Slf4j
 @RequiredArgsConstructor
 ///api/my-card/{user_id}/{card_id}/share/email
