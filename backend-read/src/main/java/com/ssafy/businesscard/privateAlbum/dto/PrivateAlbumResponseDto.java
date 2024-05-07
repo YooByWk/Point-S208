@@ -10,6 +10,7 @@ public record PrivateAlbumResponseDto(
         String company,
         String position,
         String rank,
+        String department,
         String email,
         String landlineNumber,
         String faxNumber,

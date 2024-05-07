@@ -48,6 +48,7 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
                         privateAlbum.getBusinesscard().getCompany(),
                         privateAlbum.getBusinesscard().getPosition(),
                         privateAlbum.getBusinesscard().getRank(),
+                        privateAlbum.getBusinesscard().getDepartment(),
                         privateAlbum.getBusinesscard().getEmail(),
                         privateAlbum.getBusinesscard().getLandlineNumber(),
                         privateAlbum.getBusinesscard().getFaxNumber(),
@@ -73,6 +74,7 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
                     .company(privateAlbum.getBusinesscard().getCompany())
                     .position(privateAlbum.getBusinesscard().getPosition())
                     .rank(privateAlbum.getBusinesscard().getRank())
+                    .department(privateAlbum.getBusinesscard().getDepartment())
                     .email(privateAlbum.getBusinesscard().getEmail())
                     .landlineNumber(privateAlbum.getBusinesscard().getLandlineNumber())
                     .faxNumber(privateAlbum.getBusinesscard().getFaxNumber())
@@ -117,6 +119,7 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
                         .company(bc.getCompany())
                         .position(bc.getPosition())
                         .rank(bc.getRank())
+                        .department(bc.getDepartment())
                         .email(bc.getEmail())
                         .landlineNumber(bc.getLandlineNumber())
                         .faxNumber(bc.getFaxNumber())

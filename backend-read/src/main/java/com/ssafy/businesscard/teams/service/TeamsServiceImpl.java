@@ -70,6 +70,7 @@ public class TeamsServiceImpl implements TeamsService{
                         teamAlbumDetail.getBusinesscard().getCompany(),
                         teamAlbumDetail.getBusinesscard().getPosition(),
                         teamAlbumDetail.getBusinesscard().getRank(),
+                        teamAlbumDetail.getBusinesscard().getDepartment(),
                         teamAlbumDetail.getBusinesscard().getEmail(),
                         teamAlbumDetail.getBusinesscard().getLandlineNumber(),
                         teamAlbumDetail.getBusinesscard().getFaxNumber(),
