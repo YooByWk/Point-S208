@@ -54,23 +54,23 @@ const TeamDetail = () => {
   
   useEffect(() => {
     const handleScroll = () => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop ===
-        document.documentElement.offsetHeight
-      )
-        return
-      if (hasNextPage) {
-        fetchNextPage()
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+        if (hasNextPage) {
+          console.log('더불러오기')
+          fetchNextPage()
+        }
       }
     }
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [fetchNextPage, hasNextPage, data])
   
+  
+  
+  
   if (isAddCard) {
     return (
       <>
-
         <AddCard isAddCard={isAddCard} setIsAddCard={setIsAddCard} />
       </>
     )

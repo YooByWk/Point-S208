@@ -62,11 +62,6 @@ const AlbumList = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      console.log('scroll')
-      console.log(
-        window.innerHeight + window.scrollY >= document.body.offsetHeight,
-        hasNextPage,
-      )
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
         if (hasNextPage) {
           console.log('더불러오기')
