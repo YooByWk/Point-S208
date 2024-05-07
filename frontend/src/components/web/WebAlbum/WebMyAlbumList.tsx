@@ -12,17 +12,26 @@ import Text from '@shared/Text'
 import Spacing from '@shared/Spacing'
 import AddCard from '@components/mobile/MyAlbum/AddCard'
 import WebCardThumbnail from '@/components/shared/WebCardThumbnail'
+import { isRefreshedAlbumState } from '@/stores/card'
+import { CardType } from '@/types/cardType'
 
 const WebMyAlbumList = ({
+  cards,
+  setCards,
   selectedCards,
+  setSelectedCards,
   setIsDetail,
 }: {
+  cards: CardType[]
+  setCards: React.Dispatch<React.SetStateAction<CardType[]>>
   selectedCards: number[]
+  setSelectedCards: React.Dispatch<React.SetStateAction<number[]>>
   setIsDetail: (isDetail: boolean) => void
 }) => {
   const userId = useRecoilValue(userState).userId
+  const isRefreshed = useRecoilValue(isRefreshedAlbumState)
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
     useInfiniteQuery({
       queryKey: ['fetchMyAlbum'],
       queryFn: ({ pageParam = 0 }) => fetchMyAlbum(userId as number, pageParam),
@@ -34,7 +43,19 @@ const WebMyAlbumList = ({
       initialPageParam: 0,
     })
 
-  const cards = data?.pages.flatMap(page => page) || []
+  useEffect(() => {
+    if (data) {
+      setCards(data.pages.flatMap(page => page) || [])
+    }
+  }, [data, setCards])
+
+  useEffect(() => {
+    console.log('refetch')
+    if (cards.length === 1 && cards[0].cardId === 0) {
+      refetch()
+    }
+    refetch()
+  }, [isRefreshed, refetch, cards])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -50,12 +71,20 @@ const WebMyAlbumList = ({
 
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [fetchNextPage, hasNextPage, data])
+  }, [fetchNextPage, hasNextPage, data, isRefreshed])
 
   const [isAddCard, setIsAddCard] = useState(false)
 
   const handleAdd = () => {
-    setIsAddCard(!isAddCard)
+    console.log('이미지로 명함 추가')
+  }
+
+  const handleCardSelect = (cardId: number) => {
+    setSelectedCards(prev =>
+      prev.includes(cardId)
+        ? prev.filter(id => id !== cardId)
+        : [...prev, cardId],
+    )
   }
 
   return (
@@ -71,37 +100,31 @@ const WebMyAlbumList = ({
                     <WebCardThumbnail
                       cardInfo={card}
                       key={card.cardId}
-                      selectedCards={[]}
+                      selectedCards={selectedCards}
                       setIsDetail={setIsDetail}
+                      onSelect={handleCardSelect}
                     />
                   )
                 })}
             </div>
             <div css={buttonCss}>
-              {selectedCards.length > 0 ? (
-                <LargeButton text="명함 공유" width="80%" onClick={() => {}} />
-              ) : (
-                <LargeButton text="명함 추가" width="80%" onClick={handleAdd} />
-              )}
+              <LargeButton text="명함 추가" width="80%" onClick={handleAdd} />
             </div>
           </>
         ) : (
-          <Flex
-            direction="column"
-            justify="center"
-            align="center"
-            css={nullDivCss}
-          >
-            <Text>지갑에 등록된 명함이 없습니다.</Text>
-
-            <Spacing size={40} direction="vertical" />
-            <LargeButton
-              text="명함 추가"
-              width="80vw"
-              height="50px"
-              onClick={handleAdd}
-            />
-          </Flex>
+          <>
+            <Flex
+              direction="column"
+              justify="center"
+              align="center"
+              css={nullDivCss}
+            >
+              <Text>지갑에 등록된 명함이 없습니다.</Text>
+            </Flex>
+            <div css={buttonCss}>
+              <LargeButton text="명함 추가" width="80%" onClick={handleAdd} />
+            </div>
+          </>
         )}
         {isFetchingNextPage && (
           <div css={SpinnerCss}>
@@ -123,7 +146,7 @@ const SpinnerCss = css`
 `
 
 const nullDivCss = css`
-  height: 100%;
+  height: calc(100% - 150px);
   padding-bottom: 10vh;
 `
 

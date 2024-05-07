@@ -18,26 +18,35 @@ import { useNavigate } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import { userState } from '@/stores/user'
 import { ExternalCardType } from '@/types/ExternalCard'
-///
-///
+import EmptyThumbnail from '@/components/shared/EmptyThumbnail'
+import { useMutation } from '@tanstack/react-query'
 interface CardThumbnailProps {
   cardInfo: CardType | ExternalCardType
   onSelect: (cardId: number) => void
   selectedCards: number[]
   forShare?: boolean
   scale?: number
+  teamId? : number
 }
 
 const CardThumbnail = ({
+  teamId,
   cardInfo,
   onSelect,
   selectedCards,
   forShare = false,
-  scale=1
+  scale = 1,
 }: CardThumbnailProps) => {
   const [isfavorite, setIsFavorite] = useState(false)
   const [isChecked, setIsChecked] = useState(false)
   const isSelected = selectedCards.includes(cardInfo.cardId)
+  const userId = useRecoilValue(userState).userId 
+  // const deleteMutation = useDeleteMyAlbumMutation(selectedCards)
+  console.log(teamId,userId,'teamId')
+  
+
+  
+  
   const handleCheck = (event: React.MouseEvent) => {
     event.stopPropagation()
     setIsChecked(!isChecked)
@@ -59,21 +68,25 @@ const CardThumbnail = ({
 
   const handleDelete = (event: React.MouseEvent) => {
     event.stopPropagation()
+    /*  api 호출 */
+    
     console.log('삭제 : ', cardInfo)
   }
-  const userId = useRecoilValue(userState).userId
-  
+  console.log(cardInfo)
   const navigate = useNavigate()
   return (
     <div
-      css={cardContainer( forShare, scale)}
+      css={cardContainer(forShare, scale)}
       onClick={() => {
-        if (forShare) { // 공유하기 화면 이하에서는 명함 썸네일 전체가 선택여부가 되도록
+        if (forShare) {
+          // 공유하기 화면 이하에서는 명함 썸네일 전체가 선택여부가 되도록
           setIsChecked(!isChecked)
           onSelect(cardInfo.cardId)
         } else {
           console.log(cardInfo, '님의 명함')
-          navigate(`/myAlbum/${userId}/${cardInfo.cardId}`, { state: { cardInfo } })
+          navigate(`/myAlbum/${userId}/${cardInfo.cardId}`, {
+            state: { cardInfo },
+          })
         }
       }}
     >
@@ -82,41 +95,54 @@ const CardThumbnail = ({
       ) : (
         <Circle24Regular onClick={handleCheck} />
       )}
-      <Flex direction="row" justify="space-around" align="center" css={content}>
-        <Flex direction="column" justify="center" align="center">
+      <Flex direction="row" justify="space-around" align="center" >
+        <Flex direction="column" justify="center" align="center" css= {infoCss}>
           <Text typography="t7" bold={true}>
-            {cardInfo.name}
+            {cardInfo.name.length > 3 &&
+            /[\u3131-\u314e|\u314f-\u3163|\uac00-\ud7a3]/g.test(cardInfo.name)
+              ? `${cardInfo.name.slice(0, 3)}...`
+              : cardInfo.name.length > 6
+              ? `${cardInfo.name.slice(0, 6)}...`
+              : cardInfo.name.padEnd(6, ' ')}
           </Text>
-          <Text typography="t9">{`${cardInfo.rank} / ${cardInfo.position}`}</Text>
-          <Text typography="t9">{cardInfo.company}</Text>
+          <Text typography="t9" css={infoContent} >{`${cardInfo.department} / ${cardInfo.position}`}</Text>
+          <Text typography="t9" css={infoContent}>{cardInfo.company}</Text>
         </Flex>
-        <img
-          src={
-            cardInfo.realPicture
-              ? cardInfo.realPicture
-              : cardInfo.digitalPicture
-          }
-          alt="card"
-        />
-        {!forShare&&<Flex direction="column" justify="space-around" align="center">
-          {isfavorite ? (
-            <Star24Filled css={iconCss} onClick={handleFavorite} />
-          ) : (
-            <Star24Regular css={i} onClick={handleFavorite} />
-          )}
-          <ShareAndroid24Filled css={i} onClick={handleShare} />
-          <Delete24Filled css={i} onClick={handleDelete} />
-        </Flex>}
-        
+
+        {cardInfo.realPicture || cardInfo.digitalPicture ? (
+          <img
+            src={
+              cardInfo.realPicture
+                ? cardInfo.realPicture
+                : cardInfo.digitalPicture
+            }
+            alt="card"
+          />
+        ) : (
+          <div>
+            <EmptyThumbnail />
+          </div>
+        )}
+        {!forShare && (
+          <Flex direction="column" justify="space-around" align="center">
+            {isfavorite ? (
+              <Star24Filled css={iconCss} onClick={handleFavorite} />
+            ) : (
+              <Star24Regular css={i} onClick={handleFavorite} />
+            )}
+            <ShareAndroid24Filled css={i} onClick={handleShare} />
+            <Delete24Filled css={i} onClick={handleDelete} />
+          </Flex>
+        )}
       </Flex>
-      <Spacing  size={10} direction='vertical'/>
+      <Spacing size={10} direction="vertical" />
     </div>
   )
 }
 
 export default CardThumbnail
 
-const cardContainer = (forShare:boolean, scale:number) => css`
+const cardContainer = (forShare: boolean, scale: number) => css`
   border-radius: 10px;
   width: 85%;
   min-height: 120px;
@@ -124,7 +150,7 @@ const cardContainer = (forShare:boolean, scale:number) => css`
   margin-top: 1%;
   background-color: ${tokens.colorNeutralBackground1Selected};
   min-height: 100px;
-  scale: ${forShare? scale : 1};
+  scale: ${forShare ? scale : 1};
   /* padding: 10px; */
 
   &:hover,
@@ -157,4 +183,14 @@ const i = css`
   margin-bottom: 15px;
 `
 
-const content = css``
+const infoContent = css`
+  overflow: hidden;
+  max-width: 140px;
+`
+
+
+const infoCss = css`
+  min-width: 132px;
+  max-width: 160px;
+  overflow: hidden;
+`

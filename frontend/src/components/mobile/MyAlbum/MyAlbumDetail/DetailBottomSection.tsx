@@ -19,6 +19,8 @@ import { useState } from 'react'
 import { useRecoilValue } from 'recoil'
 
 
+
+
 const DetailBottomSection = () => {
   const theme = useRecoilValue(themeState)
   const [openItems, setOpenItems] = useState(['0'])
@@ -74,7 +76,7 @@ const DetailBottomSection = () => {
         </Button>
       </Flex>
 
-      <Spacing size={24} />
+      <Spacing size={10} />
     </>
   )
 };

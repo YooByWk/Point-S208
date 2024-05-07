@@ -22,9 +22,10 @@ import {
 } from '@fluentui/react-components'
 import { colors } from '@styles/colorPalette'
 import { useMutation } from '@tanstack/react-query'
-import { deleteMyCard } from '@apis/card'
 import { useRecoilValue } from 'recoil'
 import { userState } from '@stores/user'
+import { deleteMyAlbumCard } from '@/apis/album'
+import { selectedCardState } from '@/stores/card'
 
 const WebAlbumDetailTopBar = ({
   setIsDetail,
@@ -34,10 +35,11 @@ const WebAlbumDetailTopBar = ({
   setEditOpen: (isOpen: boolean) => void
 }) => {
   const userId = useRecoilValue(userState).userId
+  const selectedCard = useRecoilValue(selectedCardState)
 
   const { mutate } = useMutation({
-    mutationKey: ['deleteMyCard'],
-    mutationFn: deleteMyCard,
+    mutationKey: ['deleteMyAlbumCard'],
+    mutationFn: deleteMyAlbumCard,
     onSuccess(result) {
       console.log('삭제 성공', result)
     },
@@ -46,7 +48,10 @@ const WebAlbumDetailTopBar = ({
     },
   })
 
-  const handleDelete = async () => {}
+  const handleDelete = async () => {
+    mutate({ userId: userId, cardId: selectedCard.cardId })
+    setIsDetail(false)
+  }
 
   return (
     <>

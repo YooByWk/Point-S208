@@ -14,4 +14,5 @@ export type CardType = {
   digitalPicture: string
   frontBack: string
   domainUrl: string
+  memo: string
 }

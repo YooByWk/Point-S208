@@ -5,15 +5,28 @@ import Spacing from '@shared/Spacing'
 import Text from '@shared/Text'
 import { useEffect, useRef, useState } from 'react'
 import { colors } from '@/styles/colorPalette'
-import InfoEdit from '../../mobile/MyCard/MyCardDetail/InfoEdit'
 import WebAlbumCardInfo from './WebAlbumCardInfo'
 import WebAlbumDetailTopBar from './WebAlbumDetailTopBar'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { selectedCardState } from '@/stores/card'
-import { tokens } from '@fluentui/react-components'
-import TextButton from '@/components/shared/TextButton'
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogBody,
+  DialogContent,
+  DialogSurface,
+  DialogTrigger,
+  Field,
+  Textarea,
+  TextareaProps,
+  tokens,
+} from '@fluentui/react-components'
 
 import { Edit16Filled } from '@fluentui/react-icons'
+import { useMutation } from '@tanstack/react-query'
+import { editMyAlbumMemo } from '@/apis/album'
+import { userState } from '@/stores/user'
 
 declare global {
   interface Window {
@@ -24,19 +37,28 @@ declare global {
 interface LatLng {
   x: number
   y: number
+  loc: string
 }
 
 const WebAlbumDetail = ({
   setIsDetail,
+  editOpen,
+  setEditOpen,
 }: {
   setIsDetail: (isDetail: boolean) => void
+  editOpen: boolean
+  setEditOpen: (isDetail: boolean) => void
 }) => {
-  const selectedCard = useRecoilValue(selectedCardState)
+  const [selectedCard, setSelectedCard] = useRecoilState(selectedCardState)
   const mapContainer = useRef(null)
   const [positionArr, setPositionArr] = useState<LatLng>({
     y: 37.3891408885668,
     x: 126.644442676851,
+    loc: '포스코인터네셔널 송도본사',
   })
+  const [editMemo, setEditMemo] = useState(selectedCard.memo)
+  const [modalOpen, setModalOpen] = useState(false)
+  const userId = useRecoilValue(userState).userId as number
 
   useEffect(() => {
     const script = document.createElement('script')
@@ -54,7 +76,11 @@ const WebAlbumDetail = ({
           function (result: LatLng[], status: any) {
             if (status === window.kakao.maps.services.Status.OK) {
               console.log(result)
-              setPositionArr({ y: result[0].y, x: result[0].x })
+              setPositionArr({
+                y: result[0].y,
+                x: result[0].x,
+                loc: selectedCard.address,
+              })
 
               const position = new window.kakao.maps.LatLng(
                 result[0].y,
@@ -75,6 +101,7 @@ const WebAlbumDetail = ({
               )
               marker.setMap(map)
             } else {
+              console.log('kakao map is not available')
               const position = new window.kakao.maps.LatLng(
                 positionArr.y,
                 positionArr.x,
@@ -100,8 +127,35 @@ const WebAlbumDetail = ({
     }
   }, [selectedCard.address])
 
-  const [editOpen, setEditOpen] = useState(false)
-  if (editOpen) return <InfoEdit value={editOpen} setValue={setEditOpen} />
+  const { mutate } = useMutation({
+    mutationKey: ['editMyAlbumMemo'],
+    mutationFn: editMyAlbumMemo,
+    onSuccess(result) {
+      console.log('수정 성공', result)
+    },
+    onError(error) {
+      console.error('수정 실패:', error)
+    },
+  })
+
+  const handleSubmit = (ev: React.FormEvent) => {
+    ev.preventDefault()
+
+    let params = {
+      userId: userId,
+      cardId: selectedCard.cardId,
+      data: {
+        memo: editMemo,
+      },
+    }
+    mutate(params)
+
+    setSelectedCard(prev => ({ ...prev, memo: editMemo }))
+  }
+
+  const onChange: TextareaProps['onChange'] = (ev, data) => {
+    setEditMemo(data.value)
+  }
 
   return (
     <>
@@ -121,7 +175,7 @@ const WebAlbumDetail = ({
               <div ref={mapContainer} css={mapContainerStyles}></div>
               <a
                 css={findWayButtonStyles}
-                href={`https://map.kakao.com/link/to/${selectedCard.address},${positionArr.y},${positionArr.x}`}
+                href={`https://map.kakao.com/link/to/${positionArr.loc},${positionArr.y},${positionArr.x}`}
                 target="_blank"
                 rel="noreferrer"
               >
@@ -131,16 +185,60 @@ const WebAlbumDetail = ({
             <Spacing size={20} />
             <Flex justify="space-between">
               <Text typography="t6">메모</Text>
-              <TextButton
-                onClick={() => {
-                  // TODO: 메모 수정 로직
-                }}
-              >
-                <Edit16Filled /> 수정
-              </TextButton>
+
+              <Dialog modalType="alert" open={modalOpen}>
+                <DialogTrigger disableButtonEnhancement>
+                  <Button shape="circular" onClick={() => setModalOpen(true)}>
+                    <Text typography="t7">
+                      <Edit16Filled /> 수정
+                    </Text>
+                  </Button>
+                </DialogTrigger>
+                <DialogSurface aria-describedby={undefined}>
+                  <form onSubmit={handleSubmit}>
+                    <DialogBody>
+                      <DialogContent>
+                        <Field label="메모 수정">
+                          <Textarea
+                            appearance="outline"
+                            onChange={onChange}
+                            value={editMemo}
+                            resize="both"
+                          />
+                        </Field>
+                      </DialogContent>
+                      <DialogActions>
+                        <DialogTrigger disableButtonEnhancement>
+                          <Button
+                            appearance="secondary"
+                            shape="circular"
+                            onClick={() => setModalOpen(false)}
+                          >
+                            취소
+                          </Button>
+                        </DialogTrigger>
+                        <Button
+                          type="submit"
+                          appearance="primary"
+                          shape="circular"
+                          onClick={() => setModalOpen(false)}
+                        >
+                          수정
+                        </Button>
+                      </DialogActions>
+                    </DialogBody>
+                  </form>
+                </DialogSurface>
+              </Dialog>
             </Flex>
 
-            <div css={memoBoxStyles}>{/* TODO: 메모 내용 */}</div>
+            <div css={memoBoxStyles}>
+              <Text typography="t8">
+                {selectedCard.memo
+                  ? selectedCard.memo
+                  : '등록된 메모가 없습니다.'}
+              </Text>
+            </div>
           </Flex>
         </div>
       </Flex>
@@ -188,4 +286,5 @@ const memoBoxStyles = css`
   margin: 20px;
   width: 42vw;
   height: 30vh;
+  padding: 10px;
 `

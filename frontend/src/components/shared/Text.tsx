@@ -21,6 +21,10 @@ const Text = styled.span<TextProps>(
     fontWeight: bold ? 'bold' : fontWeight,
   }),
   ({ typography = 't5' }) => typographyMap[typography],
+  {
+    display: 'flex', // 상하 중앙 정렬을 위해 추가된 display: flex
+    alignItems: 'center', // 상하 중앙 정렬을 위해 추가된 align-items: center
+  },
 )
 
 export default Text

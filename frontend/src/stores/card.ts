@@ -17,6 +17,7 @@ const defaultCard = {
   digitalPicture: '',
   frontBack: '',
   domainUrl: '',
+  memo: '',
 }
 
 export const frontCardState = atom<CardType>({
@@ -47,4 +48,9 @@ export const isFirstCardState = atom({
 export const selectedCardState = atom<CardType>({
   key: 'selectedCardState',
   default: defaultCard,
+})
+
+export const isRefreshedAlbumState = atom({
+  key: 'isRefreshedAlbumState',
+  default: false,
 })

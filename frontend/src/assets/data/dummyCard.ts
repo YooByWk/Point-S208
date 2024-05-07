@@ -17,10 +17,10 @@ export const dummyCard = [
     domainUrl: 'https://www.posco.co.kr/',
     createdAt: '2024-04-20',
     updateAt: '2024-04-23',
-    frontBack: 'front'
-    
+    frontBack: 'front',
+    memo: '과장님',
   },
-  {  
+  {
     cardId: 2,
     userId: 2,
     name: '김싸피',
@@ -38,7 +38,8 @@ export const dummyCard = [
     domainUrl: 'https://www.posco.co.kr/',
     createdAt: '2024-04-20',
     updateAt: '2024-04-23',
-    frontBack: 'front'
+    frontBack: 'front',
+    memo: '대리님',
   },
   {
     cardId: 3,
@@ -58,7 +59,7 @@ export const dummyCard = [
     domainUrl: 'https://www.posco.co.kr/',
     createdAt: '2024-04-20',
     updateAt: '2024-04-23',
-    frontBack: 'front'
-    
-  }
+    frontBack: 'front',
+    memo: '차장님',
+  },
 ]

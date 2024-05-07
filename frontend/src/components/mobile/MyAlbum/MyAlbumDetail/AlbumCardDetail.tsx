@@ -9,6 +9,7 @@ import DetailBottomSection from '@components/mobile/MyAlbum/MyAlbumDetail/Detail
 import styled from '@emotion/styled';
 import BackArrow from '@/components/shared/BackArrow';
 import DetailMapSection from '@components/mobile/MyAlbum/MyAlbumDetail/DetailMapSection';
+import DetailFilter from './DetailFilter';
 
 const AlbumCardDetail = () => {
   const params = useParams()
@@ -18,7 +19,6 @@ const AlbumCardDetail = () => {
   const [card, setCard] = useState<CardType>(locationState)
   const [isEdit, setIsEdit] = useState(false)
   const [isReal, setIsReal] = useState(true)
-  const api = process.env.REACT_APP_KAKAO_APP_KEY
   
   const renderContent = () => {
     if (isEdit) return <DetailInfoEdit isEdit={{value: isEdit, setValue: setIsEdit}} card={card} />
@@ -29,6 +29,7 @@ const AlbumCardDetail = () => {
         <DetailInfoSection card={card} isEdit={{value: isEdit, setValue: setIsEdit}}/>
         <DetailMapSection card={card} />
         <DetailBottomSection />
+        <DetailFilter cardId={cardId}/>
       </Container>
       // 지도 : 수정하기 
       // 메모 : 수정하기

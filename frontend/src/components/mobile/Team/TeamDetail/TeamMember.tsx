@@ -3,15 +3,11 @@
 import Text from '@shared/Text'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { userState } from '@/stores/user'
-import Dimmed from '@/components/shared/Dimmed'
 import Flex from '@/components/shared/Flex'
 import { css } from '@emotion/react'
 import { tokens } from '@fluentui/react-components'
 import { isLookingMemberState } from '@/stores/team'
 import {
-  CameraAdd48Regular,
-  SlideTextPerson48Regular,
-  Dismiss24Regular,
   Person48Filled,
 } from '@fluentui/react-icons'
 import Spacing from '@/components/shared/Spacing'
@@ -23,7 +19,6 @@ import { fetchTeamMember } from '@/apis/team'
 import  BackArrow  from '@/components/shared/BackArrow';
 import SearchBox from '@/components/shared/SearchBox'
 import LargeButton from '@/components/shared/LargeButton'
-import { TeamType } from '@microsoft/teams-js'
 import { TeamListType } from '@/types/TeamListType'
 import AddMember from './AddMember'
 
