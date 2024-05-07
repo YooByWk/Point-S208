@@ -7,11 +7,24 @@ spring:
     # url: jdbc:mariadb://stg-yswa-kr-practice-db-master.mariadb.database.azure.com:3306/s10p31s208?serverTimezone=UTC&Unicode=true&characterEncoding=utf8
     # username: S10P31S208
     # password: HGsiyybsmb
-   url: jdbc:mysql://k10s208.p.ssafy.io:3306/bscard
-   username: root
-   password: ssafy
+    url: jdbc:mysql://k10s208.p.ssafy.io:3306/bscard
+    username: root
+    password: ssafy
   jackson:
     time-zone: Asia/Seoul
+
+  mail:
+    default-encoding: UTF-8
+    host: smtp.naver.com
+    port: 465
+    username: junwon1131@naver.com
+    password: think1492*
+    properties:
+      mail:
+        debug: true
+        smtp.auth: true
+        smtp.timeout: 50000
+        smtp.starttls.enable: true
 
   data:
     redis:

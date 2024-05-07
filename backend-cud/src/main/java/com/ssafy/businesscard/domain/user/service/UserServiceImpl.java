@@ -4,25 +4,26 @@ import com.ssafy.businesscard.domain.user.repository.UserRepository;
 import com.ssafy.businesscard.domain.user.dto.UserRequestDto;
 import com.ssafy.businesscard.domain.user.entity.User;
 import com.ssafy.businesscard.domain.user.mapper.UserMapper;
+import com.ssafy.businesscard.global.exception.GlobalExceptionHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
 
     /**
-     *userId return을 위한 tutorial
+     * userId return을 위한 tutorial
      */
     public long findUserId(UserRequestDto userRequestDto) {
         Long userId = userRepository.findUserIdByNameAndEmail(userRequestDto.name(), userRequestDto.email());
-        if(userId != null){
+        if (userId != null) {
             return userId;
-        }else{
+        } else {
 
             User user = User.builder()
                     .name(userRequestDto.name())
@@ -31,5 +32,13 @@ public class UserServiceImpl implements UserService{
             User saveUser = userRepository.save(user);
             return saveUser.getUserId();
         }
+    }
+
+    @Override
+    public User findUserById(Long userid) {
+        User user = userRepository.findById(userid).orElseThrow(() ->
+                new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_USER));
+        return user;
+
     }
 }
