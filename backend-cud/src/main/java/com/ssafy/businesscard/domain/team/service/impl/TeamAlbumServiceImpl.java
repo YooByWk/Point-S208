@@ -63,6 +63,11 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
         }
     }
 
+    @Override
+    public void createTeamAlbum(Long userId, TeamAlbumRegistRequest teamAlbumRegistRequest) {
+
+    }
+
     // 팀 명함지갑 생성시 팀 구성원에 등록
     private String addTeamMember(TeamMemberRequest teamMemberRequest) {
         teamMemberRepository.save(TeamMember.builder()
