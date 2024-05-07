@@ -1,5 +1,6 @@
 package com.ssafy.businesscard.privateAlbum.service;
 
+import com.ssafy.businesscard.mycard.entity.Businesscard;
 import com.ssafy.businesscard.mycard.repository.BusinesscardRepository;
 import com.ssafy.businesscard.privateAlbum.dto.FilterCardResponseDto;
 import com.ssafy.businesscard.privateAlbum.dto.FilterListResponseDto;
@@ -42,8 +43,8 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("businesscard.cardId").descending());
         Page<PrivateAlbum> albumPage = privateAlbumRepository.findByUser_userId(userId, pageable);
-
-        List<PrivateAlbumResponseDto> dtos = albumPage.map(privateAlbumMapper::toDto).toList();
+        List<Businesscard> pages = albumPage.stream().map(card -> card.getBusinesscard()).toList();
+        List<PrivateAlbumResponseDto> dtos = pages.stream().map(privateAlbumMapper::toDto).toList();
 //        List<PrivateAlbumResponseDto> responseDtoList = albumPage.getContent().stream()
 //                .map(privateAlbum -> new PrivateAlbumResponseDto(
 //                        privateAlbum.getBusinesscard().getCardId(),
@@ -147,7 +148,8 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
     @Override
     public List<PrivateAlbumResponseDto> getAlbumAllList(Long userId){
         List<PrivateAlbum> privateAlbums = privateAlbumRepository.findByUser_userId(userId);
-        List<PrivateAlbumResponseDto> dtos = privateAlbums.stream().map(privateAlbumMapper::toDto).toList();
+        List<Businesscard> businesscards = privateAlbums.stream().map(bc -> bc.getBusinesscard()).toList();
+        List<PrivateAlbumResponseDto> dtos = businesscards.stream().map(privateAlbumMapper::toDto).toList();
         return dtos;
     }
 }
