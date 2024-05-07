@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -62,7 +63,7 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
     }
 
     @Override
-    public void registSharedCard(Long userId,   CardSharedRequest cardSharedRequest) {
+    public void registSharedCard(Long userId, CardSharedRequest cardSharedRequest) {
 
         User user = userRepository.findById(userId).orElseThrow(() -> new GlobalExceptionHandler.UserException(
                 GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_USER
@@ -71,7 +72,9 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
         Businesscard businesscard = businesscardRepository.findById(cardSharedRequest.cardId()).
                 orElseThrow(() -> new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_CARD));
 
-        if (isCardExist(userId, businesscard)) {
+        PrivateAlbum privateAlbum = privateAlbumRepository.findByUser_userIdAndBusinesscard_cardId(userId, businesscard.getCardId());
+
+        if (privateAlbum != null) {
             throw new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.ALREADY_IN_CARD);
         } else {
             PrivateAlbumRequest privateAlbumRequest = PrivateAlbumRequest.builder()
