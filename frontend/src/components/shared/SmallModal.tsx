@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import styled from '@emotion/styled'
 import { CSSProperties } from 'react'
 import { ReactNode } from 'react'
 import {
@@ -13,26 +12,25 @@ import {
   DialogContent,
   Button,
 } from '@fluentui/react-components'
-import { useState } from 'react'
 import { Colors } from '@/styles/colorPalette'
 import * as s from './LargeModal.styled'
 import Text from '@shared/Text'
-import LargeButton from '@/components/shared/LargeButton'
 import useWindowSize from '@/hooks/useWindowSize'
 import { ReactElement } from 'react';
-import {
-  Delete24Filled,
-} from '@fluentui/react-icons'
+import Flex from '@/components/shared/Flex'
+import Spacing from '@/components/shared/Spacing'
+
 interface SmallModalProps {
   dialogTitle: string
   dialogContent: ReactNode | string
-  onClick: () => void
+  onClick: (() => void) | ((e:React.MouseEvent) => void)
   bgColor?: Colors
   closeButtonText?: string
   actionButtonText: string
   height?: string
   btnWidth?: string
   icon?: ReactElement
+  onIconClick?: (() => void) | ((e:React.MouseEvent) => void)
 }
 
 /**
@@ -49,51 +47,36 @@ const SmallModal: React.FC<SmallModalProps> = ({
   bgColor,
   height,
   btnWidth,
+  onIconClick
 }) => {
-  const screenSize = useWindowSize()
   return (
     <Dialog modalType="alert">
       <DialogTrigger disableButtonEnhancement>
-        {icon}
+        <div onClick={onIconClick}>{icon}</div>
       </DialogTrigger>
-      <DialogSurface>
-        <DialogBody css={s.largeModalBody({ height })}>
+      <DialogSurface css={surface}>
+        <DialogBody css={body}>
           <DialogTitle>{dialogTitle}</DialogTitle>
-          <DialogContent>
-            {typeof dialogContent === 'string' ? (
-              <Text typography='t9'>{dialogContent}</Text>
-            ) : (
-              dialogContent
-            )}
-            {/* 필요한 것 있으면 여기에 넣을 수 있게 수정 */}
-          </DialogContent>
-          {screenSize < 550 ? (
-            <DialogActions>
-              <DialogTrigger disableButtonEnhancement>
-                <Button appearance="primary" onClick={onClick}>
-                  {actionButtonText}
-                </Button>
-              </DialogTrigger>
-              <DialogTrigger disableButtonEnhancement>
-                <Button appearance="secondary">
-                  {closeButtonText ? closeButtonText : '닫기'}{' '}
-                </Button>
-              </DialogTrigger>
-            </DialogActions>
-          ) : (
-            <DialogActions>
-              <DialogTrigger disableButtonEnhancement>
-                <Button appearance="secondary">
-                  {closeButtonText ? closeButtonText : '닫기'}{' '}
-                </Button>
-              </DialogTrigger>
-              <DialogTrigger disableButtonEnhancement>
-                <Button appearance="primary" onClick={onClick}>
-                  {actionButtonText}
-                </Button>
-              </DialogTrigger>
-            </DialogActions>
+          <DialogContent css={content}>
+            <Text typography='t9'>{dialogContent}</Text>
+            <Spacing size={20} direction='vertical'/>
+          {(
+            <Flex direction='row' align='center' justify='center'>
+              <DialogActions css={fui}>
+                <DialogTrigger disableButtonEnhancement>
+                  <Button appearance="primary" onClick={onClick}>
+                    {actionButtonText}
+                  </Button>
+                </DialogTrigger>
+                <DialogTrigger disableButtonEnhancement>
+                  <Button appearance="secondary" onClick={onIconClick}>
+                    {closeButtonText ? closeButtonText : '닫기'}{' '}
+                  </Button>
+                </DialogTrigger>
+              </DialogActions>
+            </Flex>
           )}
+          </DialogContent>
         </DialogBody>
       </DialogSurface>
     </Dialog>
@@ -101,3 +84,40 @@ const SmallModal: React.FC<SmallModalProps> = ({
 }
 
 export default SmallModal
+
+const fui = css`
+  display: flex;
+  flex-direction: row;
+  
+  justify-content: space-evenly;
+`
+
+const body = css`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: fit-content;
+  width: fit-content;
+  padding: 0;
+  margin: 0;
+`
+
+const surface = css`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: fit-content;
+`
+
+const content = css`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: fit-content;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+`

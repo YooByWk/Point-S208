@@ -283,6 +283,7 @@ const btnCss = css`
 `
 
 const bodyCss = css`
-  height: 60vh;
+  height: fit-content;
+  max-height: 40vh;
   overflow-y: scroll;
 `
