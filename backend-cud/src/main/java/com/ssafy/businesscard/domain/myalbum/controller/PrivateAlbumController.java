@@ -4,6 +4,7 @@ package com.ssafy.businesscard.domain.myalbum.controller;
 import com.ssafy.businesscard.domain.card.dto.request.CardAddFilterRequest;
 import com.ssafy.businesscard.domain.card.dto.request.CardRequest;
 import com.ssafy.businesscard.domain.card.dto.request.MemoRequest;
+import com.ssafy.businesscard.domain.myalbum.dto.request.CardSharedRequest;
 import com.ssafy.businesscard.domain.myalbum.service.PrivateAlbumService;
 import com.ssafy.businesscard.global.utils.MessageUtils;
 import lombok.RequiredArgsConstructor;
@@ -25,10 +26,20 @@ public class PrivateAlbumController {
     // 명함 추가
     @PostMapping("/{userId}")
     public ResponseEntity<?> registCard(@PathVariable("userId") Long userId,
-                                                   @RequestBody CardRequest request) {
+                                        @RequestBody CardRequest request) {
         String result = privateAlbumService.registCard(userId, request);
-        log.info("Regist Card : {}" , request);
+        log.info("Regist Card : {}", request);
         return ResponseEntity.ok().body(MessageUtils.success(result));
+    }
+
+    //    /api/{user_id}/{card_id}/share/email
+    @PostMapping("/{userId}/save")
+    public ResponseEntity<MessageUtils> registSharedCard(@PathVariable("userId") Long userId,
+                                                         @RequestBody CardSharedRequest cardSharedRequest) {
+
+        privateAlbumService.registSharedCard(userId, cardSharedRequest);
+//        log.info("Regist Card : {}", request);
+        return ResponseEntity.ok().body(MessageUtils.success("나의 명함지갑에 등록되었습니다"));
     }
 
     // 명함에 필터 추가
@@ -45,7 +56,7 @@ public class PrivateAlbumController {
     @PatchMapping("/{userId}/{cardId}")
     public ResponseEntity<MessageUtils> cardUpdate(@PathVariable("userId") Long userId,
                                                    @PathVariable("cardId") Long cardId,
-                                                   @RequestBody CardRequest request){
+                                                   @RequestBody CardRequest request) {
         privateAlbumService.updateCard(userId, cardId, request);
         log.info("Update Card : {} 명함이 수정되었습니다.", request);
         return ResponseEntity.ok().body(MessageUtils.success("명함이 수정되었습니다."));

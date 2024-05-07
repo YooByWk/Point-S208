@@ -6,6 +6,7 @@ import com.ssafy.businesscard.domain.card.repository.BusinesscardRepository;
 import com.ssafy.businesscard.domain.card.dto.request.CardAddFilterRequest;
 import com.ssafy.businesscard.domain.card.dto.request.CardRequest;
 import com.ssafy.businesscard.domain.card.dto.request.MemoRequest;
+import com.ssafy.businesscard.domain.myalbum.dto.request.CardSharedRequest;
 import com.ssafy.businesscard.domain.myalbum.dto.request.PrivateAlbumRequest;
 import com.ssafy.businesscard.domain.myalbum.entity.PrivateAlbum;
 import com.ssafy.businesscard.domain.myalbum.entity.PrivateAlbumMember;
@@ -47,7 +48,7 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
 
         Businesscard businesscard = businesscardMapper.toEntity(request);
 
-        if (isCardExist(userId, businesscard) ) {
+        if (isCardExist(userId, businesscard)) {
             return "이미 등록된 명함입니다.";
         } else {
             businesscardRepository.save(businesscard);
@@ -58,6 +59,30 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
                     .build();
             return addPrivateAlbum(privateAlbumRequest);
         }
+    }
+
+    @Override
+    public void registSharedCard(Long userId,   CardSharedRequest cardSharedRequest) {
+
+        User user = userRepository.findById(userId).orElseThrow(() -> new GlobalExceptionHandler.UserException(
+                GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_USER
+        ));
+
+        Businesscard businesscard = businesscardRepository.findById(cardSharedRequest.cardId()).
+                orElseThrow(() -> new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_CARD));
+
+        if (isCardExist(userId, businesscard)) {
+            throw new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.ALREADY_IN_CARD);
+        } else {
+            PrivateAlbumRequest privateAlbumRequest = PrivateAlbumRequest.builder()
+                    .user(user)
+                    .businesscard(businesscard)
+                    .favorite(false)
+                    .build();
+
+            addPrivateAlbum(privateAlbumRequest);
+        }
+
     }
 
     // 명함 중복 검사
@@ -98,15 +123,15 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
 
         for (Long filterId : filterIdList) {
             Filter filter = privateAlbumFilterRepository.findById(filterId)
-                            .orElseThrow(() -> new GlobalExceptionHandler.UserException(
-                                    GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_FILTER
-                            ));
+                    .orElseThrow(() -> new GlobalExceptionHandler.UserException(
+                            GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_FILTER
+                    ));
             PrivateAlbum privateAlbum = privateAlbumRepository.
-                      findByUser_userIdAndBusinesscard_cardId(userId, cardId);
+                    findByUser_userIdAndBusinesscard_cardId(userId, cardId);
             privateAlbumMemberRepository.save(PrivateAlbumMember.builder()
-                            .filter(filter)
-                            .user(user)
-                            .privateAlbum(privateAlbum)
+                    .filter(filter)
+                    .user(user)
+                    .privateAlbum(privateAlbum)
                     .build());
         }
     }
@@ -155,11 +180,11 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
         // 메모가 없다면 메모 등록
         if (privateAlbum.getMemo() == null) {
             privateAlbumRepository.save(PrivateAlbum.builder()
-                            .privateAlbumId(privateAlbum.getPrivateAlbumId())
-                            .businesscard(privateAlbum.getBusinesscard())
-                            .user(privateAlbum.getUser())
-                            .favorite(privateAlbum.isFavorite())
-                            .memo(request.memo())
+                    .privateAlbumId(privateAlbum.getPrivateAlbumId())
+                    .businesscard(privateAlbum.getBusinesscard())
+                    .user(privateAlbum.getUser())
+                    .favorite(privateAlbum.isFavorite())
+                    .memo(request.memo())
                     .build());
             return "메모가 등록되었습니다.";
         } else { // 메모가 있다면 메모 수정
@@ -170,7 +195,8 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
                     .favorite(privateAlbum.isFavorite())
                     .memo(request.memo())
                     .build());
-          return "메모가 수정되었습니다.";
+            return "메모가 수정되었습니다.";
         }
     }
+
 }
