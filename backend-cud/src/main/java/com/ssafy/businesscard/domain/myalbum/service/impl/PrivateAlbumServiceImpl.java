@@ -155,11 +155,11 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
         // 메모가 없다면 메모 등록
         if (privateAlbum.getMemo() == null) {
             privateAlbumRepository.save(PrivateAlbum.builder()
-                            .privateAlbumId(privateAlbum.getPrivateAlbumId())
-                            .businesscard(privateAlbum.getBusinesscard())
-                            .user(privateAlbum.getUser())
-                            .favorite(privateAlbum.isFavorite())
-                            .memo(request.memo())
+                    .privateAlbumId(privateAlbum.getPrivateAlbumId())
+                    .businesscard(privateAlbum.getBusinesscard())
+                    .user(privateAlbum.getUser())
+                    .favorite(privateAlbum.isFavorite())
+                    .memo(request.memo())
                     .build());
             return "메모가 등록되었습니다.";
         } else { // 메모가 있다면 메모 수정
