@@ -28,11 +28,13 @@ const WebTeamNameSection = ({
   }
 
   useEffect(() => {
-    data.forEach(item => {
-      if (item.teamName === name) {
-        setIsError(true)
-      }
-    })
+    const isName = data.some(item => item.teamName === name)
+
+    if (isName) {
+      setIsError(true)
+    } else {
+      setIsError(false)
+    }
   }, [data, name])
 
   return (
