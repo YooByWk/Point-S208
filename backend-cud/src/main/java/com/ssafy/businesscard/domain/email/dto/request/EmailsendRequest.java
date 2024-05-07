@@ -1,5 +1,5 @@
 package com.ssafy.businesscard.domain.email.dto.request;
 
-public record EmailsendRequest(Long recipientId) {
+public record EmailsendRequest(String recipientEmail) {
 
 }
