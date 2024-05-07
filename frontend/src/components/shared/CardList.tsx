@@ -122,11 +122,11 @@ const CardList = ({
   {
     searchResults !== undefined && searchValue !== undefined && searchValue.trim() !== '' 
     ? (searchResults.length > 0 
-      ? searchResults.map((card: ExternalCardType | CardType) => {
+      ? searchResults.map((card: ExternalCardType | CardType, index:number) => {
           return (
             <CardThumbnail
               cardInfo={card}
-              key={card.cardId} 
+              key={index} 
               onSelect={handleCardSelect}
               selectedCards={selectedCards}
             />
@@ -134,11 +134,11 @@ const CardList = ({
         })
       : <Flex direction='column' justify='center' align='center'>검색 결과가 없습니다</Flex>)
     : cards.filter((card: ExternalCardType | CardType) => card)
-            .map((card: ExternalCardType | CardType) => {
+            .map((card: ExternalCardType | CardType,index:number) => {
               return (
                 <CardThumbnail
                   cardInfo={card}
-                  key={card.cardId} 
+                  key={index} 
                   onSelect={handleCardSelect}
                   selectedCards={selectedCards}
                 />

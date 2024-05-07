@@ -26,34 +26,34 @@ const AlbumList = () => {
   const userId = useRecoilValue(userState).userId
   const [user, setUser] = useRecoilState(userState)
   const [searchValue, setSearchValue] = useState('')
-
+  const [filterId, setFilterId] = useState(NaN)
   const { data, fetchNextPage, hasNextPage, isError, isFetchingNextPage } =
     useInfiniteQuery({
       queryKey: ['fetchMyAlbum'],
       queryFn: ({ pageParam = 0 }) => fetchMyAlbum(userId as number, pageParam),
       getNextPageParam: (lastPage, allPages) => {
-        return Array.isArray(lastPage) && lastPage.length > 0
-          ? allPages.length
+        return Array.isArray(lastPage.data_body) && lastPage.data_body.length > 0
+          ? allPages.length + 1
           : undefined
       },
       initialPageParam: 0,
     })
 
   let cards = data?.pages.flatMap(page => page.data_body) || [] // 명함 리스트
-  // let cards = data?.pages.flatMap(page => page) || [] // 명함 리스트 : 오류 : 수정하기
   console.log('cards: ', cards);
   //
   
   useEffect(() => {
     const handleScroll = () => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop ===
-        document.documentElement.offsetHeight
-      )
-        return
-      if (hasNextPage) {
-        fetchNextPage()
-      }
+      console.log('scroll')
+      console.log(window.innerHeight + window.scrollY >= document.body.offsetHeight, hasNextPage)
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight)
+          {
+          if (hasNextPage) {
+            console.log('더불러오기')
+            fetchNextPage()
+          }
+        }
     }
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)

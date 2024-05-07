@@ -39,6 +39,7 @@ import Flex from '@/components/shared/Flex'
 import Spacing from '@shared/Spacing'
 import { css } from '@emotion/react'
 import AddFilter from '@/components/mobile/MyAlbum/Filter/AddFillter'
+import React from 'react'
 
 ///
 const NoFilter = ({
@@ -228,7 +229,7 @@ const FilterIconModal: React.FC<LargeModalProps> = ({
                     filterList.map((filter, index) => {
                       const isEditing = filter.filterId === editingFilterId
                       return (
-                        <>
+                        <React.Fragment key={index}>
                           {isEditing ? (
                             <Flex align="center">
                               <Input
@@ -252,7 +253,7 @@ const FilterIconModal: React.FC<LargeModalProps> = ({
                               onDelete={handleDeleteFilter}
                             />
                           )}
-                        </>
+                        </React.Fragment>
                       )
                     })
                   ) : (

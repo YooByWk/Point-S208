@@ -43,8 +43,6 @@ const CardThumbnail = ({
   const [isChecked, setIsChecked] = useState(false)
   const isSelected = selectedCards.includes(cardInfo.cardId)
   const userId = useRecoilValue(userState).userId 
-  // const deleteMutation = useDeleteMyAlbumMutation(selectedCards)
-  console.log(teamId,userId,'teamId')
   const deletemutation = useDeleteAlbumCard()
   
 
@@ -73,7 +71,6 @@ const CardThumbnail = ({
     deletemutation.mutate(cardInfo.cardId)
     console.log('삭제 : ', cardInfo.cardId)
   }
-  console.log(cardInfo)
   const navigate = useNavigate()
   return (
     <div
@@ -130,7 +127,6 @@ const CardThumbnail = ({
               <Star24Regular css={i} onClick={handleFavorite} />
             )}
             <ShareAndroid24Filled css={i} onClick={handleShare} />
-            {/* <Delete24Filled css={i} onClick={handleDelete} /> */}
             <SmallModal 
             icon={<Delete24Filled/>}
             dialogTitle='명함 삭제'

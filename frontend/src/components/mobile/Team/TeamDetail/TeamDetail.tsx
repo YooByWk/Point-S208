@@ -43,7 +43,7 @@ const TeamDetail = () => {
     queryKey: ['fetchTeamCardsList'],
     queryFn: ({ pageParam = 0 }) => fetchTeamCardsList(teamAlbumIdNumber, pageParam),
     getNextPageParam: (lastPage, allPages) => {
-      return Array.isArray(lastPage) && lastPage.length > 0
+      return Array.isArray(lastPage.data_body) && lastPage.length > 0
         ? allPages.length
         : undefined
     },
