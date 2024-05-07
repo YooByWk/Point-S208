@@ -26,13 +26,14 @@ import {
 } from '@fluentui/react-icons'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { deleteFilter, editFilter, fetchFilter } from '@/apis/album'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { userState } from '@/stores/user'
 import {
   EditFilterArgs,
   FilterListType,
   FilterNameAction,
   FilterNameState,
+  FilterType,
 } from '@/types/FilterType'
 import LargeButton from '@shared/LargeButton'
 import Flex from '@/components/shared/Flex'
@@ -40,7 +41,7 @@ import Spacing from '@shared/Spacing'
 import { css } from '@emotion/react'
 import AddFilter from '@/components/mobile/MyAlbum/Filter/AddFillter'
 import React from 'react'
-
+import { filterState  as filterStoreState} from '@/stores/album'
 ///
 const NoFilter = ({
   handleAddFilter,
@@ -101,6 +102,7 @@ const FilterIconModal: React.FC<LargeModalProps> = ({
   const [isAddFilter, setIsAddFilter] = useState(false)
   const [editingFilterId, setEditingFilterId] = useState<number | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [filterState, setFilterState] = useRecoilState(filterStoreState)
   const queryClient = useQueryClient()
 
   const { data } = useQuery({
@@ -120,10 +122,19 @@ const FilterIconModal: React.FC<LargeModalProps> = ({
     setIsModalOpen(!isModalOpen)
   }
 
-  const handleEditClick = (filterId: number) => () => {
+  const handleEditClick = (filterId: number)  => {
     setEditingFilterId(filterId)
   }
 
+  const handleCardClick = (filter: FilterType) => {
+    setFilterState({
+      filterId: filter.filterId,
+      filterName: filter.filterName,
+    })
+    handleModalOpen()
+  };
+  
+  
   const filterNameReducer = (
     state: FilterNameState,
     action: FilterNameAction,
@@ -136,7 +147,6 @@ const FilterIconModal: React.FC<LargeModalProps> = ({
     }
   }
   const [filterNames, dispatch] = useReducer(filterNameReducer, {})
-  console.log(filterList,'asdasdasdasdasdasd')
   useEffect(() => {
     const initialFilterNames = filterList.reduce((acc, filter) => {
       acc[filter.filterId] = filter.filterName
@@ -158,7 +168,6 @@ const FilterIconModal: React.FC<LargeModalProps> = ({
       editFilter(userId, filterId, filterName),
     onSuccess() {
       queryClient.invalidateQueries({ queryKey: ['fetchFilterList'] })
-      // queryClient.invalidateQueries()
     },
   })
   
@@ -229,7 +238,7 @@ const FilterIconModal: React.FC<LargeModalProps> = ({
                     filterList.map((filter, index) => {
                       const isEditing = filter.filterId === editingFilterId
                       return (
-                        <React.Fragment key={index}>
+                        <div key={index}>
                           {isEditing ? (
                             <Flex align="center">
                               <Input
@@ -246,14 +255,16 @@ const FilterIconModal: React.FC<LargeModalProps> = ({
                               </Button>
                             </Flex>
                           ) : (
+                            <div key={index} onClick={() => handleCardClick(filter)}>
                             <Filter
                               filterId={filter.filterId}
                               filterName={filter.filterName}
-                              onClick={handleEditClick(filter.filterId)}
+                              onClick={() => handleEditClick(filter.filterId)}
                               onDelete={handleDeleteFilter}
                             />
+                            </div>
                           )}
-                        </React.Fragment>
+                        </div>
                       )
                     })
                   ) : (
