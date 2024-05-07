@@ -15,4 +15,5 @@ public interface PrivateAlbumService {
     public List<FilterListResponseDto> getFilter(Long userId);
     public FilterCardResponseDto getFilterCard(Long userId, Long filterId);
     public List<PrivateAlbumResponseDto> getAlbumAllList(Long userId);
+    public List<FilterListResponseDto> getAlbumDtailFilter(Long userId, Long cardId);
 }

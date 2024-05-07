@@ -55,6 +55,16 @@ public class PrivateAlbumController {
         return ResponseEntity.ok().body(MessageUtils.success(filterCardResponseDto));
     }
 
+    //상세보기에서 명함마다 필터 뭐있는지 조회
+    @GetMapping("/my-album/{user_id}/{card_id}/filter")
+    public ResponseEntity<?> getAlbumDtailFilter(
+            @PathVariable("user_id")Long userId,
+            @PathVariable("card_id")Long cardId){
+        List<FilterListResponseDto> list = privateAlbumService.getAlbumDtailFilter(userId, cardId);
+        return ResponseEntity.ok().body(MessageUtils.success(list));
+    }
+
+
     //엑셀로 내보내기용 명함지갑목록조회
     @GetMapping("/my-album/list/{user_id}")
     public ResponseEntity<?> getAlbumAllList(@PathVariable("user_id")Long userId){

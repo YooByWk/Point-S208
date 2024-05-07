@@ -7,6 +7,9 @@ import com.ssafy.businesscard.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Builder
@@ -36,4 +39,7 @@ public class PrivateAlbum extends BaseTimeEntity {
 
     @Column(name = "memo", length = 100)
     private String memo;
+
+    @OneToMany(mappedBy = "privateAlbum", cascade = CascadeType.ALL)
+    private List<PrivateAlbumMember> privateAlbumMemberList = new ArrayList<>();
 }

@@ -5,12 +5,14 @@ import com.ssafy.businesscard.mycard.repository.BusinesscardRepository;
 import com.ssafy.businesscard.privateAlbum.dto.FilterCardResponseDto;
 import com.ssafy.businesscard.privateAlbum.dto.FilterListResponseDto;
 import com.ssafy.businesscard.privateAlbum.dto.PrivateAlbumResponseDto;
+import com.ssafy.businesscard.privateAlbum.entity.Filter;
 import com.ssafy.businesscard.privateAlbum.entity.PrivateAlbum;
 import com.ssafy.businesscard.privateAlbum.entity.PrivateAlbumMember;
 import com.ssafy.businesscard.privateAlbum.mapper.PrivateAlbumMapper;
 import com.ssafy.businesscard.privateAlbum.repository.FilterRepository;
 import com.ssafy.businesscard.privateAlbum.repository.PrivateAlbumMemberRepository;
 import com.ssafy.businesscard.privateAlbum.repository.PrivateAlbumRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -19,10 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,31 +39,10 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
     @Override
     public List<PrivateAlbumResponseDto> getAlbumList(Long userId, int page){
         int size = 12;
-
         Pageable pageable = PageRequest.of(page, size, Sort.by("businesscard.cardId").descending());
         Page<PrivateAlbum> albumPage = privateAlbumRepository.findByUser_userId(userId, pageable);
         List<Businesscard> pages = albumPage.stream().map(card -> card.getBusinesscard()).toList();
         List<PrivateAlbumResponseDto> dtos = pages.stream().map(privateAlbumMapper::toDto).toList();
-//        List<PrivateAlbumResponseDto> responseDtoList = albumPage.getContent().stream()
-//                .map(privateAlbum -> new PrivateAlbumResponseDto(
-//                        privateAlbum.getBusinesscard().getCardId(),
-//                        privateAlbum.getBusinesscard().getName(),
-//                        privateAlbum.getBusinesscard().getCompany(),
-//                        privateAlbum.getBusinesscard().getPosition(),
-//                        privateAlbum.getBusinesscard().getRank(),
-//                        privateAlbum.getBusinesscard().getDepartment(),
-//                        privateAlbum.getBusinesscard().getEmail(),
-//                        privateAlbum.getBusinesscard().getLandlineNumber(),
-//                        privateAlbum.getBusinesscard().getFaxNumber(),
-//                        privateAlbum.getBusinesscard().getPhoneNumber(),
-//                        privateAlbum.getBusinesscard().getAddress(),
-//                        privateAlbum.getBusinesscard().getRealPicture(),
-//                        privateAlbum.getBusinesscard().getFrontBack(),
-//                        privateAlbum.getBusinesscard().getDomainUrl(),
-//                        privateAlbum.getMemo()
-//                        ))
-//                .collect(Collectors.toList());
-//        return responseDtoList;
         return dtos;
     }
 
@@ -97,6 +75,7 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
     }
 
     //필터 목록 조회
+    @Override
     public List<FilterListResponseDto> getFilter(Long userId){
         List<PrivateAlbumMember> privateAlbumMembers = privateAlbumMemberRepository.findByUser_userId(userId);
         List<FilterListResponseDto> filterListResponseDtoList = privateAlbumMembers.stream()
@@ -143,6 +122,30 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
                 .cardList(cards)
                 .build();
     }
+
+    //상세보기에서 명함마다 필터 뭐있는지 조회
+    @Override
+    @Transactional
+    public List<FilterListResponseDto> getAlbumDtailFilter(Long userId, Long cardId){
+        Optional<PrivateAlbum> optionalPrivateAlbum = privateAlbumRepository.findByUser_userIdAndBusinesscard_cardId(userId, cardId);
+        if (optionalPrivateAlbum.isPresent()) {
+            PrivateAlbum privateAlbum = optionalPrivateAlbum.get();
+
+            // 카드에 태그된 필터 목록 조회
+            List<PrivateAlbumMember> albumMembers = privateAlbum.getPrivateAlbumMemberList();
+            List<FilterListResponseDto> dtos = new ArrayList<>();
+            for (PrivateAlbumMember albumMember : albumMembers) {
+                Filter filter = albumMember.getFilter();
+                FilterListResponseDto dto = new FilterListResponseDto(filter.getFilterId(), filter.getFilterName());
+                dtos.add(dto);
+            }
+            return dtos;
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+
 
     //엑셀로 내보내기용 명함지갑목록조회
     @Override

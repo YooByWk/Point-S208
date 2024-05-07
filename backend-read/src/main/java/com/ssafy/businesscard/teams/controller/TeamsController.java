@@ -1,6 +1,7 @@
 package com.ssafy.businesscard.teams.controller;
 
 import com.ssafy.businesscard.global.utils.MessageUtils;
+import com.ssafy.businesscard.privateAlbum.dto.FilterListResponseDto;
 import com.ssafy.businesscard.privateAlbum.dto.PrivateAlbumResponseDto;
 import com.ssafy.businesscard.teams.dto.TeamListResponseDto;
 import com.ssafy.businesscard.teams.dto.TeamMemberListResponseDto;
@@ -29,7 +30,7 @@ public class TeamsController {
     }
 
     //팀 내 명함 조회
-    @GetMapping("/teams/{team_album_id}/{page}")
+    @GetMapping("/teams/list/{team_album_id}/{page}")
     public ResponseEntity<?> getTeamAlbumList(@PathVariable("team_album_id")Long teamAlbumId, @PathVariable("page")int page){
         List<PrivateAlbumResponseDto> dtos = teamsService.getTeamAlbumList(teamAlbumId, page);
         return ResponseEntity.ok().body(MessageUtils.success(dtos));
@@ -41,10 +42,32 @@ public class TeamsController {
         List<TeamMemberListResponseDto> dtos = teamsService.getTeamMemberList(userId, teamAlbumId);
         return ResponseEntity.ok().body(MessageUtils.success(dtos));
     }
+
+    //팀 명함 상세 조회
+    @GetMapping("/teams/{team_album_id}/{card_id}")
+    public ResponseEntity<?> getTeamAlbumDtail(
+            @PathVariable("team_album_id")Long teamAlbumId,
+            @PathVariable("card_id")Long cardId){
+        PrivateAlbumResponseDto dtos = teamsService.getTeamAlbumDtail(teamAlbumId, cardId);
+        return ResponseEntity.ok().body(MessageUtils.success(dtos));
+    }
+
     //엑셀로 내보내기용 팀 명함 목록조회
     @GetMapping("/teams/list/{team_album_id}")
     public ResponseEntity<?> getTeamAlbumAllList(@PathVariable("team_album_id")Long teamAlbumId){
         List<PrivateAlbumResponseDto> dtos = teamsService.getTeamAlbumAllList(teamAlbumId);
         return ResponseEntity.ok().body(MessageUtils.success(dtos));
     }
+
+    //필터 목록 조회
+    @GetMapping("/teams/{team_album_detail_id}/filter")
+    public ResponseEntity<?> getFilter(@PathVariable("team_album_detail_id")Long teamsAlbumDetailId){
+        List<FilterListResponseDto> dtos = teamsService.getFilter(teamsAlbumDetailId);
+        return ResponseEntity.ok().body(MessageUtils.success(dtos));
+    }
+
+    //필터 별 명함 조회
+//    @GetMapping("/teams/{team_album_id}/filter/{filter_id}")
+
+    //상세보기에서 명함마다 필터 뭐있는지 조회
 }
