@@ -10,4 +10,6 @@ public interface UserService {
     public long findUserId(UserRequestDto userRequestDto);
     public List<UserInfoResponseDto> searchUser(String info);
     public List<PrivateAlbumResponseDto> searchCard(String info);
+    public List<PrivateAlbumResponseDto> searchMyAlbumCard(Long userId, String info);
+    public List<PrivateAlbumResponseDto> searchTeamsCard(Long teamAlbumId, String info);
 }

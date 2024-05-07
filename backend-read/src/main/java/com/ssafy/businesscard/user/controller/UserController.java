@@ -41,4 +41,17 @@ public class UserController {
         List<PrivateAlbumResponseDto> dtos = userService.searchCard(info);
         return ResponseEntity.ok().body(MessageUtils.success(dtos).getDataBody());
     }
+
+    //명함 지갑 검색
+    @GetMapping("/my-album/{user_id}/search")
+    public ResponseEntity<List<PrivateAlbumResponseDto>> searchMyAlbumCard(@PathVariable("user_id") Long userId, @RequestParam("info") String info){
+        List<PrivateAlbumResponseDto> dtos = userService.searchMyAlbumCard(userId, info);
+        return ResponseEntity.ok().body(MessageUtils.success(dtos).getDataBody());
+    }
+    //팀 명함 검색
+    @GetMapping("/teams/{team_album_id}/search")
+    public ResponseEntity<List<PrivateAlbumResponseDto>> searchTeamsCard(@PathVariable("team_album_id") Long teamAlbumId, @RequestParam("info") String info){
+        List<PrivateAlbumResponseDto> dtos = userService.searchTeamsCard(teamAlbumId, info);
+        return ResponseEntity.ok().body(MessageUtils.success(dtos).getDataBody());
+    }
 }
