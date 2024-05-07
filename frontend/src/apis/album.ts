@@ -1,6 +1,6 @@
 import { CreateFilterType } from '@/types/FilterType'
 import {
-  deleteAlbumCardType,
+  deleteAlbumCardArrayType,
   editAlbumCardType,
   editMemoType,
   WriteCardType,
@@ -50,11 +50,18 @@ export const editMyAlbumCard = async (params: editAlbumCardType) => {
 }
 
 // 명함지갑 내 명함 삭제
-export const deleteMyAlbumCard = async (params: deleteAlbumCardType) => {
-  return authRequest
-    .delete(`${CudUrl}/${params.userId}/${params.cardId}`)
-    .then(res => res.data)
-    .catch(err => console.log(err))
+export const deleteMyAlbumCardsArray = async (params: deleteAlbumCardArrayType) => {
+  if (!params.cardIdArray || params.userId) return
+  
+  return Promise.all(params.cardIdArray.map(async cardId =>  {
+    try {
+      const res = await authRequest
+        .delete(`${CudUrl}/${params.userId}/${cardId}`)
+      return res.data
+    } catch (err) {
+      return console.log(err)
+    }
+  }))
 }
 
 export const fetchFilter = async (userId: number) => {
@@ -112,10 +119,10 @@ export const deleteFilter = async (userId: number, filterId: number) => {
     .catch(err => console.log(err))
 }
 
-// 명함에 메모 등록 및 수정
 export const editMyAlbumMemo = async (params: editMemoType) => {
   return authRequest
     .post(`${CudUrl}/${params.userId}/${params.cardId}/memo`, params.data)
     .then(res => res.data)
     .catch(err => console.log(err))
 }
+

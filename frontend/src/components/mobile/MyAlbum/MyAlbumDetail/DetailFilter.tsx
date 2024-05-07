@@ -32,7 +32,9 @@ const DetailFilter = ({ cardId }: { cardId: number }) => {
   ]
 
   // 필터 추가하는 곳 - useMutation 사용
-
+  
+    
+  
   return (
     <Flex direction="column" align="center">
       <Flex justify="flex-start" align="center" css={container}>

@@ -19,18 +19,18 @@ import { useRecoilValue } from 'recoil'
 import { userState } from '@/stores/user'
 import { ExternalCardType } from '@/types/ExternalCard'
 import EmptyThumbnail from '@/components/shared/EmptyThumbnail'
-///
-
-///
+import { useMutation } from '@tanstack/react-query'
 interface CardThumbnailProps {
   cardInfo: CardType | ExternalCardType
   onSelect: (cardId: number) => void
   selectedCards: number[]
   forShare?: boolean
   scale?: number
+  teamId? : number
 }
 
 const CardThumbnail = ({
+  teamId,
   cardInfo,
   onSelect,
   selectedCards,
@@ -40,7 +40,13 @@ const CardThumbnail = ({
   const [isfavorite, setIsFavorite] = useState(false)
   const [isChecked, setIsChecked] = useState(false)
   const isSelected = selectedCards.includes(cardInfo.cardId)
+  const userId = useRecoilValue(userState).userId 
+  // const deleteMutation = useDeleteMyAlbumMutation(selectedCards)
+  console.log(teamId,userId,'teamId')
+  
 
+  
+  
   const handleCheck = (event: React.MouseEvent) => {
     event.stopPropagation()
     setIsChecked(!isChecked)
@@ -62,9 +68,10 @@ const CardThumbnail = ({
 
   const handleDelete = (event: React.MouseEvent) => {
     event.stopPropagation()
+    /*  api 호출 */
+    
     console.log('삭제 : ', cardInfo)
   }
-  const userId = useRecoilValue(userState).userId
   console.log(cardInfo)
   const navigate = useNavigate()
   return (

@@ -33,9 +33,9 @@ export type editAlbumCardType = {
   data: cardInput
 }
 
-export type deleteAlbumCardType = {
+export type deleteAlbumCardArrayType = {
   userId: number | undefined
-  cardId: number | undefined
+  cardIdArray: number[] | undefined[]
 }
 
 export type editMemoType = {
