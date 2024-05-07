@@ -21,7 +21,8 @@
     "react-scripts": "^5.0.1",
     "react-swipeable": "^7.0.1",
     "recoil": "^0.7.7",
-    "recoil-persist": "^5.1.0"
+    "recoil-persist": "^5.1.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/react": "^18.0.0",

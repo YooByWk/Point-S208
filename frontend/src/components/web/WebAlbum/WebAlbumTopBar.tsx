@@ -14,10 +14,23 @@ import {
   TabList,
   Tab,
   Button,
+  Dialog,
+  DialogTrigger,
+  DialogSurface,
+  DialogBody,
+  DialogTitle,
+  DialogActions,
 } from '@fluentui/react-components'
 import Spacing from '@/components/shared/Spacing'
 import { colors } from '@/styles/colorPalette'
 import { CardType } from '@/types/cardType'
+import { useMutation } from '@tanstack/react-query'
+import { deleteMyAlbumCard } from '@/apis/album'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { userState } from '@/stores/user'
+import { isRefreshedAlbumState } from '@/stores/card'
+import { useState } from 'react'
+import * as XLSX from 'xlsx'
 
 const WebAlbumTopBar = ({
   allCards,
@@ -28,14 +41,83 @@ const WebAlbumTopBar = ({
   selectedCards: number[]
   setSelectedCards: React.Dispatch<React.SetStateAction<number[]>>
 }) => {
-  console.log(`all cards: ${allCards.length}`)
-  console.log(`selected cards: ${selectedCards.length}`)
+  const userId = useRecoilValue(userState).userId
+  const [isRefreshed, setIsRefreshed] = useRecoilState(isRefreshedAlbumState)
+  const [modalOpen, setModalOpen] = useState(false)
 
   const handleSelectAll = () => {
     if (allCards.length === selectedCards.length) {
       setSelectedCards([])
     } else {
       setSelectedCards(allCards.map(card => card.cardId))
+    }
+  }
+
+  const { mutate } = useMutation({
+    mutationKey: ['deleteMyAlbumCard'],
+    mutationFn: deleteMyAlbumCard,
+    onSuccess(result) {
+      console.log('삭제 성공', result)
+      setIsRefreshed(!isRefreshed)
+    },
+    onError(error) {
+      console.error('삭제 실패:', error)
+    },
+  })
+
+  const handleDownload = () => {
+    const selectedCardDetails: CardType[] = allCards.filter(card =>
+      selectedCards.includes(card.cardId),
+    )
+
+    const data = [
+      [
+        '이름',
+        '회사',
+        '부서',
+        '직무',
+        '직책',
+        '이메일',
+        '유선전화',
+        '휴대전화',
+        '팩스번호',
+        '웹사이트',
+        '주소',
+      ],
+      ...selectedCardDetails.map(card => [
+        card.name,
+        card.company,
+        card.department,
+        card.rank,
+        card.position,
+        card.email,
+        card.landlineNumber,
+        card.phoneNumber,
+        card.faxNumber,
+        card.domainUrl,
+        card.address,
+      ]),
+    ]
+
+    const wb = XLSX.utils.book_new()
+    const ws = XLSX.utils.aoa_to_sheet(data)
+    XLSX.utils.book_append_sheet(wb, ws, '사용자 정보')
+
+    XLSX.writeFile(wb, '명함.xlsx')
+  }
+
+  const handleDelete = async () => {
+    try {
+      const deletePromises = selectedCards.map(cardId =>
+        mutate({ userId: userId, cardId: cardId }),
+      )
+      await Promise.all(deletePromises)
+
+      setSelectedCards(selectedCards.filter(id => !selectedCards.includes(id)))
+
+      setModalOpen(false)
+    } catch (error) {
+      console.error('카드 삭제 중 오류 발생:', error)
     }
   }
 
@@ -80,12 +162,49 @@ const WebAlbumTopBar = ({
                 {selectedCards.length}개 선택됨
               </Text>
             </div>
-            <Button appearance="transparent" size="small" css={buttonStyles}>
+            <Button
+              appearance="transparent"
+              size="small"
+              css={buttonStyles}
+              onClick={handleDownload}
+            >
               <ArrowDownload24Filled />
             </Button>
-            <Button appearance="transparent" size="small" css={buttonStyles}>
-              <Delete24Filled />
-            </Button>
+
+            <Dialog modalType="alert" open={modalOpen}>
+              <DialogTrigger disableButtonEnhancement>
+                <Button
+                  appearance="transparent"
+                  size="small"
+                  css={buttonStyles}
+                  onClick={() => setModalOpen(true)}
+                >
+                  <Delete24Filled />
+                </Button>
+              </DialogTrigger>
+              <DialogSurface>
+                <DialogBody>
+                  <DialogTitle>
+                    선택하신 {selectedCards.length}개의 명함을 전부
+                    삭제하시겠습니까?
+                  </DialogTitle>
+                  <DialogActions>
+                    <Button
+                      shape="circular"
+                      css={buttonStyles3}
+                      onClick={handleDelete}
+                    >
+                      삭제
+                    </Button>
+                    <DialogTrigger disableButtonEnhancement>
+                      <Button shape="circular" css={buttonStyles2}>
+                        취소
+                      </Button>
+                    </DialogTrigger>
+                  </DialogActions>
+                </DialogBody>
+              </DialogSurface>
+            </Dialog>
           </Flex>
         </Flex>
       </Flex>
@@ -115,4 +234,12 @@ const buttonStyles = css`
 const wordBoxStyles = css`
   width: 100px;
   text-align: center;
+`
+const buttonStyles3 = css`
+  background-color: #f00;
+  color: white;
+`
+const buttonStyles2 = css`
+  background-color: ${colors.poscoSilver};
+  color: white;
 `
