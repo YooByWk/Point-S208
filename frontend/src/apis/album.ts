@@ -115,6 +115,7 @@ export const deleteFilter = async (userId: number, filterId: number) => {
     .catch(err => console.log(err))
 }
 
+
 export const editMyAlbumMemo = async (params: editMemoType) => {
   return authRequest
     .post(`${CudUrl}/${params.userId}/${params.cardId}/memo`, params.data)
@@ -122,21 +123,17 @@ export const editMyAlbumMemo = async (params: editMemoType) => {
     .catch(err => console.log(err))
 }
 
-export const deleteMyAlbumCardsArray = async (
-  params: deleteAlbumCardArrayType,
-) => {
-  if (!params.cardIdArray || params.userId) return
 
-  return Promise.all(
-    params.cardIdArray.map(async cardId => {
-      try {
-        const res = await authRequest.delete(
-          `${CudUrl}/${params.userId}/${cardId}`,
-        )
-        return res.data
-      } catch (err) {
-        return console.log(err)
-      }
-    }),
-  )
+export const deleteMyAlbumCards = async (params: deleteAlbumCardArrayType) => {
+  if (!params.cardIdArray || params.userId) return
+  
+  return Promise.all(params.cardIdArray.map(async cardId =>  {
+    try {
+      const res = await authRequest
+        .delete(`${CudUrl}/${params.userId}/${cardId}`)
+      return res.data
+    } catch (err) {
+      return console.log(err)
+    }
+  }))
 }

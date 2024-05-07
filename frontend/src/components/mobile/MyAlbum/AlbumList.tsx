@@ -39,8 +39,11 @@ const AlbumList = () => {
       initialPageParam: 0,
     })
 
-  let cards = data?.pages.flatMap(page => page) || [] // 명함 리스트
+  let cards = data?.pages.flatMap(page => page.data_body) || [] // 명함 리스트
+  // let cards = data?.pages.flatMap(page => page) || [] // 명함 리스트 : 오류 : 수정하기
+  console.log('cards: ', cards);
   //
+  
   useEffect(() => {
     const handleScroll = () => {
       if (

@@ -47,7 +47,7 @@ const ShareCard = ({
   >(undefined)
 
   const handleResult = (data: ExternalCardListType | UserListType) => {
-    if (Array.isArray(data) && data.length > 0 && 'cardId' in data[0]) {
+    if (Array.isArray(data) ) {
       setSearchResults(data as ExternalCardListType)
     }
   }
