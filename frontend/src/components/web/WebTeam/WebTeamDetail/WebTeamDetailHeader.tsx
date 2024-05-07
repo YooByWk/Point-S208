@@ -28,22 +28,21 @@ import {
 import Spacing from '@/components/shared/Spacing'
 import { colors } from '@/styles/colorPalette'
 import { useRecoilValue, useResetRecoilState } from 'recoil'
-import { selectedTeamIdState } from '@/stores/team'
+import { selectedTeamAlbumIdState } from '@/stores/team'
 import styled from '@emotion/styled'
 import { useState } from 'react'
 
 const WebTeamDetailHeader = (props: Partial<TabListProps>) => {
-  const selectedTeam = useRecoilValue(selectedTeamIdState)
-  const resetSelectedTeam = useResetRecoilState(selectedTeamIdState)
+  const selectedTeam = useRecoilValue(selectedTeamAlbumIdState)
+  const resetSelectedTeam = useResetRecoilState(selectedTeamAlbumIdState)
   const [value, setValue] = useState('')
-  console.log(value)
 
   return (
     <>
       <Flex direction="column" css={boxStyles}>
         <Flex justify="space-between" align="center">
           <Flex align="center">
-            <BackButton onClick={() => resetSelectedTeam()} css={textStyles}>
+            <BackButton onClick={() => resetSelectedTeam()}>
               <ArrowLeft24Regular />
               <Text typography="t7"> 뒤로가기 </Text>
             </BackButton>
@@ -115,6 +114,7 @@ export default WebTeamDetailHeader
 const BackButton = styled.div`
   display: flex;
   gap: 10px;
+  white-space: nowrap;
   cursor: pointer;
 `
 
@@ -134,8 +134,4 @@ const iconStyles = css`
 const buttonStyles = css`
   padding: 0;
   margin: 0;
-`
-
-const textStyles = css`
-  white-space: nowrap;
 `

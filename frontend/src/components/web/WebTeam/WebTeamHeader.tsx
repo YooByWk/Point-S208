@@ -1,23 +1,23 @@
 /** @jsxImportSource @emotion/react */
 import LargeButton from '@/components/shared/LargeButton'
-import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { SearchBox } from '@fluentui/react-components'
 import { useState } from 'react'
 import { Filter32Regular, ArrowSort28Regular } from '@fluentui/react-icons'
+import { BooleanStateType } from '@/types/commonType'
 
-const WebTeamHeader = () => {
-  const [value, setValue] = useState('')
-  console.log(value)
+const WebTeamHeader = (props: BooleanStateType) => {
+  const { setValue } = props
+  const [keyword, setKeyword] = useState('')
 
   return (
     <Container>
       <SearchBox
         placeholder="팀 이름을 검색해 주세요"
         appearance="underline"
-        onChange={(e: any) => setValue(e.target.value)}
+        onChange={(e: any) => setKeyword(e.target.value)}
       />
-      <LargeButton text="팀 추가" width="20vw" onClick={() => {}} />
+      <LargeButton text="팀 추가" width="20vw" onClick={() => setValue(true)} />
       <Filter32Regular />
       <ArrowSort28Regular />
     </Container>

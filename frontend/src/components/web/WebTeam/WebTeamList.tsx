@@ -4,31 +4,40 @@ import { tokens } from '@fluentui/react-components'
 import { Add48Filled } from '@fluentui/react-icons'
 import { useMemo } from 'react'
 import WebTeamCard from './WebTeamCard'
-import { dummyTeamList } from '@/assets/data/dummyTeamList'
 import { useSetRecoilState } from 'recoil'
-import { selectedTeamIdState } from '@/stores/team'
+import { selectedTeamAlbumIdState } from '@/stores/team'
+import { TeamListType } from '@/types/TeamListType'
+import { BooleanStateType } from '@/types/commonType'
 
-const WebTeamList = () => {
-  const setSelectedTeamId = useSetRecoilState(selectedTeamIdState)
+type WebTeamListType = {
+  data: TeamListType[]
+} & BooleanStateType
+
+const WebTeamList = (props: WebTeamListType) => {
+  const { data, setValue } = props
+  const setSelectedTeamId = useSetRecoilState(selectedTeamAlbumIdState)
   const width = useWindowSize() - 390 - 17
-  const teamList = dummyTeamList
 
   const marginInline = useMemo(() => {
     let baseMargin = width % 440
-    if (teamList.length * 440 < width) {
-      baseMargin = width - teamList.length * 440
+    if (data.length * 440 < width) {
+      baseMargin = width - data.length * 440
     }
     return baseMargin / 2
-  }, [width, teamList.length])
+  }, [width, data.length])
 
   return (
     <Container $marginInline={marginInline}>
-      {teamList.map((item, idx) => (
-        <Box key={idx} $isAdd={false} onClick={() => setSelectedTeamId(item)}>
+      {data.map(item => (
+        <Box
+          key={item.teamAlbumId}
+          $isAdd={false}
+          onClick={() => setSelectedTeamId(item)}
+        >
           <WebTeamCard item={item} />
         </Box>
       ))}
-      <Box onClick={() => {}} $isAdd={true}>
+      <Box onClick={() => setValue(true)} $isAdd={true}>
         <Add48Filled />
       </Box>
     </Container>
