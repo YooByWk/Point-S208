@@ -6,6 +6,7 @@ import com.ssafy.businesscard.privateAlbum.dto.FilterListResponseDto;
 import com.ssafy.businesscard.privateAlbum.dto.PrivateAlbumResponseDto;
 import com.ssafy.businesscard.privateAlbum.entity.PrivateAlbum;
 import com.ssafy.businesscard.privateAlbum.entity.PrivateAlbumMember;
+import com.ssafy.businesscard.privateAlbum.mapper.PrivateAlbumMapper;
 import com.ssafy.businesscard.privateAlbum.repository.FilterRepository;
 import com.ssafy.businesscard.privateAlbum.repository.PrivateAlbumMemberRepository;
 import com.ssafy.businesscard.privateAlbum.repository.PrivateAlbumRepository;
@@ -32,6 +33,7 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
     private final BusinesscardRepository businesscardRepository;
     private final PrivateAlbumMemberRepository privateAlbumMemberRepository;
     private final FilterRepository filterRepository;
+    private final PrivateAlbumMapper privateAlbumMapper;
 
     //명함 지갑 목록 조회
     @Override
@@ -41,26 +43,28 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
         Pageable pageable = PageRequest.of(page, size, Sort.by("businesscard.cardId").descending());
         Page<PrivateAlbum> albumPage = privateAlbumRepository.findByUser_userId(userId, pageable);
 
-        List<PrivateAlbumResponseDto> responseDtoList = albumPage.getContent().stream()
-                .map(privateAlbum -> new PrivateAlbumResponseDto(
-                        privateAlbum.getBusinesscard().getCardId(),
-                        privateAlbum.getBusinesscard().getName(),
-                        privateAlbum.getBusinesscard().getCompany(),
-                        privateAlbum.getBusinesscard().getPosition(),
-                        privateAlbum.getBusinesscard().getRank(),
-                        privateAlbum.getBusinesscard().getDepartment(),
-                        privateAlbum.getBusinesscard().getEmail(),
-                        privateAlbum.getBusinesscard().getLandlineNumber(),
-                        privateAlbum.getBusinesscard().getFaxNumber(),
-                        privateAlbum.getBusinesscard().getPhoneNumber(),
-                        privateAlbum.getBusinesscard().getAddress(),
-                        privateAlbum.getBusinesscard().getRealPicture(),
-                        privateAlbum.getBusinesscard().getFrontBack(),
-                        privateAlbum.getBusinesscard().getDomainUrl(),
-                        privateAlbum.getMemo()
-                        ))
-                .collect(Collectors.toList());
-        return responseDtoList;
+        List<PrivateAlbumResponseDto> dtos = albumPage.map(privateAlbumMapper::toDto).toList();
+//        List<PrivateAlbumResponseDto> responseDtoList = albumPage.getContent().stream()
+//                .map(privateAlbum -> new PrivateAlbumResponseDto(
+//                        privateAlbum.getBusinesscard().getCardId(),
+//                        privateAlbum.getBusinesscard().getName(),
+//                        privateAlbum.getBusinesscard().getCompany(),
+//                        privateAlbum.getBusinesscard().getPosition(),
+//                        privateAlbum.getBusinesscard().getRank(),
+//                        privateAlbum.getBusinesscard().getDepartment(),
+//                        privateAlbum.getBusinesscard().getEmail(),
+//                        privateAlbum.getBusinesscard().getLandlineNumber(),
+//                        privateAlbum.getBusinesscard().getFaxNumber(),
+//                        privateAlbum.getBusinesscard().getPhoneNumber(),
+//                        privateAlbum.getBusinesscard().getAddress(),
+//                        privateAlbum.getBusinesscard().getRealPicture(),
+//                        privateAlbum.getBusinesscard().getFrontBack(),
+//                        privateAlbum.getBusinesscard().getDomainUrl(),
+//                        privateAlbum.getMemo()
+//                        ))
+//                .collect(Collectors.toList());
+//        return responseDtoList;
+        return dtos;
     }
 
     //명함 상세 조회
@@ -137,5 +141,13 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
                 .filterId(filterId)
                 .cardList(cards)
                 .build();
+    }
+
+    //엑셀로 내보내기용 명함지갑목록조회
+    @Override
+    public List<PrivateAlbumResponseDto> getAlbumAllList(Long userId){
+        List<PrivateAlbum> privateAlbums = privateAlbumRepository.findByUser_userId(userId);
+        List<PrivateAlbumResponseDto> dtos = privateAlbums.stream().map(privateAlbumMapper::toDto).toList();
+        return dtos;
     }
 }

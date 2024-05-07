@@ -41,4 +41,9 @@ public class TeamsController {
         List<TeamMemberListResponseDto> dtos = teamsService.getTeamMemberList(userId, teamAlbumId);
         return ResponseEntity.ok().body(MessageUtils.success(dtos));
     }
+    //엑셀로 내보내기용 팀 명함 목록조회
+//    @GetMapping("/api/teams/{team_album_id}")
+//    public ResponseEntity<?> getTeamAlbumAllList(@PathVariable("team_album_id")Long teamAlbumId){
+//
+//    }
 }

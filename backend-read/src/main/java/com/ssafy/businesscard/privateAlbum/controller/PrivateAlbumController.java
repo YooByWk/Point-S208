@@ -24,36 +24,41 @@ public class PrivateAlbumController {
 
     //명함지갑에서목록조회
     @GetMapping("/my-album/list/{user_id}/{page}")
-    public ResponseEntity<List<PrivateAlbumResponseDto>> getAlbumList(
+    public ResponseEntity<?> getAlbumList(
             @PathVariable("user_id")Long userId,
             @PathVariable("page")int page){
 
         List<PrivateAlbumResponseDto> list = privateAlbumService.getAlbumList(userId, page);
-        return ResponseEntity.ok().body(MessageUtils.success(list).getDataBody());
+        return ResponseEntity.ok().body(MessageUtils.success(list));
     }
 
     //명함 상세 조회
     @GetMapping("/my-album/{user_id}/{card_id}")
-    public ResponseEntity<PrivateAlbumResponseDto> getAlbumDtail(
+    public ResponseEntity<?> getAlbumDtail(
             @PathVariable("user_id")Long userId,
             @PathVariable("card_id")Long cardId){
         PrivateAlbumResponseDto privateAlbumResponseDto = privateAlbumService.getAlbumDtail(userId, cardId);
-        return ResponseEntity.ok().body(MessageUtils.success(privateAlbumResponseDto).getDataBody());
+        return ResponseEntity.ok().body(MessageUtils.success(privateAlbumResponseDto));
     }
 
     //필터 목록 조회
     @GetMapping("/my-album/{user_id}/filter")
-    public ResponseEntity<List<FilterListResponseDto>> getFilter(@PathVariable("user_id")Long userId){
+    public ResponseEntity<?> getFilter(@PathVariable("user_id")Long userId){
         List<FilterListResponseDto> list = privateAlbumService.getFilter(userId);
-        return ResponseEntity.ok().body(MessageUtils.success(list).getDataBody());
+        return ResponseEntity.ok().body(MessageUtils.success(list));
     }
 
     //필터별 명함 조회
     @GetMapping("/my-album/{user_id}/filter/{filter_id}")
-    public ResponseEntity<FilterCardResponseDto> getFilterCard(@PathVariable("user_id")Long userId, @PathVariable("filter_id")Long filterId){
+    public ResponseEntity<?> getFilterCard(@PathVariable("user_id")Long userId, @PathVariable("filter_id")Long filterId){
         FilterCardResponseDto filterCardResponseDto = privateAlbumService.getFilterCard(userId, filterId);
-        return ResponseEntity.ok().body(MessageUtils.success(filterCardResponseDto).getDataBody());
+        return ResponseEntity.ok().body(MessageUtils.success(filterCardResponseDto));
     }
 
-
+    //엑셀로 내보내기용 명함지갑목록조회
+    @GetMapping("/my-album/list/{user_id}")
+    public ResponseEntity<?> getAlbumAllList(@PathVariable("user_id")Long userId){
+        List<PrivateAlbumResponseDto> list = privateAlbumService.getAlbumAllList(userId);
+        return ResponseEntity.ok().body(MessageUtils.success(list));
+    }
 }

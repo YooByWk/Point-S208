@@ -13,4 +13,5 @@ public interface PrivateAlbumRepository extends JpaRepository<PrivateAlbum, Long
     Page<PrivateAlbum> findByUser_userId(Long userId, Pageable pageable);
     Optional<PrivateAlbum> findByUser_userIdAndBusinesscard_cardId(Long userId, Long cardId);
     List<PrivateAlbum> findByUser_userId(Long userId);
+
 }
