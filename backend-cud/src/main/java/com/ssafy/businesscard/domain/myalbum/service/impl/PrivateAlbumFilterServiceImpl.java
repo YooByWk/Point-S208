@@ -2,12 +2,10 @@ package com.ssafy.businesscard.domain.myalbum.service.impl;
 
 import com.ssafy.businesscard.domain.card.dto.request.FilterRequest;
 import com.ssafy.businesscard.domain.card.entity.Filter;
-import com.ssafy.businesscard.domain.card.mapper.FilterMapper;
 import com.ssafy.businesscard.global.exception.GlobalExceptionHandler;
 import com.ssafy.businesscard.domain.myalbum.entity.PrivateAlbumMember;
 import com.ssafy.businesscard.domain.myalbum.repository.PrivateAlbumFilterRepository;
 import com.ssafy.businesscard.domain.myalbum.repository.PrivateAlbumMemberRepository;
-import com.ssafy.businesscard.domain.myalbum.repository.privateAlbum.PrivateAlbumRepository;
 import com.ssafy.businesscard.domain.myalbum.service.PrivateAlbumFilterService;
 import com.ssafy.businesscard.domain.user.entity.User;
 import com.ssafy.businesscard.domain.user.repository.UserRepository;
@@ -63,7 +61,6 @@ public class PrivateAlbumFilterServiceImpl implements PrivateAlbumFilterService 
                     .filterName(request.filterName())
                     .build());
         }
-
     }
 
     // 필터 생성 후 filterId와 userId를 중계 테이블에 저장
