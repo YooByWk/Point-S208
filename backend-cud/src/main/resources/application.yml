@@ -54,12 +54,12 @@ springdoc:
 cloud:
   aws:
     credentials:
-      access-key: AKIAW3MEAWFWGVMIB3VX
-      secret-key: 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
+      access-key: AKIARI2J3RH43CRK24NB
+      secret-key: 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
     region:
       static: ap-northeast-2
     s3:
-      bucket: fullerting-s3-v2
+      bucket: ssafybizcard
       stack:
         auto: false
 
