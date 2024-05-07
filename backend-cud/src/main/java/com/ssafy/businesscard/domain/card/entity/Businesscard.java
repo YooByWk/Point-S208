@@ -57,7 +57,7 @@ public class Businesscard extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "front_back", nullable = false)
-    private Status frontBack;
+    private Status frontBack = Status.FRONT;
 
     @Column(name = "domain_url", length = 100)
     private String domainUrl;

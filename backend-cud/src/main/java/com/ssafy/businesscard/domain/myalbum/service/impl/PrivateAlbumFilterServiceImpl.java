@@ -27,10 +27,14 @@ public class PrivateAlbumFilterServiceImpl implements PrivateAlbumFilterService 
     @Override
     @Transactional
     public void create(Long userId, FilterRequest request) {
+        privateAlbumFilterRepository.findByFilterName(request.filterName()).ifPresent(
+                filter -> {throw new GlobalExceptionHandler.UserException(
+                        GlobalExceptionHandler.UserErrorCode.ALREADY_IN_FILTER
+                );
+            });
         Filter filter = privateAlbumFilterRepository.save(Filter.builder()
                 .filterName(request.filterName())
                 .build());
-
         saveFilter(userId, filter.getFilterId());
     }
 
@@ -38,8 +42,8 @@ public class PrivateAlbumFilterServiceImpl implements PrivateAlbumFilterService 
     @Override
     public void update(Long userId, Long filterId, FilterRequest request) {
         privateAlbumFilterRepository.save(Filter.builder()
-                        .filterId(filterId)
-                        .filterName(request.filterName())
+                .filterId(filterId)
+                .filterName(request.filterName())
                 .build());
     }
 

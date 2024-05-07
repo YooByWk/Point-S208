@@ -29,6 +29,11 @@ public class TeamFilterServiceImpl implements TeamFilterService {
     // 필터 생성
     @Override
     public void create(Long teamAlbumId, FilterRequest request) {
+        teamAlbumFilterRepository.findByFilterName(request.filterName()).ifPresent(
+                filter -> {throw new GlobalExceptionHandler.UserException(
+                        GlobalExceptionHandler.UserErrorCode.ALREADY_IN_FILTER
+                );
+        });
         Filter filter = filterMapper.toEntity(request);
         teamAlbumFilterRepository.save(filter);
         saveFilter(teamAlbumId, filter.getFilterId());
