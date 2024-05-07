@@ -25,7 +25,6 @@ public class EmailController {
                                                @PathVariable("card_id") Long card_id,
                                                @RequestBody EmailsendRequest emailsendRequest
     ) {
-
         emailService.sendEmail(emailsendRequest.recipientEmail(), card_id);
 
         return ResponseEntity.ok().body(MessageUtils.success("명함이 등록되었습니다."));
