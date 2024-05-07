@@ -49,7 +49,3 @@ export type deleteAlbumCardArrayType = {
   cardIdArray: number[] | undefined[]
 }
 
-export type deleteAlbumCardArrayType = {
-  userId: number | undefined
-  cardIdArray: number[] | undefined[]
-}
