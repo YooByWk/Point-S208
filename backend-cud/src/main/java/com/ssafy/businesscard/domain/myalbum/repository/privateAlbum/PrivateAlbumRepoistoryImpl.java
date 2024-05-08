@@ -14,6 +14,7 @@ import java.util.List;
 public class PrivateAlbumRepoistoryImpl implements PrivateAlbumCustomRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
+
     QPrivateAlbum qPrivateAlbum = QPrivateAlbum.privateAlbum;
     QUser qUser = QUser.user;
     QBusinesscard qBusinesscard = QBusinesscard.businesscard;
@@ -26,4 +27,5 @@ public class PrivateAlbumRepoistoryImpl implements PrivateAlbumCustomRepository 
                 .where(qPrivateAlbum.user.userId.eq(userId).and(qPrivateAlbum.businesscard.email.eq(email)))
                 .fetch();
     }
+
 }

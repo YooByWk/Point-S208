@@ -7,9 +7,14 @@ import com.ssafy.businesscard.global.exception.GlobalExceptionHandler;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.mail.javamail.*;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Properties;
 
 @RequiredArgsConstructor
@@ -63,10 +68,19 @@ public class EmailService {
             messageHelper.setTo(recipientEmail);
             messageHelper.setSubject("명함 정보입니다.");
             messageHelper.setText(toEmailString(businesscard), true);
+
+
+            System.out.println("rrrrrrrr" + businesscard.getRealPicture());
+//            FileSystemResource image = new FileSystemResource(new File(businesscard.getRealPicture()));
+            URL imageUrl = new URL(businesscard.getRealPicture());
+            UrlResource imageResource = new UrlResource(imageUrl);
+            messageHelper.addAttachment("image.jpg", imageResource);
             mailSender.send(message);
 
         } catch (MessagingException e) {
             throw new RuntimeException("메일 생성 오류", e);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
         }
 
     }
@@ -89,8 +103,6 @@ public class EmailService {
         sb.append("도메인 URL: ").append(businesscard.getDomainUrl() != null ? businesscard.getDomainUrl() : "").append("<br>");
         return sb.toString();
     }
-
-
 
 
 }
