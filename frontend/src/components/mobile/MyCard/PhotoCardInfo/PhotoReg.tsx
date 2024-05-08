@@ -172,14 +172,16 @@ const PhotoReg = (props: { isMyCard: boolean }) => {
               <Point $isFront={!isFront} />
             </Flex>
           )}
-          <Text
-            typography="t8"
-            textAlign="center"
-            style={{ marginTop: '2%' }}
-            onClick={() => (isFront && !backImgSrc ? setIsFront(false) : '')}
-          >
-            {!backImgSrc ? '영문추가 >' : isFront ? '국문' : '영문'}
-          </Text>
+          <Flex justify="center">
+            <Text
+              typography="t8"
+              textAlign="center"
+              style={{ marginTop: '2%' }}
+              onClick={() => (isFront && !backImgSrc ? setIsFront(false) : '')}
+            >
+              {!backImgSrc ? '영문추가 >' : isFront ? '국문' : '영문'}
+            </Text>
+          </Flex>
           <Grid2>
             <Button
               $position={'left'}
@@ -196,9 +198,15 @@ const PhotoReg = (props: { isMyCard: boolean }) => {
         </>
       ) : (
         <>
-          <Text typography="t8" textAlign="center" style={{ marginTop: '2%' }}>
-            {isFront ? '국문' : '영문'}
-          </Text>
+          <Flex justify="center">
+            <Text
+              typography="t8"
+              textAlign="center"
+              style={{ marginTop: '2%' }}
+            >
+              {isFront ? '국문' : '영문'}
+            </Text>
+          </Flex>
           <Grid3>
             <Flex direction="column" align="center">
               <FileInput

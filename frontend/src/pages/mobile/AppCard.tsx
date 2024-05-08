@@ -38,6 +38,7 @@ const AppCard = () => {
       if (data?.front) setFrontCard(data.front)
       if (data?.back) setBackCard(data.back)
       setIsCard(true)
+      setIsFirstCard(false)
     } else {
       setIsFirstCard(true)
     }

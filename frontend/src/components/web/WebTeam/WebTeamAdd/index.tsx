@@ -53,12 +53,12 @@ const Index = (props: TeamAddType) => {
   })
 
   const createTeamHandler = () => {
-    const userIdList = member.map(item => item.userId) as number[]
+    const userList = member.map(item => item.userId) as number[]
     let params = {
       userId: userId,
       data: {
         teamName: name,
-        userIdList: userIdList,
+        userList: userList,
       },
     }
 

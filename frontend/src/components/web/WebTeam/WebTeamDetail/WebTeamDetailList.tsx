@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import { Spinner, tokens } from '@fluentui/react-components'
 import LargeButton from '@shared/LargeButton'
@@ -12,6 +12,7 @@ import AddCard from '@components/mobile/MyAlbum/AddCard'
 import WebCardThumbnail from '@/components/shared/WebCardThumbnail'
 import { fetchTeamCardsList } from '@/apis/team'
 import { selectedTeamAlbumIdState } from '@/stores/team'
+import useWindowSize from '@/hooks/useWindowSize'
 
 const WebTeamDetailList = ({
   selectedCards,
@@ -69,12 +70,22 @@ const WebTeamDetailList = ({
     )
   }
 
+  const width = useWindowSize() - 320 - 17
+
+  const marginInline = useMemo(() => {
+    let baseMargin = width % 340
+    if (cards.length * 340 < width) {
+      baseMargin = width - cards.length * 340
+    }
+    return baseMargin / 2
+  }, [width, cards.length])
+
   return (
     <>
       <div css={boxStyles}>
         {cards.length > 0 && cards[0] !== undefined ? (
           <>
-            <div css={gridStyles}>
+            <div css={flexStyles(marginInline)}>
               {cards
                 .filter(card => card)
                 .map(card => {
@@ -147,10 +158,11 @@ const buttonCss = css`
   background-color: ${tokens.colorNeutralBackground1};
 `
 
-const gridStyles = css`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 20px;
+const flexStyles = (marginInline: number) => css`
+  display: flex;
+  flex-wrap: wrap;
+  margin: 20px ${marginInline}px;
+  gap: 20px;
 `
 
 const boxStyles = css`

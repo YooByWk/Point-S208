@@ -41,7 +41,7 @@ export type CreateTeamType = {
   userId: number
   data: {
     teamName: string
-    userIdList: number[]
+    userList: number[]
   }
 }
 

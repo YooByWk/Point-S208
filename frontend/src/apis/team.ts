@@ -17,7 +17,6 @@ export const searchUser = async (userInput: string | number) => {
 
 // 팀 리스트 조회 
 export const fetchTeamList = async (userId: number) => {
-  // console.log(`${ReadUrl}/${userId}`)
   return authRequest
     .get(`${ReadUrl}/${userId}`)
     .then(res => res.data)
@@ -46,7 +45,7 @@ export const CreateTeamSkip = async (params: CreateTeamSkipType) => {
 // 팀 멤버포함 생성
 export const CreateTeam = async (params: CreateTeamType) => {
   return authRequest
-    .post(`${CudUrl}/${params.userId}`, params.data)
+    .post(`${CudUrl}/${params.userId}/create`, params.data)
     .then(res => res.data)
     .catch(err => console.log(err))
 }
