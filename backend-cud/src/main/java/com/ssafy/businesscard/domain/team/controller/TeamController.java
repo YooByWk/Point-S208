@@ -75,7 +75,7 @@ public class TeamController {
     @PostMapping("/{userId}/{teamId}/ocr")
     public ResponseEntity<MessageUtils> registCard(@PathVariable("userId") Long userId,
                                                    @PathVariable("teamId") Long teamAlbumId,
-                                                   @RequestPart("file") MultipartFile image,
+                                                   @RequestPart MultipartFile image,
                                                    @RequestPart CardRequest request){
         teamAlbumService.registCard(userId, teamAlbumId, image, request);
         log.info("[Regist Card] : {}", request);
