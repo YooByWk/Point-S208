@@ -1,5 +1,6 @@
 package com.ssafy.businesscard.teams.service;
 
+import com.ssafy.businesscard.privateAlbum.dto.FilterCardResponseDto;
 import com.ssafy.businesscard.privateAlbum.dto.FilterListResponseDto;
 import com.ssafy.businesscard.privateAlbum.dto.PrivateAlbumResponseDto;
 import com.ssafy.businesscard.teams.dto.TeamListResponseDto;
@@ -14,4 +15,5 @@ public interface TeamsService {
     public List<PrivateAlbumResponseDto> getTeamAlbumAllList(Long teamAlbumId);
     public PrivateAlbumResponseDto getTeamAlbumDtail(Long teamAlbumId, Long cardId);
     public List<FilterListResponseDto> getFilter(Long teamsAlbumDetailId);
+    public FilterCardResponseDto getFilterCard(Long teamAlbumId, Long filterId);
 }

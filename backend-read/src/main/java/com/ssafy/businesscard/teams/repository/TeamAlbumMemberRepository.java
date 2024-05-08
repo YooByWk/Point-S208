@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface TeamAlbumMemberRepository extends JpaRepository<TeamAlbumMember, Long> {
     List<TeamAlbumMember> findByTeamAlbumDetail_TeamAlbumDetailId(Long teamsAlbumDetailId);
+    List<TeamAlbumMember> findByTeamAlbum_TeamAlbumIdAndFilter_filterId(Long teamAlbumId, Long filterId);
 }

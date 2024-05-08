@@ -1,6 +1,7 @@
 package com.ssafy.businesscard.teams.controller;
 
 import com.ssafy.businesscard.global.utils.MessageUtils;
+import com.ssafy.businesscard.privateAlbum.dto.FilterCardResponseDto;
 import com.ssafy.businesscard.privateAlbum.dto.FilterListResponseDto;
 import com.ssafy.businesscard.privateAlbum.dto.PrivateAlbumResponseDto;
 import com.ssafy.businesscard.teams.dto.TeamListResponseDto;
@@ -67,7 +68,18 @@ public class TeamsController {
     }
 
     //필터 별 명함 조회
-//    @GetMapping("/teams/{team_album_id}/filter/{filter_id}")
-
+    @GetMapping("/teams/{team_album_id}/filter/{filter_id}")
+    public ResponseEntity<?> getFilterCard(
+            @PathVariable("team_album_id")Long teamAlbumId,
+            @PathVariable("filter_id")Long filterId){
+        FilterCardResponseDto dto = teamsService.getFilterCard(teamAlbumId, filterId);
+        return ResponseEntity.ok().body(MessageUtils.success(dto));
+    }
     //상세보기에서 명함마다 필터 뭐있는지 조회
+//    @GetMapping("/teams/{team_album_id}/{card_id}/filter")
+//    public ResponseEntity<?> getCardFilter(
+//            @PathVariable("team_album_id")Long teamAlbumId,
+//            @PathVariable("card_id")Long cardId){
+//        List<FilterListResponseDto> dtos =
+//    }
 }

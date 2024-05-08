@@ -20,6 +20,10 @@ public class TeamAlbumMember {
     private Filter filter;
 
     @ManyToOne
+    @JoinColumn(name = "team_album_id")
+    private TeamAlbum teamAlbum;
+
+    @ManyToOne
     @JoinColumn(name = "team_album_detail_id")
     private TeamAlbumDetail teamAlbumDetail;
 }

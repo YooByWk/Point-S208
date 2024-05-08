@@ -1,6 +1,7 @@
 package com.ssafy.businesscard.teams.service;
 
 import com.ssafy.businesscard.mycard.entity.Businesscard;
+import com.ssafy.businesscard.privateAlbum.dto.FilterCardResponseDto;
 import com.ssafy.businesscard.privateAlbum.dto.FilterListResponseDto;
 import com.ssafy.businesscard.privateAlbum.dto.PrivateAlbumResponseDto;
 import com.ssafy.businesscard.privateAlbum.entity.Filter;
@@ -165,7 +166,15 @@ public class TeamsServiceImpl implements TeamsService{
     }
 
     //필터 별 명함 조회
-
+    @Override
+    public FilterCardResponseDto getFilterCard(Long teamAlbumId, Long filterId){
+        List<TeamAlbumMember> members = teamAlbumMemberRepository.findByTeamAlbum_TeamAlbumIdAndFilter_filterId(teamAlbumId, filterId);
+        List<TeamAlbumDetail> teamAlbumDetails = members.stream().map(details ->details.getTeamAlbumDetail()).toList();
+        List<Businesscard> businesscards = teamAlbumDetails.stream().map(bc ->bc.getBusinesscard()).toList();
+        List<PrivateAlbumResponseDto> list = businesscards.stream().map(teamsMapper::toDto).toList();
+        FilterCardResponseDto dto = new FilterCardResponseDto(filterId, list);
+        return dto;
+    }
 
     //상세보기에서 명함마다 필터 뭐있는지 조회
 }

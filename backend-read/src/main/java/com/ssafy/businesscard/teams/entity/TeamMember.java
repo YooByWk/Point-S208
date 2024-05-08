@@ -23,5 +23,4 @@ public class TeamMember {
     @ManyToOne
     @JoinColumn(name = "team_album_id")
     private TeamAlbum teamAlbum;
-
 }
