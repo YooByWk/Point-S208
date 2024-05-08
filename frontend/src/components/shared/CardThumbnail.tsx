@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { ReactEventHandler, useState } from 'react'
+import {  useState } from 'react'
 import type { CardType } from '@/types/cardType'
 import Flex from '@/components/shared/Flex'
 import Text from '@/components/shared/Text'
@@ -14,13 +14,14 @@ import {
   ShareAndroid24Filled,
   Delete24Filled,
 } from '@fluentui/react-icons'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import { userState } from '@/stores/user'
 import { ExternalCardType } from '@/types/ExternalCard'
 import EmptyThumbnail from '@/components/shared/EmptyThumbnail'
 import { useDeleteAlbumCard } from '@/hooks/useDeleteAlbumCard'
 import SmallModal from '@/components/shared/SmallModal'
+import { useDeleteTeamAlbumCard } from '@/hooks/Team/useDeleteTeamAlbumCard'
 
 interface CardThumbnailProps {
   cardInfo: CardType | ExternalCardType
@@ -28,11 +29,9 @@ interface CardThumbnailProps {
   selectedCards: number[]
   forShare?: boolean
   scale?: number
-  teamId? : number
 }
 
 const CardThumbnail = ({
-  teamId,
   cardInfo,
   onSelect,
   selectedCards,
@@ -43,11 +42,10 @@ const CardThumbnail = ({
   const [isChecked, setIsChecked] = useState(false)
   const isSelected = selectedCards.includes(cardInfo.cardId)
   const userId = useRecoilValue(userState).userId 
-  const deletemutation = useDeleteAlbumCard()
-  
+  const myAlbumDeletemutation = useDeleteAlbumCard()
+  const teamAlbumDeleteMutation = useDeleteTeamAlbumCard()
+  const teamAlbumId = useParams()?.teamAlbumId
 
-  
-  
   const handleCheck = (event: React.MouseEvent) => {
     event.stopPropagation()
     setIsChecked(!isChecked)
@@ -66,9 +64,13 @@ const CardThumbnail = ({
     event.stopPropagation()
     console.log('공유 : ', cardInfo)
   }
-
   const handleDelete = () => {
-    deletemutation.mutate(cardInfo.cardId)
+    if (teamAlbumId) {
+      // 팀 앨범의 명함 삭제
+      teamAlbumDeleteMutation.mutate({cardId: cardInfo.cardId, teamAlbumId: +teamAlbumId})
+      return
+    }
+    myAlbumDeletemutation.mutate(cardInfo.cardId)
     console.log('삭제 : ', cardInfo.cardId)
   }
   const navigate = useNavigate()

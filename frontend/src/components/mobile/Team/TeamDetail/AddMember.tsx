@@ -14,7 +14,9 @@ import { useRecoilValue } from 'recoil'
 import { userState } from '@/stores/user'
 import BackArrow from '@/components/shared/BackArrow'
 import SearchBox from '@/components/shared/SearchBox'
-import { TeamListType } from '@/types/TeamListType'
+import { TeamListType, TeamMemberInfoType } from '@/types/TeamListType'
+import { useFetchTeamMember } from '@/hooks/Team/useFetchTeamMember'
+import { useAddMember } from '@/hooks/Team/useAddMember'
 
 const AddMember = ({
   team,
@@ -30,11 +32,17 @@ const AddMember = ({
   const isWrite = value
   const setIsWrite = setValue
   const userId = useRecoilValue(userState).userId
-
+  const memberQuery = useFetchTeamMember({ teamId: team.teamAlbumId })
+  const memberMutation = useAddMember()
+  
   const handleSearch = () => {}
 
   const handleMemberCheck = (user: UserType) => {
-    if (!selectedMember.some(member => member.userId === user.userId)) {
+    if (selectedMember.some(member => member.userId === user.userId)) {
+      setSelectedMember(prev =>
+        prev.filter(member => member.userId !== user.userId),
+      )
+    } else {
       setSelectedMember(prev => [...prev, user])
     }
   }
@@ -58,104 +66,133 @@ const AddMember = ({
       setSearchResults(data)
     }
   }
+
+
+  const teamMemberId =
+    memberQuery.data?.data_body.map(
+      (member: TeamMemberInfoType) => member.userId,
+    ) || []
+    
+    const handleAddMember = () => {
+      var userList = selectedMember.map(member => member.userId) 
+      memberMutation.mutate({
+        userId: userId!,
+        teamId: team.teamAlbumId,
+        data: {
+          userList: userList
+        },
+      })
+      setIsWrite(!isWrite)
+    } 
   return (
     <>
-    <div css={css`height:100vh;`}>
-      <BackArrow onClick={handleBackArrow} />
-      <Flex
-        direction="column"
-        justify="space-around"
-        align="center"
-        css={Step1mainContainerCss}
+      <div
+        css={css`
+          height: 100vh;
+        `}
       >
-        {/* step 2*/}
-        <Flex direction="column" align="flex-start" style={{ width: '100%' }}>
-          <Text typography="t6" bold={true}>
-            {team.teamName}에 구성원 추가
-          </Text>
-          <Spacing size={20} direction="vertical" />
-          <Text bold={true} typography="t8">
-            팀원으로 추가할 사람을 선택해주세요.
-          </Text>
-          <Spacing size={20} direction="vertical" />
-          <Flex direction="row" align="center" justify="center" css={searchCss}>
-            <SearchBox
-              onSearch={handleResult} // 검색 로직 넣기
-              value={teamSearchValue}
-              isSearchingMember={true}
-              onChange={(e: any) => {
-                if (e.target.value !== undefined ) {
-                  setTeamSearchValue(e.target.value)
+        <BackArrow onClick={handleBackArrow} />
+        <Flex
+          direction="column"
+          justify="space-around"
+          align="center"
+          css={Step1mainContainerCss}
+        >
+          {/* step 2*/}
+          <Flex direction="column" align="flex-start" style={{ width: '100%' }}>
+            <Text typography="t6" bold={true}>
+              {team.teamName}에 구성원 추가
+            </Text>
+            <Spacing size={20} direction="vertical" />
+            <Text bold={true} typography="t8">
+              팀원으로 추가할 사람을 선택해주세요.
+            </Text>
+            <Spacing size={20} direction="vertical" />
+            <Flex
+              direction="row"
+              align="center"
+              justify="center"
+              css={searchCss}
+            >
+              <SearchBox
+                onSearch={handleResult} // 검색 로직 넣기
+                value={teamSearchValue}
+                isSearchingMember={true}
+                onChange={(e: any) => {
+                  if (e.target.value !== undefined) {
+                    setTeamSearchValue(e.target.value)
+                  }
+                  if (e.target.value === undefined || e.target.value === '') {
+                    setTeamSearchValue('')
+                    setSearchResults([])
+                  }
+                }}
+                lefticon={false}
+                bgColor="colorNeutralBackground3"
+                memberIcon={false}
+                filterIcon={false}
+                sortIcon={false}
+                width="70vw"
+              />
+              <LargeButton text="검색" onClick={handleSearch} width="10vw" />
+            </Flex>
+            <Spacing size={20} direction="vertical" />
+            {SearchResults === undefined || SearchResults.length > 0 ? (
+              SearchResults.filter(
+                user => !teamMemberId.includes(user.userId),
+              ).map(user => {
+                if (user.userId !== userId) {
+                  return (
+                    <MemberThumbnail
+                      user={user}
+                      onClick={e => {
+                        e.stopPropagation()
+                        handleMemberCheck(user)
+                      }}
+                      isSelected={isMember(user)}
+                    />
+                  )
+                } else {
+                  return <></>
                 }
-                if (e.target.value === undefined || e.target.value === '') {
-                  setTeamSearchValue('')
-                  setSearchResults([])
-                }
-              }}
-              lefticon={false}
-              bgColor="colorNeutralBackground3"
-              memberIcon={false}
-              filterIcon={false}
-              sortIcon={false}
-              width="70vw"
-            />
-            <LargeButton text="검색" onClick={handleSearch} width="10vw" />
+              })
+            ) : (
+              <>
+                <Text typography="t8" bold={true}>
+                  선택된 구성원
+                </Text>
+                {selectedMember.map(user => {
+                  return (
+                    <MemberThumbnail
+                      user={user}
+                      onIconClick={e => {
+                        e.stopPropagation()
+                        handleMemberUnCheck(user)
+                      }}
+                      isSelected={isMember(user)}
+                    />
+                  )
+                })}
+              </>
+            )}
           </Flex>
-          <Spacing size={20} direction="vertical" />
-          {SearchResults === undefined || SearchResults.length > 0 ? (
-            SearchResults.map(user => {
-              if (user.userId !== userId) {
-                return (
-                  <MemberThumbnail
-                    user={user}
-                    onClick={e => {
-                      e.stopPropagation()
-                      handleMemberCheck(user)
-                    }}
-                    isSelected={isMember(user)}
-                  />
-                )
-              } else {
-                return <></>
-              }
-            })
-          ) : (
-            <>
-              <Text typography="t8" bold={true}>
-                선택된 구성원
-              </Text>
-              {selectedMember.map(user => {
-                return (
-                  <MemberThumbnail
-                    user={user}
-                    onIconClick={e => {
-                      e.stopPropagation()
-                      handleMemberUnCheck(user)
-                    }}
-                    isSelected={isMember(user)}
-                  />
-                )
-              })}
-            </>
-          )}
-        </Flex>
 
-        <Spacing size={20} direction="horizontal" />
-      </Flex>
-    </div>
+          <Spacing size={20} direction="horizontal" />
+        </Flex>
+      </div>
       <div css={addMemberbtn}>
         {selectedMember.length > 0 ? (
-            <LargeButton text="완료" width="35vw" onClick={() => {}} />
+          <LargeButton text="완료" width="35vw" onClick={handleAddMember} />
         ) : (
-            <LargeButton
-              text="완료"
-              width="35vw"
-              disabled={true}
-              onClick={() => console.log('팀 추가 -멤버 포함 : 수정하기')}
-            />
+          <LargeButton
+            text="완료"
+            width="35vw"
+            disabled={true}
+            onClick={() => console.log('팀 추가 -멤버 포함 : 수정하기')}
+          />
         )}
       </div>
-      </>
+    </>
   )
 }
 
@@ -169,8 +206,6 @@ const addMemberbtn = css`
   background-color: ${tokens.colorNeutralBackground1};
   border-top: 1px solid ${tokens.colorNeutralBackground2};
 `
-
-
 
 const Step1mainContainerCss = css`
   margin-top: 2vh;

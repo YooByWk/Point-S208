@@ -1,4 +1,4 @@
-import { RegisterTeammCard } from '@/apis/team'
+import { RegisterTeamCard } from '@/apis/team'
 import { cardInput } from '@/types/cardInput'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 export const useTeamCardAdd = () => {
@@ -13,7 +13,7 @@ export const useTeamCardAdd = () => {
       userId: number
       teamAlbumId: number
       data: cardInput
-    }) => RegisterTeammCard({userId: userId, teamId: teamAlbumId, data: data }),
+    }) => RegisterTeamCard({userId: userId, teamId: teamAlbumId, data: data }),
     onSuccess: () => {
       console.log('팀 카드 등록 성공')
       queryClient.invalidateQueries({ queryKey: ['fetchTeamCardsList'] })

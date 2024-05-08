@@ -51,7 +51,6 @@ const TeamMember = ({team}: {team: TeamListType}) => {
     queryFn: () => fetchTeamMember(teamAlbumId,userId as number),
   })
   const teamMember: CardType[] = data?.data_body || []
-  
   console.log('teamMember: ', teamMember);
   const handleBackArrow = () => {
     setIsLookingMember(!isLookingMember)
