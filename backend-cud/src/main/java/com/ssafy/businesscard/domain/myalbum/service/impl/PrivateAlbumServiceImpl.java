@@ -128,8 +128,8 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
                     .realPicture(businesscard1.getRealPicture())
                     .build());
 
-            PrivateAlbum privateAlbum1 = privateAlbumRepository.findByUser_userIdAndBusinesscard_cardId(
-                    userId, businesscard1.getCardId());
+//            PrivateAlbum privateAlbum1 = privateAlbumRepository.findByUser_userIdAndBusinesscard_cardId(
+//                    userId, businesscard1.getCardId());
 
 //            if (privateAlbum1 != null) {
 //                throw new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.ALREADY_IN_CARD);
