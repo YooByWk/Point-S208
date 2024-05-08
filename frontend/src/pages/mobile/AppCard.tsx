@@ -56,7 +56,15 @@ const AppCard = () => {
         />
       )
     if (camera)
-      return <>{isFirstCard ? <PhotoReg isMyCard={true} /> : <PhotoAddReg />}</>
+      return (
+        <>
+          {isFirstCard ? (
+            <PhotoReg isMyCard={true} refetch={refetch} />
+          ) : (
+            <PhotoAddReg refetch={refetch} />
+          )}
+        </>
+      )
     if (isCard) return <MyCardDetail />
     return <EmptyCard />
   }

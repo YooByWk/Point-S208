@@ -1,4 +1,9 @@
-import { deleteCardType, EditCardType, WriteCardType } from '@/types/cardInput'
+import {
+  deleteCardType,
+  EditCardType,
+  OcrCardType,
+  WriteCardType,
+} from '@/types/cardInput'
 import { authRequest } from '@/utils/requestMethod'
 
 const url = '/cud/api/my-card'
@@ -47,9 +52,15 @@ export const postOCR = async (data: FormData) => {
 // 사진 자르기
 export const clipPhoto = async (data: FormData) => {
   return authRequest
-    .post(`/ocr/process_image/scanv4/`, data, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    })
+    .post(`/ocr/process_image/scanv4/`, data)
+    .then(res => res.data)
+    .catch(err => console.log(err))
+}
+
+// OCR 데이터 등록
+export const ocrRegMyCard = async (params: OcrCardType) => {
+  return authRequest
+    .post(`${url}/${params.userId}/ocr`, params.data)
     .then(res => res.data)
     .catch(err => console.log(err))
 }
