@@ -67,7 +67,7 @@ async def process_ocr(file: bytes = File(...), message: str = Form(...)):
         return JSONResponse(status_code=response.status_code, content={"message": "OCR 처리 실패"})
 
 
-@app.post("/process_image/scanv2/")
+@api.post("/process_image/scanv2/")
 async def process_image(image: UploadFile = File(...)):
     try:
         # 이미지를 읽어옴
@@ -111,7 +111,7 @@ async def process_image(image: UploadFile = File(...)):
         raise HTTPException(status_code=500, detail=str(e))
     
     
-@app.post("/process_image/scanv3/")
+@api.post("/process_image/scanv3/")
 async def process_image(image: UploadFile = File(...)):
     try:
         # 이미지를 읽어옴
