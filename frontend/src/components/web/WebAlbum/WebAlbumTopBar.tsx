@@ -1,10 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import {
-  Delete24Filled,
   ArrowDownload24Filled,
   ArrowSort24Filled,
   Filter24Filled,
+  DrawerArrowDownload24Filled,
 } from '@fluentui/react-icons'
 import Flex from '@shared/Flex'
 import Text from '@shared/Text'
@@ -13,12 +13,6 @@ import {
   TabList,
   Tab,
   Button,
-  Dialog,
-  DialogTrigger,
-  DialogSurface,
-  DialogBody,
-  DialogTitle,
-  DialogActions,
   Popover,
   PopoverTrigger,
   PopoverSurface,
@@ -26,17 +20,17 @@ import {
 import Spacing from '@/components/shared/Spacing'
 import { colors } from '@/styles/colorPalette'
 import { CardType } from '@/types/cardType'
-import { useMutation } from '@tanstack/react-query'
-import { deleteMyAlbumCard } from '@/apis/album'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import { userState } from '@/stores/user'
-import { isRefreshedAlbumState } from '@/stores/card'
-import { useState } from 'react'
 import * as XLSX from 'xlsx'
 import WebUploadFromFile from './WebUploadFromFile'
 import SearchBox from '@/components/shared/SearchBox'
 import { UserListType } from '@/types/userType'
 import { ExternalCardListType } from '@/types/ExternalCard'
+import WebAlbumDeleteSelected from './WebAlbumDeleteSelected'
+import { useMutation } from '@tanstack/react-query'
+import { fetchAllAlbum } from '@/apis/album'
+import { useState } from 'react'
 
 const WebAlbumTopBar = ({
   allCards,
@@ -58,8 +52,6 @@ const WebAlbumTopBar = ({
   setSearchValue: React.Dispatch<React.SetStateAction<string>>
 }) => {
   const userId = useRecoilValue(userState).userId
-  const [isRefreshed, setIsRefreshed] = useRecoilState(isRefreshedAlbumState)
-  const [modalOpen, setModalOpen] = useState(false)
 
   const handleResult = (data: ExternalCardListType | UserListType) => {
     if (Array.isArray(data)) {
@@ -76,18 +68,6 @@ const WebAlbumTopBar = ({
       setSelectedCards(allCards.map(card => card.cardId))
     }
   }
-
-  const { mutate } = useMutation({
-    mutationKey: ['deleteMyAlbumCard'],
-    mutationFn: deleteMyAlbumCard,
-    onSuccess(result) {
-      console.log('삭제 성공', result)
-      setIsRefreshed(!isRefreshed)
-    },
-    onError(error) {
-      console.error('삭제 실패:', error)
-    },
-  })
 
   const handleDownload = () => {
     const selectedCardDetails: CardType[] = allCards.filter(card =>
@@ -130,19 +110,57 @@ const WebAlbumTopBar = ({
     XLSX.writeFile(wb, '명함.xlsx')
   }
 
-  const handleDelete = async () => {
-    try {
-      const deletePromises = selectedCards.map(cardId =>
-        mutate({ userId: userId, cardId: cardId }),
-      )
-      await Promise.all(deletePromises)
+  const downloadAsExcel = (arr: CardType[]) => {
+    const data = [
+      [
+        '이름',
+        '회사',
+        '부서',
+        '직무',
+        '직책',
+        '이메일',
+        '유선전화',
+        '휴대전화',
+        '팩스번호',
+        '웹사이트',
+        '주소',
+      ],
+      ...arr.map(card => [
+        card.name,
+        card.company,
+        card.department,
+        card.rank,
+        card.position,
+        card.email,
+        card.landlineNumber,
+        card.phoneNumber,
+        card.faxNumber,
+        card.domainUrl,
+        card.address,
+      ]),
+    ]
 
-      setSelectedCards(selectedCards.filter(id => !selectedCards.includes(id)))
+    const wb = XLSX.utils.book_new()
+    const ws = XLSX.utils.aoa_to_sheet(data)
+    XLSX.utils.book_append_sheet(wb, ws, '사용자 정보')
 
-      setModalOpen(false)
-    } catch (error) {
-      console.error('카드 삭제 중 오류 발생:', error)
-    }
+    XLSX.writeFile(wb, '명함.xlsx')
+  }
+
+  const { mutate } = useMutation({
+    mutationKey: ['fetchAllAlbum'],
+    mutationFn: fetchAllAlbum,
+    onSuccess(result) {
+      console.log('읽어오기 성공', result.data_body)
+      downloadAsExcel(result.data_body)
+    },
+    onError(error) {
+      console.error('읽어오기 실패:', error)
+    },
+  })
+
+  const handleDownloadAll = () => {
+    mutate({ userId: userId })
   }
 
   return (
@@ -218,56 +236,29 @@ const WebAlbumTopBar = ({
               </PopoverSurface>
             </Popover>
 
-            <Dialog modalType="alert" open={modalOpen}>
-              <DialogTrigger disableButtonEnhancement>
-                <Popover openOnHover={true} mouseLeaveDelay={0.1}>
-                  <PopoverTrigger disableButtonEnhancement>
-                    <Button
-                      appearance="transparent"
-                      size="small"
-                      css={buttonStyles}
-                      onClick={() => setModalOpen(true)}
-                    >
-                      <Delete24Filled />
-                    </Button>
-                  </PopoverTrigger>
-
-                  <PopoverSurface tabIndex={-1}>
-                    <Text typography="t9"> 선택한 명함 삭제하기</Text>
-                  </PopoverSurface>
-                </Popover>
-              </DialogTrigger>
-              <DialogSurface>
-                <DialogBody>
-                  <DialogTitle>
-                    선택하신 {selectedCards.length}개의 명함을 전부
-                    삭제하시겠습니까?
-                  </DialogTitle>
-                  <DialogActions>
-                    <Button
-                      shape="circular"
-                      css={buttonStyles3}
-                      onClick={handleDelete}
-                    >
-                      삭제
-                    </Button>
-                    <DialogTrigger disableButtonEnhancement>
-                      <Button
-                        shape="circular"
-                        css={buttonStyles2}
-                        onClick={() => {
-                          setModalOpen(false)
-                        }}
-                      >
-                        취소
-                      </Button>
-                    </DialogTrigger>
-                  </DialogActions>
-                </DialogBody>
-              </DialogSurface>
-            </Dialog>
+            <WebAlbumDeleteSelected
+              selectedCards={selectedCards}
+              setSelectedCards={setSelectedCards}
+            />
 
             <WebUploadFromFile />
+
+            <Popover openOnHover={true} mouseLeaveDelay={0.1}>
+              <PopoverTrigger disableButtonEnhancement>
+                <Button
+                  appearance="transparent"
+                  size="small"
+                  css={buttonStyles}
+                  onClick={handleDownloadAll}
+                >
+                  <DrawerArrowDownload24Filled />
+                </Button>
+              </PopoverTrigger>
+
+              <PopoverSurface tabIndex={-1}>
+                <Text typography="t9"> 전체 명함 엑셀로 다운받기</Text>
+              </PopoverSurface>
+            </Popover>
           </Flex>
         </Flex>
       </Flex>
@@ -297,12 +288,4 @@ const buttonStyles = css`
 const wordBoxStyles = css`
   width: 100px;
   text-align: center;
-`
-const buttonStyles3 = css`
-  background-color: #f00;
-  color: white;
-`
-const buttonStyles2 = css`
-  background-color: ${colors.poscoSilver};
-  color: white;
 `

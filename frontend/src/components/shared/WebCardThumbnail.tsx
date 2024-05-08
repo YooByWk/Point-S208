@@ -28,6 +28,7 @@ import { useMutation } from '@tanstack/react-query'
 import { deleteMyAlbumCard } from '@/apis/album'
 import { userState } from '@/stores/user'
 import { ExternalCardType } from '@/types/ExternalCard'
+import WebMakeBusinessCard from '../web/WebAlbum/WebMakeBusinessCard'
 
 interface CardThumbnailProps {
   cardInfo: ExternalCardType | CardType
@@ -69,6 +70,7 @@ const WebCardThumbnail = ({
   })
 
   const handleDetailSelect = () => {
+    console.log(cardInfo)
     setIsDetail(true)
     setSelectedCardState(cardInfo)
   }
@@ -96,11 +98,15 @@ const WebCardThumbnail = ({
     <>
       <Flex justify="center" align="center" css={content}>
         <div onClick={handleDetailSelect} css={imgContainerStyles}>
-          <Image
-            fit="contain"
-            src={cardInfo.realPicture}
-            alt={`${cardInfo.name}'s card`}
-          />
+          {cardInfo.realPicture ? (
+            <Image
+              fit="contain"
+              src={cardInfo.realPicture}
+              alt={`${cardInfo.name}'s card`}
+            />
+          ) : (
+            <WebMakeBusinessCard cardInfo={cardInfo} />
+          )}
         </div>
 
         <Flex direction="column" justify="space-around" align="center">
@@ -171,7 +177,6 @@ const checkboxStyles = css`
 const imgContainerStyles = css`
   width: 263px;
   height: 150px;
-  border: 1px solid black;
 `
 
 const buttonStyles = css`

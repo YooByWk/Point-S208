@@ -17,9 +17,15 @@ const CardComponent = (isFront: boolean) => {
     <>
       {isReal ? (
         isFront ? (
-          <RealCard $url={dummyUrl} />
+          frontCard.realPicture ? (
+            <RealCard $url={frontCard.realPicture} />
+          ) : (
+            <NoCard>모바일에서 실물 명함을 추가해 주세요</NoCard>
+          )
+        ) : backCard.realPicture ? (
+          <RealCard $url={backCard.realPicture} />
         ) : (
-          <RealCard $url={dummyUrl} />
+          <NoCard>모바일에서 실물 명함을 추가해 주세요</NoCard>
         )
       ) : isFront ? (
         <MyDigitalCard cardInfo={frontCard} scale={1} border={false} />
@@ -80,4 +86,15 @@ const RealCard = styled.div<{ $url: string }>`
   height: 100%;
   background: url(${props => props.$url});
   background-size: cover;
+`
+
+const NoCard = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #242424;
+  border-radius: 10px;
+  color: #fff;
 `
