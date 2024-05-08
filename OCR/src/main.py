@@ -4,7 +4,7 @@ import uvicorn
  
 
 from fastapi import FastAPI, File, UploadFile , HTTPException,Form,Request
-from fastapi.responses import JSONResponse, StreamingResponse
+from fastapi.responses import JSONResponse, StreamingResponse, FileResponse
 import requests
 import time
 import os
@@ -12,6 +12,7 @@ import cv2
 import numpy as np
 from fastapi.middleware.cors import CORSMiddleware
 from io import BytesIO
+from tempfile import NamedTemporaryFile
 
 
 # from transformers import DetrImageProcessor, DetrForObjectDetection
@@ -43,6 +44,66 @@ API_URL = secrets["API_URL"]
  
 print('apiurl   '+API_URL)
 print('secret   '+CLIENT_SECRET)
+
+
+################################################################
+def reorderPts(pts): # 꼭지점 순서 정렬
+    idx = np.lexsort((pts[:, 1], pts[:, 0]))  # 칼럼0 -> 칼럼1 순으로 정렬한 인덱스를 반환
+    pts = pts[idx]  # x좌표로 정렬
+    
+    if pts[0, 1] > pts[1, 1]:
+        pts[[0, 1]] = pts[[1, 0]] # 스와핑
+
+    if pts[2, 1] < pts[3, 1]:
+        pts[[2, 3]] = pts[[3, 2]] # 스와핑
+
+    return pts
+
+def detect_and_save_business_card(image):
+    # 이미지를 numpy 배열로 변환
+    nparr = np.frombuffer(image.file.read(), np.uint8)
+    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+    # 출력 영상 설정
+    dw, dh = 720, 400
+    srcQuad = np.array([[0, 0], [0, 0], [0, 0], [0, 0]], np.float32)
+    dstQuad = np.array([[0, 0], [0, dh], [dw, dh], [dw, 0]], np.float32)
+    dst = np.zeros((dh, dw), np.uint8)
+
+    # 입력 영상 전처리
+    src_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    _, src_bin = cv2.threshold(src_gray, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
+
+    # 외곽선 검출 및 명함 검출
+    contours, _ = cv2.findContours(src_bin, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+
+    for pts in contours:
+        # 너무 작은 객체는 무시
+        if cv2.contourArea(pts) < 1000:
+            continue
+
+        # 외곽선 근사화
+        approx = cv2.approxPolyDP(pts, cv2.arcLength(pts, True)*0.02, True)
+
+        # 컨벡스가 아니고, 사각형이 아니면 무시
+        if not cv2.isContourConvex(approx) or len(approx) != 4:
+            continue
+
+        # 명함의 꼭지점을 찾은 후에 꼭지점을 정렬하고 원근 변환 행렬 계산
+        srcQuad = reorderPts(approx.reshape(4, 2).astype(np.float32))
+
+    pers = cv2.getPerspectiveTransform(srcQuad, dstQuad)
+    dst = cv2.warpPerspective(img, pers, (dw, dh))
+
+    # 임시 파일로 저장
+    temp_output_file = NamedTemporaryFile(delete=False, suffix='.png')
+    cv2.imwrite(temp_output_file.name, dst)
+
+    return temp_output_file
+###########################################
+
+
+
 
 # CORS 미들웨어 설정
 api.add_middleware(
@@ -113,74 +174,8 @@ async def process_image(image: UploadFile = File(...)):
     
 @api.post("/process_image/scanv3/")
 async def process_image(image: UploadFile = File(...)):
-    try:
-        # 이미지를 읽어옴
-        contents = await image.read()
-        nparr = np.frombuffer(contents, np.uint8)
-        img_color = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-        
-        # 흑백영상으로 전환
-        src = cv2.cvtColor(img_color, cv2.COLOR_BGR2GRAY)
-        
-        # 이진화
-        _, binary_src = cv2.threshold(src, 0, 255, cv2.THRESH_OTSU)
-        
-        # 윤곽선 찾기
-        contours, _ = cv2.findContours(binary_src, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-        
-        # 가장 면적이 큰 윤곽선 찾기
-        biggest_contour = None
-        biggest_contour_area = 0.0
-        for contour in contours:
-            area = cv2.contourArea(contour)
-            if area > biggest_contour_area:
-                biggest_contour = contour
-                biggest_contour_area = area
-        
-        if biggest_contour is None:
-            raise HTTPException(status_code=400, detail="No contour found")
-        
-        # 너무 작은 경우 처리
-        if biggest_contour_area < 400:
-            raise HTTPException(status_code=400, detail="Contour area is too small")
-        
-        # 사각형 판별
-        approx_candidate = cv2.approxPolyDP(biggest_contour, cv2.arcLength(biggest_contour, True) * 0.02, True)
-        if approx_candidate.shape[0] != 4:
-            raise HTTPException(status_code=400, detail="It's not a rectangle")
-        
-        # 컨벡스(볼록한 도형) 판별
-        if not cv2.isContourConvex(approxCandidate):
-            raise HTTPException(status_code=400, detail="It's not convex")
-        
-        # 좌상단부터 시계 반대 방향으로 정점 정렬
-        points = approx_candidate[:, 0]
-        points = points[np.argsort(points[:, 0])]  # x좌표 기준으로 정렬
-        if points[0][1] > points[1][1]:
-            points[0], points[1] = points[1], points[0]
-        if points[2][1] < points[3][1]:
-            points[2], points[3] = points[3], points[2]
-        
-        # 원본 영상 내 정점들
-        src_quad = np.array(points, dtype=np.float32)
-        
-        # 사각형 최대 사이즈 구하기
-        dw, dh = calculate_max_width_height(src_quad)
-        dst_quad = np.array([[0.0, 0.0], [0.0, dh], [dw, dh], [dw, 0.0]], dtype=np.float32)
-        
-        # 투시변환 매트릭스 구하기
-        perspective_transform = cv2.getPerspectiveTransform(src_quad, dst_quad)
-        
-        # 투시변환 된 결과 영상 얻기
-        dst = cv2.warpPerspective(img_color, perspective_transform, (dw, dh))
-        
-        # 이미지를 JPEG 형식으로 인코딩하여 전송
-        retval, buffer = cv2.imencode('.jpg', dst)
-        io_buf = BytesIO(buffer)
-        return StreamingResponse(io_buf, media_type="image/jpeg")
-    
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    output_file = detect_and_save_business_card(image)
+    return FileResponse(output_file.name)
 
 
 # def calculate_max_width_height(src_quad):
