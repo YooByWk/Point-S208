@@ -10,11 +10,16 @@ import { Dismiss16Filled, Add16Filled } from '@fluentui/react-icons'
 import { colors } from '@/styles/colorPalette'
 import DetailAddFilterModal from '@/components/mobile/MyAlbum/MyAlbumDetail/DetailAddFilterModal'
 import { useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { useRecoilValue } from 'recoil'
+import { userState } from '@/stores/user'
 
 const DetailFilter = ({ cardId }: { cardId: number }) => {
   const [filters, setFilters] = useState<string[]>([])
   // 필터 정보 불러오는 곳 - useQuery 사용 : 수정하기
-
+  const userId = useRecoilValue(userState).userId
+  const params = useParams()
+  console.log(params)
   // 우선 더미 데이터로 대체
   const dummyData: FilterListType = [
     {

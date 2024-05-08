@@ -18,6 +18,7 @@ import { useDeleteTeamAlbumCards } from '@/hooks/Team/useDeleteTeamAlbumCards'
 import { useParams } from 'react-router-dom'
 import { userState } from '@/stores/user'
 import { useRecoilValue } from 'recoil'
+import * as XLSX from 'xlsx'
 
 interface MultiSelectBarProps {
   selectedCards: number[]
@@ -50,6 +51,40 @@ const MultiSelectBar = ({
     const selectedCardDetails: CardType[] = allCards.filter(card =>
       selectedCards.includes(card.cardId),
     )
+    
+    const data = [
+      [
+        '이름',
+        '회사',
+        '부서',
+        '직무',
+        '직책',
+        '이메일',
+        '유선전화',
+        '휴대전화',
+        '팩스번호',
+        '웹사이트',
+        '주소',
+      ],
+      ...selectedCardDetails.map(card => [
+        card.name,
+        card.company,
+        card.department,
+        card.rank,
+        card.position,
+        card.email,
+        card.landlineNumber,
+        card.phoneNumber,
+        card.faxNumber,
+        card.domainUrl,
+        card.address,
+      ]),
+    ]
+    const wb = XLSX.utils.book_new()
+    const ws = XLSX.utils.aoa_to_sheet(data)
+    XLSX.utils.book_append_sheet(wb, ws, '사용자 정보')
+
+    XLSX.writeFile(wb, '명함.xlsx')
     console.log('selectedCardDetails: ', selectedCardDetails)
   }
 

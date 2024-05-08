@@ -37,7 +37,9 @@ const AuthRouter = () => {
       ) : (
         <Route path="/myTeam" element={<AppTeam />}>
           <Route index element={<AppTeamList />} />
+          {/* <Route path=':teamId' element={< />}/> */}
           {/* <Route path=':teamId' element={<CardList />}/>  */}
+          <Route path=":teamAlbumId/:cardId" element={<AlbumCardDetail />} />
           <Route path=":teamAlbumId" element={<TeamDetail />} />
         </Route>
       )}

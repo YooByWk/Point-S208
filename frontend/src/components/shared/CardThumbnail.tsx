@@ -82,9 +82,9 @@ const CardThumbnail = ({
           setIsChecked(!isChecked)
           onSelect(cardInfo.cardId)
         } else {
-          navigate(`/myAlbum/${userId}/${cardInfo.cardId}`, {
-            state: { cardInfo },
-          })
+          console.log(teamAlbumId? '팀앨범' : '내앨범')
+          teamAlbumId? navigate(`${cardInfo.cardId}`, {state: { cardInfo, teamAlbumId }}) :
+          navigate(`/myAlbum/${userId}/${cardInfo.cardId}`, {state: { cardInfo }})
         }
       }}
     >

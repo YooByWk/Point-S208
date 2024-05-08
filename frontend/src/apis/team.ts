@@ -106,3 +106,10 @@ export const deleteTeamCards = async (params: deleteTeamCardArrayType) => {
   return Promise.all(deleteRequests)
 }
 
+
+// export const fetchTeamCardFilter = async (teamAlbumId: number, filter: string) => {
+//   return authRequest
+//     .get(`${ReadUrl}/${teamAlbumId}/filter/${filter}`)
+//     .then(res => res.data)
+//     .catch(err => console.log(err))
+// }
