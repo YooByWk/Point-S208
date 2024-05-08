@@ -16,7 +16,7 @@ import { userState } from '@/stores/user'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { RegisterOtherCard } from '@/apis/album'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useTeamCardAdd } from '@/hooks/useTeamCardAdd'
+import { useTeamCardAdd } from '@/hooks/Team/useTeamCardAdd'
 import { TeamListType } from '@/types/TeamListType';
 
 const RegisterOtherCardInfo = ({isEnglish, params}: {

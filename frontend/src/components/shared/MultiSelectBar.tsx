@@ -14,6 +14,10 @@ import Spacing from '@/components/shared/Spacing'
 import type { CardType } from '@/types/cardType'
 import { useDeleteAlbumCards } from '@/hooks/useDeleteAlbumCards'
 import SmallModal from '@/components/shared/SmallModal'
+import { useDeleteTeamAlbumCards } from '@/hooks/Team/useDeleteTeamAlbumCards'
+import { useParams } from 'react-router-dom'
+import { userState } from '@/stores/user'
+import { useRecoilValue } from 'recoil'
 
 interface MultiSelectBarProps {
   selectedCards: number[]
@@ -26,7 +30,11 @@ const MultiSelectBar = ({
   allCards,
   setSelectedCards,
 }: MultiSelectBarProps) => {
-  const deletemutation = useDeleteAlbumCards()
+  const myAlbumDeletemutation = useDeleteAlbumCards()
+  const teamAlubmDeleteMutation = useDeleteTeamAlbumCards()
+  const teamAlbumId: number = useParams()?.teamAlbumId as unknown as number 
+  const userId = useRecoilValue(userState).userId
+  console.log('teamAlbumId: ', teamAlbumId);
 
   const handleSelectAll = () => {
     if (allCards.length === selectedCards.length) {
@@ -46,9 +54,20 @@ const MultiSelectBar = ({
   }
 
   const handleDelete = () => {
+    if (teamAlbumId) {
+      const params = {
+        teamAlbumId: teamAlbumId,
+        cardIdArray: selectedCards,
+        userId: userId
+      }
+      console.log('teamAlbumId: ', teamAlbumId)
+      // teamAlubmDeleteMutation.mutate(selectedCards)
+      teamAlubmDeleteMutation.mutate(params)
+      return
+    }
     console.log('handleDelete: ', selectedCards)
-    deletemutation.mutate(selectedCards)
-  }
+    myAlbumDeletemutation.mutate(selectedCards)
+  } 
 
   return (
     <Flex

@@ -1,4 +1,4 @@
-import { CreateTeamSkipType, CreateTeamType, RegisterTeammCardType } from '@/types/TeamListType'
+import { AddTeamMemberType, CreateTeamSkipType, CreateTeamType, RegisterTeammCardType, deleteTeamAlbumCardType, deleteTeamCardArrayType } from '@/types/TeamListType'
 import { authRequest } from '@/utils/requestMethod'
 
 const CudUrl = '/cud/api/teams'
@@ -49,25 +49,60 @@ export const CreateTeam = async (params: CreateTeamType) => {
     .then(res => res.data)
     .catch(err => console.log(err))
 }
-
+// 팀 멤버 조회
 export const fetchTeamMember = async (teamAlbumId: number, userId: number) => {
   return authRequest
     .get(`${ReadUrl}/${userId}/member/${teamAlbumId}`)
     .then(res => res.data)
     .catch(err => console.log(err))
 }
-
-export const RegisterTeammCard = async (params: RegisterTeammCardType) => {
+// 팀
+export const RegisterTeamCard = async (params: RegisterTeammCardType) => {
   console.log(params.data, typeof params.data)
   return authRequest
     .post(`${CudUrl}/${params.userId}/${params.teamId}/card`, params.data)
-    .then(res => {console.log(res,'팀카드등록');return res.data})
+    .then(res => { console.log(res, '팀카드등록'); return res.data })
     .catch(err => console.log(err))
 }
-
-export const searchTeamCard = async(teamAlbumId: number, userInput: string | number) => {
+// 팀 카드 검색
+export const searchTeamCard = async (teamAlbumId: number, userInput: string | number) => {
   return authRequest
     .get(`${ReadUrl}/${teamAlbumId}/search`, { params: { info: userInput } })
     .then(res => res.data)
     .catch(err => console.log(err))
 }
+
+// 팀 멤버 추가
+export const addTeamMember = async (params: AddTeamMemberType) => {
+  if (params.data.userList === undefined) {
+    console.log(params.data.userList, typeof params.data.userList)
+    return
+  }
+  return authRequest
+    .post(`${CudUrl}/${params.userId}/${params.teamId}/member`, params.data)
+    .then(res => res.data)
+    .catch(err => console.log(err))
+}
+
+// 팀 카드 삭제
+export const deleteTeamCard = async (params: deleteTeamAlbumCardType) => {
+  return authRequest
+    .delete(`${CudUrl}/${params.userId}/${params.teamAlbumId}/card/${params.cardId}`)
+    .then(res => res.data)
+    .catch(err => console.log(err))
+}
+
+export const deleteTeamCards = async (params: deleteTeamCardArrayType) => {
+  console.log(params.cardIdArray, params.userId, params.teamAlbumId, 'params')
+  if (!params.cardIdArray || !params.userId || !params.teamAlbumId) return
+
+  const deleteRequests = params.cardIdArray.map(cardId =>
+    authRequest
+      .delete(`${CudUrl}/${params.userId}/${params.teamAlbumId}/card/${cardId}`)
+      .then(res => res.data)
+      .catch(err => console.log(err))
+  )
+  console.log(`${CudUrl}/${params.userId}/${params.teamAlbumId}/card/${params.cardIdArray}`)
+  return Promise.all(deleteRequests)
+}
+

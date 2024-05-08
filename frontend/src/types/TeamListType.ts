@@ -50,3 +50,29 @@ export type RegisterTeammCardType = {
   teamId: number
   data: cardInput
 }
+
+export type AddTeamMemberType = {
+  userId: number
+  teamId: number
+  data: {
+    userList: (number | undefined)[]
+  }
+}
+
+export type TeamMemberInfoType = {
+  userId: number
+  email: string
+  name: string
+}
+
+export type deleteTeamAlbumCardType = {
+  userId: number
+  teamAlbumId: number
+  cardId: number
+}
+
+export type deleteTeamCardArrayType = {
+  userId: number | undefined
+  teamAlbumId: number | undefined
+  cardIdArray: number[] | undefined[]
+}

@@ -12,8 +12,9 @@ import { UserListType, UserType } from '@/types/userType'
 import MemberThumbnail from './MemberThumbnail'
 import { useRecoilValue } from 'recoil'
 import { userState } from '@/stores/user'
-import { useTeamCreatgeSkip } from '@/hooks/useTeamCreateSkip'
+import { useTeamCreatgeSkip } from '@/hooks/Team/useTeamCreateSkip'
 import { useCreateTeam } from '@/hooks/useCreateTeam'
+
 interface AddTeamProps {
   setIsWrite: (isWrite: boolean) => void
   isWrite: boolean
