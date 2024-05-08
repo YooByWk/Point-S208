@@ -2,18 +2,17 @@
 import {  tokens, SearchBox as FluentSearchBox } from '@fluentui/react-components'
 import { css } from '@emotion/react'
 import { useEffect } from 'react'
-
-import Flex from './Flex'
+import Flex from '@/components/shared/Flex'
 import PeopleFilterSortIcons from './PeopleFilterSortIcons';
-
 import { SearchRegular } from '@fluentui/react-icons';
 import { searchMyAlbumCard } from '@/apis/album';
 import { useQuery } from '@tanstack/react-query';
 import { ExternalCardListType } from '@/types/ExternalCard';
-import { searchUser } from '@/apis/team';
+import { searchTeamCard, searchUser } from '@/apis/team';
 import { UserListType } from '@/types/userType';
 import { useRecoilValue } from 'recoil';
 import { userState } from '@/stores/user';
+import { useParams } from 'react-router-dom';
 interface SearchBoxProps {
   placeholder?: string
   onChange?: (e: any) => void
@@ -27,7 +26,7 @@ interface SearchBoxProps {
   bgColor?: string
   onSearch: (value: ExternalCardListType | UserListType ) => void
   isSearchingMember?: boolean
-  isInTeam?: boolean
+  isTeam?: boolean
 }
 
 
@@ -49,33 +48,32 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   bgColor='',
   onSearch,
   isSearchingMember=false,
-  isInTeam=false
+  isTeam=false
 }) => {
   const userId = useRecoilValue(userState).userId
-  // const handleKeyDown = (e: any): void => {
-  //   if (e.key === 'Enter') {
-  //     // console.log('submit', value)
-  //     // handleSubmit()
-  //   } else {
-  //     // console.log('not enter', value)
-  //   }
-  // }
   
 // 검색 로직
-
+ const param = useParams().teamAlbumId
+ const teamAlbumId = param? +param : NaN
+ 
  const { data } = useQuery({
   
-  queryKey: isSearchingMember? ['searchUser', value] : ['searchMyAlbumCard', value],
-  queryFn: () => isSearchingMember ? searchUser(value) : userId &&  searchMyAlbumCard({id: userId, userInput: value}) ,
-  enabled: value !== '',
+  queryKey: isSearchingMember? ['searchUser', value] : isTeam? ['searchTeamCard', value] :['searchMyAlbumCard', value],
+  queryFn: () => {
+    if (isSearchingMember) {
+      return searchUser(value);
+    } else if (isTeam) {
+      return searchTeamCard(teamAlbumId, value); 
+    } else {
+      return userId && searchMyAlbumCard({id: userId, userInput: value});
+    }
+  },  enabled: value !== '',
  })
  
  useEffect(() => {
-  console.log('검색결과 - 수정하기 :', data)
-  // console.log(data.length)
-  // if (data === undefined) {return}
   if (data && onSearch) {
     onSearch(data)
+    console.log(isTeam, 'isTeam', isSearchingMember, 'isSearchingMember')
   } 
 }, [value, data, onSearch])
   
@@ -88,7 +86,6 @@ const SearchBox: React.FC<SearchBoxProps> = ({
           <FluentSearchBox
             size='large'
             placeholder={placeholder}
-            // onKeyDown={handleKeyDown}
             onChange={onChange}
             css={searchBoxCss(bgColor)}
             appearance='filled-darker'

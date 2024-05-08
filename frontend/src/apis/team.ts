@@ -64,3 +64,10 @@ export const RegisterTeammCard = async (params: RegisterTeammCardType) => {
     .then(res => {console.log(res,'팀카드등록');return res.data})
     .catch(err => console.log(err))
 }
+
+export const searchTeamCard = async(teamAlbumId: number, userInput: string | number) => {
+  return authRequest
+    .get(`${ReadUrl}/${teamAlbumId}/search`, { params: { info: userInput } })
+    .then(res => res.data)
+    .catch(err => console.log(err))
+}

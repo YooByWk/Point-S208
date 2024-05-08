@@ -5,15 +5,12 @@ import TextField from '@shared/TextField'
 import { cardInput } from '@/types/cardInput'
 import {
   ChangeEvent,
-  Dispatch,
-  SetStateAction,
   useCallback,
   useMemo,
   useState,
 } from 'react'
 import { css } from '@emotion/react'
 import { Button } from '@fluentui/react-components'
-import { writeInfoState } from '@/stores/emptyCard'
 import {  useRecoilValue,  } from 'recoil'
 import { userState } from '@/stores/user'
 import { useMutation, useQueryClient } from '@tanstack/react-query'

@@ -2,8 +2,8 @@
 import BackArrow from '@/components/shared/BackArrow'
 import CardList from '@/components/shared/CardList'
 import { CardType } from '@/types/cardType'
-import React, { useEffect, useState } from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import  { useEffect, useState } from 'react'
+import {  useRecoilValue } from 'recoil'
 import { pageChanged } from '@stores/team'
 import AddCard from '@/components/mobile/MyAlbum/AddCard'
 import { useInfiniteQuery } from '@tanstack/react-query'
@@ -41,7 +41,7 @@ const TeamDetail = () => {
     }
   }, [teamAlbumId])
   
-  const {data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading} = useInfiniteQuery({
+  const {data, fetchNextPage, hasNextPage,  } = useInfiniteQuery({
     queryKey: ['fetchTeamCardsList'],
     queryFn: ({ pageParam = 0 }) => fetchTeamCardsList(teamAlbumIdNumber, pageParam),
     getNextPageParam: (lastPage, allPages) => {

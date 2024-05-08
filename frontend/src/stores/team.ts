@@ -1,5 +1,5 @@
 import { atom , selector} from 'recoil'
-import { TeamListType} from '@/types/TeamListType';
+import { TeamListType } from '@/types/TeamListType';
 
 const defaultSelectedTeam = {
   teamName: '',

@@ -68,6 +68,7 @@ const TeamList = () => {
         searchResult={searchResults}
         setSearchResult={setSearchResults}
         value={searchValue}
+        setSearchValue={setSearchValue}
         onChange={(e: any) => {
           setSearchValue(e.target.value)
         }}

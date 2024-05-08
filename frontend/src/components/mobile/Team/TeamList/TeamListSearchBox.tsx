@@ -2,24 +2,16 @@
 import {  tokens, SearchBox as FluentSearchBox } from '@fluentui/react-components'
 import { css } from '@emotion/react'
 import { useEffect } from 'react'
-
 import Flex from '@/components/shared/Flex'
 import PeopleFilterSortIcons from '@/components/shared/PeopleFilterSortIcons';
-
 import { SearchRegular } from '@fluentui/react-icons';
-import { searchMyAlbumCard } from '@/apis/album';
-import { useQuery } from '@tanstack/react-query';
 import { ExternalCardListType } from '@/types/ExternalCard';
-import { searchUser } from '@/apis/team';
 import { UserListType } from '@/types/userType';
-import { useRecoilValue } from 'recoil';
-import { userState } from '@/stores/user';
 import { TeamListType } from '@/types/TeamListType';
 interface SearchBoxProps {
   placeholder?: string
   onChange?: (e: any) => void
   sortIcon?: boolean
-  spacing? : boolean
   lefticon?: boolean
   value: string | number
   width?: string
@@ -30,6 +22,7 @@ interface SearchBoxProps {
   teams: TeamListType[]
   searchResult: TeamListType[];
   setSearchResult: React.Dispatch<React.SetStateAction<TeamListType[]>>;
+  setSearchValue: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const TeamListSearchBox: React.FC<SearchBoxProps> = ({
@@ -38,7 +31,6 @@ const TeamListSearchBox: React.FC<SearchBoxProps> = ({
   teams,
   value, // 검색어
   sortIcon,
-  spacing = true,
   width,
   lefticon=true,
   bgColor='',
@@ -46,12 +38,12 @@ const TeamListSearchBox: React.FC<SearchBoxProps> = ({
   isSearchingMember=false,
   isInTeam=false,
   searchResult,
-  setSearchResult
+  setSearchResult,
+  setSearchValue
 }) => {
-  const userId = useRecoilValue(userState).userId
-  
   
   useEffect(() => {
+    if  (value === undefined) {setSearchValue(''); return}
     if (value.toString().trim().length > 0) {
       const results = teams.filter((team) => 
         team.teamName.toLowerCase().includes(value.toString().toLowerCase())
@@ -61,7 +53,7 @@ const TeamListSearchBox: React.FC<SearchBoxProps> = ({
     } else {
       setSearchResult(teams)
     }
-  }, [value, teams, setSearchResult])
+  }, [value, teams, setSearchResult, setSearchValue])
   
   return (
     <div>
@@ -87,27 +79,9 @@ const TeamListSearchBox: React.FC<SearchBoxProps> = ({
     </div>
   )
 }
-
 export default TeamListSearchBox
 
-// 사용 예
-/**
- *
- *   const [searchValue, setSearchValue] = useState('');
- * return (
- *   <div>
- *     모바일 팀 명함
- *     <p></p>
- *     <TeamListSearchBox
- *     value={searchValue}
- *     onChange={(e:any) =>{ setSearchValue(e.target.value)
- *     console.log(searchValue)} }
- *
- *     />
- *   </div>
- * );
- */
-
+// css
 const mainContainerCss = css`
   padding-left: 5%;
   padding-right: 5%;
