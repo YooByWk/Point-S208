@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RestController
@@ -21,8 +22,18 @@ public class MycardController {
     @PostMapping("/{userId}")
     public ResponseEntity<MessageUtils> regist(@PathVariable("userId") Long userId,
                                                  @RequestBody MycardRegistRequest registRequest) {
-        log.info("[Register Card] : {}", registRequest.toString());
-        mycardService.registCard(userId, registRequest);
+        log.info("[Regist Card] : {}", registRequest.toString());
+        mycardService.regist(userId, registRequest);
+        return ResponseEntity.ok().body(MessageUtils.success("명함이 등록되었습니다."));
+    }
+
+    // 내 명함 등록 OCR
+    @PostMapping("/{userId}/ocr")
+    public ResponseEntity<MessageUtils> registCard(@PathVariable("userId") Long userId,
+                                                   @RequestPart MultipartFile image,
+                                                   @RequestPart MycardRegistRequest request) {
+        mycardService.registCard(userId, image, request);
+        log.info("[Regist Card] : {}", request);
         return ResponseEntity.ok().body(MessageUtils.success("명함이 등록되었습니다."));
     }
 
