@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -25,11 +26,21 @@ public class PrivateAlbumController {
 
     // 명함 추가
     @PostMapping("/{userId}")
-    public ResponseEntity<?> registCard(@PathVariable("userId") Long userId,
-                                        @RequestBody CardRequest request) {
-        String result = privateAlbumService.registCard(userId, request);
-        log.info("Regist Card : {}", request);
-        return ResponseEntity.ok().body(MessageUtils.success(result));
+    public ResponseEntity<?> regist(@PathVariable("userId") Long userId,
+                                    @RequestBody CardRequest request) {
+        privateAlbumService.regist(userId, request);
+        log.info("[Regist Card] : {}", request);
+        return ResponseEntity.ok().body(MessageUtils.success("명함이 등록되었습니다."));
+    }
+
+    // OCR로 명함 추가
+    @PostMapping("/{userId}/ocr")
+    public ResponseEntity<MessageUtils> registCard(@PathVariable("userId") Long userId,
+                                                   @RequestPart MultipartFile image,
+                                                   @RequestPart CardRequest request) {
+        privateAlbumService.registCard(userId, image, request);
+        log.info("[Regist Card] : {}", request);
+        return ResponseEntity.ok().body(MessageUtils.success("명함이 등록되었습니다."));
     }
 
     //    /api/{user_id}/{card_id}/share/email
@@ -53,7 +64,7 @@ public class PrivateAlbumController {
                                                   @PathVariable("cardId") Long cardId,
                                                   @RequestBody List<CardAddFilterRequest> request) {
         privateAlbumService.addFilter(userId, cardId, request);
-        log.info("Add Filter : {}", request);
+        log.info("[Add Filter] : {}", request);
         return ResponseEntity.ok().body(MessageUtils.success("명함에 필터가 추가 되었습니다."));
     }
 
@@ -63,7 +74,7 @@ public class PrivateAlbumController {
                                                    @PathVariable("cardId") Long cardId,
                                                    @RequestBody CardRequest request) {
         privateAlbumService.updateCard(userId, cardId, request);
-        log.info("Update Card : {} 명함이 수정되었습니다.", request);
+        log.info("[Update Card] : {} 명함이 수정되었습니다.", request);
         return ResponseEntity.ok().body(MessageUtils.success("명함이 수정되었습니다."));
     }
 
@@ -82,7 +93,7 @@ public class PrivateAlbumController {
     public ResponseEntity<MessageUtils> deleteCard(@PathVariable("userId") Long userId,
                                                    @PathVariable("cardId") Long cardId) {
         privateAlbumService.deleteCard(userId, cardId);
-        log.info("Delete Card : {} 명함이 명함지갑에서 삭제되었습니다.", cardId);
+        log.info("[Delete Card] : {} 명함이 명함지갑에서 삭제되었습니다.", cardId);
         return ResponseEntity.ok().body(MessageUtils.success("명함이 삭제되었습니다."));
     }
 }

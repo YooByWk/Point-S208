@@ -71,7 +71,6 @@ public class MycardServiceImpl implements MycardService {
                 userId, registRequest.frontBack()
         );
         String url = amazonS3Service.uploadThunmail(image).getUrl();
-        log.info("[url] : {}",url);
         if (myBusinessCard.isEmpty()) {
             businesscardRepository.save(Businesscard.builder()
                     .name(registRequest.name())

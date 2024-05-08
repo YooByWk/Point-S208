@@ -2,6 +2,7 @@ package com.ssafy.businesscard.domain.card.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.businesscard.domain.card.entity.Businesscard;
+import lombok.Setter;
 
 public record CardRequest(
         @JsonIgnore

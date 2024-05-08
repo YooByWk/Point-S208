@@ -18,10 +18,12 @@ import com.ssafy.businesscard.domain.myalbum.service.PrivateAlbumService;
 import com.ssafy.businesscard.domain.user.entity.User;
 import com.ssafy.businesscard.domain.user.repository.UserRepository;
 import com.ssafy.businesscard.global.exception.GlobalExceptionHandler;
+import com.ssafy.businesscard.global.s3.servcie.AmazonS3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,19 +40,18 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
     private final PrivateAlbumFilterRepository privateAlbumFilterRepository;
     private final PrivateAlbumRepository privateAlbumRepository;
     private final PrivateAlbumMemberRepository privateAlbumMemberRepository;
+    private final AmazonS3Service amazonS3Service;
 
     // 명함 지갑에 명함 등록
     @Override
     @Transactional
-    public String registCard(Long userId, CardRequest request) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new GlobalExceptionHandler.UserException(
-                GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_USER
-        ));
-
+    public void regist(Long userId, CardRequest request) {
+        User user = findUser(userId);
         Businesscard businesscard = businesscardMapper.toEntity(request);
-
         if (isCardExist(userId, businesscard)) {
-            return "이미 등록된 명함입니다.";
+            throw new GlobalExceptionHandler.UserException(
+                    GlobalExceptionHandler.UserErrorCode.ALREADY_IN_CARD
+            );
         } else {
             businesscardRepository.save(businesscard);
             PrivateAlbumRequest privateAlbumRequest = PrivateAlbumRequest.builder()
@@ -58,17 +59,37 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
                     .businesscard(businesscard)
                     .favorite(false)
                     .build();
-            return addPrivateAlbum(privateAlbumRequest);
+            addPrivateAlbum(privateAlbumRequest);
+        }
+    }
+
+    // 명함 지갑에 OCR로 명함 등록
+    @Override
+    @Transactional
+    public void registCard(Long userId, MultipartFile image, CardRequest request) {
+        User user = findUser(userId);
+        String url = amazonS3Service.uploadThunmail(image).getUrl();
+        Businesscard businesscard = businesscardMapper.toEntity(request);
+        businesscard.setRealPicture(url);
+
+        if (isCardExist(userId, businesscard)) {
+            throw new GlobalExceptionHandler.UserException(
+                    GlobalExceptionHandler.UserErrorCode.ALREADY_IN_CARD
+            );
+        } else {
+            businesscardRepository.save(businesscard);
+            PrivateAlbumRequest privateAlbumRequest = PrivateAlbumRequest.builder()
+                    .user(user)
+                    .businesscard(businesscard)
+                    .favorite(false)
+                    .build();
+            addPrivateAlbum(privateAlbumRequest);
         }
     }
 
     @Override
     public void registSharedCard(Long userId, CardSharedRequest cardSharedRequest) {
-
-        User user = userRepository.findById(userId).orElseThrow(() -> new GlobalExceptionHandler.UserException(
-                GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_USER
-        ));
-
+        User user = findUser(userId);
         List<Businesscard> businesscards = new ArrayList<>();
 
         cardSharedRequest.cardIds().forEach(aLong -> {
@@ -78,7 +99,6 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
                             new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_CARD)));
 
         });
-
 
         List<PrivateAlbum> privateAlbum = new ArrayList<>();
 
@@ -101,24 +121,6 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
                 addPrivateAlbum(privateAlbumRequest);
             }
         });
-
-//
-//        privateAlbum.forEach(privateAlbum1 -> {
-//            if (privateAlbum1 != null) {
-//                throw new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.ALREADY_IN_CARD);
-//            } else {
-//                PrivateAlbumRequest privateAlbumRequest = PrivateAlbumRequest.builder()
-//                        .user(user)
-//                        .businesscard(businesscard)
-//                        .favorite(false)
-//                        .build();
-//
-//                addPrivateAlbum(privateAlbumRequest);
-//            }
-//
-//        });
-
-
     }
 
     // 명함 중복 검사
@@ -133,25 +135,19 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
     }
 
     // 명함 지갑에 명함 등록 로직
-    private String addPrivateAlbum(PrivateAlbumRequest request) {
+    private void addPrivateAlbum(PrivateAlbumRequest request) {
         privateAlbumRepository.save(PrivateAlbum.builder()
                 .user(request.user())
                 .businesscard(request.businesscard())
                 .favorite(request.favorite())
                 .build());
-        return "명함이 등록되었습니다.";
-
     }
 
     // 명함에 필터 추가
     @Override
     @Transactional
     public void addFilter(Long userId, Long cardId, List<CardAddFilterRequest> request) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new GlobalExceptionHandler.UserException(
-                        GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_USER
-                ));
-
+        User user = findUser(userId);
         List<Long> filterIdList = new ArrayList<>();
         for (CardAddFilterRequest cardAddFilterRequest : request) {
             filterIdList.add(cardAddFilterRequest.filterId());
@@ -235,4 +231,11 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
         }
     }
 
+    private User findUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new GlobalExceptionHandler.UserException(
+                        GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_USER
+                ));
+        return user;
+    }
 }
