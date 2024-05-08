@@ -48,7 +48,7 @@ const WebMyAlbumList = ({
     })
 
   useEffect(() => {
-    if (data) {
+    if (data && data.pages) {
       setCards(data.pages.flatMap(page => page.data_body) || [])
     }
   }, [data, setCards])

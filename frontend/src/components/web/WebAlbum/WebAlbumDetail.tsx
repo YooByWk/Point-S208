@@ -189,8 +189,8 @@ const WebAlbumDetail = ({
                   <Button
                     shape="circular"
                     onClick={() => {
-                      setEditMemo(selectedCard.memo)
                       setModalOpen(true)
+                      setEditMemo(selectedCard.memo)
                     }}
                   >
                     <Text typography="t7">

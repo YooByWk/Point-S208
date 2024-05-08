@@ -53,3 +53,8 @@ export type OcrCardType = {
   userId: number
   data: FormData
 }
+
+export type shareCardType = {
+  cardId: number
+  email: string
+}

@@ -6,6 +6,7 @@ import { colors } from '@/styles/colorPalette'
 import { CardType } from '@/types/cardType'
 import { ExternalCardType } from '@/types/ExternalCard'
 import { css } from '@emotion/react'
+import { ARIAButtonType } from '@fluentui/react-aria'
 import {
   Button,
   Dialog,
@@ -14,15 +15,25 @@ import {
   DialogSurface,
   DialogTitle,
   DialogTrigger,
+  DialogTriggerChildProps,
 } from '@fluentui/react-components'
-import { Delete24Filled } from '@fluentui/react-icons'
 import { useMutation } from '@tanstack/react-query'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
 const WebAlbumDeleteSingleCard = ({
+  setIsDetail,
   cardInfo,
+  children,
 }: {
+  setIsDetail: (isCard: boolean) => void
   cardInfo: ExternalCardType | CardType
+  children:
+    | React.ReactElement<any, string | React.JSXElementConstructor<any>>
+    | ((
+        props: DialogTriggerChildProps<ARIAButtonType, {}>,
+      ) => React.ReactElement<any, string | React.JSXElementConstructor<any>>)
+    | null
+    | undefined
 }) => {
   const userId = useRecoilValue(userState).userId
   const [isRefreshed, setIsRefreshed] = useRecoilState(isRefreshedAlbumState)
@@ -42,13 +53,12 @@ const WebAlbumDeleteSingleCard = ({
   const handleDelete = () => {
     mutate({ userId: userId, cardId: cardInfo.cardId })
     alert('삭제되었습니다.')
+    setIsDetail(false)
   }
 
   return (
     <Dialog modalType="alert">
-      <DialogTrigger disableButtonEnhancement>
-        <Delete24Filled />
-      </DialogTrigger>
+      <DialogTrigger disableButtonEnhancement>{children}</DialogTrigger>
       <DialogSurface>
         <DialogBody>
           <DialogTitle>명함을 삭제하시겠습니까?</DialogTitle>

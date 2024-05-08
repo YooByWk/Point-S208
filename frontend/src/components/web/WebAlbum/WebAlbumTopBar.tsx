@@ -30,7 +30,6 @@ import { ExternalCardListType } from '@/types/ExternalCard'
 import WebAlbumDeleteSelected from './WebAlbumDeleteSelected'
 import { useMutation } from '@tanstack/react-query'
 import { fetchAllAlbum } from '@/apis/album'
-import { useState } from 'react'
 
 const WebAlbumTopBar = ({
   allCards,

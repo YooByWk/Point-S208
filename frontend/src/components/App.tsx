@@ -47,7 +47,6 @@ export default function App() {
       if (!user.userId) {
         setIsUserInfoinLocal(false)
       }
-      
     }
   })
 

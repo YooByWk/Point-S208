@@ -46,6 +46,7 @@ const WebTopBar = ({
 }) => {
   const userId = useRecoilValue(userState).userId
   const setFront = useSetRecoilState(isFrontState)
+  const frontCard = useRecoilValue(isFrontState)
   const [isReal, setIsReal] = useRecoilState(isRealState)
 
   const { mutate } = useMutation({
@@ -69,9 +70,12 @@ const WebTopBar = ({
       <Flex justify="space-between">
         <Text typography="t7">내 명함</Text>
         <Flex>
-          <TextButton>
-            <ShareAndroid16Filled /> 공유
-          </TextButton>
+          <Button shape="circular">
+            <Text typography="t7">
+              <ShareAndroid16Filled /> 공유
+            </Text>
+          </Button>
+
           <Spacing size={10} direction="horizontal" />
           <Menu>
             <MenuTrigger disableButtonEnhancement>

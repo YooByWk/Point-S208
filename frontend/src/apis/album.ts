@@ -4,12 +4,14 @@ import {
   deleteAlbumCardType,
   editAlbumCardType,
   editMemoType,
+  shareCardType,
   WriteCardType,
 } from '@/types/cardInput'
 import { searchType } from '@/types/searchType'
 import { authRequest } from '@/utils/requestMethod'
 
 const CudUrl = '/cud/api/my-album'
+const cudBaseUrl = '/cud/api'
 const ReadUrl = '/read/api/my-album'
 
 // 내 명함지갑에서 목록 조회
@@ -80,6 +82,16 @@ export const editMyAlbumCard = async (params: editAlbumCardType) => {
 export const deleteMyAlbumCard = async (params: deleteAlbumCardType) => {
   return authRequest
     .delete(`${CudUrl}/${params.userId}/${params.cardId}`)
+    .then(res => res.data)
+    .catch(err => console.log(err))
+}
+
+// 명함지갑 내 명함 공유
+export const shareCard = async (params: shareCardType) => {
+  return authRequest
+    .post(`${cudBaseUrl}/${params.cardId}/share/email`, {
+      recipientEmail: params.email,
+    })
     .then(res => res.data)
     .catch(err => console.log(err))
 }
@@ -159,5 +171,3 @@ export const deleteMyAlbumCards = async (params: deleteAlbumCardArrayType) => {
 
   return Promise.all(deleteRequests)
 }
-
-

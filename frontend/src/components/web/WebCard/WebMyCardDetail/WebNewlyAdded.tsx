@@ -14,6 +14,7 @@ import { selectedCardState } from '@/stores/card'
 import { useMutation } from '@tanstack/react-query'
 import { getAlbumDetail } from '@/apis/album'
 import { userState } from '@/stores/user'
+import WebAlbumShare from '../../WebAlbum/WebAlbumShare'
 
 const WebNewlyAdded = ({
   card,
@@ -73,9 +74,11 @@ const WebNewlyAdded = ({
           </Flex>
         </Flex>
         {/* 공유버튼 */}
-        <Button appearance="transparent">
-          <ShareAndroid16Filled /> 공유
-        </Button>
+        <WebAlbumShare card={card}>
+          <Button appearance="transparent">
+            <ShareAndroid16Filled /> 공유
+          </Button>
+        </WebAlbumShare>
       </Flex>
     </>
   )

@@ -1,7 +1,7 @@
 {
     "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.15/MicrosoftTeams.schema.json",
     "manifestVersion": "1.15",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "id": "${{TEAMS_APP_ID}}",
     "packageName": "com.microsoft.teams.extension",
     "developer": {
@@ -19,8 +19,8 @@
         "full": "BizCard"
     },
     "description": {
-        "short": "Short description of frontend",
-        "full": "Full description of frontend"
+        "short": "포스코 인터네셔널 직원분들을 위한 명함 관리 APP",
+        "full": "본 어플은 포스코 인터네셔널 직원분들을 위한 명함 관리 APP으로써, SSAFY에서 제작하였습니다."
     },
     "accentColor": "#FFFFFF",
     "bots": [],

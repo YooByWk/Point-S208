@@ -6,9 +6,10 @@ import { css } from '@emotion/react'
 import Spacing from '@shared/Spacing'
 import { Checkbox, Image } from '@fluentui/react-components'
 import {
-  Star24Regular,
-  Star24Filled,
+  // Star24Regular,
+  // Star24Filled,
   ShareAndroid24Filled,
+  Delete24Filled,
 } from '@fluentui/react-icons'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { selectedCardState } from '@stores/card'
@@ -18,6 +19,7 @@ import WebMakeBusinessCard from '../web/WebAlbum/WebMakeBusinessCard'
 import WebAlbumDeleteSingleCard from '../web/WebAlbum/WebAlbumDeleteSingleCard'
 import { useMutation } from '@tanstack/react-query'
 import { getAlbumDetail } from '@/apis/album'
+import WebAlbumShare from '../web/WebAlbum/WebAlbumShare'
 
 interface CardThumbnailProps {
   cardInfo: ExternalCardType | CardType
@@ -32,7 +34,7 @@ const WebCardThumbnail = ({
   setIsDetail,
   onSelect,
 }: CardThumbnailProps) => {
-  const [isfavorite, setIsFavorite] = useState(false)
+  // const [isfavorite, setIsFavorite] = useState(false)
   const [isChecked, setIsChecked] = useState(
     selectedCards.includes(cardInfo.cardId),
   )
@@ -67,15 +69,11 @@ const WebCardThumbnail = ({
     onSelect(cardInfo.cardId)
   }
 
-  const handleFavorite = () => {
-    setIsFavorite(!isfavorite)
-    /*  api 호출 */
-    console.log('즐겨찾기 : ', cardInfo)
-  }
-
-  const handleShare = () => {
-    console.log('공유 : ', cardInfo)
-  }
+  // const handleFavorite = () => {
+  //   setIsFavorite(!isfavorite)
+  //   /*  api 호출 */
+  //   console.log('즐겨찾기 : ', cardInfo)
+  // }
 
   return (
     <>
@@ -102,13 +100,20 @@ const WebCardThumbnail = ({
           />
 
           <Spacing size={10} />
-          {isfavorite ? (
+          {/* {isfavorite ? (
             <Star24Filled css={iconCss} onClick={handleFavorite} />
           ) : (
             <Star24Regular css={i} onClick={handleFavorite} />
-          )}
-          <ShareAndroid24Filled css={i} onClick={handleShare} />
-          <WebAlbumDeleteSingleCard cardInfo={cardInfo} />
+          )} */}
+          <WebAlbumShare card={cardInfo}>
+            <ShareAndroid24Filled css={i} />
+          </WebAlbumShare>
+          <WebAlbumDeleteSingleCard
+            cardInfo={cardInfo}
+            setIsDetail={setIsDetail}
+          >
+            <Delete24Filled />
+          </WebAlbumDeleteSingleCard>
           <Spacing size={10} />
         </Flex>
       </Flex>
@@ -118,10 +123,11 @@ const WebCardThumbnail = ({
 
 export default WebCardThumbnail
 
-const iconCss = css`
-  color: yellow;
-  margin-bottom: 15px;
-`
+// const iconCss = css`
+//   color: yellow;
+//   margin-bottom: 15px;
+// `
+
 const i = css`
   margin-bottom: 15px;
 `
