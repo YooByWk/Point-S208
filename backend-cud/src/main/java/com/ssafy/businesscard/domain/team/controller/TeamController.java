@@ -66,16 +66,16 @@ public class TeamController {
     public ResponseEntity<?> regist(@PathVariable("userId") Long userId,
                                     @PathVariable("teamId") Long teamAlbumId,
                                     @RequestBody CardRequest request) {
-        String result = teamAlbumService.regist(userId, teamAlbumId, request);
+        teamAlbumService.regist(userId, teamAlbumId, request);
         log.info("[Regist Card] : {}", request);
-        return ResponseEntity.ok().body(MessageUtils.success(result));
+        return ResponseEntity.ok().body(MessageUtils.success("명함이 등록되었습니다."));
     }
 
     // 팀 명함지갑에 OCR로 명함 등록
     @PostMapping("/{userId}/{teamId}/ocr")
     public ResponseEntity<MessageUtils> registCard(@PathVariable("userId") Long userId,
                                                    @PathVariable("teamId") Long teamAlbumId,
-                                                   @RequestPart MultipartFile image,
+                                                   @RequestPart("file") MultipartFile image,
                                                    @RequestPart CardRequest request){
         teamAlbumService.registCard(userId, teamAlbumId, image, request);
         log.info("[Regist Card] : {}", request);

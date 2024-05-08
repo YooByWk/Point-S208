@@ -162,7 +162,7 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
     // 팀 명함지갑에 명함 등록
     @Override
     @Transactional
-    public String regist(Long userId, Long teamAlbumId, CardRequest request) {
+    public void regist(Long userId, Long teamAlbumId, CardRequest request) {
         TeamAlbum teamAlbum = teamAlbumRepository.findById(teamAlbumId)
                 .orElseThrow(() -> new GlobalExceptionHandler.UserException(
                         GlobalExceptionHandler.UserErrorCode.NOT_EXITSTS_TEAM
@@ -170,7 +170,9 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
         Businesscard businesscard = businesscardMapper.toEntity(request);
 
         if (isCardExist(teamAlbum.getTeamAlbumId(), businesscard)) {
-            return "이미 등록된 명함입니다.";
+            throw new GlobalExceptionHandler.UserException(
+                    GlobalExceptionHandler.UserErrorCode.ALREADY_IN_CARD
+            );
         } else {
             businesscardRepository.save(businesscard);
             TeamAlbumDetailRequest teamAlbumDetailRequest = TeamAlbumDetailRequest.builder()
@@ -178,7 +180,7 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
                     .businesscard(businesscard)
                     .memo(null)
                     .build();
-            return addCardToTeamAlbumDetail(teamAlbumDetailRequest);
+            addCardToTeamAlbumDetail(teamAlbumDetailRequest);
         }
     }
 
@@ -194,7 +196,18 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
         Businesscard businesscard = businesscardMapper.toEntity(request);
         businesscard.setRealPicture(url);
 
-        if ()
+        if (isCardExist(teamAlbum.getTeamAlbumId(), businesscard)) {
+            throw new GlobalExceptionHandler.UserException(
+                    GlobalExceptionHandler.UserErrorCode.ALREADY_IN_CARD
+            );
+        } else {
+            businesscardRepository.save(businesscard);
+            TeamAlbumDetailRequest teamAlbumDetailRequest = TeamAlbumDetailRequest.builder()
+                    .teamAlbum(teamAlbum)
+                    .businesscard(businesscard)
+                    .build();
+            addCardToTeamAlbumDetail(teamAlbumDetailRequest);
+        }
     }
 
 
@@ -211,13 +224,12 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
     }
 
     // 팀 명함지갑에 명함 등록 로직
-    private String addCardToTeamAlbumDetail(TeamAlbumDetailRequest request) {
+    private void addCardToTeamAlbumDetail(TeamAlbumDetailRequest request) {
         teamAlbumDetailRepository.save(TeamAlbumDetail.builder()
                 .teamAlbum(request.teamAlbum())
                 .businesscard(request.businesscard())
                 .memo(request.memo())
                 .build());
-        return "명함이 등록되었습니다.";
     }
 
     // 팀 명함지갑에 명함 수정
