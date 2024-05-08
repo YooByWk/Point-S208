@@ -21,11 +21,11 @@ public class EmailController {
     private final EmailService emailService;
     private final UserService userService;
 
-    @PostMapping("/{userId}/{card_id}/share/email")
+    @PostMapping("/{card_id}/share/email")
 
-    public ResponseEntity<MessageUtils> regist(@PathVariable("userId") Long userId,
-                                               @PathVariable("card_id") Long card_id,
-                                               @Valid @RequestBody EmailsendRequest emailsendRequest
+    public ResponseEntity<MessageUtils> regist(
+            @PathVariable("card_id") Long card_id,
+            @Valid @RequestBody EmailsendRequest emailsendRequest
     ) {
 
         emailService.sendEmail(emailsendRequest.recipientEmail(), card_id);

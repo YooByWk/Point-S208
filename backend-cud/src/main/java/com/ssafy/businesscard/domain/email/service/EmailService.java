@@ -13,6 +13,8 @@ import org.springframework.mail.javamail.*;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Properties;
@@ -73,13 +75,19 @@ public class EmailService {
             System.out.println("rrrrrrrr" + businesscard.getRealPicture());
 //            FileSystemResource image = new FileSystemResource(new File(businesscard.getRealPicture()));
             URL imageUrl = new URL(businesscard.getRealPicture());
-            UrlResource imageResource = new UrlResource(imageUrl);
-            messageHelper.addAttachment("image.jpg", imageResource);
+            File tempFile = File.createTempFile("temp", ".jpg");
+
+            try (FileOutputStream fos = new FileOutputStream(tempFile)) {
+                fos.write(imageUrl.openStream().readAllBytes());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            messageHelper.addAttachment("image.jpg", tempFile);
             mailSender.send(message);
 
         } catch (MessagingException e) {
             throw new RuntimeException("메일 생성 오류", e);
-        } catch (MalformedURLException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
@@ -87,21 +95,26 @@ public class EmailService {
 
     public String toEmailString(Businesscard businesscard) {
         StringBuilder sb = new StringBuilder();
-        sb.append("이름: ").append(businesscard.getName()).append("<br>");
-        sb.append("회사: ").append(businesscard.getCompany() != null ? businesscard.getCompany() : "").append("<br>");
-        sb.append("직책: ").append(businesscard.getPosition() != null ? businesscard.getPosition() : "").append("<br>");
-        sb.append("직급: ").append(businesscard.getRank() != null ? businesscard.getRank() : "").append("<br>");
-        sb.append("부서: ").append(businesscard.getDepartment() != null ? businesscard.getDepartment() : "").append("<br>");
-        sb.append("이메일: ").append(businesscard.getEmail() != null ? businesscard.getEmail() : "").append("<br>");
-        sb.append("유선 전화번호: ").append(businesscard.getLandlineNumber() != null ? businesscard.getLandlineNumber() : "").append("<br>");
-        sb.append("팩스 번호: ").append(businesscard.getFaxNumber() != null ? businesscard.getFaxNumber() : "").append("<br>");
-        sb.append("휴대폰 번호: ").append(businesscard.getPhoneNumber() != null ? businesscard.getPhoneNumber() : "").append("<br>");
-        sb.append("주소: ").append(businesscard.getAddress() != null ? businesscard.getAddress() : "").append("<br>");
-        sb.append("실제 사진: ").append(businesscard.getRealPicture() != null ? businesscard.getRealPicture() : "").append("<br>");
-        sb.append("디지털 사진: ").append(businesscard.getDigitalPicture() != null ? businesscard.getDigitalPicture() : "").append("<br>");
+        appendIfNotEmpty(sb, "이름: ", businesscard.getName());
+        appendIfNotEmpty(sb, "회사: ", businesscard.getCompany());
+        appendIfNotEmpty(sb, "직책: ", businesscard.getPosition());
+        appendIfNotEmpty(sb, "직급: ", businesscard.getRank());
+        appendIfNotEmpty(sb, "부서: ", businesscard.getDepartment());
+        appendIfNotEmpty(sb, "이메일: ", businesscard.getEmail());
+        appendIfNotEmpty(sb, "유선 전화번호: ", businesscard.getLandlineNumber());
+        appendIfNotEmpty(sb, "팩스 번호: ", businesscard.getFaxNumber());
+        appendIfNotEmpty(sb, "휴대폰 번호: ", businesscard.getPhoneNumber());
+        appendIfNotEmpty(sb, "주소: ", businesscard.getAddress());
+        appendIfNotEmpty(sb, "실제 사진: ", businesscard.getRealPicture());
         sb.append("앞/뒤: ").append(businesscard.getFrontBack()).append("<br>");
-        sb.append("도메인 URL: ").append(businesscard.getDomainUrl() != null ? businesscard.getDomainUrl() : "").append("<br>");
+        appendIfNotEmpty(sb, "도메인 URL: ", businesscard.getDomainUrl());
         return sb.toString();
+    }
+
+    private void appendIfNotEmpty(StringBuilder sb, String label, String value) {
+        if (value != null && !value.isEmpty()) {
+            sb.append(label).append(value).append("<br>");
+        }
     }
 
 
