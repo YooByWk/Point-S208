@@ -15,6 +15,10 @@ import com.ssafy.businesscard.domain.myalbum.repository.PrivateAlbumFilterReposi
 import com.ssafy.businesscard.domain.myalbum.repository.PrivateAlbumMemberRepository;
 import com.ssafy.businesscard.domain.myalbum.repository.privateAlbum.PrivateAlbumRepository;
 import com.ssafy.businesscard.domain.myalbum.service.PrivateAlbumService;
+import com.ssafy.businesscard.domain.team.entity.TeamAlbum;
+import com.ssafy.businesscard.domain.team.entity.TeamAlbumDetail;
+import com.ssafy.businesscard.domain.team.repository.TeamAlbumDetailRepository;
+import com.ssafy.businesscard.domain.team.repository.TeamAlbumRepository;
 import com.ssafy.businesscard.domain.user.entity.User;
 import com.ssafy.businesscard.domain.user.repository.UserRepository;
 import com.ssafy.businesscard.global.exception.GlobalExceptionHandler;
@@ -41,6 +45,8 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
     private final PrivateAlbumRepository privateAlbumRepository;
     private final PrivateAlbumMemberRepository privateAlbumMemberRepository;
     private final AmazonS3Service amazonS3Service;
+    private final TeamAlbumRepository teamAlbumRepository;
+    private final TeamAlbumDetailRepository teamAlbumDetailRepository;
 
     // 명함 지갑에 명함 등록
     @Override
@@ -93,9 +99,8 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
         List<Businesscard> businesscards = new ArrayList<>();
 
         cardSharedRequest.cardIds().forEach(aLong -> {
-            Businesscard businesscard = businesscardRepository.findById(aLong).
-                    orElseThrow(() ->
-                            new GlobalExceptionHandler.UserException(
+            Businesscard businesscard = businesscardRepository.findById(aLong)
+                    .orElseThrow(() -> new GlobalExceptionHandler.UserException(
                                     GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_CARD));
             businesscards.add(businesscard);
 
@@ -166,13 +171,41 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
     }
 
     @Override
+    @Transactional
     public void shareCard(Long userId, Long teamId, CardSharedRequest request) {
+        TeamAlbum teamAlbum = teamAlbumRepository.findById(teamId)
+                .orElseThrow(() -> new GlobalExceptionHandler.UserException(
+                        GlobalExceptionHandler.UserErrorCode.NOT_EXITSTS_TEAM
+                ));
         List<Businesscard> businesscardList = new ArrayList<>();
+        // cardId list를 반복하여 businesscard를 businesscardList에 추가
         request.cardIds().forEach(cardId -> {
-            businesscardList.add(businesscardRepository.findById(cardId)
+            Businesscard businesscard = businesscardRepository.findById(cardId)
                     .orElseThrow(() -> new GlobalExceptionHandler.UserException(
                             GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_CARD
-                    )));
+                    ));
+            System.out.println("businesscard : " + businesscard.getCardId());
+            // 이미 등록된 명함이 있는지 확인
+            TeamAlbumDetail teamAlbumDetail = teamAlbumDetailRepository.findByTeamAlbum_TeamAlbumIdAndBusinesscard_Email(
+                    teamId, businesscard.getEmail()
+            );
+            System.out.println("teamAlbumDeatil : " + teamAlbumDetail);
+            if (teamAlbumDetail != null) {
+                throw new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.ALREADY_IN_CARD);
+            }
+            businesscardList.add(businesscard);
+        });
+        System.out.println("businesscardList : " + businesscardList.size());
+        // businesscardList를 반복하여 businesscard를 db에 저장하고 teamAlbumDetail에 저장
+        businesscardList.forEach(businesscard -> {
+            CardRequest cardRequest = businesscardMapper.toDto(businesscard);
+            Businesscard card = businesscardMapper.toEntity(cardRequest);
+            System.out.println("businesscard : " + card);
+            businesscardRepository.save(card);
+            teamAlbumDetailRepository.save(TeamAlbumDetail.builder()
+                    .teamAlbum(teamAlbum)
+                    .businesscard(card)
+                    .build());
         });
     }
 

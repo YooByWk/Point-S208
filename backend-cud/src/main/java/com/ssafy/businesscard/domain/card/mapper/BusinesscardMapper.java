@@ -8,5 +8,5 @@ import org.mapstruct.Mapper;
 public interface BusinesscardMapper {
 
     Businesscard toEntity(CardRequest cardRequest);
-
+    CardRequest toDto(Businesscard businesscard);
 }

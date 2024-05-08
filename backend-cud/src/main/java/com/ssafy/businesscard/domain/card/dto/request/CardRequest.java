@@ -5,8 +5,6 @@ import com.ssafy.businesscard.domain.card.entity.Businesscard;
 import lombok.Setter;
 
 public record CardRequest(
-        @JsonIgnore
-        Long cardId,
         String name,
         String company,
         String position,

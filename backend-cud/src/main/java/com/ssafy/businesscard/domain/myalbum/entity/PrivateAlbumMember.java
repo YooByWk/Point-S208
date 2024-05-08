@@ -19,6 +19,7 @@ public class PrivateAlbumMember {
     @Column(name = "private_album_member_id")
     private Long privateAlbumMemberId;
 
+    @JsonIgnore
     @JoinColumn(name = "filter_id")
     @ManyToOne
     private Filter filter;

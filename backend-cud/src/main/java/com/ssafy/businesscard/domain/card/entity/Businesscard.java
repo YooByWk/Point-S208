@@ -1,9 +1,14 @@
 package com.ssafy.businesscard.domain.card.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ssafy.businesscard.domain.team.entity.TeamAlbumDetail;
 import com.ssafy.businesscard.global.BaseTimeEntity;
 import com.ssafy.businesscard.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter

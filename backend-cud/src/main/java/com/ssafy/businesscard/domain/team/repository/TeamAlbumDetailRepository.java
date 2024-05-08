@@ -11,4 +11,6 @@ public interface TeamAlbumDetailRepository extends JpaRepository<TeamAlbumDetail
     TeamAlbumDetail findByTeamAlbum_teamAlbumIdAndBusinesscard_CardId(Long teamAlbumId, Long cardId);
 
     List<TeamAlbumDetail> findAllByTeamAlbum_teamAlbumId(Long teamAlbumId);
+
+    TeamAlbumDetail findByTeamAlbum_TeamAlbumIdAndBusinesscard_Email(Long teamAlbumId, String eamil);
 }

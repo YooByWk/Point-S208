@@ -1,5 +1,6 @@
 package com.ssafy.businesscard.domain.team.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.businesscard.domain.card.entity.Businesscard;
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,6 +24,7 @@ public class TeamAlbumDetail {
     @Column(name = "memo", length = 100)
     private String memo;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_album_id")
     private TeamAlbum teamAlbum;

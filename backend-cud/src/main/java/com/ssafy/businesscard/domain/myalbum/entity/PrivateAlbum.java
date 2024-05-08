@@ -32,10 +32,7 @@ public class PrivateAlbum extends BaseTimeEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "card_id")
     private Businesscard businesscard;
-
-
 }
