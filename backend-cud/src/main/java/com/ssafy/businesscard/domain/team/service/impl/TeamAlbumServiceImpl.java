@@ -7,6 +7,7 @@ import com.ssafy.businesscard.domain.card.entity.Businesscard;
 import com.ssafy.businesscard.domain.card.entity.Filter;
 import com.ssafy.businesscard.domain.card.mapper.BusinesscardMapper;
 import com.ssafy.businesscard.domain.card.repository.BusinesscardRepository;
+import com.ssafy.businesscard.domain.team.dto.request.MemberRequest;
 import com.ssafy.businesscard.domain.team.dto.request.TeamAlbumDetailRequest;
 import com.ssafy.businesscard.domain.team.dto.request.TeamAlbumRegistRequest;
 import com.ssafy.businesscard.domain.team.dto.request.TeamMemberRequest;
@@ -74,21 +75,7 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
                     .teamName(teamAlbumRequest.teamName())
                     .user(user)
                     .build());
-            List<User> userList = new ArrayList<>();
-            for (Long userInfo : teamAlbumRequest.userList()) {
-                User user1 = userRepository.findById(userInfo).orElseThrow(() -> new GlobalExceptionHandler.UserException(
-                        GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_USER
-                ));
-                userList.add(user1);
-            }
-
-            for (User userInfo : userList) {
-                TeamMemberRequest teamMemberRequest = TeamMemberRequest.builder()
-                        .teamAlbum(teamAlbum)
-                        .user(userInfo)
-                        .build();
-                addTeamMember(teamMemberRequest);
-            }
+            addMemberList(teamAlbum, teamAlbumRequest.userList());
         } else {
             throw new GlobalExceptionHandler.UserException(
                     GlobalExceptionHandler.UserErrorCode.ALREADY_IN_TEAM
@@ -96,12 +83,36 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
         }
     }
 
+    private void addMemberList(TeamAlbum teamAlbum, List<Long> userIdList){
+        List<User> userList = new ArrayList<>();
+        for (Long userInfo : userIdList) {
+            User user = userRepository.findById(userInfo).orElseThrow(() -> new GlobalExceptionHandler.UserException(
+                    GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_USER
+            ));
+            userList.add(user);
+        }
+        for (User user : userList) {
+            TeamMemberRequest teamMemberRequest = TeamMemberRequest.builder()
+                    .teamAlbum(teamAlbum)
+                    .user(user)
+                    .build();
+            addTeamMember(teamMemberRequest);
+        }
+    }
+
     // 팀 명함지갑 생성시 팀 구성원에 등록
     private void addTeamMember(TeamMemberRequest teamMemberRequest) {
-        teamMemberRepository.save(TeamMember.builder()
-                .user(teamMemberRequest.user())
-                .teamAlbum(teamMemberRequest.teamAlbum())
-                .build());
+        TeamMember teamMember = teamMemberRepository.findByTeamAlbum_TeamAlbumIdAndUser_UserId(
+                teamMemberRequest.teamAlbum().getTeamAlbumId(), teamMemberRequest.user().getUserId()
+        );
+        if (teamMember == null) {
+            teamMemberRepository.save(TeamMember.builder()
+                    .user(teamMemberRequest.user())
+                    .teamAlbum(teamMemberRequest.teamAlbum())
+                    .build());
+        } else {
+            throw new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.ALREADY_IN_TEAMMEMBER);
+        }
     }
 
     // 팀 명함지갑 이름 수정
@@ -122,7 +133,6 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
         } else {
             return "Owner가 아닙니다.";
         }
-
     }
 
     // 팀 명함지갑 삭제
@@ -142,7 +152,7 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
     // 팀 명함지갑에 명함 등록
     @Override
     @Transactional
-    public String registCard(Long teamAlbumId, CardRequest request) {
+    public String registCard(Long userId, Long teamAlbumId, CardRequest request) {
         TeamAlbum teamAlbum = teamAlbumRepository.findById(teamAlbumId)
                 .orElseThrow(() -> new GlobalExceptionHandler.UserException(
                         GlobalExceptionHandler.UserErrorCode.NOT_EXITSTS_TEAM
@@ -160,7 +170,6 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
                     .build();
             return addCardToTeamAlbumDetail(teamAlbumDetailRequest);
         }
-
     }
 
 
@@ -188,7 +197,7 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
 
     // 팀 명함지갑에 명함 수정
     @Override
-    public void updateCard(Long teamAlbumId, Long cardId, CardRequest request) {
+    public void updateCard(Long userId, Long teamAlbumId, Long cardId, CardRequest request) {
         TeamAlbumDetail teamAlbumDetail = teamAlbumDetailRepository.findByTeamAlbum_teamAlbumIdAndBusinesscard_CardId(
                 teamAlbumId, cardId);
         businesscardRepository.save(Businesscard.builder()
@@ -211,7 +220,7 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
 
     // 팀 명함지갑에서 명함 삭제
     @Override
-    public void deleteCard(Long teamAlbumId, Long cardId) {
+    public void deleteCard(Long userId, Long teamAlbumId, Long cardId) {
         TeamAlbumDetail teamAlbumDetail = teamAlbumDetailRepository.findByTeamAlbum_teamAlbumIdAndBusinesscard_CardId(
                 teamAlbumId, cardId
         );
@@ -221,7 +230,7 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
     // 팀 명함지갑 명함에 필터 추가
     @Override
     @Transactional
-    public void addFilter(Long teamAlbumId, Long cardId, List<CardAddFilterRequest> requestList) {
+    public void addFilter(Long userId, Long teamAlbumId, Long cardId, List<CardAddFilterRequest> requestList) {
         TeamAlbum teamAlbum = findTeam(teamAlbumId);
         List<Long> filterIdList = requestList.stream().map(CardAddFilterRequest::filterId).toList();
 
@@ -242,7 +251,7 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
 
     // 팀 명함지갑 명함에 메모 등록 및 수정
     @Override
-    public String cardMemo(Long teamAlbumId, Long cardId, MemoRequest request) {
+    public String cardMemo(Long userId, Long teamAlbumId, Long cardId, MemoRequest request) {
         TeamAlbumDetail teamAlbumDetail = teamAlbumDetailRepository.findByTeamAlbum_teamAlbumIdAndBusinesscard_CardId(
                 teamAlbumId, cardId
         );
@@ -265,6 +274,17 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
             return "메모가 수정되었습니다.";
         }
 
+    }
+
+    // 팀 명함지갑에 구성원 추가
+    @Override
+    public void addMember(Long userId, Long teamAlbumId, MemberRequest request) {
+
+        TeamAlbum teamAlbum = teamAlbumRepository.findById(teamAlbumId)
+                .orElseThrow(() -> new GlobalExceptionHandler.UserException(
+                        GlobalExceptionHandler.UserErrorCode.NOT_EXITSTS_TEAM
+                ));
+        addMemberList(teamAlbum, request.userList());
     }
 
     private User findUser(Long userId) {

@@ -18,29 +18,32 @@ public class TeamFilterController {
     private final TeamFilterService teamFilterService;
 
     // 필터 생성
-    @PostMapping("/{teamId}/filter")
-    public ResponseEntity<MessageUtils> create(@PathVariable("teamId") Long teamAlbumId,
+    @PostMapping("/{userId}/{teamId}/filter")
+    public ResponseEntity<MessageUtils> create(@PathVariable("userId") Long userId,
+                                               @PathVariable("teamId") Long teamAlbumId,
                                                @RequestBody FilterRequest request) {
-        teamFilterService.create(teamAlbumId, request);
+        teamFilterService.create(userId, teamAlbumId, request);
         log.info("[Create Filter] : {}", request.filterName());
         return ResponseEntity.ok().body(MessageUtils.success("필터가 생성되었습니다."));
     }
 
     // 필터 이름 편집
-    @PatchMapping("/{teamId}/filter/{filterId}")
-    public ResponseEntity<MessageUtils> update(@PathVariable("teamId") Long teamAlbumId,
+    @PatchMapping("/{userId}/{teamId}/filter/{filterId}")
+    public ResponseEntity<MessageUtils> update(@PathVariable("userId") Long userId,
+                                               @PathVariable("teamId") Long teamAlbumId,
                                                @PathVariable("filterId") Long filterId,
                                                @RequestBody FilterRequest request) {
-        teamFilterService.update(teamAlbumId, filterId, request);
+        teamFilterService.update(userId, teamAlbumId, filterId, request);
         log.info("[Update Filter] : {}", request);
         return ResponseEntity.ok().body(MessageUtils.success("필터가 수정되었습니다."));
     }
 
     // 필터 삭제
-    @DeleteMapping("/{teamId}/filter/{filterId}")
-    public ResponseEntity<MessageUtils> delete(@PathVariable("teamId") Long teamAlbumId,
+    @DeleteMapping("/{userId}/{teamId}/filter/{filterId}")
+    public ResponseEntity<MessageUtils> delete(@PathVariable("userId") Long userId,
+                                               @PathVariable("teamId") Long teamAlbumId,
                                                @PathVariable("filterId") Long filterId) {
-        teamFilterService.delete(teamAlbumId, filterId);
+        teamFilterService.delete(userId, teamAlbumId, filterId);
         log.info("[Delete Filter] : {}",filterId);
         return ResponseEntity.ok().body(MessageUtils.success("필터가 삭제되었습니다."));
     }

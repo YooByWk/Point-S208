@@ -27,7 +27,7 @@ public class TeamFilterServiceImpl implements TeamFilterService {
 
     // 필터 생성
     @Override
-    public void create(Long teamAlbumId, FilterRequest request) {
+    public void create(Long userId, Long teamAlbumId, FilterRequest request) {
         if (request.filterName().isEmpty()) {
             throw new GlobalExceptionHandler.UserException(
                     GlobalExceptionHandler.UserErrorCode.INVALID_FILTER_NAME
@@ -61,7 +61,7 @@ public class TeamFilterServiceImpl implements TeamFilterService {
 
     // 필터 이름 편집
     @Override
-    public void update(Long teamAlbumId, Long filterId, FilterRequest request) {
+    public void update(Long userId, Long teamAlbumId, Long filterId, FilterRequest request) {
         if (request.filterName().isEmpty()) {
             throw new GlobalExceptionHandler.UserException(
                     GlobalExceptionHandler.UserErrorCode.INVALID_FILTER_NAME
@@ -81,7 +81,7 @@ public class TeamFilterServiceImpl implements TeamFilterService {
 
     // 필터 삭제
     @Override
-    public void delete(Long teamAlbumId, Long filterId) {
+    public void delete(Long userId, Long teamAlbumId, Long filterId) {
         Filter filter = findFilter(filterId);
         teamAlbumFilterRepository.delete(filter);
     }

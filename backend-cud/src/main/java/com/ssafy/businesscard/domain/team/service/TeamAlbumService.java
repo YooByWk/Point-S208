@@ -3,6 +3,7 @@ package com.ssafy.businesscard.domain.team.service;
 import com.ssafy.businesscard.domain.card.dto.request.CardAddFilterRequest;
 import com.ssafy.businesscard.domain.card.dto.request.CardRequest;
 import com.ssafy.businesscard.domain.card.dto.request.MemoRequest;
+import com.ssafy.businesscard.domain.team.dto.request.MemberRequest;
 import com.ssafy.businesscard.domain.team.dto.request.TeamAlbumRegistRequest;
 
 import java.util.List;
@@ -15,13 +16,15 @@ public interface TeamAlbumService {
 
     String delete(Long userId, Long teamId);
 
-    String registCard(Long teamAlbumId, CardRequest request);
+    String registCard(Long userId, Long teamAlbumId, CardRequest request);
 
-    void updateCard(Long teamAlbumId, Long cardId, CardRequest request);
+    void updateCard(Long userId, Long teamAlbumId, Long cardId, CardRequest request);
 
-    void deleteCard(Long teamAlbumId, Long cardId);
+    void deleteCard(Long userId, Long teamAlbumId, Long cardId);
 
-    void addFilter(Long teamAlbumId, Long cardId, List<CardAddFilterRequest> requestList);
+    void addFilter(Long userId, Long teamAlbumId, Long cardId, List<CardAddFilterRequest> requestList);
 
-    String cardMemo(Long teamAlbumId, Long cardId, MemoRequest request);
+    String cardMemo(Long userId, Long teamAlbumId, Long cardId, MemoRequest request);
+
+    void addMember(Long userId, Long teamAlbumId, MemberRequest request);
 }
