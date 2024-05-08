@@ -30,8 +30,8 @@ public class MycardController {
     // 내 명함 등록 OCR
     @PostMapping("/{userId}/ocr")
     public ResponseEntity<MessageUtils> registCard(@PathVariable("userId") Long userId,
-                                                   @RequestPart MultipartFile image,
-                                                   @RequestPart MycardRegistRequest request) {
+                                                   @RequestPart("image") MultipartFile image,
+                                                   @RequestPart("request") MycardRegistRequest request) {
         mycardService.registCard(userId, image, request);
         log.info("[Regist Card] : {}", request);
         return ResponseEntity.ok().body(MessageUtils.success("명함이 등록되었습니다."));
