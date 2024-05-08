@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface TeamAlbumService {
 
-    String create(Long userId, TeamAlbumRegistRequest teamAlbumRegistRequest);
-    void createTeamAlbum(Long userId, TeamAlbumRegistRequest teamAlbumRegistRequest);
+    void create(Long userId, TeamAlbumRegistRequest teamAlbumRegistRequest);
+    void createTeamAlbum(Long userId, TeamAlbumRegistRequest teamAlbumRequest);
     String update(Long userId, Long teamId, TeamAlbumRegistRequest teamAlbumRegistRequest);
 
     String delete(Long userId, Long teamId);

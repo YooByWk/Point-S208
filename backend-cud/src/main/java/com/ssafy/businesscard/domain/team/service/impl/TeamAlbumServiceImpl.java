@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -43,7 +44,7 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
     // 팀 명함지갑 생성(건너뛰기)
     @Override
     @Transactional
-    public String create(Long userId, TeamAlbumRegistRequest teamAlbumRegistRequest) {
+    public void create(Long userId, TeamAlbumRegistRequest teamAlbumRegistRequest) {
         User user = findUser(userId);
         TeamAlbum checkTeamAlbum = teamAlbumRepository.findByUser_userIdAndTeamName(userId, teamAlbumRegistRequest.teamName());
         if (checkTeamAlbum == null) {
@@ -55,34 +56,52 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
                     .user(user)
                     .teamAlbum(teamAlbum)
                     .build();
-            String resultMember = addTeamMember(teamMemberRequest);
-            return verification(resultMember);
-
+            addTeamMember(teamMemberRequest);
         } else {
-            return "이미 존재하는 팀입니다.";
+            throw new GlobalExceptionHandler.UserException(
+                    GlobalExceptionHandler.UserErrorCode.ALREADY_IN_TEAM
+            );
         }
     }
 
+    // 팀 명함지갑 생성(구성원추가)
     @Override
-    public void createTeamAlbum(Long userId, TeamAlbumRegistRequest teamAlbumRegistRequest) {
+    public void createTeamAlbum(Long userId, TeamAlbumRegistRequest teamAlbumRequest) {
+        User user = findUser(userId);
+        TeamAlbum checkTeamAlbum = teamAlbumRepository.findByUser_userIdAndTeamName(userId, teamAlbumRequest.teamName());
+        if (checkTeamAlbum == null) {
+            TeamAlbum teamAlbum = teamAlbumRepository.save(TeamAlbum.builder()
+                    .teamName(teamAlbumRequest.teamName())
+                    .user(user)
+                    .build());
+            List<User> userList = new ArrayList<>();
+            for (Long userInfo : teamAlbumRequest.userList()) {
+                User user1 = userRepository.findById(userInfo).orElseThrow(() -> new GlobalExceptionHandler.UserException(
+                        GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_USER
+                ));
+                userList.add(user1);
+            }
 
+            for (User userInfo : userList) {
+                TeamMemberRequest teamMemberRequest = TeamMemberRequest.builder()
+                        .teamAlbum(teamAlbum)
+                        .user(userInfo)
+                        .build();
+                addTeamMember(teamMemberRequest);
+            }
+        } else {
+            throw new GlobalExceptionHandler.UserException(
+                    GlobalExceptionHandler.UserErrorCode.ALREADY_IN_TEAM
+            );
+        }
     }
 
     // 팀 명함지갑 생성시 팀 구성원에 등록
-    private String addTeamMember(TeamMemberRequest teamMemberRequest) {
+    private void addTeamMember(TeamMemberRequest teamMemberRequest) {
         teamMemberRepository.save(TeamMember.builder()
                 .user(teamMemberRequest.user())
                 .teamAlbum(teamMemberRequest.teamAlbum())
                 .build());
-        return "okay";
-    }
-
-    private String verification(String resultMember) {
-        if (resultMember.equals("okay")) {
-            return "팀이 생성되었습니다.";
-        } else {
-            return "팀 생성에 실패하였습니다.";
-        }
     }
 
     // 팀 명함지갑 이름 수정

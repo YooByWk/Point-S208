@@ -8,7 +8,7 @@ import java.util.List;
 @Builder
 public record TeamAlbumRegistRequest(
           String teamName,
-          List<User> userList
+          List<Long> userList
 ) {
 
 

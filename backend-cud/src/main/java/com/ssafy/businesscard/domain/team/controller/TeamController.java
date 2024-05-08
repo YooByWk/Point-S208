@@ -24,19 +24,19 @@ public class TeamController {
 
     // 팀 명함지갑 생성(구성원추가 스킵)
     @PostMapping("/{userId}/skip")
-    public ResponseEntity<?> create(@PathVariable("userId") Long userId,
+    public ResponseEntity<MessageUtils> create(@PathVariable("userId") Long userId,
                                                @RequestBody TeamAlbumRegistRequest teamAlbumRegistRequest) {
-        String result = teamAlbumService.create(userId, teamAlbumRegistRequest);
-        log.info("[Create Team] : {}", teamAlbumRegistRequest);
-        return ResponseEntity.ok().body(MessageUtils.success(result));
+        teamAlbumService.create(userId, teamAlbumRegistRequest);
+        log.info("[Create Team] : {}", teamAlbumRegistRequest.teamName());
+        return ResponseEntity.ok().body(MessageUtils.success("팀이 생성되었습니다."));
     }
 
     // 팀 명함지갑 생성
-    @PostMapping("/{userId}")
+    @PostMapping("/{userId}/create")
     public ResponseEntity<MessageUtils> createTeamAlbum(@PathVariable("userId") Long userId,
-                                                        @RequestBody TeamAlbumRegistRequest teamAlbumRegistRequest) {
-        teamAlbumService.createTeamAlbum(userId, teamAlbumRegistRequest);
-        log.info("[Create Team] : {}", teamAlbumRegistRequest);
+                                                        @RequestBody TeamAlbumRegistRequest teamAlbumRequest) {
+        teamAlbumService.createTeamAlbum(userId, teamAlbumRequest);
+        log.info("[Create Team] : {}", teamAlbumRequest.teamName());
         return ResponseEntity.ok().body(MessageUtils.success("팀이 생성되었습니다."));
     }
 
