@@ -8,7 +8,11 @@ import Spacing from '@shared/Spacing'
 import { useSetRecoilState } from 'recoil'
 import { writeInfoState } from '@/stores/emptyCard'
 
-const WebEmptyCard = () => {
+const WebEmptyCard = ({
+  setIsDetail,
+}: {
+  setIsDetail: React.Dispatch<React.SetStateAction<boolean>>
+}) => {
   const setWriteInfo = useSetRecoilState(writeInfoState)
 
   const children = () => {

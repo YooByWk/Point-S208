@@ -4,30 +4,20 @@ import type { CardType } from '@/types/cardType'
 import Flex from '@shared/Flex'
 import { css } from '@emotion/react'
 import Spacing from '@shared/Spacing'
-import {
-  Button,
-  Checkbox,
-  Dialog,
-  DialogActions,
-  DialogBody,
-  DialogSurface,
-  DialogTitle,
-  DialogTrigger,
-  Image,
-} from '@fluentui/react-components'
+import { Checkbox, Image } from '@fluentui/react-components'
 import {
   Star24Regular,
   Star24Filled,
   ShareAndroid24Filled,
-  Delete24Filled,
 } from '@fluentui/react-icons'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { isRefreshedAlbumState, selectedCardState } from '@stores/card'
-import { colors } from '@/styles/colorPalette'
-import { useMutation } from '@tanstack/react-query'
-import { deleteMyAlbumCard } from '@/apis/album'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { selectedCardState } from '@stores/card'
 import { userState } from '@/stores/user'
 import { ExternalCardType } from '@/types/ExternalCard'
+import WebMakeBusinessCard from '../web/WebAlbum/WebMakeBusinessCard'
+import WebAlbumDeleteSingleCard from '../web/WebAlbum/WebAlbumDeleteSingleCard'
+import { useMutation } from '@tanstack/react-query'
+import { getAlbumDetail } from '@/apis/album'
 
 interface CardThumbnailProps {
   cardInfo: ExternalCardType | CardType
@@ -47,8 +37,8 @@ const WebCardThumbnail = ({
     selectedCards.includes(cardInfo.cardId),
   )
 
-  const setSelectedCardState = useSetRecoilState(selectedCardState)
-  const [isRefreshed, setIsRefreshed] = useRecoilState(isRefreshedAlbumState)
+  const setSelectedCard = useSetRecoilState(selectedCardState)
+
   const userId = useRecoilValue(userState).userId
 
   useEffect(() => {
@@ -57,20 +47,19 @@ const WebCardThumbnail = ({
   }, [selectedCards, cardInfo.cardId, setIsChecked])
 
   const { mutate } = useMutation({
-    mutationKey: ['deleteMyAlbumCard'],
-    mutationFn: deleteMyAlbumCard,
+    mutationKey: ['getAlbumDetail'],
+    mutationFn: getAlbumDetail,
     onSuccess(result) {
-      console.log('삭제 성공', result)
-      setIsRefreshed(!isRefreshed)
+      setSelectedCard(result.data_body)
     },
     onError(error) {
-      console.error('삭제 실패:', error)
+      console.error(error)
     },
   })
 
   const handleDetailSelect = () => {
+    mutate({ userId: userId, cardId: cardInfo.cardId })
     setIsDetail(true)
-    setSelectedCardState(cardInfo)
   }
 
   const handleCheck = () => {
@@ -88,19 +77,19 @@ const WebCardThumbnail = ({
     console.log('공유 : ', cardInfo)
   }
 
-  const handleDelete = () => {
-    mutate({ userId: userId, cardId: cardInfo.cardId })
-  }
-
   return (
     <>
       <Flex justify="center" align="center" css={content}>
         <div onClick={handleDetailSelect} css={imgContainerStyles}>
-          <Image
-            fit="contain"
-            src={cardInfo.realPicture}
-            alt={`${cardInfo.name}'s card`}
-          />
+          {cardInfo.realPicture ? (
+            <Image
+              fit="contain"
+              src={cardInfo.realPicture}
+              alt={`${cardInfo.name}'s card`}
+            />
+          ) : (
+            <WebMakeBusinessCard cardInfo={cardInfo} />
+          )}
         </div>
 
         <Flex direction="column" justify="space-around" align="center">
@@ -119,32 +108,7 @@ const WebCardThumbnail = ({
             <Star24Regular css={i} onClick={handleFavorite} />
           )}
           <ShareAndroid24Filled css={i} onClick={handleShare} />
-          <Dialog modalType="alert">
-            <DialogTrigger disableButtonEnhancement>
-              <Delete24Filled />
-            </DialogTrigger>
-            <DialogSurface>
-              <DialogBody>
-                <DialogTitle>명함을 삭제하시겠습니까?</DialogTitle>
-                <DialogActions>
-                  <DialogTrigger disableButtonEnhancement>
-                    <Button
-                      shape="circular"
-                      css={buttonStyles}
-                      onClick={handleDelete}
-                    >
-                      삭제
-                    </Button>
-                  </DialogTrigger>
-                  <DialogTrigger disableButtonEnhancement>
-                    <Button shape="circular" css={buttonStyles2}>
-                      취소
-                    </Button>
-                  </DialogTrigger>
-                </DialogActions>
-              </DialogBody>
-            </DialogSurface>
-          </Dialog>
+          <WebAlbumDeleteSingleCard cardInfo={cardInfo} />
           <Spacing size={10} />
         </Flex>
       </Flex>
@@ -171,14 +135,4 @@ const checkboxStyles = css`
 const imgContainerStyles = css`
   width: 263px;
   height: 150px;
-  border: 1px solid black;
-`
-
-const buttonStyles = css`
-  background-color: #f00;
-  color: white;
-`
-const buttonStyles2 = css`
-  background-color: ${colors.poscoSilver};
-  color: white;
 `

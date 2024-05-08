@@ -8,6 +8,7 @@ import { colors } from '@styles/colorPalette'
 import { useRecoilValue } from 'recoil'
 import { selectedCardState } from '@/stores/card'
 import { Image } from '@fluentui/react-components'
+import WebMakeBusinessCard from './WebMakeBusinessCard'
 
 const WebAlbumCardInfo = () => {
   const selectedCard = useRecoilValue(selectedCardState)
@@ -15,9 +16,17 @@ const WebAlbumCardInfo = () => {
   return (
     <>
       <Flex direction="column">
-        <div css={boxStyles}>
-          <Image src={selectedCard.realPicture} alt="명함사진" fit="contain" />
-        </div>
+        <Flex justify="center" align="center" css={boxStyles}>
+          {selectedCard.realPicture ? (
+            <Image
+              fit="contain"
+              src={selectedCard.realPicture}
+              alt={`${selectedCard.name}'s card`}
+            />
+          ) : (
+            <WebMakeBusinessCard cardInfo={selectedCard} />
+          )}
+        </Flex>
         <Spacing size={20} />
         <Flex direction="column" css={container3Styles}>
           <Flex justify="flex-start" align="center">
@@ -70,35 +79,36 @@ const WebAlbumCardInfo = () => {
             <Text bold={true}>연락처</Text>
           </Flex>
           <Spacing size={20} />
-          {selectedCard.email && (
+          {selectedCard.email && selectedCard.email.trim() && (
             <Flex>
               <Text typography="t6">이메일</Text>
               <Spacing size={40} direction="horizontal" />
               <Text typography="t6">{selectedCard.email}</Text>
             </Flex>
           )}
-          {selectedCard.landlineNumber && (
-            <Flex>
-              <Text typography="t6">유선전화</Text>
-              <Spacing size={20} direction="horizontal" />
-              <Text typography="t6">{selectedCard.landlineNumber}</Text>
-            </Flex>
-          )}
-          {selectedCard.phoneNumber && (
+          {selectedCard.landlineNumber &&
+            selectedCard.landlineNumber.trim() && (
+              <Flex>
+                <Text typography="t6">유선전화</Text>
+                <Spacing size={20} direction="horizontal" />
+                <Text typography="t6">{selectedCard.landlineNumber}</Text>
+              </Flex>
+            )}
+          {selectedCard.phoneNumber && selectedCard.phoneNumber.trim() && (
             <Flex>
               <Text typography="t6">휴대전화</Text>
               <Spacing size={20} direction="horizontal" />
               <Text typography="t6">{selectedCard.phoneNumber}</Text>
             </Flex>
           )}
-          {selectedCard.faxNumber && (
+          {selectedCard.faxNumber && selectedCard.faxNumber.trim() && (
             <Flex>
               <Text typography="t6">팩스</Text>
               <Spacing size={60} direction="horizontal" />
               <Text typography="t6">{selectedCard.faxNumber}</Text>
             </Flex>
           )}
-          {selectedCard.domainUrl && (
+          {selectedCard.domainUrl && selectedCard.domainUrl.trim() && (
             <Flex>
               <Text typography="t6">웹사이트</Text>
               <Spacing size={20} direction="horizontal" />
@@ -113,7 +123,7 @@ const WebAlbumCardInfo = () => {
               </Text>
             </Flex>
           )}
-          {selectedCard.address && (
+          {selectedCard.address && selectedCard.address.trim() && (
             <Flex>
               <Text typography="t6">주소</Text>
               <Spacing size={60} direction="horizontal" />
@@ -136,5 +146,4 @@ const container3Styles = css`
 const boxStyles = css`
   width: 46vw;
   height: 25vh;
-  border: 1px solid black;
 `

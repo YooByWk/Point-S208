@@ -38,7 +38,7 @@ export const isFrontState = atom({
 
 export const isRealState = atom({
   key: 'isRealState',
-  default: true,
+  default: false,
 })
 
 export const isFirstCardState = atom({

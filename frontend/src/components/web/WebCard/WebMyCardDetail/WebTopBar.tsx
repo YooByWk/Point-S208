@@ -29,9 +29,9 @@ import {
 import { colors } from '@styles/colorPalette'
 import { useMutation } from '@tanstack/react-query'
 import { deleteMyCard } from '@apis/card'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { userState } from '@stores/user'
-import { isFrontState } from '@/stores/card'
+import { isFrontState, isRealState } from '@/stores/card'
 
 const WebTopBar = ({
   isFront,
@@ -46,6 +46,7 @@ const WebTopBar = ({
 }) => {
   const userId = useRecoilValue(userState).userId
   const setFront = useSetRecoilState(isFrontState)
+  const [isReal, setIsReal] = useRecoilState(isRealState)
 
   const { mutate } = useMutation({
     mutationKey: ['deleteMyCard'],
@@ -91,7 +92,13 @@ const WebTopBar = ({
                 >
                   국/영문 전환
                 </MenuItem>
-                <MenuItem onClick={() => {}}>디지털/실물 전환</MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    setIsReal(!isReal)
+                  }}
+                >
+                  디지털/실물 전환
+                </MenuItem>
               </MenuList>
             </MenuPopover>
           </Menu>

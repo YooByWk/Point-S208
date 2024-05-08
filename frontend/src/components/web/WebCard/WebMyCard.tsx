@@ -15,30 +15,14 @@ import WebEmptyBackCard from './WebMyCardDetail/WebEmptyBackCard'
 import WebEmptyCard from './WebEmptyCard'
 import InfoEdit from '../../mobile/MyCard/MyCardDetail/InfoEdit'
 import { backCardState, frontCardState } from '@/stores/card'
-
-interface CardInfo {
-  card_id: number
-  name: string
-  company: string
-  department: string
-  position: string
-  rank?: string
-  email: string
-  landlineNumber: string
-  fax_number?: string
-  phoneNumber: string
-  address?: string
-  real_picture: string
-  digital_picture: string
-  front_back: 'front' | 'back'
-  domain_url?: string
-}
+import { ExternalCardType } from '@/types/ExternalCard'
+import { CardType } from '@/types/cardType'
 
 interface DataProps {
   userId: number
-  front: CardInfo
-  back?: CardInfo
-  list: CardInfo[]
+  front: ExternalCardType | CardType
+  back?: ExternalCardType | CardType
+  list: ExternalCardType[] | CardType[]
 }
 
 function useFetchCardData(
@@ -79,10 +63,12 @@ const WebMyCard = ({
   isCard,
   setIsCard,
   setIsEnglish,
+  setIsDetail,
 }: {
   isCard: boolean
   setIsCard: (isCard: boolean) => void
   setIsEnglish: (isFront: boolean) => void
+  setIsDetail: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
   const userId = useRecoilValue(userState).userId
   const [editOpen, setEditOpen] = useState(false)
@@ -100,12 +86,13 @@ const WebMyCard = ({
         setIsFront={setIsFront}
         data={data}
         setIsCard={setIsCard}
+        setIsDetail={setIsDetail}
       />
     )
   }
   if (isFront && data.front === null) {
     setIsEnglish(false)
-    return <WebEmptyCard />
+    return <WebEmptyCard setIsDetail={setIsDetail} />
   }
   if (editOpen) return <InfoEdit value={editOpen} setValue={setEditOpen} />
 
@@ -124,7 +111,7 @@ const WebMyCard = ({
           <Spacing size={10} />
           <WebMyCardInfo isFront={isFront} data={data} />
         </Flex>
-        <WebNewlyAddedCard list={data.list} />
+        <WebNewlyAddedCard list={data.list} setIsDetail={setIsDetail} />
       </Flex>
     </>
   )

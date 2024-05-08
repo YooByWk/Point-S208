@@ -10,30 +10,14 @@ import { writeInfoState } from '@/stores/emptyCard'
 import WebTopBar from './WebTopBar'
 import WebNewlyAddedCard from './WebNewlyAddedCard'
 import { colors } from '@/styles/colorPalette'
-
-interface CardInfo {
-  card_id: number
-  name: string
-  company: string
-  department: string
-  position: string
-  rank?: string
-  email: string
-  landlineNumber: string
-  fax_number?: string
-  phoneNumber: string
-  address?: string
-  real_picture: string
-  digital_picture: string
-  front_back: 'front' | 'back'
-  domain_url?: string
-}
+import { ExternalCardType } from '@/types/ExternalCard'
+import { CardType } from '@/types/cardType'
 
 interface DataProps {
   userId: number
-  front: CardInfo
-  back?: CardInfo
-  list: CardInfo[]
+  front: ExternalCardType | CardType
+  back?: ExternalCardType | CardType
+  list: ExternalCardType[] | CardType[]
 }
 
 const WebEmptyBackCard = ({
@@ -41,11 +25,13 @@ const WebEmptyBackCard = ({
   isFront,
   setIsFront,
   data,
+  setIsDetail,
 }: {
   setIsCard: (isCard: boolean) => void
   isFront: boolean
   setIsFront: (isFront: boolean) => void
   data: DataProps
+  setIsDetail: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
   const setWriteInfo = useSetRecoilState(writeInfoState)
 
@@ -85,7 +71,7 @@ const WebEmptyBackCard = ({
             </Flex>
           </div>
         </Flex>
-        <WebNewlyAddedCard list={data.list} />
+        <WebNewlyAddedCard list={data.list} setIsDetail={setIsDetail} />
       </Flex>
     </>
   )
