@@ -104,7 +104,6 @@ def detect_and_save_business_card(image):
 
 
 
-
 # CORS 미들웨어 설정
 api.add_middleware(
     CORSMiddleware,
@@ -177,6 +176,72 @@ async def process_image(image: UploadFile = File(...)):
     output_file = detect_and_save_business_card(image)
     return FileResponse(output_file.name)
 
+
+@api.post("/process_image/scanv4/")
+async def process_image(image: UploadFile = File(...)):
+    try:
+        # 이미지를 읽어옴
+        contents = await image.read()
+        nparr = np.frombuffer(contents, np.uint8)
+        img_color = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        
+        # 이미지 흑백 변환
+        img_gray = cv2.cvtColor(img_color, cv2.COLOR_BGR2GRAY)
+        
+        # 이미지 이진화
+        ret, img_binary = cv2.threshold(img_gray, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
+        
+        # 가우시안 블러를 통한 노이즈 제거
+        img_blur = cv2.GaussianBlur(img_binary, (5, 5), 0)
+        
+        # 케니 엣지 검출
+        edges = cv2.Canny(img_blur, 50, 150)
+        
+        # 윤곽선 찾기
+        contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        for idx, contour in enumerate(contours):
+            # 윤곽선의 영역 계산
+            area = cv2.contourArea(contour)
+
+            # 일정 크기 이상의 영역만 저장
+            if area > 1000:
+                # 꼭지점 검출
+                epsilon = 0.1 * cv2.arcLength(contour, True)
+                approx = cv2.approxPolyDP(contour, epsilon, True)
+                
+                if len(approx) == 4:  # 꼭지점이 4개인 경우
+                    # 꼭지점 좌표를 배열로 변환
+                    pts = np.float32([point[0] for point in approx])
+                    
+                    # 꼭지점 좌표 정렬
+                    rect = np.zeros((4, 2), dtype="float32")
+                    s = pts.sum(axis=1)
+                    rect[0] = pts[np.argmin(s)]
+                    rect[2] = pts[np.argmax(s)]
+                    diff = np.diff(pts, axis=1)
+                    rect[1] = pts[np.argmin(diff)]
+                    rect[3] = pts[np.argmax(diff)]
+                    
+                    # 원근 변환을 위한 좌표 설정
+                    pts1 = rect
+                    pts2 = np.float32([[0, 0], [500, 0], [500, 300], [0, 300]])
+                    
+                    # 원근 변환 행렬 계산
+                    matrix = cv2.getPerspectiveTransform(pts1, pts2)
+                    
+                    # 원근 변환 적용
+                    result = cv2.warpPerspective(img_color, matrix, (500, 300))
+                    
+                    # 이미지를 JPEG 형식으로 인코딩하여 전송
+                    retval, buffer = cv2.imencode('.jpg', result)
+                    io_buf = BytesIO(buffer)
+                    return StreamingResponse(io_buf, media_type="image/jpeg")
+        
+        raise HTTPException(status_code=400, detail="No contour area found")
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 # def calculate_max_width_height(src_quad):
 #     # Calculate width
