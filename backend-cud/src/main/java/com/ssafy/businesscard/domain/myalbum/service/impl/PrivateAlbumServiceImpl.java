@@ -131,9 +131,9 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
             PrivateAlbum privateAlbum1 = privateAlbumRepository.findByUser_userIdAndBusinesscard_cardId(
                     userId, businesscard1.getCardId());
 
-            if (privateAlbum1 != null) {
-                throw new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.ALREADY_IN_CARD);
-            } else {
+//            if (privateAlbum1 != null) {
+//                throw new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.ALREADY_IN_CARD);
+//            } else {
                 PrivateAlbumRequest privateAlbumRequest = PrivateAlbumRequest.builder()
                         .user(user)
                         .businesscard(newbusinesscard)
@@ -141,7 +141,7 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
                         .build();
 
                 addPrivateAlbum(privateAlbumRequest);
-            }
+//            }
 
         });
 
