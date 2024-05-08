@@ -93,10 +93,17 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
         List<Businesscard> businesscards = new ArrayList<>();
 
         cardSharedRequest.cardIds().forEach(aLong -> {
-            businesscards.add(businesscardRepository.findById(aLong).
+            Businesscard businesscard = businesscardRepository.findById(aLong).
                     orElseThrow(() ->
                             new GlobalExceptionHandler.UserException(
-                                    GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_CARD)));
+                                    GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_CARD));
+            businesscards.add(businesscard);
+
+            List<PrivateAlbum> privateAlbum = privateAlbumRepository.findByUser_userIdAndBusinesscard_email(userId, businesscard.getEmail());
+
+            if(privateAlbum.size()!=0){
+                throw new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.ALREADY_IN_CARD);
+            }
 
         });
 
@@ -119,7 +126,6 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
                     .rank(businesscard1.getRank())
                     .user(businesscard1.getUser())
                     .realPicture(businesscard1.getRealPicture())
-
                     .build());
 
             PrivateAlbum privateAlbum1 = privateAlbumRepository.findByUser_userIdAndBusinesscard_cardId(
