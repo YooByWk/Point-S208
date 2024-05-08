@@ -93,10 +93,10 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
         List<Businesscard> businesscards = new ArrayList<>();
 
         cardSharedRequest.cardIds().forEach(aLong -> {
-
             businesscards.add(businesscardRepository.findById(aLong).
                     orElseThrow(() ->
-                            new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_CARD)));
+                            new GlobalExceptionHandler.UserException(
+                                    GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_CARD)));
 
         });
 
@@ -108,7 +108,8 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
         });
 
         businesscards.forEach(businesscard -> {
-            PrivateAlbum privateAlbum1 = privateAlbumRepository.findByUser_userIdAndBusinesscard_cardId(userId, businesscard.getCardId());
+            PrivateAlbum privateAlbum1 = privateAlbumRepository.findByUser_userIdAndBusinesscard_cardId(
+                    userId, businesscard.getCardId());
             if (privateAlbum1 != null) {
                 throw new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.ALREADY_IN_CARD);
             } else {
@@ -120,6 +121,17 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
 
                 addPrivateAlbum(privateAlbumRequest);
             }
+        });
+    }
+
+    @Override
+    public void shareCard(Long userId, Long teamId, CardSharedRequest request) {
+        List<Businesscard> businesscardList = new ArrayList<>();
+        request.cardIds().forEach(cardId -> {
+            businesscardList.add(businesscardRepository.findById(cardId)
+                    .orElseThrow(() -> new GlobalExceptionHandler.UserException(
+                            GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_CARD
+                    )));
         });
     }
 

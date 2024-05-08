@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/my-album")
+@CrossOrigin("*")
 public class PrivateAlbumFilterController {
 
     private final PrivateAlbumFilterService privateAlbumFilterService;
