@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -62,12 +63,23 @@ public class TeamController {
 
     // 팀 명함지갑에 명함 등록
     @PostMapping("/{userId}/{teamId}/card")
-    public ResponseEntity<?> registCard(@PathVariable("userId") Long userId,
-                                        @PathVariable("teamId") Long teamAlbumId,
-                                        @RequestBody CardRequest request) {
-        String result = teamAlbumService.registCard(userId, teamAlbumId, request);
+    public ResponseEntity<?> regist(@PathVariable("userId") Long userId,
+                                    @PathVariable("teamId") Long teamAlbumId,
+                                    @RequestBody CardRequest request) {
+        String result = teamAlbumService.regist(userId, teamAlbumId, request);
         log.info("[Regist Card] : {}", request);
         return ResponseEntity.ok().body(MessageUtils.success(result));
+    }
+
+    // 팀 명함지갑에 OCR로 명함 등록
+    @PostMapping("/{userId}/{teamId}/ocr")
+    public ResponseEntity<MessageUtils> registCard(@PathVariable("userId") Long userId,
+                                                   @PathVariable("teamId") Long teamAlbumId,
+                                                   @RequestPart MultipartFile image,
+                                                   @RequestPart CardRequest request){
+        teamAlbumService.registCard(userId, teamAlbumId, image, request);
+        log.info("[Regist Card] : {}", request);
+        return ResponseEntity.ok().body(MessageUtils.success("명함이 등록되었습니다."));
     }
 
     // 팀 명함지갑에 등록된 명함 수정

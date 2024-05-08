@@ -20,10 +20,12 @@ import com.ssafy.businesscard.domain.team.service.TeamAlbumService;
 import com.ssafy.businesscard.domain.user.entity.User;
 import com.ssafy.businesscard.domain.user.repository.UserRepository;
 import com.ssafy.businesscard.global.exception.GlobalExceptionHandler;
+import com.ssafy.businesscard.global.s3.servcie.AmazonS3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +43,7 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
     private final TeamAlbumFilterRepository teamAlbumFilterRepository;
     private final TeamAlbumMemberRepository teamAlbumMemberRepository;
     private final TeamMemberRepository teamMemberRepository;
+    private final AmazonS3Service amazonS3Service;
 
     // 팀 명함지갑 생성(건너뛰기)
     @Override
@@ -159,7 +162,7 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
     // 팀 명함지갑에 명함 등록
     @Override
     @Transactional
-    public String registCard(Long userId, Long teamAlbumId, CardRequest request) {
+    public String regist(Long userId, Long teamAlbumId, CardRequest request) {
         TeamAlbum teamAlbum = teamAlbumRepository.findById(teamAlbumId)
                 .orElseThrow(() -> new GlobalExceptionHandler.UserException(
                         GlobalExceptionHandler.UserErrorCode.NOT_EXITSTS_TEAM
@@ -177,6 +180,21 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
                     .build();
             return addCardToTeamAlbumDetail(teamAlbumDetailRequest);
         }
+    }
+
+    // 팀 명함지갑에 OCR로 명함 등록
+    @Override
+    @Transactional
+    public void registCard(Long userId, Long teamAlbumId, MultipartFile image, CardRequest request) {
+        TeamAlbum teamAlbum = teamAlbumRepository.findById(teamAlbumId)
+                .orElseThrow(() -> new GlobalExceptionHandler.UserException(
+                        GlobalExceptionHandler.UserErrorCode.NOT_EXITSTS_TEAM
+                ));
+        String url = amazonS3Service.uploadThunmail(image).getUrl();
+        Businesscard businesscard = businesscardMapper.toEntity(request);
+        businesscard.setRealPicture(url);
+
+        if ()
     }
 
 
