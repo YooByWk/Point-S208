@@ -27,4 +27,6 @@ public interface TeamAlbumService {
     String cardMemo(Long userId, Long teamAlbumId, Long cardId, MemoRequest request);
 
     void addMember(Long userId, Long teamAlbumId, MemberRequest request);
+
+    void deleteMember(Long userId, Long teamAlbumId, Long memberId);
 }

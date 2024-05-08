@@ -25,8 +25,8 @@ public class TeamController {
 
     // 팀 명함지갑 생성(구성원추가 스킵)
     @PostMapping("/{userId}/skip")
-    public ResponseEntity<MessageUtils> create(@PathVariable("userId") Long userId,
-                                               @RequestBody TeamAlbumRegistRequest teamAlbumRegistRequest) {
+    public ResponseEntity<?> create(@PathVariable("userId") Long userId,
+                                    @RequestBody TeamAlbumRegistRequest teamAlbumRegistRequest) {
         teamAlbumService.create(userId, teamAlbumRegistRequest);
         log.info("[Create Team] : {}", teamAlbumRegistRequest.teamName());
         return ResponseEntity.ok().body(MessageUtils.success("팀이 생성되었습니다."));
@@ -34,8 +34,8 @@ public class TeamController {
 
     // 팀 명함지갑 생성
     @PostMapping("/{userId}/create")
-    public ResponseEntity<MessageUtils> createTeamAlbum(@PathVariable("userId") Long userId,
-                                                        @RequestBody TeamAlbumRegistRequest teamAlbumRequest) {
+    public ResponseEntity<?> createTeamAlbum(@PathVariable("userId") Long userId,
+                                             @RequestBody TeamAlbumRegistRequest teamAlbumRequest) {
         teamAlbumService.createTeamAlbum(userId, teamAlbumRequest);
         log.info("[Create Team] : {}", teamAlbumRequest.teamName());
         return ResponseEntity.ok().body(MessageUtils.success("팀이 생성되었습니다."));
@@ -121,5 +121,15 @@ public class TeamController {
         teamAlbumService.addMember(userId, teamAlbumId, request);
         log.info("[Add Member] : {}", request.userList());
         return ResponseEntity.ok().body(MessageUtils.success("구성원이 추가되었습니다."));
+    }
+
+    // 팀 명함지갑 구성원 삭제
+    @DeleteMapping("/{userId}/{teamId}/member/{memberId}")
+    public ResponseEntity<MessageUtils> deleteMember(@PathVariable("userId") Long userId,
+                                                     @PathVariable("teamId") Long teamAlbumId,
+                                                     @PathVariable("memberId") Long memberId) {
+        teamAlbumService.deleteMember(userId, teamAlbumId, memberId);
+        log.info("[Delete Member] : {}",memberId);
+        return ResponseEntity.ok().body(MessageUtils.success("구성원을 방출했습니다."));
     }
 }

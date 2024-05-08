@@ -75,7 +75,14 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
                     .teamName(teamAlbumRequest.teamName())
                     .user(user)
                     .build());
-            addMemberList(teamAlbum, teamAlbumRequest.userList());
+            TeamMemberRequest teamMemberRequest = TeamMemberRequest.builder()
+                    .user(user)
+                    .teamAlbum(teamAlbum)
+                    .build();
+            addTeamMember(teamMemberRequest);
+            if (teamAlbumRequest.userList() != null) {
+                addMemberList(teamAlbum, teamAlbumRequest.userList());
+            }
         } else {
             throw new GlobalExceptionHandler.UserException(
                     GlobalExceptionHandler.UserErrorCode.ALREADY_IN_TEAM
@@ -273,18 +280,23 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
                     .build());
             return "메모가 수정되었습니다.";
         }
-
     }
 
     // 팀 명함지갑에 구성원 추가
     @Override
     public void addMember(Long userId, Long teamAlbumId, MemberRequest request) {
-
         TeamAlbum teamAlbum = teamAlbumRepository.findById(teamAlbumId)
                 .orElseThrow(() -> new GlobalExceptionHandler.UserException(
                         GlobalExceptionHandler.UserErrorCode.NOT_EXITSTS_TEAM
                 ));
         addMemberList(teamAlbum, request.userList());
+    }
+
+    // 팀 명함지갑 구성원 삭제
+    @Override
+    public void deleteMember(Long userId, Long teamAlbumId, Long memberId) {
+        TeamMember teamMember = teamMemberRepository.findByTeamAlbum_TeamAlbumIdAndUser_UserId(teamAlbumId, memberId);
+        teamMemberRepository.delete(teamMember);
     }
 
     private User findUser(Long userId) {
