@@ -67,48 +67,48 @@ async def process_ocr(file: bytes = File(...), message: str = Form(...)):
         return JSONResponse(status_code=response.status_code, content={"message": "OCR 처리 실패"})
 
 
-@api.post("/process_image/scanv2/")
-async def process_image(image: UploadFile = File(...)):
-    try:
-        # 이미지를 읽어옴
-        contents = await image.read()
-        nparr = np.frombuffer(contents, np.uint8)
-        img_color = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+# @api.post("/process_image/scanv2/")
+# async def process_image(image: UploadFile = File(...)):
+#     try:
+#         # 이미지를 읽어옴
+#         contents = await image.read()
+#         nparr = np.frombuffer(contents, np.uint8)
+#         img_color = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
         
-        # 이미지 흑백 변환
-        img_gray = cv2.cvtColor(img_color, cv2.COLOR_BGR2GRAY)
+#         # 이미지 흑백 변환
+#         img_gray = cv2.cvtColor(img_color, cv2.COLOR_BGR2GRAY)
         
-        # 이미지 이진화
-        ret, img_binary = cv2.threshold(img_gray, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
+#         # 이미지 이진화
+#         ret, img_binary = cv2.threshold(img_gray, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
         
-        # 가우시안 블러를 통한 노이즈 제거
-        img_blur = cv2.GaussianBlur(img_binary, (5, 5), 0)
+#         # 가우시안 블러를 통한 노이즈 제거
+#         img_blur = cv2.GaussianBlur(img_binary, (5, 5), 0)
         
-        # 케니 엣지 검출
-        edges = cv2.Canny(img_blur, 50, 150)
+#         # 케니 엣지 검출
+#         edges = cv2.Canny(img_blur, 50, 150)
         
-        # 윤곽선 찾기
-        contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+#         # 윤곽선 찾기
+#         contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-        for idx, contour in enumerate(contours):
-            # 윤곽선의 영역 계산
-            area = cv2.contourArea(contour)
+#         for idx, contour in enumerate(contours):
+#             # 윤곽선의 영역 계산
+#             area = cv2.contourArea(contour)
 
-            # 일정 크기 이상의 영역만 저장
-            if area > 1000:
-                # 윤곽선이 그려진 부분만 잘라내기
-                x, y, w, h = cv2.boundingRect(contour)
-                contour_area = img_color[y:y+h, x:x+w]
+#             # 일정 크기 이상의 영역만 저장
+#             if area > 1000:
+#                 # 윤곽선이 그려진 부분만 잘라내기
+#                 x, y, w, h = cv2.boundingRect(contour)
+#                 contour_area = img_color[y:y+h, x:x+w]
                 
-                # 이미지를 JPEG 형식으로 인코딩하여 전송
-                retval, buffer = cv2.imencode('.jpg', contour_area)
-                io_buf = BytesIO(buffer)
-                return StreamingResponse(io_buf, media_type="image/jpeg")
+#                 # 이미지를 JPEG 형식으로 인코딩하여 전송
+#                 retval, buffer = cv2.imencode('.jpg', contour_area)
+#                 io_buf = BytesIO(buffer)
+#                 return StreamingResponse(io_buf, media_type="image/jpeg")
         
-        raise HTTPException(status_code=400, detail="No contour area found")
+#         raise HTTPException(status_code=400, detail="No contour area found")
     
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+#     except Exception as e:
+#         raise HTTPException(status_code=500, detail=str(e))
     
     
 # @api.post("/process_image/scanv3/")
