@@ -10,6 +10,7 @@ import time
 import os
 import cv2
 import numpy as np
+import base64
 from fastapi.middleware.cors import CORSMiddleware
 from io import BytesIO
 from tempfile import NamedTemporaryFile
@@ -234,9 +235,15 @@ async def process_image(image: UploadFile = File(...)):
                     result = cv2.warpPerspective(img_color, matrix, (500, 300))
                     
                     # 이미지를 JPEG 형식으로 인코딩하여 전송
+                    # retval, buffer = cv2.imencode('.jpg', result)
+                    # io_buf = BytesIO(buffer)
+                    # return StreamingResponse(io_buf, media_type="image/jpeg")
+
+                    # 이미지를 JPEG 형식으로 인코딩
                     retval, buffer = cv2.imencode('.jpg', result)
-                    io_buf = BytesIO(buffer)
-                    return StreamingResponse(io_buf, media_type="image/jpeg")
+                    # 이미지를 base64로 인코딩하여 문자열로 변환
+                    image_base64 = base64.b64encode(buffer).decode('utf-8')
+                    return image_base64
         
         raise HTTPException(status_code=400, detail="No contour area found")
     
