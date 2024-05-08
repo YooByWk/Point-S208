@@ -13,11 +13,12 @@ import LargeButton from './LargeButton'
 import ShareCard from '@/components/mobile/Team/ShareCard'
 import { useParams } from 'react-router-dom'
 import { tokens } from '@fluentui/react-components'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { pageChanged } from '@stores/team'
 import { ExternalCardListType } from '@/types/ExternalCard'
 import { ExternalCardType } from '@/types/ExternalCard'
 import { UserListType, UserType } from '@/types/userType'
+import { filterState } from '@/stores/album'
 
 interface CardListProps {
   cardList?: CardListType
@@ -35,7 +36,8 @@ const CardList = ({
   handleAdd,
 }: CardListProps) => {
   const [isPageChanged, setPageChanged] = useRecoilState(pageChanged)
-
+  const isfilter = useRecoilValue(filterState)
+  console.log('isfilter: ', isfilter);
   const [searchValue, setSearchValue] = useState('')
   const [selectedCards, setSelectedCards] = useState<number[]>([])
   const [isShare, setIsShare] = useState(false) // 공유창 여닫는 state
@@ -142,7 +144,7 @@ const CardList = ({
                   검색 결과가 없습니다
                 </Flex>
               )
-            ) :  cards.length > 0 ? (
+            ) :  cards.length > 0  ? (
               cards.map((card: ExternalCardType | CardType, index: number) => {
                 return (
                   <CardThumbnail
@@ -154,9 +156,13 @@ const CardList = ({
                 )
               })
             ) : (
-              <Flex direction="column" justify="center" align="center" style={{height:'50vh'}}>
+              isfilter.filterId ? 
+              (<Flex direction="column" justify="center" align="center" style={{height:'50vh'}}>
                 해당 필터에 명함이 없습니다
-              </Flex>
+              </Flex>) : 
+              (<Flex direction="column" justify="center" align="center" style={{height:'50vh'}}>
+              명함지갑에 명함이 없습니다
+            </Flex>)
             )}
             <Spacing size={40} direction="vertical" />
           </Flex>

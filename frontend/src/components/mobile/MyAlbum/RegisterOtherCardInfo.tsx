@@ -46,7 +46,6 @@ const RegisterOtherCardInfo = ({isEnglish, params}: {
   const [dirty, setDirty] = useState<Partial<cardInput>>({})
   const queryClient = useQueryClient()
   const teamCardMutation = useTeamCardAdd()
-  console.log(location.state.teamInfo === undefined, '상태')
   const handleCardInputs = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setCardInputs(prevCardInputs => ({
       ...prevCardInputs,
@@ -91,14 +90,19 @@ const RegisterOtherCardInfo = ({isEnglish, params}: {
         frontBack: 'FRONT' // 첫 추가는 앞면.
       },
     }
+    if (teamInfo === undefined) {
+    console.log('팀이아님');
     mutate(params)
+    }
+    
     if (teamInfo !== undefined) {
-      
+      console.log('팀 환경에서의 명함 등록')  
       teamCardMutation.mutate({
         userId: userId as number,
         teamAlbumId: teamInfo.teamAlbumId,
         data: params.data
       })
+      navigate(-1)
     }
   }
 

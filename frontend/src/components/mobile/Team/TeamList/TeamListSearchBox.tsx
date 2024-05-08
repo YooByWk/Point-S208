@@ -3,8 +3,8 @@ import {  tokens, SearchBox as FluentSearchBox } from '@fluentui/react-component
 import { css } from '@emotion/react'
 import { useEffect } from 'react'
 
-import Flex from './Flex'
-import PeopleFilterSortIcons from './PeopleFilterSortIcons';
+import Flex from '@/components/shared/Flex'
+import PeopleFilterSortIcons from '@/components/shared/PeopleFilterSortIcons';
 
 import { SearchRegular } from '@fluentui/react-icons';
 import { searchMyAlbumCard } from '@/apis/album';
@@ -14,33 +14,28 @@ import { searchUser } from '@/apis/team';
 import { UserListType } from '@/types/userType';
 import { useRecoilValue } from 'recoil';
 import { userState } from '@/stores/user';
+import { TeamListType } from '@/types/TeamListType';
 interface SearchBoxProps {
   placeholder?: string
   onChange?: (e: any) => void
-  memberIcon?: boolean
-  filterIcon?: boolean
   sortIcon?: boolean
   spacing? : boolean
   lefticon?: boolean
   value: string | number
   width?: string
   bgColor?: string
-  onSearch: (value: ExternalCardListType | UserListType ) => void
+  onSearch?: (value: ExternalCardListType | UserListType ) => void
   isSearchingMember?: boolean
   isInTeam?: boolean
+  teams: TeamListType[]
+  searchResult: TeamListType[];
+  setSearchResult: React.Dispatch<React.SetStateAction<TeamListType[]>>;
 }
 
-
-/**
- *
- * [searchValue, setSearchValue] = useState('');를
- * 각각 value와 onChange로 받아서 사용
- */
-const SearchBox: React.FC<SearchBoxProps> = ({
+const TeamListSearchBox: React.FC<SearchBoxProps> = ({
   placeholder,
-  filterIcon,
-  memberIcon,
   onChange,
+  teams,
   value, // 검색어
   sortIcon,
   spacing = true,
@@ -49,36 +44,24 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   bgColor='',
   onSearch,
   isSearchingMember=false,
-  isInTeam=false
+  isInTeam=false,
+  searchResult,
+  setSearchResult
 }) => {
   const userId = useRecoilValue(userState).userId
-  // const handleKeyDown = (e: any): void => {
-  //   if (e.key === 'Enter') {
-  //     // console.log('submit', value)
-  //     // handleSubmit()
-  //   } else {
-  //     // console.log('not enter', value)
-  //   }
-  // }
   
-// 검색 로직
-
- const { data } = useQuery({
   
-  queryKey: isSearchingMember? ['searchUser', value] : ['searchMyAlbumCard', value],
-  queryFn: () => isSearchingMember ? searchUser(value) : userId &&  searchMyAlbumCard({id: userId, userInput: value}) ,
-  enabled: value !== '',
- })
- 
- useEffect(() => {
-  console.log('검색결과 - 수정하기 :', data)
-  // console.log(data.length)
-  // if (data === undefined) {return}
-  if (data && onSearch) {
-    onSearch(data)
-  } 
-}, [value, data, onSearch])
-  
+  useEffect(() => {
+    if (value.toString().trim().length > 0) {
+      const results = teams.filter((team) => 
+        team.teamName.toLowerCase().includes(value.toString().toLowerCase())
+      )
+      setSearchResult(results)
+       console.log(results)
+    } else {
+      setSearchResult(teams)
+    }
+  }, [value, teams, setSearchResult])
   
   return (
     <div>
@@ -96,18 +79,16 @@ const SearchBox: React.FC<SearchBoxProps> = ({
           />
         </div>
         <PeopleFilterSortIcons
-         memberIcon={memberIcon}
-         filterIcon={filterIcon}
+         memberIcon={false}
+         filterIcon={false}
          sortIcon={sortIcon}
         />
       </Flex>
-      
     </div>
-    
   )
 }
 
-export default SearchBox
+export default TeamListSearchBox
 
 // 사용 예
 /**
@@ -117,7 +98,7 @@ export default SearchBox
  *   <div>
  *     모바일 팀 명함
  *     <p></p>
- *     <SearchBox
+ *     <TeamListSearchBox
  *     value={searchValue}
  *     onChange={(e:any) =>{ setSearchValue(e.target.value)
  *     console.log(searchValue)} }
@@ -136,7 +117,7 @@ const mainContainerCss = css`
 const searchBoxCss = (bg: string) => css`
   background-color: ${bg?  'tokens.'+ bg :tokens.colorNeutralBackground1 } !important;
   font-size: 16px !important;
-.ms-SearchBox-clearButton {
+.ms-TeamListSearchBox-clearButton {
   position: absolute;
     right: 0;
 }

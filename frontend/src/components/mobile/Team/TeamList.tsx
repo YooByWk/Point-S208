@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import Spacing from '@/components/shared/Spacing'
 import TeamCard from '@/components/mobile/Team/TeamCard'
-import SearchBox from '@/components/shared/SearchBox'
+import TeamListSearchBox from '@/components/mobile/Team/TeamList/TeamListSearchBox'
 import { useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import * as teamState from '@/stores/team'
@@ -26,20 +26,14 @@ const TeamList = () => {
   )
   const navigate = useNavigate()
   const userId = useRecoilValue(userState).userId
-
-  console.log(userId, 'id')
+  const [searchResults, setSearchResults] = useState<TeamListType[]>([])
   const {data,isLoading} = useQuery({
     queryKey: ['fetchTeamList', userId],
     queryFn: () => fetchTeamList(userId as number),
   })
- 
-/*   //디버그용 : 수정하기
-   // const {data,isLoading} = useQuery<TeamListType[]>({
-   //   queryKey: ['fetchTeamList', ],
-   //   queryFn: () => fetchTeamList(4),
-   // })
-*/
   const teamList: TeamListType[] = data || []
+  
+  
   
   if (isLoading) {
     return <Flex direction='column' justify='center' align='center' style={{height:'100vh'}}>
@@ -67,28 +61,29 @@ const TeamList = () => {
     )
   }
   
-  
   return (
     <>
-    <button onClick={()=>console.log(teamList, data)}>sdfa</button>
-      <SearchBox
-        onSearch={() => {}}
+      <TeamListSearchBox
+        teams={teamList}
+        searchResult={searchResults}
+        setSearchResult={setSearchResults}
         value={searchValue}
         onChange={(e: any) => {
           setSearchValue(e.target.value)
         }}
-        memberIcon={false}
         placeholder="팀 검색"
       />
       <Spacing size={30}/>
-      {teamList.map(team => (
+      {
+      searchResults.map(team => (
         <TeamCard
           teamInfo={team}
           key={team.teamAlbumId}
           onClick={() =>  {
             setSelectedTeam(team)
             navigate(`/myTeam/${team.teamAlbumId}`, {state: team})
-          }}/>))}
+          }}/>))
+          }
       <Spacing size={30} direction="vertical" />
       <div css={buttonCss}>
         <LargeButton text='팀 추가' width='80%' onClick={() => setIsWrite(true)} />

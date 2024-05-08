@@ -13,6 +13,7 @@ import MemberThumbnail from './MemberThumbnail'
 import { useRecoilValue } from 'recoil'
 import { userState } from '@/stores/user'
 import { useTeamCreatgeSkip } from '@/hooks/useTeamCreateSkip'
+import { useCreateTeam } from '@/hooks/useCreateTeam'
 interface AddTeamProps {
   setIsWrite: (isWrite: boolean) => void
   isWrite: boolean
@@ -27,7 +28,7 @@ const AddTeam = ({ setIsWrite, isWrite }: AddTeamProps) => {
   const [selectedMember, setSelectedMember] = useState<UserType[]>([])
 
   const skipMutation = useTeamCreatgeSkip()
-  
+  const createTeamMutation = useCreateTeam()
   const handleResult = (data: UserListType) => {
     if (data) {
       setSearchResults(data)
@@ -36,9 +37,6 @@ const AddTeam = ({ setIsWrite, isWrite }: AddTeamProps) => {
 
   const handleTeamNameInput = (e: any) => {
     setTeamName(e.target.value)
-    // if (teamName.length > 0) {
-      // console.log('팀 이름이 입력되었습니다.', teamName)
-    // }
   }
 
   const handleBackArrow = () => {
@@ -49,15 +47,14 @@ const AddTeam = ({ setIsWrite, isWrite }: AddTeamProps) => {
     }
   }
 
-  const handleSearch = () => {
-  }
-  
+  const handleSearch = () => {}
+
   const handleMemberCheck = (user: UserType) => {
     if (!selectedMember.some(member => member.userId === user.userId)) {
       setSelectedMember(prev => [...prev, user])
     }
   }
-  
+
   // 아이콘 버튼에서 선택 해제용으로 사용
   const handleMemberUnCheck = (user: UserType) => {
     setSelectedMember(prev =>
@@ -68,11 +65,24 @@ const AddTeam = ({ setIsWrite, isWrite }: AddTeamProps) => {
   const isMember = (user: UserType) => {
     return selectedMember.some(member => member.userId === user.userId)
   }
-  
+
   const handleSkipClick = () => {
     skipMutation.mutate(teamName)
     setIsWrite(!isWrite)
-   }
+  }
+
+  const handleCreateTeam = () => {
+    console.log(selectedMember, 'selectedMember')
+    const userList: number[] = selectedMember
+    .map(member => member.userId)
+    .filter((id): id is number => id !== undefined)
+    setIsWrite(!isWrite)
+    console.log(userList,'userList')
+    if (!userList || userList.length === 0) return
+    createTeamMutation.mutate({ teamName, userList })
+    
+  }
+
   return (
     <div css={Step1mainContainerCss}>
       <Flex direction="row" onClick={handleBackArrow} css={arrowContainer}>
@@ -232,17 +242,14 @@ const AddTeam = ({ setIsWrite, isWrite }: AddTeamProps) => {
                 <LargeButton
                   text="완료"
                   width="35vw"
-                  onClick={() => {
-                    setStep(2)
-                    console.log(teamName)
-                  }}
+                  onClick={handleCreateTeam}
                 />
               ) : (
                 <LargeButton
                   text="완료"
                   width="35vw"
                   disabled={true}
-                  onClick={() => console.log('팀 추가 -멤버 포함 : 수정하기')}
+                  onClick={() => {}}
                 />
               )}
             </Flex>
