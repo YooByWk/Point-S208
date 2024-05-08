@@ -13,7 +13,7 @@ import Text from '@/components/shared/Text'
 import { colors } from '@/styles/colorPalette'
 import ScrollToTop from '@/utils/scrollToTop'
 import { useMutation } from '@tanstack/react-query'
-import { postOCR } from '@/apis/card'
+import { clipPhoto, postOCR } from '@/apis/card'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { isFrontState } from '@/stores/card'
 import { cameraState } from '@/stores/emptyCard'
@@ -74,7 +74,21 @@ const PhotoAddReg = () => {
     }
   }
 
-  const { mutate } = useMutation({
+  const { mutate: clipPhotoMutate } = useMutation({
+    mutationKey: ['clipPhoto'],
+    mutationFn: clipPhoto,
+    onSuccess(result) {
+      console.log('등록 성공', typeof result)
+
+      const file = new File([result], 'image.jpg', { type: 'image/jpeg' })
+      setImgSrc(file)
+    },
+    onError(error) {
+      console.error('등록 실패:', error)
+    },
+  })
+
+  const { mutate: ocrMutate } = useMutation({
     mutationKey: ['postOCR'],
     mutationFn: postOCR,
     onSuccess(result) {
@@ -108,20 +122,28 @@ const PhotoAddReg = () => {
     if (imgSrc) {
       const formData = new FormData()
 
-      formData.append('file', imgSrc)
+      formData.append('image', imgSrc)
 
-      formData.append(
-        'message',
-        JSON.stringify({
-          version: 'V2',
-          requestId: 'string',
-          timestamp: 0,
-          images: [{ format: 'JPG', name: 'string' }],
-        }),
-      )
-
-      mutate(formData)
+      clipPhotoMutate(formData)
     }
+
+    // if (imgSrc) {
+    //   const formData = new FormData()
+
+    //   formData.append('file', imgSrc)
+
+    //   formData.append(
+    //     'message',
+    //     JSON.stringify({
+    //       version: 'V2',
+    //       requestId: 'string',
+    //       timestamp: 0,
+    //       images: [{ format: 'JPG', name: 'string' }],
+    //     }),
+    //   )
+
+    //   ocrMutate(formData)
+    // }
   }
 
   useEffect(() => {
@@ -142,9 +164,15 @@ const PhotoAddReg = () => {
       </Flex>
       {imgSrc ? (
         <>
-          <Text typography="t8" textAlign="center" style={{ marginTop: '2%' }}>
-            {isFront ? '국문' : '영문'}
-          </Text>
+          <Flex justify="center">
+            <Text
+              typography="t8"
+              textAlign="center"
+              style={{ marginTop: '2%' }}
+            >
+              {isFront ? '국문' : '영문'}
+            </Text>
+          </Flex>
           <Grid2>
             <Button $position={'left'} onClick={() => setImgSrc(null)}>
               재촬영
@@ -156,9 +184,15 @@ const PhotoAddReg = () => {
         </>
       ) : (
         <>
-          <Text typography="t8" textAlign="center" style={{ marginTop: '2%' }}>
-            {isFront ? '국문' : '영문'}
-          </Text>
+          <Flex justify="center">
+            <Text
+              typography="t8"
+              textAlign="center"
+              style={{ marginTop: '2%' }}
+            >
+              {isFront ? '국문' : '영문'}
+            </Text>
+          </Flex>
           <Grid3>
             <Flex direction="column" align="center">
               <FileInput

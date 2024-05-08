@@ -43,3 +43,13 @@ export const postOCR = async (data: FormData) => {
     .then(res => res.data)
     .catch(err => console.log(err))
 }
+
+// 사진 자르기
+export const clipPhoto = async (data: FormData) => {
+  return authRequest
+    .post(`/ocr/process_image/scanv4/`, data, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+    .then(res => res.data)
+    .catch(err => console.log(err))
+}

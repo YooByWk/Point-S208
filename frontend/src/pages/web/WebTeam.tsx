@@ -21,7 +21,7 @@ const WebTeam = () => {
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['fetchTeamList'],
-    queryFn: () => fetchTeamList(6),
+    queryFn: () => fetchTeamList(userId),
   })
 
   // 특정 팀 내 특정 명함 페이지
