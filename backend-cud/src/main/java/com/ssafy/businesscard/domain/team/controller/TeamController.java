@@ -86,8 +86,8 @@ public class TeamController {
     @PatchMapping("/{userId}/{teamId}/card/{cardId}")
     public ResponseEntity<MessageUtils> updateCard(@PathVariable("userId") Long userId,
                                                    @PathVariable("teamId") Long teamAlbumId,
-                                                    @PathVariable("cardId") Long cardId,
-                                                    @RequestBody CardRequest request) {
+                                                   @PathVariable("cardId") Long cardId,
+                                                   @RequestBody CardRequest request) {
         teamAlbumService.updateCard(userId, teamAlbumId, cardId, request);
         log.info("[Update Card] : {}", request);
         return ResponseEntity.ok().body(MessageUtils.success("명함이 수정되었습니다."));
@@ -144,4 +144,6 @@ public class TeamController {
         log.info("[Delete Member] : {}",memberId);
         return ResponseEntity.ok().body(MessageUtils.success("구성원을 방출했습니다."));
     }
+
+
 }

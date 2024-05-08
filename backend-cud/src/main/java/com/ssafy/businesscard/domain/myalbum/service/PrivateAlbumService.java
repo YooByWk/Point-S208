@@ -16,4 +16,5 @@ public interface PrivateAlbumService {
     void deleteCard(Long userId, Long cardId);
     String cardMemo(Long userId, Long cardId, MemoRequest request);
     void registSharedCard(Long userId, CardSharedRequest cardSharedRequest);
+    void shareCard(Long userId, Long teamId, CardSharedRequest request);
 }

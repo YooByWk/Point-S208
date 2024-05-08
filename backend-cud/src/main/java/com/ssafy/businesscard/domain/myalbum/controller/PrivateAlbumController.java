@@ -20,6 +20,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/my-album")
+@CrossOrigin("*")
 public class PrivateAlbumController {
 
     private final PrivateAlbumService privateAlbumService;
@@ -56,6 +57,16 @@ public class PrivateAlbumController {
         privateAlbumService.registSharedCard(userId, cardSharedRequest);
 //        log.info("Regist Card : {}", request);
         return ResponseEntity.ok().body(MessageUtils.success("나의 명함지갑에 등록되었습니다"));
+    }
+
+    // 명함지갑에 있는 명함 팀 명함지갑으로 공유
+    @PostMapping("/{userId}/{teamId}/share")
+    public ResponseEntity<MessageUtils> shareCard(@PathVariable("userId") Long userId,
+                                                  @PathVariable("teamId") Long teamId,
+                                                  @RequestBody CardSharedRequest request) {
+        privateAlbumService.shareCard(userId, teamId, request);
+        log.info("[Share Card] : {}", request.cardIds());
+        return ResponseEntity.ok().body(MessageUtils.success("팀 명함지갑에 공유되었습니다."));
     }
 
     // 명함에 필터 추가
