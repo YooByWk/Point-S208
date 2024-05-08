@@ -186,7 +186,13 @@ const WebAlbumDetail = ({
 
               <Dialog modalType="alert" open={modalOpen}>
                 <DialogTrigger disableButtonEnhancement>
-                  <Button shape="circular" onClick={() => setModalOpen(true)}>
+                  <Button
+                    shape="circular"
+                    onClick={() => {
+                      setEditMemo(selectedCard.memo)
+                      setModalOpen(true)
+                    }}
+                  >
                     <Text typography="t7">
                       <Edit16Filled /> 수정
                     </Text>
@@ -201,7 +207,7 @@ const WebAlbumDetail = ({
                             appearance="outline"
                             onChange={onChange}
                             value={editMemo}
-                            resize="both"
+                            resize="none"
                           />
                         </Field>
                       </DialogContent>
@@ -285,4 +291,5 @@ const memoBoxStyles = css`
   width: 42vw;
   height: 30vh;
   padding: 10px;
+  overflow-y: scroll;
 `

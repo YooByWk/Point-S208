@@ -55,6 +55,7 @@ const WebAlbumDeleteSelected = ({
       setSelectedCards(selectedCards.filter(id => !selectedCards.includes(id)))
 
       setModalOpen(false)
+      alert('삭제되었습니다.')
     } catch (error) {
       console.error('카드 삭제 중 오류 발생:', error)
     }

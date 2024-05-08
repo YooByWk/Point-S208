@@ -12,6 +12,7 @@ import { authRequest } from '@/utils/requestMethod'
 const CudUrl = '/cud/api/my-album'
 const ReadUrl = '/read/api/my-album'
 
+// 내 명함지갑에서 목록 조회
 export const fetchMyAlbum = async (userId: number, page: number) => {
   console.log('페이지: ', page)
   return authRequest
@@ -20,6 +21,7 @@ export const fetchMyAlbum = async (userId: number, page: number) => {
     .catch(err => console.log(err))
 }
 
+// 엑셀로 내보내기용 명함지갑 목록 조회
 export const fetchAllAlbum = async ({
   userId,
 }: {
@@ -27,6 +29,20 @@ export const fetchAllAlbum = async ({
 }) => {
   return authRequest
     .get(`${ReadUrl}/list/${userId}`)
+    .then(res => res.data)
+    .catch(err => console.log(err))
+}
+
+// 명함 상세 조회
+export const getAlbumDetail = async ({
+  userId,
+  cardId,
+}: {
+  userId: number | undefined
+  cardId: number
+}) => {
+  return authRequest
+    .get(`${ReadUrl}/${userId}/${cardId}`)
     .then(res => res.data)
     .catch(err => console.log(err))
 }

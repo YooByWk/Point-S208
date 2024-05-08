@@ -9,8 +9,11 @@ import { Image } from '@fluentui/react-components'
 import WebMakeBusinessCard from '../../WebAlbum/WebMakeBusinessCard'
 import { ExternalCardType } from '@/types/ExternalCard'
 import { CardType } from '@/types/cardType'
-import { useSetRecoilState } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { selectedCardState } from '@/stores/card'
+import { useMutation } from '@tanstack/react-query'
+import { getAlbumDetail } from '@/apis/album'
+import { userState } from '@/stores/user'
 
 const WebNewlyAdded = ({
   card,
@@ -20,11 +23,22 @@ const WebNewlyAdded = ({
   setIsDetail: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
   const setSelectedCard = useSetRecoilState(selectedCardState)
+  const userId = useRecoilValue(userState).userId
+
+  const { mutate } = useMutation({
+    mutationKey: ['getAlbumDetail'],
+    mutationFn: getAlbumDetail,
+    onSuccess(result) {
+      setSelectedCard(result.data_body)
+    },
+    onError(error) {
+      console.error(error)
+    },
+  })
 
   const handleOnClick = () => {
-    console.log(card.cardId)
+    mutate({ userId: userId, cardId: card.cardId })
     setIsDetail(true)
-    setSelectedCard(card)
   }
 
   return (
