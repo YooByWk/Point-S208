@@ -44,7 +44,6 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
     private final TeamAlbumMemberRepository teamAlbumMemberRepository;
     private final TeamMemberRepository teamMemberRepository;
     private final AmazonS3Service amazonS3Service;
-
     // 팀 명함지갑 생성(건너뛰기)
     @Override
     @Transactional
