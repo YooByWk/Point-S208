@@ -181,8 +181,6 @@ const buttonCss = css`
   bottom: 0px;
   height: 45px;
   background-color: ${tokens.colorNeutralBackground1};
-  /* display: flex; */
-  /* align-items: center; */
 `
 
 const gridStyles = css`
@@ -192,5 +190,5 @@ const gridStyles = css`
 `
 const boxStyles = css`
   padding-top: 100px;
-  padding-bottom: 50px;
+  margin-bottom: 50px;
 `

@@ -42,11 +42,9 @@ interface LatLng {
 
 const WebAlbumDetail = ({
   setIsDetail,
-  editOpen,
   setEditOpen,
 }: {
   setIsDetail: (isDetail: boolean) => void
-  editOpen: boolean
   setEditOpen: (isDetail: boolean) => void
 }) => {
   const [selectedCard, setSelectedCard] = useRecoilState(selectedCardState)

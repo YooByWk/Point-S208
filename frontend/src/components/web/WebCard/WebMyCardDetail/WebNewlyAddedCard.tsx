@@ -3,38 +3,23 @@ import { css } from '@emotion/react'
 import Flex from '@shared/Flex'
 import Text from '@shared/Text'
 import Spacing from '@shared/Spacing'
-import { SearchBox } from '@fluentui/react-components'
 import WebNewlyAdded from './WebNewlyAdded'
+import { ExternalCardType } from '@/types/ExternalCard'
+import { CardType } from '@/types/cardType'
 
-interface CardInfo {
-  card_id: number
-  name: string
-  company: string
-  department: string
-  position: string
-  rank?: string
-  email: string
-  landlineNumber: string
-  fax_number?: string
-  phoneNumber: string
-  address?: string
-  real_picture: string
-  digital_picture: string
-  front_back: 'front' | 'back'
-  domain_url?: string
-}
-
-const WebNewlyAddedCard = ({ list }: { list: CardInfo[] }) => {
+const WebNewlyAddedCard = ({
+  list,
+  setIsDetail,
+}: {
+  list: ExternalCardType[] | CardType[]
+  setIsDetail: React.Dispatch<React.SetStateAction<boolean>>
+}) => {
   return (
     <>
       <Flex direction="column" css={container2Styles}>
         <Flex justify="space-between">
           <Text typography="t7"> 새로 추가된 명함 </Text>
-          <SearchBox
-            appearance="underline"
-            size="medium"
-            placeholder="명함 검색"
-          />
+          <Spacing size={0} />
         </Flex>
         <Spacing size={10} />
 
@@ -47,11 +32,16 @@ const WebNewlyAddedCard = ({ list }: { list: CardInfo[] }) => {
               </Text>
             </>
           ) : (
-            list.map((card, index) => (
-              <div key={index} css={boxStyles}>
-                <WebNewlyAdded card={card} />
-              </div>
-            ))
+            list.slice(0, 5).map(
+              (
+                card,
+                index, // Use slice(0, 5) to get only the first 5 cards
+              ) => (
+                <div key={index} css={boxStyles}>
+                  <WebNewlyAdded card={card} setIsDetail={setIsDetail} />
+                </div>
+              ),
+            )
           )}
         </Flex>
       </Flex>
@@ -71,6 +61,6 @@ const boxStyles = css`
 `
 
 const setMaxHeight = css`
-  max-height: calc(100vh - 80px);
+  max-height: calc(100vh - 70px);
   overflow-y: auto;
 `

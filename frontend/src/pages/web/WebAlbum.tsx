@@ -22,11 +22,7 @@ const WebAlbum = () => {
     }
     if (isDetail) {
       return (
-        <WebAlbumDetail
-          setIsDetail={setIsDetail}
-          editOpen={editOpen}
-          setEditOpen={setEditOpen}
-        />
+        <WebAlbumDetail setIsDetail={setIsDetail} setEditOpen={setEditOpen} />
       )
     }
 

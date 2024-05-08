@@ -6,30 +6,14 @@ import Text from '@shared/Text'
 import Spacing from '@shared/Spacing'
 import { colors } from '@styles/colorPalette'
 import WebCardSection from './WebCardSection'
-
-interface CardInfo {
-  card_id: number
-  name: string
-  company: string
-  department: string
-  position: string
-  rank?: string
-  email: string
-  landlineNumber: string
-  fax_number?: string
-  phoneNumber: string
-  address?: string
-  real_picture: string
-  digital_picture: string
-  front_back: 'front' | 'back'
-  domain_url?: string
-}
+import { ExternalCardType } from '@/types/ExternalCard'
+import { CardType } from '@/types/cardType'
 
 interface DataProps {
   userId: number
-  front: CardInfo
-  back?: CardInfo
-  list: CardInfo[]
+  front: ExternalCardType | CardType
+  back?: ExternalCardType | CardType
+  list: ExternalCardType[] | CardType[]
 }
 
 const WebMyCardInfo = ({

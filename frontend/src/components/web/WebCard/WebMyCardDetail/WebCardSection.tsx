@@ -10,8 +10,6 @@ const CardComponent = (isFront: boolean) => {
   const isReal = useRecoilValue(isRealState)
   const frontCard = useRecoilValue(frontCardState)
   const backCard = useRecoilValue(backCardState)
-  const dummyUrl =
-    'https://1drv.ms/i/c/60d1136c8e1eeac5/IQPtHI8a_PwASK5IZLcow2yZAdjLhrrPZqV_cjryVMdkpRA?width=150&height=120'
 
   return (
     <>
