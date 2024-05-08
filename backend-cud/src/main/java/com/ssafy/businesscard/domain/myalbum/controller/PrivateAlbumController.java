@@ -36,6 +36,11 @@ public class PrivateAlbumController {
     @PostMapping("/{userId}/save")
     public ResponseEntity<MessageUtils> registSharedCard(@PathVariable("userId") Long userId,
                                                          @RequestBody CardSharedRequest cardSharedRequest) {
+// 팀명함 에 공유 -> 명함 아이디 안다 -> 명함 아이디로 명함정보 추출 -> 정보를 내 private-album 테이블에 추출한 정보 저장 ->
+//        추출한 정보로 저장햇으므로, 팀명함에서 해당 명함 삭제해도 내 명함지갑에는 유지된다.
+
+// 1 . 채팅 을 통한 공유된 명함을 내명함지갑에 저장.
+// 2 팀 명함에 공유된 명함을 내명함지갑 에 저장 .
 
         privateAlbumService.registSharedCard(userId, cardSharedRequest);
 //        log.info("Regist Card : {}", request);

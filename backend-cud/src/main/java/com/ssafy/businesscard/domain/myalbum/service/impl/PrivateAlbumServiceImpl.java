@@ -69,22 +69,55 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
                 GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_USER
         ));
 
-        Businesscard businesscard = businesscardRepository.findById(cardSharedRequest.cardId()).
-                orElseThrow(() -> new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_CARD));
+        List<Businesscard> businesscards = new ArrayList<>();
 
-        PrivateAlbum privateAlbum = privateAlbumRepository.findByUser_userIdAndBusinesscard_cardId(userId, businesscard.getCardId());
+        cardSharedRequest.cardIds().forEach(aLong -> {
 
-        if (privateAlbum != null) {
-            throw new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.ALREADY_IN_CARD);
-        } else {
-            PrivateAlbumRequest privateAlbumRequest = PrivateAlbumRequest.builder()
-                    .user(user)
-                    .businesscard(businesscard)
-                    .favorite(false)
-                    .build();
+            businesscards.add(businesscardRepository.findById(aLong).
+                    orElseThrow(() ->
+                            new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_CARD)));
 
-            addPrivateAlbum(privateAlbumRequest);
-        }
+        });
+
+
+        List<PrivateAlbum> privateAlbum = new ArrayList<>();
+
+        businesscards.forEach(businesscard1 -> {
+            privateAlbum.add(privateAlbumRepository.
+                    findByUser_userIdAndBusinesscard_cardId(userId, businesscard1.getCardId()));
+        });
+
+        businesscards.forEach(businesscard -> {
+            PrivateAlbum privateAlbum1 = privateAlbumRepository.findByUser_userIdAndBusinesscard_cardId(userId, businesscard.getCardId());
+            if (privateAlbum1 != null) {
+                throw new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.ALREADY_IN_CARD);
+            } else {
+                PrivateAlbumRequest privateAlbumRequest = PrivateAlbumRequest.builder()
+                        .user(user)
+                        .businesscard(businesscard)
+                        .favorite(false)
+                        .build();
+
+                addPrivateAlbum(privateAlbumRequest);
+            }
+        });
+
+//
+//        privateAlbum.forEach(privateAlbum1 -> {
+//            if (privateAlbum1 != null) {
+//                throw new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.ALREADY_IN_CARD);
+//            } else {
+//                PrivateAlbumRequest privateAlbumRequest = PrivateAlbumRequest.builder()
+//                        .user(user)
+//                        .businesscard(businesscard)
+//                        .favorite(false)
+//                        .build();
+//
+//                addPrivateAlbum(privateAlbumRequest);
+//            }
+//
+//        });
+
 
     }
 
