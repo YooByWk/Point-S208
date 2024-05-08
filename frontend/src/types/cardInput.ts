@@ -49,3 +49,7 @@ export type deleteAlbumCardArrayType = {
   cardIdArray: number[] | undefined[]
 }
 
+export type OcrCardType = {
+  userId: number
+  data: FormData
+}

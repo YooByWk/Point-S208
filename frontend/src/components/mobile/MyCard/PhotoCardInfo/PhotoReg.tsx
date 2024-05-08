@@ -4,7 +4,7 @@ import Flex from '@/components/shared/Flex'
 import { cameraState } from '@/stores/emptyCard'
 import styled from '@emotion/styled'
 import { useEffect, useRef, useState } from 'react'
-import { useSetRecoilState } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import {
   Dismiss20Filled,
   Circle48Regular,
@@ -16,11 +16,14 @@ import { colors } from '@/styles/colorPalette'
 import SwipeableImg from './SwipeableImg'
 import { isFirstCardState } from '@/stores/card'
 import { useMutation } from '@tanstack/react-query'
-import { postOCR } from '@/apis/card'
+import { clipPhoto, ocrRegMyCard, postOCR } from '@/apis/card'
+import base64ToBlob from '@/utils/base64ToBlob'
+import { userState } from '@/stores/user'
 
-const PhotoReg = (props: { isMyCard: boolean }) => {
+const PhotoReg = (props: { isMyCard: boolean; refetch: any }) => {
   // My Card Registration or Other people's Card Registration
-  const { isMyCard } = props
+  const { isMyCard, refetch } = props
+  const userId = useRecoilValue(userState).userId
   const setCamera = useSetRecoilState(cameraState)
   const setIsFirstCard = useSetRecoilState(isFirstCardState)
   const fileInput = useRef<HTMLInputElement | null>(null)
@@ -28,9 +31,12 @@ const PhotoReg = (props: { isMyCard: boolean }) => {
   const [frontImgSrc, setFrontImgSrc] = useState<File | null>(null)
   const [backImgSrc, setBackImgSrc] = useState<File | null>(null)
   const [isFront, setIsFront] = useState<boolean>(true)
+  const [isFrontClip, setIsFrontClip] = useState(false)
+  const [isBackClip, setIsBackClip] = useState(false)
   const isImgSrc: boolean =
     (isFront && frontImgSrc) || (!isFront && backImgSrc) ? true : false
 
+  // 카메라 띄우기
   const getCameraStream = async () => {
     try {
       const constraints = { video: { facingMode: 'environment' } }
@@ -43,6 +49,7 @@ const PhotoReg = (props: { isMyCard: boolean }) => {
     }
   }
 
+  // 사진 찍기
   const takePicture = () => {
     if (videoRef.current) {
       const videoElement = videoRef.current
@@ -67,6 +74,7 @@ const PhotoReg = (props: { isMyCard: boolean }) => {
     }
   }
 
+  // 사진첩에서 불러오기
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null
     if (file) {
@@ -78,6 +86,7 @@ const PhotoReg = (props: { isMyCard: boolean }) => {
     }
   }
 
+  // 사진 or 카메라 렌더
   const renderImage = () => {
     const imgSrc = isFront ? frontImgSrc : backImgSrc
     const objectURL = imgSrc && URL.createObjectURL(imgSrc)
@@ -89,39 +98,116 @@ const PhotoReg = (props: { isMyCard: boolean }) => {
     )
   }
 
-  const { mutate } = useMutation({
+  // 명함 영역 자르기
+  const { mutate: clipPhotoMutate } = useMutation({
+    mutationKey: ['clipPhoto'],
+    mutationFn: clipPhoto,
+    onSuccess(result) {
+      // Base64 문자열을 Blob 객체로 변환
+      const blob = base64ToBlob(result, 'image/jpeg')
+
+      // Blob 객체를 사용하여 File 객체 생성
+      const file = new File([blob], 'image.jpg', { type: 'image/jpeg' })
+
+      if (isFront) {
+        setFrontImgSrc(file)
+        setIsFrontClip(true)
+      } else {
+        setBackImgSrc(file)
+        setIsBackClip(true)
+      }
+    },
+    onError(error) {
+      console.error('등록 실패:', error)
+      alert('명함 변환에 실패하였습니다.')
+    },
+  })
+
+  // ocr 추출
+  const { mutate: ocrMutate } = useMutation({
     mutationKey: ['postOCR'],
     mutationFn: postOCR,
     onSuccess(result) {
-      console.log('등록 성공', result)
       if (result) {
         const data = result.images[0].nameCard.result
-        console.log(data)
-        let cardInfo = {
-          name: data.name?.[0].text || '',
-          company: data.company?.[0].text || '',
-          position: data.position?.[0].text || '',
-          rank: data.rank?.[0].text || '',
-          department: data.department?.[0].text || '',
-          email: data.email?.[0].text || '',
-          landlineNumber: data.landlineNumber?.[0].text || '',
-          faxNumber: data.faxNumber?.[0].text || '',
-          phoneNumber: data.mobile?.[0].text || '',
-          address: data.address?.[0].text || '',
-          domainUrl: data.domainUrl?.[0].text || '',
+
+        const imgSrc = isFront ? frontImgSrc : backImgSrc
+
+        const formData = new FormData()
+
+        imgSrc && formData.append('image', imgSrc)
+
+        formData.append(
+          'request',
+          new Blob(
+            [
+              JSON.stringify({
+                name: data.name?.[0].text || '',
+                company: data.company?.[0].text || '',
+                department: data.department?.[0].text || '',
+                position: data.position?.[0].text || '',
+                email: data.email?.[0].text || '',
+                landlineNumber: data.landlineNumber?.[0].text || '',
+                phoneNumber: data.mobile?.[0].text || data.tel?.[0].text || '',
+                frontBack: isFront ? 'FRONT' : 'BACK',
+              }),
+            ],
+            {
+              type: 'application/json',
+            },
+          ),
+        )
+
+        let params = {
+          userId: userId as number,
+          data: formData,
         }
-        // cardInfo를 params로 명함 등록 api 요청
+
+        setIsFront(!isFront)
+        if (isMyCard) {
+          // 내 명함 등록 api
+          registMutate(params)
+        } else {
+          // 명함 지갑 등록 api
+          registMutate(params)
+        }
       }
-      setIsFirstCard(false)
-      setCamera(false)
     },
     onError(error) {
       console.error('등록 실패:', error)
     },
   })
 
-  const requestApi = () => {
-    const ImgOcr = (imgSrc: File) => {
+  // 명함 등록
+  const { mutate: registMutate } = useMutation({
+    mutationKey: ['ocrRegMyCard'],
+    mutationFn: ocrRegMyCard,
+    onSuccess(result) {
+      console.log('등록 성공', result)
+      setCamera(false)
+      setIsFirstCard(false)
+      refetch()
+    },
+    onError(error) {
+      console.error('등록 실패:', error)
+    },
+  })
+
+  // 명함 자르기 버튼
+  const onClickClipPhoto = () => {
+    const imgSrc = isFront ? frontImgSrc : backImgSrc
+    if (isImgSrc && imgSrc) {
+      const formData = new FormData()
+
+      formData.append('image', imgSrc)
+
+      clipPhotoMutate(formData)
+    }
+  }
+
+  // ocr 추출 버튼
+  const onClickOCR = () => {
+    const ocrFormData = (imgSrc: File) => {
       const formData = new FormData()
 
       formData.append('file', imgSrc)
@@ -136,11 +222,22 @@ const PhotoReg = (props: { isMyCard: boolean }) => {
         }),
       )
 
-      mutate(formData)
+      ocrMutate(formData)
     }
 
-    frontImgSrc && ImgOcr(frontImgSrc)
-    backImgSrc && ImgOcr(backImgSrc)
+    isFrontClip && frontImgSrc && ocrFormData(frontImgSrc)
+    isBackClip && backImgSrc && ocrFormData(backImgSrc)
+  }
+
+  // 재촬영
+  const resetImgSrc = async () => {
+    if (isFront) {
+      setFrontImgSrc(null)
+      setIsFrontClip(false)
+    } else {
+      setBackImgSrc(null)
+      setIsBackClip(false)
+    }
   }
 
   useEffect(() => {
@@ -183,16 +280,28 @@ const PhotoReg = (props: { isMyCard: boolean }) => {
             </Text>
           </Flex>
           <Grid2>
-            <Button
-              $position={'left'}
-              onClick={() =>
-                isFront ? setFrontImgSrc(null) : setBackImgSrc(null)
-              }
-            >
+            <Button $position={'left'} onClick={resetImgSrc}>
               재촬영
             </Button>
-            <Button $position={'right'} onClick={() => requestApi()}>
-              확인
+            <Button
+              $position={'right'}
+              onClick={() => {
+                isFront
+                  ? isFrontClip
+                    ? onClickOCR()
+                    : onClickClipPhoto()
+                  : isBackClip
+                  ? onClickOCR()
+                  : onClickClipPhoto()
+              }}
+            >
+              {isFront
+                ? isFrontClip
+                  ? '확인'
+                  : '변환'
+                : isBackClip
+                ? '확인'
+                : '변환'}
             </Button>
           </Grid2>
         </>
@@ -221,7 +330,7 @@ const PhotoReg = (props: { isMyCard: boolean }) => {
             <Flex justify="center">
               <Circle48Regular onClick={takePicture} />
             </Flex>
-            <Box $isFront={isFront} onClick={() => requestApi()}>
+            <Box $isFront={isFront} onClick={() => {}}>
               <CheckmarkCircle32Filled />
               <Text typography="t10">입력 완료</Text>
             </Box>
