@@ -12,6 +12,7 @@ import { useMutation } from '@tanstack/react-query'
 import { selectedCardState } from '@/stores/card'
 import { editMyAlbumCard } from '@/apis/album'
 import { CardType } from '@/types/cardType'
+import { ExternalCardType } from '@/types/ExternalCard'
 
 const WebEditOtherCardInfo = ({
   setEditOpen,
@@ -20,7 +21,9 @@ const WebEditOtherCardInfo = ({
 }) => {
   const userId = useRecoilValue(userState).userId
   const [selectedCard, setSelectedCard] = useRecoilState(selectedCardState)
-  const [editInfo, setEditInfo] = useState<CardType>(selectedCard)
+  const [editInfo, setEditInfo] = useState<CardType | ExternalCardType>(
+    selectedCard,
+  )
 
   const handleCardInputs = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setEditInfo(prev => ({

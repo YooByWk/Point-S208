@@ -1,4 +1,5 @@
 import { CardType } from '@/types/cardType'
+import { ExternalCardType } from '@/types/ExternalCard'
 import { atom } from 'recoil'
 
 const defaultCard = {
@@ -45,7 +46,7 @@ export const isFirstCardState = atom({
   default: false,
 })
 
-export const selectedCardState = atom<CardType>({
+export const selectedCardState = atom<CardType | ExternalCardType>({
   key: 'selectedCardState',
   default: defaultCard,
 })

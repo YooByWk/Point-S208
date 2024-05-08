@@ -9,11 +9,11 @@ import { Spinner, tokens } from '@fluentui/react-components'
 import LargeButton from '@shared/LargeButton'
 import Flex from '@shared/Flex'
 import Text from '@shared/Text'
-import Spacing from '@shared/Spacing'
 import AddCard from '@components/mobile/MyAlbum/AddCard'
 import WebCardThumbnail from '@/components/shared/WebCardThumbnail'
 import { isRefreshedAlbumState } from '@/stores/card'
 import { CardType } from '@/types/cardType'
+import { ExternalCardListType, ExternalCardType } from '@/types/ExternalCard'
 
 const WebMyAlbumList = ({
   cards,
@@ -21,12 +21,16 @@ const WebMyAlbumList = ({
   selectedCards,
   setSelectedCards,
   setIsDetail,
+  searchResults,
+  searchValue,
 }: {
   cards: CardType[]
   setCards: React.Dispatch<React.SetStateAction<CardType[]>>
   selectedCards: number[]
   setSelectedCards: React.Dispatch<React.SetStateAction<number[]>>
   setIsDetail: (isDetail: boolean) => void
+  searchResults: ExternalCardListType | undefined
+  searchValue: string
 }) => {
   const userId = useRecoilValue(userState).userId
   const isRefreshed = useRecoilValue(isRefreshedAlbumState)
@@ -93,22 +97,43 @@ const WebMyAlbumList = ({
         {cards.length > 0 && cards[0] !== undefined ? (
           <>
             <div css={gridStyles}>
-              {cards
-                .filter(card => card)
-                .map(card => {
-                  return (
-                    <WebCardThumbnail
-                      cardInfo={card}
-                      key={card.cardId}
-                      selectedCards={selectedCards}
-                      setIsDetail={setIsDetail}
-                      onSelect={handleCardSelect}
-                    />
+              {searchResults !== undefined &&
+              searchValue !== undefined &&
+              searchValue.trim() !== '' ? (
+                searchResults.length > 0 ? (
+                  searchResults.map(
+                    (card: ExternalCardType | CardType, index: number) => {
+                      return (
+                        <WebCardThumbnail
+                          cardInfo={card}
+                          key={index}
+                          onSelect={handleCardSelect}
+                          setIsDetail={setIsDetail}
+                          selectedCards={selectedCards}
+                        />
+                      )
+                    },
                   )
-                })}
-            </div>
-            <div css={buttonCss}>
-              <LargeButton text="명함 추가" width="80%" onClick={handleAdd} />
+                ) : (
+                  <Flex direction="column" justify="center" align="center">
+                    검색 결과가 없습니다
+                  </Flex>
+                )
+              ) : (
+                cards
+                  .filter(card => card)
+                  .map(card => {
+                    return (
+                      <WebCardThumbnail
+                        cardInfo={card}
+                        key={card.cardId}
+                        selectedCards={selectedCards}
+                        setIsDetail={setIsDetail}
+                        onSelect={handleCardSelect}
+                      />
+                    )
+                  })
+              )}
             </div>
           </>
         ) : (
@@ -121,11 +146,11 @@ const WebMyAlbumList = ({
             >
               <Text>지갑에 등록된 명함이 없습니다.</Text>
             </Flex>
-            <div css={buttonCss}>
-              <LargeButton text="명함 추가" width="80%" onClick={handleAdd} />
-            </div>
           </>
         )}
+        <div css={buttonCss}>
+          <LargeButton text="명함 추가" width="80%" onClick={handleAdd} />
+        </div>
         {isFetchingNextPage && (
           <div css={SpinnerCss}>
             <Spinner />

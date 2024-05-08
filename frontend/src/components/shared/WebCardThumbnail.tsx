@@ -27,9 +27,10 @@ import { colors } from '@/styles/colorPalette'
 import { useMutation } from '@tanstack/react-query'
 import { deleteMyAlbumCard } from '@/apis/album'
 import { userState } from '@/stores/user'
+import { ExternalCardType } from '@/types/ExternalCard'
 
 interface CardThumbnailProps {
-  cardInfo: CardType
+  cardInfo: ExternalCardType | CardType
   selectedCards: number[]
   setIsDetail: (isDetail: boolean) => void
   onSelect: (cardId: number) => void

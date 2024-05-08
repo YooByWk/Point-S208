@@ -14,6 +14,7 @@ export type ExternalCardType = {
   frontBack: string
   domainUrl: string
   digitalPicture?: string
+  memo: string
 }
 
 export type ExternalCardListType = ExternalCardType[]

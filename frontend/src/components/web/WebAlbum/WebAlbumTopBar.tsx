@@ -36,30 +36,37 @@ import * as XLSX from 'xlsx'
 import WebUploadFromFile from './WebUploadFromFile'
 import SearchBox from '@/components/shared/SearchBox'
 import { UserListType } from '@/types/userType'
+import { ExternalCardListType } from '@/types/ExternalCard'
 
 const WebAlbumTopBar = ({
   allCards,
-  setAllCards,
   selectedCards,
   setSelectedCards,
+  searchResults,
+  setSearchResults,
+  searchValue,
+  setSearchValue,
 }: {
   allCards: CardType[]
-  setAllCards: React.Dispatch<React.SetStateAction<CardType[]>>
   selectedCards: number[]
   setSelectedCards: React.Dispatch<React.SetStateAction<number[]>>
+  searchResults: ExternalCardListType | undefined
+  setSearchResults: React.Dispatch<
+    React.SetStateAction<ExternalCardListType | undefined>
+  >
+  searchValue: string
+  setSearchValue: React.Dispatch<React.SetStateAction<string>>
 }) => {
   const userId = useRecoilValue(userState).userId
   const [isRefreshed, setIsRefreshed] = useRecoilState(isRefreshedAlbumState)
   const [modalOpen, setModalOpen] = useState(false)
-  const [searchValue, setSearchValue] = useState('')
 
-  const handleResult = (data: CardType | UserListType) => {
+  const handleResult = (data: ExternalCardListType | UserListType) => {
     if (Array.isArray(data)) {
-      setAllCards(data as CardType[])
+      setSearchResults(data as ExternalCardListType)
     }
-    if (searchValue.length === 0) {
-      setIsRefreshed(!isRefreshed)
-    }
+
+    console.log('searchResult:', searchResults)
   }
 
   const handleSelectAll = () => {
