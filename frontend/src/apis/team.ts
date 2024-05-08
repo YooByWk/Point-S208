@@ -15,8 +15,9 @@ export const searchUser = async (userInput: string | number) => {
     .catch(err => console.log(err))
 }
 
-// 팀 리스트 조회
+// 팀 리스트 조회 
 export const fetchTeamList = async (userId: number) => {
+  // console.log(`${ReadUrl}/${userId}`)
   return authRequest
     .get(`${ReadUrl}/${userId}`)
     .then(res => res.data)
@@ -24,13 +25,12 @@ export const fetchTeamList = async (userId: number) => {
 }
 
 /**
- *
  * @param userInput
  * @returns 팀 명함 검색 목록
  */
 export const fetchTeamCardsList = async (teamAlbumId: number, page: number) => {
   return authRequest
-    .get(`${ReadUrl}/${teamAlbumId}/${page}`)
+    .get(`${ReadUrl}/list/${teamAlbumId}/${page}`)
     .then(res => res.data)
     .catch(err => console.log(err))
 }

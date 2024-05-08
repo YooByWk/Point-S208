@@ -1,12 +1,12 @@
 /** @jsxImportSource @emotion/react */
 
-import { fetchMyAlbum } from '@/apis/album'
+import { fetchCardByFilter, fetchMyAlbum } from '@/apis/album'
 import { dummyCardList } from '@/assets/data/dummyCardList'
 import CardList from '@/components/shared/CardList'
 import { userState } from '@/stores/user'
 import { CardListType } from '@/types/CardListType'
 import { CardType } from '@/types/cardType'
-import { useInfiniteQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { Spinner } from '@fluentui/react-components'
@@ -17,7 +17,7 @@ import Text from '@shared/Text'
 import Spacing from '@/components/shared/Spacing'
 import AddCard from '@/components/mobile/MyAlbum/AddCard'
 import SearchBox from '@/components/shared/SearchBox'
-
+import { filterState as filterStoreState } from '@/stores/album'
 import { dummyCard } from '@/assets/data/dummyCard'
 import { ExternalCardListType, ExternalCardType } from '@/types/ExternalCard'
 
@@ -26,33 +26,47 @@ const AlbumList = () => {
   const userId = useRecoilValue(userState).userId
   const [user, setUser] = useRecoilState(userState)
   const [searchValue, setSearchValue] = useState('')
+  const [filterState, setFilterState] = useRecoilState(filterStoreState)
 
-  const { data, fetchNextPage, hasNextPage, isError, isFetchingNextPage } =
+  const { data, fetchNextPage, hasNextPage, isError, isFetchingNextPage, refetch: refetchAlbum } =
     useInfiniteQuery({
       queryKey: ['fetchMyAlbum'],
       queryFn: ({ pageParam = 0 }) => fetchMyAlbum(userId as number, pageParam),
       getNextPageParam: (lastPage, allPages) => {
-        return Array.isArray(lastPage) && lastPage.length > 0
-          ? allPages.length
+        return Array.isArray(lastPage.data_body) &&
+          lastPage.data_body.length > 0
+          ? allPages.length + 1
           : undefined
       },
       initialPageParam: 0,
     })
 
-  let cards = data?.pages.flatMap(page => page.data_body) || [] // 명함 리스트
-  // let cards = data?.pages.flatMap(page => page) || [] // 명함 리스트 : 오류 : 수정하기
-  console.log('cards: ', cards);
-  //
+  const {data : filterData, refetch: refetchFilter} = useQuery({
+    queryKey: ['fetchCardByFilter'],
+    queryFn: () => fetchCardByFilter(userId as number , filterState.filterId as number),
+    enabled: false
+  })
   
   useEffect(() => {
+    if (isNaN(filterState.filterId)) {
+      refetchAlbum();
+    } else {
+      refetchFilter();
+    }
+  }, [filterState.filterId]);
+  
+    
+  let cards = isNaN(filterState.filterId)?  data?.pages.flatMap(page => page.data_body) || [] : filterData?.data_body.cardList || []
+  console.log('cards: ', filterData? filterData : 'no')
+  //
+
+  useEffect(() => {
     const handleScroll = () => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop ===
-        document.documentElement.offsetHeight
-      )
-        return
-      if (hasNextPage) {
-        fetchNextPage()
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+        if (hasNextPage) {
+          console.log('더불러오기')
+          fetchNextPage()
+        }
       }
     }
     window.addEventListener('scroll', handleScroll)
@@ -69,6 +83,18 @@ const AlbumList = () => {
     ExternalCardListType | undefined
   >(undefined)
 
+  
+  const renderCards = () => {
+    if (cards.length > 0 && cards[0] !== undefined) {
+      return <CardList cards={cards} isTeam={false} handleAdd={handleAdd} />;
+    } else {
+      return (
+        <CardList cards={[]} isTeam={false} handleAdd={handleAdd} />
+      );
+    }
+  };
+  
+  
   return (
     <>
       <button
@@ -90,36 +116,13 @@ const AlbumList = () => {
         searchResults?.map(res => <p>{res.name}</p>)
       ) : (
         <div>
-          {cards.length > 0 && cards[0] !== undefined ? (
-            <CardList
-              cards={cards}
-              isTeam={false}
-              handleAdd={handleAdd}
-            />
-          ) : (
-            <Flex
-              direction="column"
-              justify="center"
-              align="center"
-              css={nullDivCss}
-            >
-              <Text>지갑에 등록된 명함이 없습니다.</Text>
-              <button onClick={() => console.log(userId)}>아이디 확인 </button>
-              <Spacing size={40} direction="vertical" />
-              <LargeButton
-                text="명함 추가"
-                width="80vw"
-                height="100px"
-                onClick={handleAdd}
-              />
-            </Flex>
-          )}
-          {isFetchingNextPage && (
-            <div css={SpinnerCss}>
-              <Spinner />
-            </div>
-          )}
-        </div>
+  {renderCards()}
+  {isFetchingNextPage && (
+    <div css={SpinnerCss}>
+      <Spinner />
+    </div>
+  )}
+</div>
       )}
       {isAddCard && (
         <AddCard isAddCard={isAddCard} setIsAddCard={setIsAddCard} />

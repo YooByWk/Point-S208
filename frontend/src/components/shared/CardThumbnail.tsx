@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useState } from 'react'
+import { ReactEventHandler, useState } from 'react'
 import type { CardType } from '@/types/cardType'
 import Flex from '@/components/shared/Flex'
 import Text from '@/components/shared/Text'
@@ -43,8 +43,6 @@ const CardThumbnail = ({
   const [isChecked, setIsChecked] = useState(false)
   const isSelected = selectedCards.includes(cardInfo.cardId)
   const userId = useRecoilValue(userState).userId 
-  // const deleteMutation = useDeleteMyAlbumMutation(selectedCards)
-  console.log(teamId,userId,'teamId')
   const deletemutation = useDeleteAlbumCard()
   
 
@@ -69,24 +67,19 @@ const CardThumbnail = ({
     console.log('공유 : ', cardInfo)
   }
 
-  const handleDelete = (event: React.MouseEvent) => {
-    event.stopPropagation()
-    /*  api 호출 */
+  const handleDelete = () => {
     deletemutation.mutate(cardInfo.cardId)
     console.log('삭제 : ', cardInfo.cardId)
   }
-  console.log(cardInfo)
   const navigate = useNavigate()
   return (
     <div
       css={cardContainer(forShare, scale)}
       onClick={() => {
         if (forShare) {
-          // 공유하기 화면 이하에서는 명함 썸네일 전체가 선택여부가 되도록
           setIsChecked(!isChecked)
           onSelect(cardInfo.cardId)
         } else {
-          console.log(cardInfo, '님의 명함')
           navigate(`/myAlbum/${userId}/${cardInfo.cardId}`, {
             state: { cardInfo },
           })
@@ -134,12 +127,15 @@ const CardThumbnail = ({
               <Star24Regular css={i} onClick={handleFavorite} />
             )}
             <ShareAndroid24Filled css={i} onClick={handleShare} />
-            <Delete24Filled css={i} onClick={handleDelete} />
             <SmallModal 
             icon={<Delete24Filled/>}
             dialogTitle='명함 삭제'
             dialogContent={`${cardInfo.name}님의 명함을 삭제하시겠습니까?`}
-            onClick={() => handleDelete}
+            onClick={(e) => {
+              e.stopPropagation()
+              handleDelete()
+            }}
+            onIconClick={(e:React.MouseEvent) => e.stopPropagation()}
             actionButtonText='삭제'
             />
           </Flex>

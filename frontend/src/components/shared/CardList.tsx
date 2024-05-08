@@ -16,12 +16,12 @@ import { tokens } from '@fluentui/react-components'
 import { useRecoilState } from 'recoil'
 import { pageChanged } from '@stores/team'
 import { ExternalCardListType } from '@/types/ExternalCard'
-import { ExternalCardType } from '@/types/ExternalCard';
+import { ExternalCardType } from '@/types/ExternalCard'
 import { UserListType, UserType } from '@/types/userType'
 
 interface CardListProps {
   cardList?: CardListType
-  cards: CardType[] 
+  cards: CardType[]
   isTeam?: boolean
   parentisLoading?: boolean
   handleAdd?: () => void
@@ -76,10 +76,12 @@ const CardList = ({
     setIsShare(!isShare)
     console.log('isShare: ', isShare)
   }
-  
+
   console.log('cards: ', cards)
-  const [searchResults, setSearchResults] = useState<ExternalCardListType | undefined>(undefined);
-  
+  const [searchResults, setSearchResults] = useState<
+    ExternalCardListType | undefined
+  >(undefined)
+
   // const handleResult = (data: ExternalCardListType) => {
   //   if (data) {
   //     setSearchResults(data)
@@ -87,30 +89,30 @@ const CardList = ({
   // }
 
   const handleResult = (data: ExternalCardListType | UserListType) => {
-    if (data === undefined) { setSearchResults([]); return; }
+    if (data === undefined) {
+      setSearchResults([])
+      return
+    }
     if (Array.isArray(data)) {
-      setSearchResults(data as ExternalCardListType);
-    } 
+      setSearchResults(data as ExternalCardListType)
+    }
   }
-  
-  
+
   return (
     <>
       {!isShare ? (
         <>
           <SearchBox
             value={searchValue}
-            onChange={(e) => {
+            onChange={e => {
               if (e.target.value !== undefined) {
                 setSearchValue(e.target.value)
               }
-            }
-          }
-          onSearch={handleResult}
+            }}
+            onSearch={handleResult}
             placeholder={isTeam ? '팀 명함 검색' : '명함 검색'}
             memberIcon={isTeam ? true : false}
             spacing={false}
-            
           />
           <Spacing size={15} />
           <MultiSelectBar
@@ -118,35 +120,46 @@ const CardList = ({
             allCards={cards}
             setSelectedCards={setSelectedCards}
           />
-<Flex direction="column" justify="center" align="center">
-  {
-    searchResults !== undefined && searchValue !== undefined && searchValue.trim() !== '' 
-    ? (searchResults.length > 0 
-      ? searchResults.map((card: ExternalCardType | CardType) => {
-          return (
-            <CardThumbnail
-              cardInfo={card}
-              key={card.cardId} 
-              onSelect={handleCardSelect}
-              selectedCards={selectedCards}
-            />
-          )
-        })
-      : <Flex direction='column' justify='center' align='center'>검색 결과가 없습니다</Flex>)
-    : cards.filter((card: ExternalCardType | CardType) => card)
-            .map((card: ExternalCardType | CardType) => {
-              return (
-                <CardThumbnail
-                  cardInfo={card}
-                  key={card.cardId} 
-                  onSelect={handleCardSelect}
-                  selectedCards={selectedCards}
-                />
+          <Flex direction="column" justify="center" align="center">
+            {searchResults !== undefined &&
+            searchValue !== undefined &&
+            searchValue.trim() !== '' ? (
+              searchResults.length > 0 ? (
+                searchResults.map(
+                  (card: ExternalCardType | CardType, index: number) => {
+                    return (
+                      <CardThumbnail
+                        cardInfo={card}
+                        key={index}
+                        onSelect={handleCardSelect}
+                        selectedCards={selectedCards}
+                      />
+                    )
+                  },
+                )
+              ) : (
+                <Flex direction="column" justify="center" align="center">
+                  검색 결과가 없습니다
+                </Flex>
               )
-            })
-  }
-  <Spacing size={40} direction="vertical" />
-</Flex>
+            ) :  cards.length > 0 ? (
+              cards.map((card: ExternalCardType | CardType, index: number) => {
+                return (
+                  <CardThumbnail
+                    cardInfo={card}
+                    key={index}
+                    onSelect={handleCardSelect}
+                    selectedCards={selectedCards}
+                  />
+                )
+              })
+            ) : (
+              <Flex direction="column" justify="center" align="center" style={{height:'50vh'}}>
+                해당 필터에 명함이 없습니다
+              </Flex>
+            )}
+            <Spacing size={40} direction="vertical" />
+          </Flex>
           <div css={buttonCss}>
             {selectedCards.length > 0 ? (
               <LargeButton text="명함 공유" width="80%" onClick={handleShare} />

@@ -16,7 +16,6 @@ export const fetchMyAlbum = async (userId: number, page: number) => {
   console.log('페이지: ', page)
   return (
     authRequest
-      // .get(`${ReadUrl}/list/${userId}/${page}`)
       .get(`${ReadUrl}/list/${userId}/${page}`)
       .then(res => res.data)
       .catch(err => console.log(err))
@@ -125,15 +124,15 @@ export const editMyAlbumMemo = async (params: editMemoType) => {
 
 
 export const deleteMyAlbumCards = async (params: deleteAlbumCardArrayType) => {
-  if (!params.cardIdArray || params.userId) return
-  
-  return Promise.all(params.cardIdArray.map(async cardId =>  {
-    try {
-      const res = await authRequest
-        .delete(`${CudUrl}/${params.userId}/${cardId}`)
-      return res.data
-    } catch (err) {
-      return console.log(err)
-    }
-  }))
+  console.log(params.cardIdArray, params.userId, 'params')
+  if (!params.cardIdArray || !params.userId) return
+
+  const deleteRequests = params.cardIdArray.map(cardId => 
+    authRequest
+      .delete(`${CudUrl}/${params.userId}/${cardId}`)
+      .then(res => res.data)
+      .catch(err => console.log(err))
+  )
+
+  return Promise.all(deleteRequests)
 }
