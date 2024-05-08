@@ -6,12 +6,10 @@ import RegisterOtherCardInfo from'@/components/mobile/MyAlbum/RegisterOtherCardI
 const RegisterCard = () => {
   
   const location = useLocation();
-  const { userId } = useParams();
+  const {userId}  = useParams();
+  console.log(userId, 'userId at RegisterCard')
   const isCameraInput = location.state?.isCameraInput;
   const isDirectInput = location.state?.isDirectInput;
-  console.log('isCameraInput: ', isCameraInput);
-  console.log('isDirectInput: ', isDirectInput);
-  
   const [isEnglish, setIsEnglish] = React.useState(false);
   
   return (

@@ -27,6 +27,7 @@ const TeamList = () => {
   const navigate = useNavigate()
   const userId = useRecoilValue(userState).userId
 
+  console.log(userId, 'id')
   const {data,isLoading} = useQuery({
     queryKey: ['fetchTeamList', userId],
     queryFn: () => fetchTeamList(userId as number),
@@ -39,6 +40,7 @@ const TeamList = () => {
    // })
 */
   const teamList: TeamListType[] = data || []
+  
   if (isLoading) {
     return <Flex direction='column' justify='center' align='center' style={{height:'100vh'}}>
       <Spinner />
@@ -103,3 +105,15 @@ const buttonCss = css`
   z-index: 999;
   background-color: ${tokens.colorNeutralBackground1};
   `
+  
+  
+  /*
+    const handleAddCard = () => {
+    if (teamAlbumId === undefined || currentteamAlbumId === undefined) {
+      alert('팀이 선택되지 않았습니다. 새로고침 해주세요.')
+      return
+    }
+    setIsAddCard(!isAddCard)
+    setTeamAlbumId(+currentteamAlbumId )
+  }
+  */

@@ -1,4 +1,4 @@
-import { CreateTeamSkipType, CreateTeamType } from '@/types/TeamListType'
+import { CreateTeamSkipType, CreateTeamType, RegisterTeammCardType } from '@/types/TeamListType'
 import { authRequest } from '@/utils/requestMethod'
 
 const CudUrl = '/cud/api/teams'
@@ -55,5 +55,13 @@ export const fetchTeamMember = async (teamAlbumId: number, userId: number) => {
   return authRequest
     .get(`${ReadUrl}/${userId}/member/${teamAlbumId}`)
     .then(res => res.data)
+    .catch(err => console.log(err))
+}
+
+export const RegisterTeammCard = async (params: RegisterTeammCardType) => {
+  console.log(params.data, typeof params.data)
+  return authRequest
+    .post(`${CudUrl}/${params.userId}/${params.teamId}/card`, params.data)
+    .then(res => {console.log(res,'팀카드등록');return res.data})
     .catch(err => console.log(err))
 }

@@ -23,10 +23,12 @@ const TeamDetail = () => {
   const [isAddCard, setIsAddCard] = useState(false)
   const {teamAlbumId} = useParams() 
   const teamInfo:TeamListType = useLocation().state
-  console.log(teamInfo)
+  // console.log(teamInfo)
   const teamAlbumIdNumber = teamAlbumId ? +teamAlbumId : 0
   const navigate = useNavigate()
   const isLookingMember = useRecoilValue(isLookingMemberState)
+  // const [addTeamAlbumId, setAddTeamAlbumId] = useRecoilState(targetTeamAlbumId)
+  
   const hadnleAdd = () => {
     setIsAddCard(!isAddCard)
   }
@@ -37,7 +39,7 @@ const TeamDetail = () => {
       navigate(-1)
       return
     }
-  })
+  }, [teamAlbumId])
   
   const {data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading} = useInfiniteQuery({
     queryKey: ['fetchTeamCardsList'],
@@ -71,7 +73,7 @@ const TeamDetail = () => {
   if (isAddCard) {
     return (
       <>
-        <AddCard isAddCard={isAddCard} setIsAddCard={setIsAddCard} />
+        <AddCard isAddCard={isAddCard} setIsAddCard={setIsAddCard} teamInfo={teamInfo} />
       </>
     )
   }

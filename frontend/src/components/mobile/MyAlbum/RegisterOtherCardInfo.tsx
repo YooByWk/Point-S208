@@ -14,14 +14,16 @@ import {
 import { css } from '@emotion/react'
 import { Button } from '@fluentui/react-components'
 import { writeInfoState } from '@/stores/emptyCard'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
+import {  useRecoilValue,  } from 'recoil'
 import { userState } from '@/stores/user'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { RegisterOtherCard } from '@/apis/album'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useTeamCardAdd } from '@/hooks/useTeamCardAdd'
+import { TeamListType } from '@/types/TeamListType';
 
-const RegisterOtherCardInfo = ({isEnglish}: {
-  isEnglish:boolean}) => {
+const RegisterOtherCardInfo = ({isEnglish, params}: {
+  isEnglish:boolean, params?: unknown}) => {
   const [cardInputs, setCardInputs] = useState({
     name: '',
     company: '',
@@ -35,10 +37,16 @@ const RegisterOtherCardInfo = ({isEnglish}: {
     address: '',
     domainUrl: '',
   })
+  
   const userId = useRecoilValue(userState).userId
+  const location = useLocation()
+  const teamInfo: TeamListType = location.state.teamInfo
   const navigate = useNavigate()
+  // console.log(location)
   const [dirty, setDirty] = useState<Partial<cardInput>>({})
   const queryClient = useQueryClient()
+  const teamCardMutation = useTeamCardAdd()
+  console.log(location.state.teamInfo === undefined, '상태')
   const handleCardInputs = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setCardInputs(prevCardInputs => ({
       ...prevCardInputs,
@@ -84,6 +92,14 @@ const RegisterOtherCardInfo = ({isEnglish}: {
       },
     }
     mutate(params)
+    if (teamInfo !== undefined) {
+      
+      teamCardMutation.mutate({
+        userId: userId as number,
+        teamAlbumId: teamInfo.teamAlbumId,
+        data: params.data
+      })
+    }
   }
 
   const errors = useMemo(() => validate(cardInputs), [cardInputs])

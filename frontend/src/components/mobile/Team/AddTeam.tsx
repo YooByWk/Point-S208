@@ -12,6 +12,7 @@ import { UserListType, UserType } from '@/types/userType'
 import MemberThumbnail from './MemberThumbnail'
 import { useRecoilValue } from 'recoil'
 import { userState } from '@/stores/user'
+import { useTeamCreatgeSkip } from '@/hooks/useTeamCreateSkip'
 interface AddTeamProps {
   setIsWrite: (isWrite: boolean) => void
   isWrite: boolean
@@ -25,6 +26,8 @@ const AddTeam = ({ setIsWrite, isWrite }: AddTeamProps) => {
   const [SearchResults, setSearchResults] = useState<UserType[]>([])
   const [selectedMember, setSelectedMember] = useState<UserType[]>([])
 
+  const skipMutation = useTeamCreatgeSkip()
+  
   const handleResult = (data: UserListType) => {
     if (data) {
       setSearchResults(data)
@@ -33,9 +36,9 @@ const AddTeam = ({ setIsWrite, isWrite }: AddTeamProps) => {
 
   const handleTeamNameInput = (e: any) => {
     setTeamName(e.target.value)
-    if (teamName.length > 0) {
-      console.log('팀 이름이 입력되었습니다.', teamName)
-    }
+    // if (teamName.length > 0) {
+      // console.log('팀 이름이 입력되었습니다.', teamName)
+    // }
   }
 
   const handleBackArrow = () => {
@@ -54,6 +57,7 @@ const AddTeam = ({ setIsWrite, isWrite }: AddTeamProps) => {
       setSelectedMember(prev => [...prev, user])
     }
   }
+  
   // 아이콘 버튼에서 선택 해제용으로 사용
   const handleMemberUnCheck = (user: UserType) => {
     setSelectedMember(prev =>
@@ -64,7 +68,11 @@ const AddTeam = ({ setIsWrite, isWrite }: AddTeamProps) => {
   const isMember = (user: UserType) => {
     return selectedMember.some(member => member.userId === user.userId)
   }
-
+  
+  const handleSkipClick = () => {
+    skipMutation.mutate(teamName)
+    setIsWrite(!isWrite)
+   }
   return (
     <div css={Step1mainContainerCss}>
       <Flex direction="row" onClick={handleBackArrow} css={arrowContainer}>
@@ -217,7 +225,7 @@ const AddTeam = ({ setIsWrite, isWrite }: AddTeamProps) => {
                 text="건너뛰기"
                 secondary={true}
                 width="35vw"
-                onClick={() => console.log('건너뛰기 로직넣기 : 수정하기')}
+                onClick={handleSkipClick}
               />
               <Spacing size={20} direction="horizontal" />
               {selectedMember.length > 0 ? (

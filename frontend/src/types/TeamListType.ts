@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction } from 'react'
 import { BooleanStateType } from './commonType'
 import { UserType } from './userType'
+import { cardInput } from './cardInput'
 
 export type TeamListType = {
   teamName: string
@@ -42,4 +43,10 @@ export type CreateTeamType = {
     teamName: string
     userIdList: number[]
   }
+}
+
+export type RegisterTeammCardType = {
+  userId: number
+  teamId: number
+  data: cardInput
 }
