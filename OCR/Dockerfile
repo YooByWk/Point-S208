@@ -10,6 +10,11 @@ WORKDIR /app
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install transformers
+# 시스템 패키지 업데이트 및 OpenGL 관련 라이브러리 설치
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    libgl1-mesa-glx && \
+    rm -rf /var/lib/apt/lists/*
 
 
 # 애플리케이션 코드 복사
