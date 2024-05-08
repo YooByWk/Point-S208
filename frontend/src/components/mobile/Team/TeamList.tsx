@@ -25,17 +25,19 @@ const TeamList = () => {
     teamState.selectedTeamAlbumIdState,
   )
   const navigate = useNavigate()
-  // const userId = useRecoilValue(userState).userId
-  // 원본
-  // const {data,isLoading} = useQuery({
-  //   queryKey: ['fetchTeamList', userId],
-  //   queryFn: () => fetchTeamList(userId as number),
-  // })
-  //디버그용 : 수정하기
-  const {data,isLoading} = useQuery<TeamListType[]>({
-    queryKey: ['fetchTeamList', ],
-    queryFn: () => fetchTeamList(4),
+  const userId = useRecoilValue(userState).userId
+
+  const {data,isLoading} = useQuery({
+    queryKey: ['fetchTeamList', userId],
+    queryFn: () => fetchTeamList(userId as number),
   })
+ 
+/*   //디버그용 : 수정하기
+   // const {data,isLoading} = useQuery<TeamListType[]>({
+   //   queryKey: ['fetchTeamList', ],
+   //   queryFn: () => fetchTeamList(4),
+   // })
+*/
   const teamList: TeamListType[] = data || []
   if (isLoading) {
     return <Flex direction='column' justify='center' align='center' style={{height:'100vh'}}>
