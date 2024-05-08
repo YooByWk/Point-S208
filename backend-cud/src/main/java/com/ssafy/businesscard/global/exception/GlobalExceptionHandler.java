@@ -72,7 +72,8 @@ public class GlobalExceptionHandler {
         NOT_EXISTS_FILTER("존재하는 않는 필터 입니다.", HttpStatus.BAD_REQUEST),
         ALREADY_IN_FILTER("이미 존재하는 필터입니다.", HttpStatus.BAD_REQUEST),
         INVALID_FILTER_NAME("유효하지 않는 이름입니다.", HttpStatus.BAD_REQUEST),
-        NOT_EXITSTS_TEAM("존재하지 않는 팀 입니다.", HttpStatus.BAD_REQUEST);
+        NOT_EXITSTS_TEAM("존재하지 않는 팀 입니다.", HttpStatus.BAD_REQUEST),
+        ALREADY_IN_TEAM("이미 존재하는 팀입니다.", HttpStatus.BAD_REQUEST);
 
         private final String message;
         private final HttpStatus httpStatus;
