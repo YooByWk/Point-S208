@@ -55,7 +55,6 @@ public class AmazonS3Service {
             throw new S3Exception(S3ErrorCode.EMPTY_UPLOAD_FILE);
         }
 
-
         S3ManyFilesResponse response = new S3ManyFilesResponse();
 
         // 파일을 순차적으로 처리하고, 각 파일에 대한 URL을 수집
