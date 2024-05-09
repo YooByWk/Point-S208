@@ -176,7 +176,7 @@ public class EmailService {
         appendIfNotEmpty(sb, "휴대폰 번호: ", businesscard.getPhoneNumber());
         appendIfNotEmpty(sb, "주소: ", businesscard.getAddress());
         appendIfNotEmpty(sb, "실제 사진: ", businesscard.getRealPicture());
-        sb.append("앞/뒤: ").append(businesscard.getFrontBack()).append("<br>");
+//        sb.append("앞/뒤: ").append(businesscard.getFrontBack()).append("<br>");
         appendIfNotEmpty(sb, "도메인 URL: ", businesscard.getDomainUrl());
         return sb.toString();
     }
