@@ -7,6 +7,7 @@ import { isUserinStorageState, userState } from '@/stores/user'
 import { useContext, useEffect } from 'react'
 import { TeamsFxContext } from './Context'
 import { useData } from '@microsoft/teamsfx-react'
+import { Spinner } from '@fluentui/react-spinner'
 
 const Tutorial = () => {
   const setIsUserinStorage = useSetRecoilState(isUserinStorageState)
@@ -40,15 +41,6 @@ const Tutorial = () => {
     },
   })
 
-  const HandleUserReg = () => {
-    let userData = {
-      name: user.name,
-      email: user.email,
-    }
-
-    mutate(userData)
-  }
-
   useEffect(() => {
     let userData = {
       name: user.name,
@@ -59,13 +51,14 @@ const Tutorial = () => {
   }, [mutate, user])
 
   return (
-    <Container>
-      <Box>
-        <p>환영합니다</p>
-        <p>BizCard 명합 관리 앱을 시작합니다</p>
-        <Button onClick={() => HandleUserReg()}>시작하기</Button>
-      </Box>
-    </Container>
+    <Spinner label="로딩 중..." style={{ height: '100vh' }} />
+    // <Container>
+    //   <Box>
+    //     <p>환영합니다</p>
+    //     <p>BizCard 명합 관리 앱을 시작합니다</p>
+    //     <Button onClick={() => HandleUserReg()}>시작하기</Button>
+    //   </Box>
+    // </Container>
   )
 }
 
