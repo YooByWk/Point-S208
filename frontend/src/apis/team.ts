@@ -130,10 +130,3 @@ export const editTeamAlbumMemo = async (params: editTeamMemoType) => {
   .catch(err => console.log(err))
 }
 
-export const editTeamAlbumMemo = async (params: editTeamMemoType) => {
-  console.log(params)
-  return authRequest
-  .post(`${CudUrl}/${params.userId}/${params.teamAlbumId}/${params.cardId}/memo`, params.data)
-  .then(res => res.data)
-  .catch(err => console.log(err))
-}
