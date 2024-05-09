@@ -85,7 +85,11 @@ const MyDigitalCard: React.FC<MyDigitalCardProps> = ({
       }
     }
 
-    if (cardInfo.digitalPicture === null) handleSaveAsJpg()
+    if (
+      cardInfo.digitalPicture === null ||
+      cardInfo.digitalPicture.trim() === ''
+    )
+      handleSaveAsJpg()
   }, [mutate, userId, cardInfo])
 
   return (

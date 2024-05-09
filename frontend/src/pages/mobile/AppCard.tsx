@@ -17,6 +17,8 @@ import {
   isFrontState,
 } from '@/stores/card'
 import PhotoAddReg from '@/components/mobile/MyCard/PhotoCardInfo/PhotoAddReg'
+import { ExternalCardType } from '@/types/ExternalCard'
+import { CardType } from '@/types/cardType'
 
 const AppCard = () => {
   const [isCard, setIsCard] = useState(false)
@@ -27,6 +29,7 @@ const AppCard = () => {
   const userId = useRecoilValue(userState).userId as number
   const setFrontCard = useSetRecoilState(frontCardState)
   const setBackCard = useSetRecoilState(backCardState)
+  const [list, setList] = useState<ExternalCardType[] | CardType[]>([])
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['fetchMyCard'],
@@ -35,6 +38,7 @@ const AppCard = () => {
 
   useEffect(() => {
     if (!isLoading && (data?.front || data?.back)) {
+      setList(data.list)
       if (data?.front) setFrontCard(data.front)
       if (data?.back) setBackCard(data.back)
       setIsCard(true)
@@ -65,7 +69,7 @@ const AppCard = () => {
           )}
         </>
       )
-    if (isCard) return <MyCardDetail />
+    if (isCard) return <MyCardDetail list={list} />
     return <EmptyCard />
   }
 
