@@ -23,14 +23,23 @@ public class EmailController {
 
     @PostMapping("/{card_id}/share/email")
 
-    public ResponseEntity<MessageUtils> regist(
+    public ResponseEntity<MessageUtils> sharerealpicture(
             @PathVariable("card_id") Long card_id,
             @Valid @RequestBody EmailsendRequest emailsendRequest
     ) {
 
         emailService.sendEmail(emailsendRequest.recipientEmail(), card_id );
 
-        return ResponseEntity.ok().body(MessageUtils.success("명함이 등록되었습니다."));
+        return ResponseEntity.ok().body(MessageUtils.success("명함이 전송되었습니다."));
     }
+    @PostMapping("/{user_id}/share/email/digital")
+    public ResponseEntity<MessageUtils> sharedigital(
+            @PathVariable("user_id") Long user_id,
+            @Valid @RequestBody EmailsendRequest emailsendRequest
+    ) {
+        emailService.sendEmailDigital(emailsendRequest.recipientEmail(), user_id );
+        return ResponseEntity.ok().body(MessageUtils.success("명함이 전송되었습니다."));
+    }
+
 
 }

@@ -10,6 +10,7 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.mail.javamail.*;
@@ -20,10 +21,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.Properties;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class EmailService {
 
     private final JavaMailSender mailSender;
@@ -60,7 +63,7 @@ public class EmailService {
 //            throw new RuntimeException("메일 생성 오류", e);
 //        }
 //    }
-    public void sendEmail(String recipientEmail, Long cardId ) {
+    public void sendEmail(String recipientEmail, Long cardId) {
 
 
         Businesscard businesscard = businesscardRepository.findById(cardId).
@@ -78,7 +81,7 @@ public class EmailService {
 
 //            messageHelper.setFrom(user.getEmail());
 //            messageHelper.setFrom(new InternetAddress( emailConfig.getUserName(), "SSAFYS208@ssafys208.onmicrosoft.com"));
-            messageHelper.setFrom(new InternetAddress( emailConfig.getUserName(), "SSAFYS208@ssafys208.onmicrosoft.com"));
+            messageHelper.setFrom(new InternetAddress(emailConfig.getUserName(), "SSAFYS208@ssafys208.onmicrosoft.com"));
 
             messageHelper.setTo(recipientEmail);
             messageHelper.setSubject("명함 정보입니다.");
@@ -96,6 +99,60 @@ public class EmailService {
                 throw new RuntimeException(e);
             }
             messageHelper.addAttachment("image.jpg", tempFile);
+            mailSender.send(message);
+
+        } catch (MessagingException e) {
+            throw new RuntimeException("메일 생성 오류", e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public void sendEmailDigital(String recipientEmail, Long user_id) {
+
+        List<Businesscard> businesscards = businesscardRepository.findAllByUser_userId(user_id);
+        log.info("businesscards" + businesscards);
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper messageHelper = new MimeMessageHelper(message, true);
+            messageHelper.setFrom(new InternetAddress(emailConfig.getUserName(), "SSAFYS208@ssafys208.onmicrosoft.com"));
+
+            messageHelper.setTo(recipientEmail);
+            messageHelper.setSubject("digital 명함 정보입니다.");
+
+            messageHelper.setText(toEmailString(businesscards.get(0)), true);
+            log.info("imageUrl" + businesscards.get(0).getDigitalPicture());
+
+//            FileSystemResource image = new FileSystemResource(new File(businesscard.getRealPicture()));
+
+            URL imageUrl = new URL(businesscards.get(0).getDigitalPicture());
+//            log.info("sizzzzzzzzzz" + businesscards.size());
+
+            if (businesscards.size() == 2) {
+                URL backimageUrl = new URL(businesscards.get(1).getDigitalPicture());
+                File BacktempFile = File.createTempFile("temp2", ".jpg");
+
+                try (FileOutputStream fos = new FileOutputStream(BacktempFile)) {
+                    fos.write(backimageUrl.openStream().readAllBytes());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                messageHelper.addAttachment("image.jpg", BacktempFile);
+
+            }
+
+            File FronttempFile = File.createTempFile("temp", ".jpg");
+
+
+            try (FileOutputStream fos = new FileOutputStream(FronttempFile)) {
+                fos.write(imageUrl.openStream().readAllBytes());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+
+            messageHelper.addAttachment("image.jpg", FronttempFile);
             mailSender.send(message);
 
         } catch (MessagingException e) {

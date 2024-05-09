@@ -27,4 +27,5 @@ public class AmazonS3Controller {
         amazonS3Service.deleteFile(fileName);
         return ResponseEntity.ok(fileName);
     }
+
 }
