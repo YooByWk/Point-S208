@@ -34,20 +34,20 @@ const MyDigitalCard: React.FC<MyDigitalCardProps> = ({
 
       <Flex justify="space-between">
         <LeftFlex>
-          <Name>{cardInfo.name}</Name>
-          <Desc>{cardInfo.department}</Desc>
-          <Desc>{cardInfo.position}</Desc>
+          <Name>{cardInfo?.name}</Name>
+          <Desc>{cardInfo?.department}</Desc>
+          <Desc>{cardInfo?.position}</Desc>
         </LeftFlex>
 
         <RightFlex>
           <Company>
-            {cardInfo.frontBack === 'FRONT'
+            {cardInfo?.frontBack === 'FRONT'
               ? '포스코 인터네셔널'
               : 'POSCO INTERNATIONAL'}
           </Company>
-          <Desc>Tel {cardInfo.landlineNumber}</Desc>
-          <Desc>Mobile {cardInfo.phoneNumber}</Desc>
-          <Desc>E-mail {cardInfo.email}</Desc>
+          <Desc>Tel {cardInfo?.landlineNumber}</Desc>
+          <Desc>Mobile {cardInfo?.phoneNumber}</Desc>
+          <Desc>E-mail {cardInfo?.email}</Desc>
         </RightFlex>
       </Flex>
     </div>
