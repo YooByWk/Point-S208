@@ -248,7 +248,7 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
                 .faxNumber(request.faxNumber())
                 .phoneNumber(request.phoneNumber())
                 .address(request.address())
-                .realPicture(request.realPicture())
+                .realPicture(teamAlbumDetail.getBusinesscard().getRealPicture())
                 .frontBack(request.frontBack())
                 .domainUrl(request.domainUrl())
                 .build());
