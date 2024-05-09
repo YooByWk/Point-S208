@@ -14,19 +14,19 @@ import type { TeamListType } from '@/types/TeamListType'
 import { useState } from 'react'
 
 /*  유저의 디지털 카드가 필요함*/
-const cardInfo: CardType = dummyCard[0]
+// const cardInfo: CardType = dummyCard[0]
 interface TeamCardProps {
   teamInfo: TeamListType
   onClick?: () => void
 }
 const TeamCard = ({ teamInfo,onClick }: TeamCardProps) => {
   const [isHover, setIsHover] = useState(false)
-  
+
   return (
     <div css={container}>
       <div css={bg} onClick={onClick}>
         <Flex direction="row" align="center" justify='space-around'>
-          <TeamCardThumbnail cardInfo={cardInfo} />
+          <TeamCardThumbnail teamAlbumId={teamInfo.teamAlbumId} />
           <Flex direction="column" align="center">
             <Text typography="t7" bold={true} color="themeText">
               {teamInfo.teamName}

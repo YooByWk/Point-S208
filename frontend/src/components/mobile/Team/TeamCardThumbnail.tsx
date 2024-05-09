@@ -4,26 +4,31 @@ import { css } from '@emotion/react';
 // import MyDigitalCard from './../MyCard/MyDigitalCard'
 import MyDigitalCard from '@components/mobile/MyCard/MyDigitalCard'
 import type { CardType } from '@/types/cardType'
+import { useQuery } from '@tanstack/react-query';
+import { fetchTeamCardsList } from '@/apis/team';
+import { Key } from 'react';
 // import { dummyCard } from '@/assets/data/dummyCard'
 
 interface TeamCardThumbnailProps {
-  cardInfo: CardType
+  teamAlbumId: number;
 }
 
-const TeamCardThumbnail: React.FC<TeamCardThumbnailProps>= ({cardInfo}) => {
-  /* 내 명함 정보*/
+const TeamCardThumbnail: React.FC<TeamCardThumbnailProps>= ({teamAlbumId}) => {
+  /* 팀 명함 정보*/
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ['fetchTeamCardsList', null],
+    queryFn: () => fetchTeamCardsList(teamAlbumId, 0),
+  })
+  !isLoading && console.log(teamAlbumId, data.data_body)
+  
   return (
-      <div css={TeamCardThumbnailContainer}>
-        <div css={cardStyle(0)}>
-          <MyDigitalCard cardInfo={cardInfo} scale={0.5} border={true}/>
+    <div css={TeamCardThumbnailContainer}>
+      {!isLoading && data ? data.data_body.slice(0, 3).map((card: CardType, index: number) => (
+        <div key={index} css={cardStyle(index * 18)}>
+          <MyDigitalCard cardInfo={card} scale={0.5} border={true}/>
         </div>
-        <div css={cardStyle(18)}>
-          <MyDigitalCard cardInfo={cardInfo} scale={0.5} border={true} />
-        </div>
-        <div css={cardStyle(36)}>
-          <MyDigitalCard cardInfo={cardInfo} scale={0.5} border={true} />
-        </div>
-      </div>
+      )) : <div css={emptyCardStyle} />}
+    </div>
   );
 };
 
@@ -49,3 +54,8 @@ const cardStyle = (offset: number) => css`
   /* transform: translate(${offset}px, -${offset}px); */
   z-index: ${36 - offset};
 `;
+
+const emptyCardStyle = css`
+  width: 245px;
+  height: 135px;
+`
