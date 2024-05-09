@@ -13,7 +13,7 @@ import Text from '@/components/shared/Text'
 import { colors } from '@/styles/colorPalette'
 import ScrollToTop from '@/utils/scrollToTop'
 import { useMutation } from '@tanstack/react-query'
-import { clipPhoto, ocrRegMyCard, postOCR } from '@/apis/card'
+import { clipPhoto, clipPhotoPosco, ocrRegMyCard, postOCR } from '@/apis/card'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { isFrontState } from '@/stores/card'
 import { cameraState } from '@/stores/emptyCard'
@@ -85,9 +85,9 @@ const PhotoAddReg = (props: { refetch: any }) => {
   }
 
   // 명함 영역 자르기
-  const { mutate: clipPhotoMutate } = useMutation({
-    mutationKey: ['clipPhoto'],
-    mutationFn: clipPhoto,
+  const { mutate: clipPhotoPoscoMutate } = useMutation({
+    mutationKey: ['clipPhotoPosco'],
+    mutationFn: clipPhotoPosco,
     onSuccess(result) {
       // Base64 문자열을 Blob 객체로 변환
       const blob = base64ToBlob(result, 'image/jpeg')
@@ -171,7 +171,7 @@ const PhotoAddReg = (props: { refetch: any }) => {
 
       formData.append('image', imgSrc)
 
-      clipPhotoMutate(formData)
+      clipPhotoPoscoMutate(formData)
     }
   }
 
