@@ -215,6 +215,7 @@ const CardThumbnail = ({
                                   direction="column"
                                   align="center"
                                   justify="center"
+                                  onClick={() => setIsModalOpen(false)}
                                 >
                                   <Dismiss24Filled />
                                 </Flex>
@@ -231,7 +232,7 @@ const CardThumbnail = ({
                                 <Text typography="t9">이메일</Text>
                               </Flex>
                             </DialogTrigger>
-                            <DialogTrigger disableButtonEnhancement>
+                            {/* <DialogTrigger disableButtonEnhancement>
                               <Flex
                                 direction="column"
                                 align="center"
@@ -241,7 +242,7 @@ const CardThumbnail = ({
                                 <ArrowCircleDown48Filled />
                                 <Text typography="t9">파일 저장</Text>
                               </Flex>
-                            </DialogTrigger>
+                            </DialogTrigger> */}
                           </DialogActions>
                         </Flex>
                       ) : (

@@ -30,9 +30,9 @@ import { ExternalCardType } from '@/types/ExternalCard'
 import { CardType } from '@/types/cardType'
 import NewlyAdded from './NewlyAdded'
 import { useShareCard } from '@/hooks/useShareCard'
-import { Dismiss24Filled } from '@fluentui/react-icons';
-import { MailRead48Filled } from '@fluentui/react-icons';
-import { ArrowCircleDown48Filled } from '@fluentui/react-icons';
+import { Dismiss24Filled } from '@fluentui/react-icons'
+import { MailRead48Filled } from '@fluentui/react-icons'
+import { ArrowCircleDown48Filled } from '@fluentui/react-icons'
 
 const BottomSection = ({
   list,
@@ -58,22 +58,21 @@ const BottomSection = ({
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [emailInput, setEmailInput] = useState('')
   const handleEmailClick = () => {
-      setIsEmail(!isEmail)
+    setIsEmail(!isEmail)
   }
   const handleModalOpen = () => {
     setIsModalOpen(!isModalOpen)
   }
   const handleEmailInput = (e: any) => {
-   setEmailInput(e.target.value)
+    setEmailInput(e.target.value)
   }
   // console.log(card)
   const handleEmailSubmit = () => {
     console.log(emailInput)
-    shareCardMutation.mutate({id: card.cardId, email: emailInput})
+    shareCardMutation.mutate({ id: card.cardId, email: emailInput })
     setIsModalOpen(!isModalOpen)
-    
   }
-  
+
   return (
     <>
       <Accordion
@@ -148,55 +147,79 @@ const BottomSection = ({
               <DialogTitle>{'공유 방법 선택'}</DialogTitle>
               <DialogContent css={content}>
                 <Spacing size={20} direction="vertical" />
-                {isEmail && (<>
-                <Input  onChange={handleEmailInput}  placeholder="이메일 주소를 입력해주세요" css={inputCss} />
-                <Spacing size={20} direction="vertical" />
-                </>
-                
+                {isEmail && (
+                  <>
+                    <Input
+                      onChange={handleEmailInput}
+                      placeholder="이메일 주소를 입력해주세요"
+                      css={inputCss}
+                    />
+                    <Spacing size={20} direction="vertical" />
+                  </>
                 )}
-                {!isEmail?
-                  (<Flex direction="row" align="center" justify="center">
+                {!isEmail ? (
+                  <Flex direction="row" align="center" justify="center">
                     <DialogActions css={fui}>
                       <div css={dismissCss}>
                         <DialogTrigger disableButtonEnhancement>
-                        <Flex direction='column' align='center' justify='center'>
-                          <Dismiss24Filled />
-                        </Flex>
+                          <Flex
+                            direction="column"
+                            align="center"
+                            justify="center"
+                            onClick={() => setIsModalOpen(false)}
+                          >
+                            <Dismiss24Filled />
+                          </Flex>
                         </DialogTrigger>
                       </div>
                       <DialogTrigger disableButtonEnhancement>
-                      <Flex direction='column' align='center' justify='center' onClick={handleEmailClick}>
-                        <MailRead48Filled />
-                        <Text typography='t9'>이메일</Text>
-                      </Flex>
+                        <Flex
+                          direction="column"
+                          align="center"
+                          justify="center"
+                          onClick={handleEmailClick}
+                        >
+                          <MailRead48Filled />
+                          <Text typography="t9">이메일</Text>
+                        </Flex>
+                      </DialogTrigger>
+                      {/* <DialogTrigger disableButtonEnhancement>
+                        <Flex
+                          direction="column"
+                          align="center"
+                          justify="center"
+                        >
+                          <ArrowCircleDown48Filled />
+                          <Text typography="t9">파일 저장</Text>
+                        </Flex>
+                      </DialogTrigger> */}
+                    </DialogActions>
+                  </Flex>
+                ) : (
+                  <Flex direction="row" align="center" justify="center">
+                    <DialogActions css={fui}>
+                      <DialogTrigger disableButtonEnhancement>
+                        <Button
+                          appearance="primary"
+                          onClick={handleEmailSubmit}
+                        >
+                          공유하기
+                        </Button>
                       </DialogTrigger>
                       <DialogTrigger disableButtonEnhancement>
-                      <Flex direction='column' align='center' justify='center'>
-                      <ArrowCircleDown48Filled  />
-                      <Text typography='t9'>파일 저장</Text>  
-                      </Flex>
-                      </DialogTrigger>
-                    </DialogActions>
-                  </Flex>) : (
-                    <Flex direction="row" align="center" justify="center">
-                      <DialogActions css={fui}>
-                        <DialogTrigger disableButtonEnhancement>
-                          <Button appearance="primary" onClick={handleEmailSubmit}>
-                            공유하기
-                          </Button>
-                        </DialogTrigger>
-                        <DialogTrigger disableButtonEnhancement>
-                          <Button appearance="secondary" onClick={() => {
+                        <Button
+                          appearance="secondary"
+                          onClick={() => {
                             handleModalOpen()
                             setIsEmail(!isEmail)
-                          }}>
-                            취소
-                          </Button>
-                        </DialogTrigger>
-                      </DialogActions>
-                    </Flex>
-                  )
-                }
+                          }}
+                        >
+                          취소
+                        </Button>
+                      </DialogTrigger>
+                    </DialogActions>
+                  </Flex>
+                )}
               </DialogContent>
             </DialogBody>
           </DialogSurface>
@@ -220,10 +243,6 @@ const Wrap = styled.div`
 const inputCss = css`
   width: 80%;
 `
-
-
-
-
 
 // css
 
@@ -266,11 +285,10 @@ const fui = css`
   justify-content: space-evenly;
 `
 
-const dismissCss =css`
+const dismissCss = css`
   position: absolute;
   right: 0;
   top: 0;
-
 `
 
 const body = css`
@@ -285,7 +303,6 @@ const body = css`
 `
 
 const surface = css`
-
   display: flex;
   flex-direction: column;
   justify-content: space-between;
