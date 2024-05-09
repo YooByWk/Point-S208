@@ -1,21 +1,24 @@
 /** @jsxImportSource @emotion/react */
 
-import Flex from "@/components/shared/Flex";
-import Spacing from "@/components/shared/Spacing";
-import { CardType } from "@/types/cardType";
-import { BooleanStateType } from "@/types/commonType";
+import Flex from '@/components/shared/Flex'
+import Spacing from '@/components/shared/Spacing'
+import { CardType } from '@/types/cardType'
+import { BooleanStateType } from '@/types/commonType'
 import Text from '@shared/Text'
-import { Edit20Regular,EditRegular,
-  Guest24Regular } from '@fluentui/react-icons'
+import {
+  Edit20Regular,
+  EditRegular,
+  Guest24Regular,
+} from '@fluentui/react-icons'
 import CardInfo from '@components/mobile/MyCard/MyCardDetail/InfoSection'
-import styled from "@emotion/styled";
-import { colors } from "@/styles/colorPalette";
-import { css } from "@emotion/react";
-  
+import styled from '@emotion/styled'
+import { colors } from '@/styles/colorPalette'
+import { css } from '@emotion/react'
+import { ExternalCardType } from '@/types/ExternalCard'
 
 interface DetailInfoSectionProps {
-  card: CardType;
-  isEdit: BooleanStateType;
+  card: CardType | ExternalCardType
+  isEdit: BooleanStateType
 }
 
 const DeatilCardInfo = (props: { name: string; value: string }) => {
@@ -32,56 +35,63 @@ const DeatilCardInfo = (props: { name: string; value: string }) => {
   )
 }
 
-
-const DetailInfoSection: React.FC<DetailInfoSectionProps> = ({ card, isEdit }) => {
+const DetailInfoSection: React.FC<DetailInfoSectionProps> = ({
+  card,
+  isEdit,
+}) => {
   const { setValue } = isEdit
   return (
-  <Flex direction="column">
-  <Wrap>
-    <Text typography="t5" bold={true}>
-      {card.name}
-    </Text>
-    <Text typography="t7">
-      {card.position} / {card.department}
-    </Text>
-    <Edit onClick={() => {setValue(true) ; console.log(isEdit.value)}}>
-      <EditRegular />
-      <Text typography="t8">수정</Text>
-    </Edit>
-  </Wrap>
+    <Flex direction="column">
+      <Wrap>
+        <Text typography="t5" bold={true}>
+          {card.name}
+        </Text>
+        <Text typography="t7">
+          {card.position} / {card.department}
+        </Text>
+        <Edit
+          onClick={() => {
+            setValue(true)
+            console.log(isEdit.value)
+          }}
+        >
+          <EditRegular />
+          <Text typography="t8">수정</Text>
+        </Edit>
+      </Wrap>
 
-  <BreackLine />
+      <BreackLine />
 
-  <Wrap>
-    <Flex align="center">
-      <Guest24Regular />
-      <Spacing size={10} direction="horizontal" />
-      <Text typography="t8" bold={true}>
-        명함 정보
-      </Text>
+      <Wrap>
+        <Flex align="center">
+          <Guest24Regular />
+          <Spacing size={10} direction="horizontal" />
+          <Text typography="t8" bold={true}>
+            명함 정보
+          </Text>
+        </Flex>
+        <DeatilCardInfo name={'회사'} value={card.company} />
+        <DeatilCardInfo name={'부서'} value={card.department} />
+        <DeatilCardInfo name={'직책'} value={card.position} />
+      </Wrap>
+
+      <BreackLine />
+
+      <Wrap>
+        <Flex align="center">
+          <Guest24Regular />
+          <Spacing size={10} direction="horizontal" />
+          <Text typography="t8" bold={true}>
+            연락처
+          </Text>
+        </Flex>
+        <DeatilCardInfo name={'이메일'} value={card.email} />
+        <DeatilCardInfo name={'유선전화'} value={card.landlineNumber} />
+        <DeatilCardInfo name={'휴대전화'} value={card.phoneNumber} />
+      </Wrap>
+
+      <BreackLine />
     </Flex>
-    <DeatilCardInfo name={'회사'} value={card.company} />
-    <DeatilCardInfo name={'부서'} value={card.department} />
-    <DeatilCardInfo name={'직책'} value={card.position} />
-  </Wrap>
-
-  <BreackLine />
-
-  <Wrap>
-    <Flex align="center">
-      <Guest24Regular />
-      <Spacing size={10} direction="horizontal" />
-      <Text typography="t8" bold={true}>
-        연락처
-      </Text>
-    </Flex>
-    <DeatilCardInfo name={'이메일'} value={card.email} />
-    <DeatilCardInfo name={'유선전화'} value={card.landlineNumber} />
-    <DeatilCardInfo name={'휴대전화'} value={card.phoneNumber} />
-  </Wrap>
-
-  <BreackLine />
-</Flex>
   )
 }
 

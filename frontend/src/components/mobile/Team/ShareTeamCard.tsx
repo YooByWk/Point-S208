@@ -14,19 +14,19 @@ import type { TeamListType } from '@/types/TeamListType'
 import { useState } from 'react'
 
 /*  유저의 디지털 카드가 필요함*/
-// const cardInfo: CardType = dummyCard[0]
+const cardInfo: CardType = dummyCard[0]
 interface TeamCardProps {
   teamInfo: TeamListType
   onClick?: () => void
 }
-const TeamCard = ({ teamInfo,onClick }: TeamCardProps) => {
+const ShareTeamCard = ({ teamInfo,onClick }: TeamCardProps) => {
   const [isHover, setIsHover] = useState(false)
-
+  
   return (
     <div css={container}>
       <div css={bg} onClick={onClick}>
         <Flex direction="row" align="center" justify='space-around'>
-          <TeamCardThumbnail teamAlbumId={teamInfo.teamAlbumId} />
+          <TeamCardThumbnail cardInfo={cardInfo} /> 
           <Flex direction="column" align="center">
             <Text typography="t7" bold={true} color="themeText">
               {teamInfo.teamName}
@@ -38,7 +38,6 @@ const TeamCard = ({ teamInfo,onClick }: TeamCardProps) => {
             <Text typography="t9" bold={true} color="themeText">
               {teamInfo.cardSize}개의 명함
             </Text>
-      
           </Flex>
         <Spacing size={15} direction="vertical" />
         </Flex>
@@ -47,7 +46,7 @@ const TeamCard = ({ teamInfo,onClick }: TeamCardProps) => {
   )
 }
 
-export default TeamCard
+export default ShareTeamCard
 
 const container = css`
     width: 100%;

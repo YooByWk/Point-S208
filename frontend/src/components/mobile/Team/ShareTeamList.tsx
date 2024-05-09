@@ -9,13 +9,15 @@ import { css } from '@emotion/react'
 import LargeButton from '@/components/shared/LargeButton'
 import AddTeam from '@/components/mobile/Team/AddTeam'
 import { Spinner, tokens } from '@fluentui/react-components';
-import { useNavigate } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { fetchTeamList } from '@/apis/team'
 import { userState } from '@/stores/user'
 import Flex from '@/components/shared/Flex'
 import Text from '@/components/shared/Text'
 import { TeamListType } from '@/types/TeamListType'
+import ShareTeamCard from './ShareTeamCard'
+import { shareToTeamCard } from '@/apis/album'
 
 
 const TeamList = () => {
@@ -26,40 +28,43 @@ const TeamList = () => {
   )
   const navigate = useNavigate()
   const userId = useRecoilValue(userState).userId
-
   const [searchResults, setSearchResults] = useState<TeamListType[]>([])
-  const {data,isLoading} = useQuery({
+  const queryClient = useQueryClient()
+  const { data, isLoading } = useQuery({
     queryKey: ['fetchTeamList', userId],
     queryFn: () => fetchTeamList(userId as number),
   })
   const teamList: TeamListType[] = data || []
 
+  const param = useLocation()
+  const negro = useParams()
+  console.log(negro)
+  console.log('ppppppppppp',param?.state)
   if (isLoading) {
-    return <Flex direction='column' justify='center' align='center' style={{height:'100vh'}}>
+    return <Flex direction='column' justify='center' align='center' style={{ height: '100vh' }}>
       <Spinner />
       <Text>로딩중...</Text></Flex>
   }
-  
-  if (isWrite) {
-    return (
-      <AddTeam 
-        isWrite={isWrite}
-        setIsWrite={setIsWrite}
-      />
-    )
+  const handleShareClick = async () => {
+    console.log('이 로그 아래, 즉여기에 로직 넣으면 됨')
+    console.log(param,param.state.cardId, typeof param.state)
+    shareToTeamCard(userId as number,selectedTeam.teamAlbumId, param.state.selectedCards )
+    await queryClient.invalidateQueries({queryKey:['fetchTeamCardsList']})
+    navigate(`/myTeam/${selectedTeam.teamAlbumId}`, {state: {teamAlbumId:selectedTeam} })
+    console.log(`/myTeam/${selectedTeam.teamAlbumId}`,'aaaaaaaaaaaaaaaaaa')
+    window.location.reload()
   }
-  
-  if ( !data || data.length === 0 ) {
+  if (!data || data.length === 0) {
     return (
-      <Flex direction='column' justify='center' align='center' style={{height:'100vh'}}>
+      <Flex direction='column' justify='center' align='center' style={{ height: '100vh' }}>
         <Text>팀이 없습니다. </Text>
         <Text>팀을 생성해주세요. </Text>
         <Spacing size={20} direction='vertical'></Spacing>
-        <LargeButton text='팀 추가' onClick={() => setIsWrite(!isWrite)} />
+        <LargeButton text='팀 선택' onClick={() => setIsWrite(!isWrite)} />
       </Flex>
     )
   }
-  
+
   return (
     <>
       <TeamListSearchBox
@@ -73,21 +78,26 @@ const TeamList = () => {
         }}
         placeholder="팀 검색"
       />
-      <Spacing size={30}/>
+      <Spacing size={30} />
       {
-      searchResults.map(team => (
-        <TeamCard
-          teamInfo={team}
-          key={team.teamAlbumId}
-          onClick={() =>  {
-            setSelectedTeam(team)
-            navigate(`/myTeam/${team.teamAlbumId}`, {state: team})
-          }}/>))
-          }
+        searchResults.map(team => (
+          <ShareTeamCard
+            teamInfo={team}
+            key={team.teamAlbumId}
+            onClick={() => {
+              setSelectedTeam(team)
+              console.log('선택완로ㅛ'+selectedTeam.teamAlbumId)
+              // navigate(`/myTeam/${team.teamAlbumId}`, {state: team}) 나중
+            }} />))
+      }
       <Spacing size={30} direction="vertical" />
       <div css={buttonCss}>
-        <LargeButton text='팀 추가' width='80%' onClick={() => setIsWrite(true)} />
+        <LargeButton text='팀에 공유하기' width='80%' onClick={handleShareClick}
+
+        />
+
       </div>
+
     </>
   )
 }
@@ -100,15 +110,15 @@ const buttonCss = css`
   z-index: 999;
   background-color: ${tokens.colorNeutralBackground1};
   `
-  
-  
-  /*
-    const handleAddCard = () => {
-    if (teamAlbumId === undefined || currentteamAlbumId === undefined) {
-      alert('팀이 선택되지 않았습니다. 새로고침 해주세요.')
-      return
-    }
-    setIsAddCard(!isAddCard)
-    setTeamAlbumId(+currentteamAlbumId )
+
+
+/*
+  const handleAddCard = () => {
+  if (teamAlbumId === undefined || currentteamAlbumId === undefined) {
+    alert('팀이 선택되지 않았습니다. 새로고침 해주세요.')
+    return
   }
-  */
+  setIsAddCard(!isAddCard)
+  setTeamAlbumId(+currentteamAlbumId )
+}
+*/

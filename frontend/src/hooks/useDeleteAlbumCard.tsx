@@ -12,7 +12,8 @@ export const useDeleteAlbumCard = () => {
     mutationFn: (cardId: number) => deleteMyAlbumCard({userId: userId as number, cardId }),
     onSuccess: () => {
       console.log("삭제 성공");
-      queryClient.invalidateQueries({ queryKey: ["fetchMyAlbum"]})    
+      queryClient.invalidateQueries({ queryKey: ["fetchMyAlbum"]})
+      window.location.reload() 
     },
     onError: (error) => {
       console.log("삭제 실패", error);

@@ -19,8 +19,15 @@ import {
 import { BooleanStateType } from '@/types/commonType'
 import WebMakeBusinessCard from '@/components/web/WebAlbum/WebMakeBusinessCard'
 import EmptyCard from '../../MyCard/EmptyCard'
+import { ExternalCardType } from '@/types/ExternalCard'
 
-const DetailCardComponent = (isReal: boolean, card: CardType) => {
+const DetailCardComponent = ({
+  isReal,
+  card,
+}: {
+  isReal: boolean
+  card: CardType | ExternalCardType
+}) => {
   const dummyUrl =
     'https://1drv.ms/i/c/60d1136c8e1eeac5/IQPtHI8a_PwASK5IZLcow2yZAdjLhrrPZqV_cjryVMdkpRA?width=150&height=120'
 
@@ -33,13 +40,13 @@ const DetailCardComponent = (isReal: boolean, card: CardType) => {
         <RealCard $url={card.realPicture} />
       ) : (
         <div css={noCss}>
-          <NoCard> 실물 명함 사진이 없습니다.</NoCard>  
+          <NoCard> 실물 명함 사진이 없습니다.</NoCard>
         </div>
-      ) 
-      ): (
-        <div css={noCss}>
-          <NoCard> 실물 명함 사진이 없습니다.</NoCard>  
-        </div>
+      )
+    ) : (
+      <div css={noCss}>
+        <NoCard> 실물 명함 사진이 없습니다.</NoCard>
+      </div>
     )
   } else {
     return (
@@ -61,7 +68,7 @@ const DetailCardSection = ({
   card,
 }: {
   isRealState: BooleanStateType
-  card: CardType
+  card: CardType | ExternalCardType
 }) => {
   const theme = useRecoilValue(themeState)
   const { value, setValue } = isRealState
@@ -97,20 +104,23 @@ const DetailCardSection = ({
         ''
       )} */}
       <Wrap>
-        {/* <Card $isReal={false}>{DetailCardComponent(!isReal, card)}</Card> */}
-        <Card $isReal={true}>{DetailCardComponent(isReal, card)}</Card>
+        {/* <Card $isReal={false}>
+          {DetailCardComponent({ isReal: !isReal, card })}
+        </Card> */}
+        <Card $isReal={true}>
+          {DetailCardComponent({ isReal: isReal, card })}
+        </Card>
       </Wrap>
       {/* <ArrowHookUpLeft28Regular
         css={changeStyle}
         onClick={() => setIsReal(!isReal)}
-      /> */}
-      <Desc>{isReal ? '실물' : '디지털'}</Desc>
+      />
+      <Desc>{isReal ? '실물' : '디지털'}</Desc> */}
     </Container>
   )
 }
 
 export default DetailCardSection
-
 
 const Container = styled.div<{ $theme: string }>`
   position: relative;
@@ -128,7 +138,6 @@ const Container = styled.div<{ $theme: string }>`
 const noCss = css`
   width: 245px;
   height: 135px;
-  
 `
 
 const Wrap = styled.div`
