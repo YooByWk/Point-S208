@@ -140,9 +140,12 @@ public class UserServiceImpl implements UserService{
         for (TeamAlbumDetail teamAlbumDetail : teamAlbumDetails){
             Businesscard businesscard = teamAlbumDetail.getBusinesscard();
 
-            String name = businesscard.getName();
-            String email = businesscard.getEmail();
-            String company = businesscard.getCompany();
+//            String name = businesscard.getName();
+//            String email = businesscard.getEmail();
+//            String company = businesscard.getCompany();
+            String name = businesscard.getName().toLowerCase();
+            String email = businesscard.getEmail().toLowerCase();
+            String company = businesscard.getCompany().toLowerCase();
 
             if (name.contains(info) || email.contains(info) || company.contains(info)) {
                 dtos.add(PrivateAlbumResponseDto.builder()
