@@ -32,7 +32,7 @@ export default function App() {
 
   useEffect(() => {
     setTheme(themeString)
-  }, [setTheme, themeString])
+  }, [setTheme, themeString]) 
 
   return (
     <TeamsFxContext.Provider

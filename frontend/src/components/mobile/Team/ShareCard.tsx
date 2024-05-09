@@ -13,6 +13,8 @@ import MultiSelectBar from '@/components/shared/MultiSelectBar'
 import { tokens } from '@fluentui/react-components'
 import { ExternalCardListType, ExternalCardType } from '@/types/ExternalCard'
 import { UserListType } from '@/types/userType'
+import TeamList from './TeamList'
+import { useNavigate } from 'react-router-dom'
 
 interface AddTeamProps {
   cards: CardType[]
@@ -25,6 +27,8 @@ interface AddTeamProps {
   setIsPageChanged: (isPageChanged: boolean) => void
   isPageChanged: boolean
 }
+
+
 
 const ShareCard = ({
   cards,
@@ -45,19 +49,38 @@ const ShareCard = ({
   const [searchResults, setSearchResults] = useState<
     ExternalCardListType | undefined
   >(undefined)
+  const [teamAlbumId, setTeamAlbumId] = useState<number>(); // teamAlbumId 상태를 관리
+  const navigate = useNavigate()
+/* 
+
+*/
+
+  const handleTeamList = () => {
+    console.log('sssssssssssss',selectedCards)
+    navigate(`/myTeam/share`, {
+      state: {selectedCards}
+    })
+  }
 
   const handleResult = (data: ExternalCardListType | UserListType) => {
-    if (Array.isArray(data) ) {
+    if (Array.isArray(data)) {
       setSearchResults(data as ExternalCardListType)
     }
   }
   return (
+
+
     <div>
       <Flex direction="row" onClick={handleBackArrow} css={arrowContainer}>
         <ArrowLeft24Regular />
         <Spacing size={10} direction="horizontal" />
         <Text typography="t7">뒤로가기</Text>
       </Flex>
+
+
+
+
+
       <Spacing size={10} direction="vertical" />
       <Text typography="t5" bold={true} css={textCss}>
         공유할 명함을 선택해주세요
@@ -87,9 +110,9 @@ const ShareCard = ({
       <Spacing size={5} />
       <Flex direction="column" justify="center" align="center">
         {(searchResults !== undefined &&
-        searchResults.length > 0 &&
-        searchValue !== undefined &&
-        searchValue.trim() !== ''
+          searchResults.length > 0 &&
+          searchValue !== undefined &&
+          searchValue.trim() !== ''
           ? searchResults
           : cards
         )
@@ -114,15 +137,22 @@ const ShareCard = ({
       <div css={btnContainer}>
         <LargeButton
           text="공유하기"
-          onClick={() =>
+          onClick={() => {
             console.log(
               '공유하기 버튼 클릭. 선택된 카드의 아이디 : 수정하기',
-              selectedCards,
-            )
-          }
+              selectedCards
+            );
+            handleTeamList();
+          }}
+
         />
       </div>
+
+
+
     </div>
+
+
   )
 }
 

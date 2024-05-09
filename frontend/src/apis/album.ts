@@ -105,6 +105,20 @@ export const shareCard = async (params: shareCardType) => {
     .catch(err => console.log(err))
 }
 
+
+
+// 명함지갑 팀 명함에 공유
+export const shareToTeamCard = async (userId: number, teamId: number, params: number[]) => {
+  console.log(params)
+  return authRequest
+    .post(`${cudBaseUrl}/my-album/${userId}/${teamId}/share`, {
+      cardIds: params
+    })
+    .then(res => res.data)
+    .catch(err => console.log(err))
+
+}
+
 export const fetchFilter = async (userId: number) => {
   return authRequest
     .get(`${ReadUrl}/${userId}/filter`)
