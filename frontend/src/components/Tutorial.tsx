@@ -34,7 +34,6 @@ const Tutorial = () => {
     onSuccess(result) {
       console.log('등록 성공', result)
       setUser(prev => ({ ...prev, userId: result.data_body }))
-      setIsUserinStorage(true)
     },
     onError(error) {
       console.error('등록 실패:', error)
@@ -48,6 +47,7 @@ const Tutorial = () => {
     }
 
     mutate(userData)
+    setIsUserinStorage(true)
   }, [mutate, user])
 
   return (

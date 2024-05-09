@@ -28,10 +28,18 @@ const DetailCardComponent = (isReal: boolean, card: CardType) => {
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvwfOm9MLrCGGlftO1mP678gIUIA41LG8P2ssanQH-oQ&s'
 
   if (isReal) {
-    return (
-      card.cardId && ( // 타인의 카드는 사진으로 등록하니까.
+    return card?.cardId ? (
+      card.realPicture ? ( // 타인의 카드는 사진으로 등록하니까.
         <RealCard $url={card.realPicture} />
-      )
+      ) : (
+        <div css={noCss}>
+          <NoCard> 실물 명함 사진이 없습니다.</NoCard>  
+        </div>
+      ) 
+      ): (
+        <div css={noCss}>
+          <NoCard> 실물 명함 사진이 없습니다.</NoCard>  
+        </div>
     )
   } else {
     return (
@@ -86,7 +94,7 @@ const DetailCardSection = ({
           </Flex>
         </SwitchBtn>
       ) : (
-        <EmptyCard/>
+        ''
       )}
       <Wrap>
         <Card $isReal={false}>{DetailCardComponent(!isReal, card)}</Card>
@@ -103,6 +111,7 @@ const DetailCardSection = ({
 
 export default DetailCardSection
 
+
 const Container = styled.div<{ $theme: string }>`
   position: relative;
   display: flex;
@@ -114,6 +123,12 @@ const Container = styled.div<{ $theme: string }>`
     props.$theme === 'dark'
       ? `linear-gradient(238deg, #286c95 -0.51%, #000 89.73%)`
       : `linear-gradient(246deg, #05507d 0%, #eff9ff 100%)`};
+`
+
+const noCss = css`
+  width: 245px;
+  height: 135px;
+  
 `
 
 const Wrap = styled.div`

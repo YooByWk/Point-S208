@@ -2,7 +2,7 @@
 
 import { css } from '@emotion/react'
 import { Textarea, tokens } from '@fluentui/react-components'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Flex from '@shared/Flex'
 import Text from '@shared/Text'
 import { CardType } from '@/types/cardType'
@@ -28,7 +28,6 @@ const MemoSection = ({ card }: MemoSectionProps) => {
   const userId = useRecoilValue(userState).userId as unknown as number
   const cardId = useParams()?.cardId as unknown as number
 
-  console.log('teamId: ', teamId)
   const queryClient = useQueryClient()
   
   const {data:memoText} = useQuery({
@@ -39,13 +38,12 @@ const MemoSection = ({ card }: MemoSectionProps) => {
     enabled: !teamId
   })
   const memo = teamId ? card.memo : memoText?.data_body.memo;  
+  console.log(memo,'메모')
   // teamId가 있는 경우에는 card.memo를 사용, 없는 경우에는 memoText.data_body.memo를 사용
-
   const [editvalue, setEditValue] = useState(memo);
   const [displayMemo, setDisplayMemo] = useState(memo);
 
-  
-  console.log(memoText)
+  console.log(card.cardId, teamId, '카드 / 팀 ', userId)
   const [isEdit, setIsEdit] = useState(false)
   const editAlbumMutation = useEditAlbumMemo({
     userId: userId,
@@ -55,8 +53,9 @@ const MemoSection = ({ card }: MemoSectionProps) => {
   })
 
   const handleIconClick = () => {
+    console.log(editvalue)
     setIsEdit(!isEdit)
-    setEditValue(card.memo)
+    setEditValue(memo)
   }
   
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,7 +71,10 @@ const MemoSection = ({ card }: MemoSectionProps) => {
 
   }
   
-  
+  useEffect(() => {
+    setEditValue(memo);
+    setDisplayMemo(memo);
+  }, [memo]);
   return (
     <>
       <div css={memoBoxStyles}>
