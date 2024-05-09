@@ -24,7 +24,7 @@ public class Businesscard extends BaseTimeEntity {
     @Column(name = "card_id")
     private Long cardId;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     private String name;
 
     @Column(name = "company", length = 100)
@@ -75,4 +75,5 @@ public class Businesscard extends BaseTimeEntity {
         FRONT,
         BACK
     }
+
 }
