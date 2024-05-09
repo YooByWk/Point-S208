@@ -58,3 +58,11 @@ export type shareCardType = {
   cardId: number
   email: string
 }
+
+
+export type editTeamMemoType = {
+  userId: number | undefined
+  cardId: number | undefined
+  teamAlbumId: number | undefined
+  data: { memo: string }
+}

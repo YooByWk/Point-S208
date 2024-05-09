@@ -18,6 +18,7 @@ import {
 } from '@fluentui/react-icons'
 import { BooleanStateType } from '@/types/commonType'
 import WebMakeBusinessCard from '@/components/web/WebAlbum/WebMakeBusinessCard'
+import EmptyCard from '../../MyCard/EmptyCard'
 
 const DetailCardComponent = (isReal: boolean, card: CardType) => {
   const dummyUrl =
@@ -64,7 +65,6 @@ const DetailCardSection = ({
     },
     [setIsReal],
   )
-
   return (
     <Container $theme={theme}>
       {card.realPicture ? (
@@ -86,7 +86,7 @@ const DetailCardSection = ({
           </Flex>
         </SwitchBtn>
       ) : (
-        ''
+        <EmptyCard/>
       )}
             <Wrap>
         <Card $isReal={false}>{DetailCardComponent(!isReal, card)}</Card>

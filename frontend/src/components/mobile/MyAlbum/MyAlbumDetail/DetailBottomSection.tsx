@@ -32,52 +32,13 @@ const DetailBottomSection = () => {
   console.log(params)
   return (
     <>
-      <Accordion
-        openItems={openItems}
-        onToggle={handleToggle}
-        multiple
-        collapsible
-        css={containerStyle}
-      >
-        <AccordionItem value="1" css={itemStyle(theme)}>
-          <AccordionHeader expandIconPosition="end">
-            <Text typography="t8">최근 등록한 명함</Text>
-          </AccordionHeader>
-          <AccordionPanel>
-            <Wrap>
-              <Card />
-              <Card />
-              <Card />
-            </Wrap>
-          </AccordionPanel>
-        </AccordionItem>
-        <AccordionItem value="2" css={itemStyle(theme)}>
-          <AccordionHeader expandIconPosition="end">
-            <Text typography="t8">빠른 공유</Text>
-          </AccordionHeader>
-          <AccordionPanel>
-            <Wrap>
-              <Flex direction="column" align="center">
-                <People />
-                <p>김싸피</p>
-              </Flex>
-              <Flex direction="column" align="center">
-                <People />
-                <p>김싸피</p>
-              </Flex>
-            </Wrap>
-          </AccordionPanel>
-        </AccordionItem>
-      </Accordion>
-
+      <hr></hr>
       <Spacing size={12} />
-
       <Flex justify="space-around">
         <Button shape="circular" onClick={() => {}}>
           명함 공유
         </Button>
       </Flex>
-
       <Spacing size={10} />
     </>
   )
