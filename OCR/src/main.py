@@ -159,12 +159,21 @@ async def process_image(image: UploadFile = File(...)):
             if area > 1000:
                 # 윤곽선이 그려진 부분만 잘라내기
                 x, y, w, h = cv2.boundingRect(contour)
-                contour_area = img_color[y:y+h, x:x+w]
+                result = img_color[y:y+h, x:x+w]
                 
                 # 이미지를 JPEG 형식으로 인코딩하여 전송
-                retval, buffer = cv2.imencode('.jpg', contour_area)
-                io_buf = BytesIO(buffer)
-                return StreamingResponse(io_buf, media_type="image/jpeg")
+                # retval, buffer = cv2.imencode('.jpg', contour_area)
+                # io_buf = BytesIO(buffer)
+                # return StreamingResponse(io_buf, media_type="image/jpeg")
+
+
+                # 이미지를 JPEG 형식으로 인코딩
+                retval, buffer = cv2.imencode('.jpg', result)
+                # 이미지를 base64로 인코딩하여 문자열로 변환
+                image_base64 = base64.b64encode(buffer).decode('utf-8')
+                return image_base64
+            
+            
         
         raise HTTPException(status_code=400, detail="No contour area found")
     
@@ -175,7 +184,12 @@ async def process_image(image: UploadFile = File(...)):
 @api.post("/process_image/scanv3/")
 async def process_image(image: UploadFile = File(...)):
     output_file = detect_and_save_business_card(image)
-    return FileResponse(output_file.name)
+
+    # 이미지를 JPEG 형식으로 인코딩하여 base64로 변환
+    with open(output_file.name, "rb") as img_file:
+        image_base64 = base64.b64encode(img_file.read()).decode("utf-8")
+    
+    return image_base64
 
 
 @api.post("/process_image/scanv4/")
