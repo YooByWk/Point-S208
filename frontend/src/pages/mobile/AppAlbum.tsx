@@ -1,11 +1,11 @@
-import { Outlet } from "react-router-dom";
+import { Outlet } from 'react-router-dom'
 
 const AppAlbum = () => {
   return (
-    <div>
-      <Outlet/>
+    <div style={{ height: '100dvh' }}>
+      <Outlet />
     </div>
-  );
-};
+  )
+}
 
-export default AppAlbum;
+export default AppAlbum

@@ -1,4 +1,3 @@
-
 import BackArrow from '@/components/shared/BackArrow'
 import CardList from '@/components/shared/CardList'
 import { CardType } from '@/types/cardType'
@@ -13,20 +12,19 @@ import Flex from '@/components/shared/Flex'
 import LargeButton from '@/components/shared/LargeButton'
 import Spacing from '@/components/shared/Spacing'
 import Text from '@/components/shared/Text'
-import { isLookingMemberState } from '@/stores/team';
+import { isLookingMemberState } from '@/stores/team'
 import TeamMember from '@/components/mobile/Team/TeamDetail/TeamMember'
 import { TeamListType } from '@/types/TeamListType'
 import { isAlbumState } from '@/stores/emptyCard'
 import SearchBox from '@/components/shared/SearchBox'
 
-
 const TeamDetail = () => {
   const isPageChanged = useRecoilValue(pageChanged)
   const [isAddCard, setIsAddCard] = useState(false)
-  const {teamAlbumId} = useParams() 
+  const { teamAlbumId } = useParams()
   console.log(teamAlbumId)
 
-  const teamInfo:TeamListType = useLocation().state
+  const teamInfo: TeamListType = useLocation().state
   // console.log(teamInfo)
   const teamAlbumIdNumber = teamAlbumId ? +teamAlbumId : 0
   const navigate = useNavigate()
@@ -37,7 +35,7 @@ const TeamDetail = () => {
     setIsAddCard(!isAddCard)
     setIsAlbum(false)
   }
-  
+
   useEffect(() => {
     if (teamAlbumId === undefined) {
       alert('팀이 선택되지 않았습니다.')
@@ -45,10 +43,11 @@ const TeamDetail = () => {
       return
     }
   }, [teamAlbumId])
-  
-  const {data, fetchNextPage, hasNextPage,  } = useInfiniteQuery({
+
+  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
     queryKey: ['fetchTeamCardsList'],
-    queryFn: ({ pageParam = 0 }) => fetchTeamCardsList(teamAlbumIdNumber, pageParam),
+    queryFn: ({ pageParam = 0 }) =>
+      fetchTeamCardsList(teamAlbumIdNumber, pageParam),
     getNextPageParam: (lastPage, allPages) => {
       return Array.isArray(lastPage.data_body) && lastPage.length > 0
         ? allPages.length
@@ -56,9 +55,10 @@ const TeamDetail = () => {
     },
     initialPageParam: 0,
   })
-  
-  let teamCardList: CardType[] = data?.pages.flatMap(page => page.data_body) || []
-  
+
+  let teamCardList: CardType[] =
+    data?.pages.flatMap(page => page.data_body) || []
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
@@ -71,52 +71,61 @@ const TeamDetail = () => {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [fetchNextPage, hasNextPage, data])
-  
-  
-  
-  
+
   if (isAddCard) {
     return (
       <>
-        <AddCard isAddCard={isAddCard} setIsAddCard={setIsAddCard} teamInfo={teamInfo} />
+        <AddCard
+          isAddCard={isAddCard}
+          setIsAddCard={setIsAddCard}
+          teamInfo={teamInfo}
+        />
       </>
     )
   }
   if (isLookingMember) {
-    return <TeamMember team={teamInfo}/>
+    return <TeamMember team={teamInfo} />
   }
-  
+
   if (!data || teamCardList.length === 0) {
     return (
       <>
-      
-      <BackArrow />
-      <SearchBox isTeam={true} value={''} onSearch={()=> {}} disabled={true} />
-      <Flex direction='column' justify='center' align='center' style={{height:'100vh'}}>
-        <Text>팀에 명함이 없습니다. </Text>
-        <Text>명함을 추가해주세요. </Text>
-        <Spacing size={20} direction='vertical'></Spacing>
-        <LargeButton text='명함 추가' onClick={hadnleAdd} />
-      </Flex>
+        <BackArrow />
+        <SearchBox
+          isTeam={true}
+          value={''}
+          onSearch={() => {}}
+          disabled={true}
+        />
+
+        <Flex
+          direction="column"
+          justify="center"
+          align="center"
+          style={{ height: '100vh' }}
+        >
+          <Text>팀에 명함이 없습니다. </Text>
+          <Text>명함을 추가해주세요. </Text>
+          <Spacing size={20} direction="vertical"></Spacing>
+          <LargeButton text="명함 추가" onClick={hadnleAdd} />
+        </Flex>
       </>
     )
   }
-
 
   return (
     <>
       <div>
         {!isPageChanged && <BackArrow />}
-        {teamCardList[0] !== undefined && teamCardList.length > 0 ?<CardList
-          cards={teamCardList}
-          isTeam={true}
-          handleAdd={hadnleAdd}
-        /> : <div>데이터가 없습니다.</div>}
+        {teamCardList[0] !== undefined && teamCardList.length > 0 ? (
+          <CardList cards={teamCardList} isTeam={true} handleAdd={hadnleAdd} />
+        ) : (
+          <div>데이터가 없습니다.</div>
+        )}
       </div>
       {isAddCard && (
         <AddCard isAddCard={isAddCard} setIsAddCard={setIsAddCard} />
       )}
-
     </>
   )
 }

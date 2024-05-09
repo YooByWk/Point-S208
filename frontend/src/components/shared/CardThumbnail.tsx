@@ -139,11 +139,11 @@ const CardThumbnail = ({
         )}
         {!forShare && (
           <Flex direction="column" justify="space-around" align="center">
-            {isfavorite ? (
+            {/* {isfavorite ? (
               <Star24Filled css={iconCss} onClick={handleFavorite} />
             ) : (
               <Star24Regular css={i} onClick={handleFavorite} />
-            )}
+            )} */}
             <ShareAndroid24Filled css={i} onClick={handleShare} />
             <SmallModal
               icon={<Delete24Filled />}
