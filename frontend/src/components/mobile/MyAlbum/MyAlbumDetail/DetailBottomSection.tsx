@@ -28,6 +28,8 @@ import { useParams } from 'react-router-dom'
 import SmallModal from '@/components/shared/SmallModal'
 import ShareModal from './shareModal'
 import { MailRead48Filled, ArrowCircleDown48Filled, Dismiss24Filled  } from '@fluentui/react-icons'
+import Input from '@/components/shared/Input'
+import LargeButton from '@/components/shared/LargeButton'
 
 
 const DetailBottomSection = () => {
@@ -41,11 +43,19 @@ const DetailBottomSection = () => {
 
   const [isEmail, setIsEmail] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  
+  const [emailInput, setEmailInput] = useState('')
   const handleEmailClick = () => {
       setIsEmail(!isEmail)
   }
   const handleModalOpen = () => {
+    setIsModalOpen(!isModalOpen)
+  }
+  const handleEmailInput = (e: any) => {
+   setEmailInput(e.target.value)
+  }
+  
+  const handleEmailSubmit = () => {
+    console.log(emailInput)
     setIsModalOpen(!isModalOpen)
   }
 
@@ -67,10 +77,15 @@ const DetailBottomSection = () => {
               <DialogTitle>{'공유 방법 선택'}</DialogTitle>
               <DialogContent css={content}>
                 <Spacing size={20} direction="vertical" />
+                {isEmail && (<>
+                <Input  onChange={handleEmailInput}  placeholder="이메일 주소를 입력해주세요" css={inputCss} />
+                <Spacing size={20} direction="vertical" />
+                </>
+                
+                )}
                 {!isEmail?
                   (<Flex direction="row" align="center" justify="center">
                     <DialogActions css={fui}>
-                      
                       <div css={dismissCss}>
                         <DialogTrigger disableButtonEnhancement>
                         <Flex direction='column' align='center' justify='center'>
@@ -95,8 +110,7 @@ const DetailBottomSection = () => {
                     <Flex direction="row" align="center" justify="center">
                       <DialogActions css={fui}>
                         <DialogTrigger disableButtonEnhancement>
-                          <Button appearance="primary" onClick={() => {}}>
-
+                          <Button appearance="primary" onClick={handleEmailSubmit}>
                             공유하기
                           </Button>
                         </DialogTrigger>
@@ -123,6 +137,10 @@ const DetailBottomSection = () => {
 }
 
 export default DetailBottomSection
+
+const inputCss = css`
+  width: 80%;
+`
 
 const Wrap = styled.div`
   display: flex;
