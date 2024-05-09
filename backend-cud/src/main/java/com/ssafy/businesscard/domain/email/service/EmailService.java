@@ -91,15 +91,19 @@ public class EmailService {
             System.out.println("rrrrrrrr" + businesscard.getRealPicture());
 //            FileSystemResource image = new FileSystemResource(new File(businesscard.getRealPicture()));
 
-            URL imageUrl = new URL(businesscard.getRealPicture());
-            File tempFile = File.createTempFile("temp", ".jpg");
+            if (businesscard.getRealPicture() != null && !businesscard.getRealPicture().isEmpty()) {
 
-            try (FileOutputStream fos = new FileOutputStream(tempFile)) {
-                fos.write(imageUrl.openStream().readAllBytes());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+                URL imageUrl = new URL(businesscard.getRealPicture());
+                File tempFile = File.createTempFile("temp", ".jpg");
+
+                try (FileOutputStream fos = new FileOutputStream(tempFile)) {
+                    fos.write(imageUrl.openStream().readAllBytes());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                messageHelper.addAttachment("image.jpg", tempFile);
             }
-            messageHelper.addAttachment("image.jpg", tempFile);
+
             mailSender.send(message);
 
         } catch (MessagingException e) {
@@ -135,7 +139,7 @@ public class EmailService {
 
 //            log.info("sizzzzzzzzzz" + businesscards.size());
 
-            if (businesscards.size() == 2 && !businesscards.get(1).getDigitalPicture().isEmpty()) {
+            if (businesscards.size() == 2 && businesscards.get(1).getDigitalPicture() != null && !businesscards.get(1).getDigitalPicture().isEmpty()) {
 
                 URL backimageUrl = new URL(businesscards.get(1).getDigitalPicture());
                 File BacktempFile = File.createTempFile("temp2", ".jpg");
@@ -149,7 +153,7 @@ public class EmailService {
 
             }
 
-            if (!businesscards.get(0).getDigitalPicture().isEmpty()) {
+            if (businesscards.get(0).getDigitalPicture() != null && !businesscards.get(0).getDigitalPicture().isEmpty()) {
 
                 URL imageUrl = new URL(businesscards.get(0).getDigitalPicture());
 
