@@ -57,8 +57,8 @@ const AlbumList = () => {
     }
   }, [filterState.filterId]);
   
-    
-  let cards = isNaN(filterState.filterId)?  data?.pages.flatMap(page => page.data_body) || [] : filterData?.data_body.cardList || []
+  let cards = isNaN(filterState.filterId)? data?.pages.flatMap(page => page.data_body || []) || []: filterData?.data_body.cardList || [];
+  // let cards = isNaN(filterState.filterId)?  data?.pages.flatMap(page => page.data_body) || [] : filterData?.data_body.cardList || []
   console.log('cards: ', filterData? filterData : 'no')
   //
 

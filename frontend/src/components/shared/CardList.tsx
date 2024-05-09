@@ -57,7 +57,6 @@ const CardList = ({
     console.log('isShare: ', isShare)
   }
 
-  console.log('cards: ', cards)
   const [searchResults, setSearchResults] = useState<
     ExternalCardListType | undefined
   >(undefined)
