@@ -19,6 +19,7 @@ import { isFrontState } from '@/stores/card'
 import { cameraState } from '@/stores/emptyCard'
 import { userState } from '@/stores/user'
 import base64ToBlob from '@/utils/base64ToBlob'
+import { InfoLabel } from '@fluentui/react-components'
 
 const PhotoAddReg = (props: { refetch: any }) => {
   // KOR Card Registration or ENG Card Registration
@@ -191,7 +192,7 @@ const PhotoAddReg = (props: { refetch: any }) => {
         }),
       )
 
-      ocrMutate(formData)
+      isClipPhoto && ocrMutate(formData)
     }
   }
 
@@ -212,6 +213,7 @@ const PhotoAddReg = (props: { refetch: any }) => {
   return (
     <Flex direction="column" style={{ height: '100vh' }}>
       <Top>
+        <InfoLabel info={<>변환에 성공한 카드만 등록할 수 있습니다 </>} />
         <Dismiss20Filled onClick={() => setCamera(false)} />
       </Top>
       <Flex justify="center" css={imgSrc ? '' : photoStyle}>
@@ -282,7 +284,7 @@ export default PhotoAddReg
 
 const Top = styled.div`
   display: flex;
-  justify-content: end;
+  justify-content: space-between;
   margin: 5%;
 `
 

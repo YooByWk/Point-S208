@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
 import Text from '@shared/Text'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { userState } from '@/stores/user'
 import Dimmed from '@/components/shared/Dimmed'
 import Flex from '@/components/shared/Flex'
@@ -18,7 +18,7 @@ import Spacing from '@/components/shared/Spacing'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { TeamListType } from '@/types/TeamListType'
-
+import { cameraState } from '@/stores/emptyCard'
 interface AddCardProps {
   isAddCard: boolean
   setIsAddCard: (isAddCard: boolean) => void
@@ -33,14 +33,16 @@ const AddCard = ({
   teamInfo,
 }: AddCardProps) => {
   const userId = useRecoilValue(userState).userId
-  const [isCameraInput, setIsCameraInput] = useState(false)
   const [isDirectInput, setIsDirectInput] = useState(false)
   console.log('팀앨범아이디', teamInfo?.teamAlbumId)
-  const navigate = useNavigate()
 
   const handleClose = () => {
     setIsAddCard(!isAddCard) // 닫기
   }
+
+  const setCamera = useSetRecoilState(cameraState)
+
+  const navigate = useNavigate()
 
   const handleDirectInput = () => {
     console.log('직접 입력 클릭')
@@ -50,12 +52,14 @@ const AddCard = ({
       state: { isDirectInput: true, teamInfo: teamInfo },
     })
   }
+
   const handleCameraInput = () => {
     console.log('카메라입력클릭')
     setIsAddCard(false)
-    setIsCameraInput(true)
+    setCamera(true)
     navigate(`/myAlbum/register/${userId}`, { state: { isCameraInput: true } })
   }
+
   return (
     <>
       <Dimmed>
@@ -114,6 +118,7 @@ export default AddCard
 const container = css`
   height: 100%;
   .in {
+    position: relative;
     background-color: ${tokens.colorNeutralBackground1};
     padding: 20px;
     border-radius: 10px;
@@ -123,8 +128,7 @@ const container = css`
     text-align: center;
   }
   .X {
-    position: relative;
-    left: 50%;
-    top: -15px;
+    position: absolute;
+    right: 10px;
   }
 `

@@ -25,19 +25,17 @@ const CardComponent = (isFront: boolean) => {
   const frontCard = useRecoilValue(frontCardState)
   const backCard = useRecoilValue(backCardState)
   const card = isFront ? frontCard : backCard
-  const dummyUrl =
-    'https://1drv.ms/i/c/60d1136c8e1eeac5/IQPtHI8a_PwASK5IZLcow2yZAdjLhrrPZqV_cjryVMdkpRA?width=150&height=120'
 
   if (isReal) {
-    return card.cardId ? (
-      <RealCard $url={dummyUrl} />
+    return card?.cardId ? (
+      <RealCard $url={card.realPicture} />
     ) : (
       <NoCard>
         {isFront ? '국문 명함을 추가해주세요' : '영문 명함을 추가해주세요'}
       </NoCard>
     )
   } else {
-    return card.cardId ? (
+    return card?.cardId ? (
       <MyDigitalCard cardInfo={card} scale={1} border={false} />
     ) : (
       <NoCard>
@@ -139,7 +137,7 @@ const RealCard = styled.div<{ $url: string }>`
   width: 100%;
   height: 100%;
   background: url(${props => props.$url});
-  background-size: cover;
+  background-size: contain;
 `
 
 const NoCard = styled.div`

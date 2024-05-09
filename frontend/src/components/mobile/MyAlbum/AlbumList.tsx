@@ -8,7 +8,7 @@ import { CardListType } from '@/types/CardListType'
 import { CardType } from '@/types/cardType'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { Spinner } from '@fluentui/react-components'
 import { css } from '@emotion/react'
 import LargeButton from '@/components/shared/LargeButton'
@@ -20,6 +20,7 @@ import SearchBox from '@/components/shared/SearchBox'
 import { filterState as filterStoreState } from '@/stores/album'
 import { dummyCard } from '@/assets/data/dummyCard'
 import { ExternalCardListType, ExternalCardType } from '@/types/ExternalCard'
+import { isAlbumState } from '@/stores/emptyCard'
 
 const AlbumList = () => {
   // 내 명함 리스트
@@ -27,6 +28,7 @@ const AlbumList = () => {
   const [user, setUser] = useRecoilState(userState)
   const [searchValue, setSearchValue] = useState('')
   const [filterState, setFilterState] = useRecoilState(filterStoreState)
+  const setIsAlbum = useSetRecoilState(isAlbumState)
 
   const { data, fetchNextPage, hasNextPage, isError, isFetchingNextPage, refetch: refetchAlbum } =
     useInfiniteQuery({
@@ -76,6 +78,7 @@ const AlbumList = () => {
   const [isAddCard, setIsAddCard] = useState(false)
   const handleAdd = () => {
     setIsAddCard(!isAddCard)
+    setIsAlbum(true)
   }
   //
 

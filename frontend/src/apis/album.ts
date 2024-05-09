@@ -5,6 +5,7 @@ import {
   editAlbumCardType,
   editMemoType,
   shareCardType,
+  OcrCardType,
   WriteCardType,
 } from '@/types/cardInput'
 import { searchType } from '@/types/searchType'
@@ -53,6 +54,14 @@ export const getAlbumDetail = async ({
 export const RegisterOtherCard = async (params: WriteCardType) => {
   return authRequest
     .post(`${CudUrl}/${params.userId}`, params.data)
+    .then(res => res.data)
+    .catch(err => console.log(err))
+}
+
+// OCR 데이터 등록
+export const ocrRegOtherCard = async (params: OcrCardType) => {
+  return authRequest
+    .post(`${CudUrl}/${params.userId}/ocr`, params.data)
     .then(res => res.data)
     .catch(err => console.log(err))
 }

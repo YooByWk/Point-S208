@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import Flex from '@/components/shared/Flex'
-import { cameraState } from '@/stores/emptyCard'
+import { cameraState, isAlbumState } from '@/stores/emptyCard'
 import styled from '@emotion/styled'
 import { useEffect, useRef, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
@@ -19,6 +19,11 @@ import { useMutation } from '@tanstack/react-query'
 import { clipPhoto, ocrRegMyCard, postOCR } from '@/apis/card'
 import base64ToBlob from '@/utils/base64ToBlob'
 import { userState } from '@/stores/user'
+import { InfoLabel } from '@fluentui/react-components'
+import { ocrRegOtherCard } from '@/apis/album'
+import { useNavigate } from 'react-router-dom'
+import { selectedTeamAlbumIdState } from '@/stores/team'
+import { ocrRegTeamCard } from '@/apis/team'
 
 const PhotoReg = (props: { isMyCard: boolean; refetch: any }) => {
   // My Card Registration or Other people's Card Registration
@@ -26,6 +31,10 @@ const PhotoReg = (props: { isMyCard: boolean; refetch: any }) => {
   const userId = useRecoilValue(userState).userId
   const setCamera = useSetRecoilState(cameraState)
   const setIsFirstCard = useSetRecoilState(isFirstCardState)
+  const isAlbum = useRecoilValue(isAlbumState)
+  const selectedTeamAlbumId = useRecoilValue(
+    selectedTeamAlbumIdState,
+  ).teamAlbumId
   const fileInput = useRef<HTMLInputElement | null>(null)
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const [frontImgSrc, setFrontImgSrc] = useState<File | null>(null)
@@ -137,39 +146,78 @@ const PhotoReg = (props: { isMyCard: boolean; refetch: any }) => {
 
         imgSrc && formData.append('image', imgSrc)
 
-        formData.append(
-          'request',
-          new Blob(
-            [
-              JSON.stringify({
-                name: data.name?.[0].text || '',
-                company: data.company?.[0].text || '',
-                department: data.department?.[0].text || '',
-                position: data.position?.[0].text || '',
-                email: data.email?.[0].text || '',
-                landlineNumber: data.landlineNumber?.[0].text || '',
-                phoneNumber: data.mobile?.[0].text || data.tel?.[0].text || '',
-                frontBack: isFront ? 'FRONT' : 'BACK',
-              }),
-            ],
-            {
-              type: 'application/json',
-            },
-          ),
-        )
-
-        let params = {
-          userId: userId as number,
-          data: formData,
-        }
-
         setIsFront(!isFront)
         if (isMyCard) {
           // 내 명함 등록 api
+          formData.append(
+            'request',
+            new Blob(
+              [
+                JSON.stringify({
+                  name: data.name?.[0].text || '',
+                  company: data.company?.[0].text || '',
+                  department: data.department?.[0].text || '',
+                  position: data.position?.[0].text || '',
+                  email: data.email?.[0].text || '',
+                  landlineNumber: data.landlineNumber?.[0].text || '',
+                  phoneNumber:
+                    data.mobile?.[0].text || data.tel?.[0].text || '',
+                  frontBack: isFront ? 'FRONT' : 'BACK',
+                }),
+              ],
+              {
+                type: 'application/json',
+              },
+            ),
+          )
+
+          let params = {
+            userId: userId as number,
+            data: formData,
+          }
           registMutate(params)
         } else {
           // 명함 지갑 등록 api
-          registMutate(params)
+          formData.append(
+            'request',
+            new Blob(
+              [
+                JSON.stringify({
+                  name: data.name?.[0].text || '',
+                  company: data.company?.[0].text || '',
+                  department: data.department?.[0].text || '',
+                  position: data.position?.[0].text || '',
+                  email: data.email?.[0].text || '',
+                  landlineNumber: data.landlineNumber?.[0].text || '',
+                  phoneNumber:
+                    data.mobile?.[0].text || data.tel?.[0].text || '',
+                  frontBack: isFront ? 'FRONT' : 'BACK',
+                  rank: data.rank?.[0].text || '',
+                  faxNumber: data.faxNumber?.[0].text || '',
+                  address: data.address?.[0].text || '',
+                  domainUrl: data.domainUrl?.[0].text || '',
+                }),
+              ],
+              {
+                type: 'application/json',
+              },
+            ),
+          )
+
+          if (isAlbum) {
+            let params = {
+              userId: userId as number,
+              data: formData,
+            }
+            registAlbumMutate(params)
+          } else {
+            let params = {
+              userId: userId as number,
+              teamAlbumId: selectedTeamAlbumId as number,
+              data: formData,
+            }
+            registTeamMutate(params)
+          }
         }
       }
     },
@@ -178,7 +226,7 @@ const PhotoReg = (props: { isMyCard: boolean; refetch: any }) => {
     },
   })
 
-  // 명함 등록
+  // 내 명함 등록
   const { mutate: registMutate } = useMutation({
     mutationKey: ['ocrRegMyCard'],
     mutationFn: ocrRegMyCard,
@@ -187,6 +235,34 @@ const PhotoReg = (props: { isMyCard: boolean; refetch: any }) => {
       setCamera(false)
       setIsFirstCard(false)
       refetch()
+    },
+    onError(error) {
+      console.error('등록 실패:', error)
+    },
+  })
+
+  // 명함 지갑 등록
+  const { mutate: registAlbumMutate } = useMutation({
+    mutationKey: ['ocrRegOtherCard'],
+    mutationFn: ocrRegOtherCard,
+    onSuccess(result) {
+      console.log('등록 성공', result)
+      setCamera(false)
+      navigate(-1)
+    },
+    onError(error) {
+      console.error('등록 실패:', error)
+    },
+  })
+
+  // 팀 내 명함 등록
+  const { mutate: registTeamMutate } = useMutation({
+    mutationKey: ['ocrRegTeamCard'],
+    mutationFn: ocrRegTeamCard,
+    onSuccess(result) {
+      console.log('등록 성공', result)
+      setCamera(false)
+      navigate(-1)
     },
     onError(error) {
       console.error('등록 실패:', error)
@@ -240,6 +316,16 @@ const PhotoReg = (props: { isMyCard: boolean; refetch: any }) => {
     }
   }
 
+  const navigate = useNavigate()
+
+  // dismiss 버튼
+  const onClickDismiss = () => {
+    setCamera(false)
+    if (!isMyCard) {
+      navigate(-1)
+    }
+  }
+
   useEffect(() => {
     getCameraStream()
   }, [frontImgSrc, backImgSrc, isFront])
@@ -247,7 +333,8 @@ const PhotoReg = (props: { isMyCard: boolean; refetch: any }) => {
   return (
     <Flex direction="column" style={{ height: '100vh' }}>
       <Top>
-        <Dismiss20Filled onClick={() => setCamera(false)} />
+        <InfoLabel info={<>변환에 성공한 카드만 등록할 수 있습니다 </>} />
+        <Dismiss20Filled onClick={onClickDismiss} />
       </Top>
       <Flex justify="center" css={isImgSrc ? '' : photoStyle}>
         {frontImgSrc && backImgSrc ? (
@@ -347,7 +434,7 @@ export default PhotoReg
 
 const Top = styled.div`
   display: flex;
-  justify-content: end;
+  justify-content: space-between;
   margin: 5%;
 `
 
