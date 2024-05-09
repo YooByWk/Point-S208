@@ -2,8 +2,8 @@
 import BackArrow from '@/components/shared/BackArrow'
 import CardList from '@/components/shared/CardList'
 import { CardType } from '@/types/cardType'
-import React, { useEffect, useState } from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useEffect, useState } from 'react'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { pageChanged } from '@stores/team'
 import AddCard from '@/components/mobile/MyAlbum/AddCard'
 import { useInfiniteQuery } from '@tanstack/react-query'
@@ -16,6 +16,7 @@ import Text from '@/components/shared/Text'
 import { isLookingMemberState } from '@/stores/team';
 import TeamMember from '@/components/mobile/Team/TeamDetail/TeamMember'
 import { TeamListType } from '@/types/TeamListType'
+import { isAlbumState } from '@/stores/emptyCard'
 
 
 const TeamDetail = () => {
@@ -27,8 +28,11 @@ const TeamDetail = () => {
   const teamAlbumIdNumber = teamAlbumId ? +teamAlbumId : 0
   const navigate = useNavigate()
   const isLookingMember = useRecoilValue(isLookingMemberState)
+  const setIsAlbum = useSetRecoilState(isAlbumState)
+
   const hadnleAdd = () => {
     setIsAddCard(!isAddCard)
+    setIsAlbum(false)
   }
   
   useEffect(() => {
@@ -85,7 +89,7 @@ const TeamDetail = () => {
         <Text>팀에 명함이 없습니다. </Text>
         <Text>명함을 추가해주세요. </Text>
         <Spacing size={20} direction='vertical'></Spacing>
-        <LargeButton text='명함 추가' onClick={() => setIsAddCard(!isAddCard)} />
+        <LargeButton text='명함 추가' onClick={hadnleAdd} />
       </Flex>
       </>
     )

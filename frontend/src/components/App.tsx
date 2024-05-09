@@ -29,7 +29,7 @@ export default function App() {
     })
   const setTheme = useSetRecoilState(themeState)
   const [user, setUser] = useRecoilState(userState)
-  const [isUserInfoinLocal, setIsUserInfoinLocal] = useState(true)
+  const [isUserInfoinLocal, setIsUserInfoinLocal] = useState(false)
 
   useEffect(() => {
     setTheme(themeString)

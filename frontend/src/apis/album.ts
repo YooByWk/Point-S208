@@ -4,6 +4,7 @@ import {
   deleteAlbumCardType,
   editAlbumCardType,
   editMemoType,
+  OcrCardType,
   WriteCardType,
 } from '@/types/cardInput'
 import { searchType } from '@/types/searchType'
@@ -14,18 +15,24 @@ const ReadUrl = '/read/api/my-album'
 
 export const fetchMyAlbum = async (userId: number, page: number) => {
   console.log('페이지: ', page)
-  return (
-    authRequest
-      .get(`${ReadUrl}/list/${userId}/${page}`)
-      .then(res => res.data)
-      .catch(err => console.log(err))
-  )
+  return authRequest
+    .get(`${ReadUrl}/list/${userId}/${page}`)
+    .then(res => res.data)
+    .catch(err => console.log(err))
 }
 
 // 명함 등록
 export const RegisterOtherCard = async (params: WriteCardType) => {
   return authRequest
     .post(`${CudUrl}/${params.userId}`, params.data)
+    .then(res => res.data)
+    .catch(err => console.log(err))
+}
+
+// OCR 데이터 등록
+export const ocrRegOtherCard = async (params: OcrCardType) => {
+  return authRequest
+    .post(`${CudUrl}/${params.userId}/ocr`, params.data)
     .then(res => res.data)
     .catch(err => console.log(err))
 }
@@ -114,7 +121,6 @@ export const deleteFilter = async (userId: number, filterId: number) => {
     .catch(err => console.log(err))
 }
 
-
 export const editMyAlbumMemo = async (params: editMemoType) => {
   return authRequest
     .post(`${CudUrl}/${params.userId}/${params.cardId}/memo`, params.data)
@@ -122,16 +128,15 @@ export const editMyAlbumMemo = async (params: editMemoType) => {
     .catch(err => console.log(err))
 }
 
-
 export const deleteMyAlbumCards = async (params: deleteAlbumCardArrayType) => {
   console.log(params.cardIdArray, params.userId, 'params')
   if (!params.cardIdArray || !params.userId) return
 
-  const deleteRequests = params.cardIdArray.map(cardId => 
+  const deleteRequests = params.cardIdArray.map(cardId =>
     authRequest
       .delete(`${CudUrl}/${params.userId}/${cardId}`)
       .then(res => res.data)
-      .catch(err => console.log(err))
+      .catch(err => console.log(err)),
   )
 
   return Promise.all(deleteRequests)

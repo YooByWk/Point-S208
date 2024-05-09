@@ -28,7 +28,7 @@ interface CardThumbnailProps {
   selectedCards: number[]
   forShare?: boolean
   scale?: number
-  teamId? : number
+  teamId?: number
 }
 
 const CardThumbnail = ({
@@ -42,12 +42,9 @@ const CardThumbnail = ({
   const [isfavorite, setIsFavorite] = useState(false)
   const [isChecked, setIsChecked] = useState(false)
   const isSelected = selectedCards.includes(cardInfo.cardId)
-  const userId = useRecoilValue(userState).userId 
+  const userId = useRecoilValue(userState).userId
   const deletemutation = useDeleteAlbumCard()
-  
 
-  
-  
   const handleCheck = (event: React.MouseEvent) => {
     event.stopPropagation()
     setIsChecked(!isChecked)
@@ -91,8 +88,8 @@ const CardThumbnail = ({
       ) : (
         <Circle24Regular onClick={handleCheck} />
       )}
-      <Flex direction="row" justify="space-around" align="center" >
-        <Flex direction="column" justify="center" align="center" css= {infoCss}>
+      <Flex direction="row" justify="space-around" align="center">
+        <Flex direction="column" justify="center" align="center" css={infoCss}>
           <Text typography="t7" bold={true}>
             {cardInfo.name.length > 3 &&
             /[\u3131-\u314e|\u314f-\u3163|\uac00-\ud7a3]/g.test(cardInfo.name)
@@ -101,8 +98,13 @@ const CardThumbnail = ({
               ? `${cardInfo.name.slice(0, 6)}...`
               : cardInfo.name.padEnd(6, ' ')}
           </Text>
-          <Text typography="t9" css={infoContent} >{`${cardInfo.department} / ${cardInfo.position}`}</Text>
-          <Text typography="t9" css={infoContent}>{cardInfo.company}</Text>
+          <Text
+            typography="t9"
+            css={infoContent}
+          >{`${cardInfo.department} / ${cardInfo.position}`}</Text>
+          <Text typography="t9" css={infoContent}>
+            {cardInfo.company}
+          </Text>
         </Flex>
 
         {cardInfo.realPicture || cardInfo.digitalPicture ? (
@@ -113,6 +115,7 @@ const CardThumbnail = ({
                 : cardInfo.digitalPicture
             }
             alt="card"
+            css={imgStyle}
           />
         ) : (
           <div>
@@ -127,16 +130,16 @@ const CardThumbnail = ({
               <Star24Regular css={i} onClick={handleFavorite} />
             )}
             <ShareAndroid24Filled css={i} onClick={handleShare} />
-            <SmallModal 
-            icon={<Delete24Filled/>}
-            dialogTitle='명함 삭제'
-            dialogContent={`${cardInfo.name}님의 명함을 삭제하시겠습니까?`}
-            onClick={(e) => {
-              e.stopPropagation()
-              handleDelete()
-            }}
-            onIconClick={(e:React.MouseEvent) => e.stopPropagation()}
-            actionButtonText='삭제'
+            <SmallModal
+              icon={<Delete24Filled />}
+              dialogTitle="명함 삭제"
+              dialogContent={`${cardInfo.name}님의 명함을 삭제하시겠습니까?`}
+              onClick={e => {
+                e.stopPropagation()
+                handleDelete()
+              }}
+              onIconClick={(e: React.MouseEvent) => e.stopPropagation()}
+              actionButtonText="삭제"
             />
           </Flex>
         )}
@@ -194,9 +197,11 @@ const infoContent = css`
   max-width: 140px;
 `
 
-
 const infoCss = css`
   min-width: 132px;
   max-width: 160px;
   overflow: hidden;
+`
+const imgStyle = css`
+  width: 115px;
 `

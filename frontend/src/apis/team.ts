@@ -15,7 +15,7 @@ export const searchUser = async (userInput: string | number) => {
     .catch(err => console.log(err))
 }
 
-// 팀 리스트 조회 
+// 팀 리스트 조회
 export const fetchTeamList = async (userId: number) => {
   return authRequest
     .get(`${ReadUrl}/${userId}`)
@@ -53,6 +53,14 @@ export const CreateTeam = async (params: CreateTeamType) => {
 export const fetchTeamMember = async (teamAlbumId: number, userId: number) => {
   return authRequest
     .get(`${ReadUrl}/${userId}/member/${teamAlbumId}`)
+    .then(res => res.data)
+    .catch(err => console.log(err))
+}
+
+// 팀 내 명함 OCR 등록
+export const ocrRegTeamCard = async (params: any) => {
+  return authRequest
+    .post(`${CudUrl}/${params.userId}/${params.teamAlbumId}/ocr`, params.data)
     .then(res => res.data)
     .catch(err => console.log(err))
 }
