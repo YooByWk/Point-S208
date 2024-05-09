@@ -49,9 +49,13 @@ const InfoSection = (props: BooleanStateType) => {
             <Text typography="t5" bold={true}>
               {card.name}
             </Text>
+
             <Text typography="t7">
-              {card.position} / {card.department}
+              {card.position && card.department
+                ? `${card.position} / ${card.department}`
+                : card.position || card.department}
             </Text>
+
             <Edit onClick={() => setValue(true)}>
               <EditRegular />
               <Text typography="t8">수정</Text>

@@ -199,3 +199,11 @@ export const deleteMyAlbumCards = async (params: deleteAlbumCardArrayType) => {
 // return authRequest
 // .get(`${ReadUrl}/${userId}/filter`)
 // }
+
+
+export const saveToMyAlbum = async (userId: number, cardIds: number[]) => {
+  return authRequest
+  .post(`${CudUrl}/${userId}/save`, { cardIds })
+  .then(res => res.data)
+  .catch(err => console.log(err))  
+}

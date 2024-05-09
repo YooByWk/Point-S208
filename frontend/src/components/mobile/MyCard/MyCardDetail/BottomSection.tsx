@@ -3,6 +3,7 @@ import Text from '@/components/shared/Text'
 import Flex from '@/components/shared/Flex'
 import Spacing from '@/components/shared/Spacing'
 import { themeState } from '@/stores/common'
+import Input from '@/components/shared/Input'
 import { colors } from '@/styles/colorPalette'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
@@ -13,6 +14,13 @@ import {
   AccordionPanel,
   AccordionToggleEventHandler,
   Button,
+  Dialog,
+  DialogActions,
+  DialogBody,
+  DialogContent,
+  DialogSurface,
+  DialogTitle,
+  DialogTrigger,
 } from '@fluentui/react-components'
 import { useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
@@ -21,6 +29,10 @@ import { cameraState } from '@/stores/emptyCard'
 import { ExternalCardType } from '@/types/ExternalCard'
 import { CardType } from '@/types/cardType'
 import NewlyAdded from './NewlyAdded'
+import { useShareCard } from '@/hooks/useShareCard'
+import { Dismiss24Filled } from '@fluentui/react-icons'
+import { MailRead48Filled } from '@fluentui/react-icons'
+import { ArrowCircleDown48Filled } from '@fluentui/react-icons'
 
 const BottomSection = ({
   list,
@@ -38,6 +50,27 @@ const BottomSection = ({
   const [openItems, setOpenItems] = useState(['0'])
   const handleToggle: AccordionToggleEventHandler<string> = (event, data) => {
     setOpenItems(data.openItems)
+  }
+
+  const shareCardMutation = useShareCard()
+
+  const [isEmail, setIsEmail] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [emailInput, setEmailInput] = useState('')
+  const handleEmailClick = () => {
+    setIsEmail(!isEmail)
+  }
+  const handleModalOpen = () => {
+    setIsModalOpen(!isModalOpen)
+  }
+  const handleEmailInput = (e: any) => {
+    setEmailInput(e.target.value)
+  }
+  // console.log(card)
+  const handleEmailSubmit = () => {
+    console.log(emailInput)
+    shareCardMutation.mutate({ id: card.cardId, email: emailInput })
+    setIsModalOpen(!isModalOpen)
   }
 
   return (
@@ -101,9 +134,96 @@ const BottomSection = ({
         <Button shape="circular" onClick={() => setCamera(true)}>
           {card.realPicture ? '재등록' : '명함 촬영'}
         </Button>
-        <Button shape="circular" onClick={() => {}}>
-          명함 공유
-        </Button>
+        <Dialog modalType="alert" open={isModalOpen}>
+          <DialogTrigger disableButtonEnhancement>
+            <div onClick={() => {}}>
+              <Button shape="circular" onClick={handleModalOpen}>
+                명함 공유
+              </Button>
+            </div>
+          </DialogTrigger>
+          <DialogSurface css={surface}>
+            <DialogBody css={body}>
+              <DialogTitle>{'공유 방법 선택'}</DialogTitle>
+              <DialogContent css={content}>
+                <Spacing size={20} direction="vertical" />
+                {isEmail && (
+                  <>
+                    <Input
+                      onChange={handleEmailInput}
+                      placeholder="이메일 주소를 입력해주세요"
+                      css={inputCss}
+                    />
+                    <Spacing size={20} direction="vertical" />
+                  </>
+                )}
+                {!isEmail ? (
+                  <Flex direction="row" align="center" justify="center">
+                    <DialogActions css={fui}>
+                      <div css={dismissCss}>
+                        <DialogTrigger disableButtonEnhancement>
+                          <Flex
+                            direction="column"
+                            align="center"
+                            justify="center"
+                            onClick={() => setIsModalOpen(false)}
+                          >
+                            <Dismiss24Filled />
+                          </Flex>
+                        </DialogTrigger>
+                      </div>
+                      <DialogTrigger disableButtonEnhancement>
+                        <Flex
+                          direction="column"
+                          align="center"
+                          justify="center"
+                          onClick={handleEmailClick}
+                        >
+                          <MailRead48Filled />
+                          <Text typography="t9">이메일</Text>
+                        </Flex>
+                      </DialogTrigger>
+                      {/* <DialogTrigger disableButtonEnhancement>
+                        <Flex
+                          direction="column"
+                          align="center"
+                          justify="center"
+                        >
+                          <ArrowCircleDown48Filled />
+                          <Text typography="t9">파일 저장</Text>
+                        </Flex>
+                      </DialogTrigger> */}
+                    </DialogActions>
+                  </Flex>
+                ) : (
+                  <Flex direction="row" align="center" justify="center">
+                    <DialogActions css={fui}>
+                      <DialogTrigger disableButtonEnhancement>
+                        <Button
+                          appearance="primary"
+                          onClick={handleEmailSubmit}
+                        >
+                          공유하기
+                        </Button>
+                      </DialogTrigger>
+                      <DialogTrigger disableButtonEnhancement>
+                        <Button
+                          appearance="secondary"
+                          onClick={() => {
+                            handleModalOpen()
+                            setIsEmail(!isEmail)
+                          }}
+                        >
+                          취소
+                        </Button>
+                      </DialogTrigger>
+                    </DialogActions>
+                  </Flex>
+                )}
+              </DialogContent>
+            </DialogBody>
+          </DialogSurface>
+        </Dialog>
       </Flex>
 
       <Spacing size={24} />
@@ -120,19 +240,8 @@ const Wrap = styled.div`
   gap: 30px;
   margin: 0 20px 20px;
 `
-
-const Card = styled.div`
-  width: 80px;
-  height: 80px;
-  border: 1px solid ${colors.themeText};
-`
-
-const People = styled.div`
-  width: 50px;
-  height: 50px;
-  border: 1px solid ${colors.themeText};
-  border-radius: 50px;
-  margin-bottom: 5px;
+const inputCss = css`
+  width: 80%;
 `
 
 // css
@@ -153,4 +262,62 @@ const itemStyle = (theme: string) => css`
 const setMaxHeight = css`
   max-height: 100px;
   overflow-x: auto;
+`
+const Card = styled.div`
+  width: 80px;
+  height: 80px;
+  border: 1px solid ${colors.themeText};
+`
+
+const People = styled.div`
+  width: 50px;
+  height: 50px;
+  border: 1px solid ${colors.themeText};
+  border-radius: 50px;
+  margin-bottom: 5px;
+`
+
+// css
+
+const fui = css`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+`
+
+const dismissCss = css`
+  position: absolute;
+  right: 0;
+  top: 0;
+`
+
+const body = css`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: fit-content;
+  width: 80vw;
+  padding: 0;
+  margin: 0;
+`
+
+const surface = css`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: fit-content;
+  width: 70vw;
+`
+
+const content = css`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: fit-content;
+  width: 80vw;
+  padding: 0;
+  margin: 0;
 `

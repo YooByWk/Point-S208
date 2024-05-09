@@ -1,4 +1,3 @@
-
 import { useState } from 'react'
 import { css } from '@emotion/react'
 import TeamList from '@/components/mobile/Team/TeamList'
@@ -10,10 +9,10 @@ import { Routes, Route, Outlet } from 'react-router-dom'
 const AppTeam = () => {
   const selectedTeam = useRecoilValue(teamState.selectedTeamAlbumIdState)
   const hasSelectedTeam = useRecoilValue(teamState.hasSelectedTeam)
-  
+
   return (
-    <div css={bg}>
-      <Outlet/>
+    <div css={bg} style={{ height: '100dvh' }}>
+      <Outlet />
     </div>
   )
 }

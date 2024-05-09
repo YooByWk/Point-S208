@@ -1,11 +1,22 @@
 /** @jsxImportSource @emotion/react */
-import {  useState } from 'react'
+import { useState } from 'react'
 import type { CardType } from '@/types/cardType'
 import Flex from '@/components/shared/Flex'
 import Text from '@/components/shared/Text'
 import { css } from '@emotion/react'
 import Spacing from '@/components/shared/Spacing'
-import { tokens } from '@fluentui/react-components'
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogBody,
+  DialogContent,
+  DialogSurface,
+  DialogTitle,
+  DialogTrigger,
+  Input,
+  tokens,
+} from '@fluentui/react-components'
 import {
   CheckmarkCircle24Regular,
   Circle24Regular,
@@ -13,6 +24,9 @@ import {
   Star24Filled,
   ShareAndroid24Filled,
   Delete24Filled,
+  MailRead48Filled,
+  ArrowCircleDown48Filled,
+  Dismiss24Filled,
 } from '@fluentui/react-icons'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
@@ -22,6 +36,7 @@ import EmptyThumbnail from '@/components/shared/EmptyThumbnail'
 import { useDeleteAlbumCard } from '@/hooks/useDeleteAlbumCard'
 import SmallModal from '@/components/shared/SmallModal'
 import { useDeleteTeamAlbumCard } from '@/hooks/Team/useDeleteTeamAlbumCard'
+import { useShareCard } from '@/hooks/useShareCard'
 
 interface CardThumbnailProps {
   cardInfo: CardType | ExternalCardType
@@ -42,7 +57,7 @@ const CardThumbnail = ({
   const [isfavorite, setIsFavorite] = useState(false)
   const [isChecked, setIsChecked] = useState(false)
   const isSelected = selectedCards.includes(cardInfo.cardId)
-  const userId = useRecoilValue(userState).userId 
+  const userId = useRecoilValue(userState).userId
   const myAlbumDeletemutation = useDeleteAlbumCard()
   const teamAlbumDeleteMutation = useDeleteTeamAlbumCard()
   const teamAlbumId = useParams()?.teamAlbumId
@@ -63,17 +78,42 @@ const CardThumbnail = ({
 
   const handleShare = (event: React.MouseEvent) => {
     event.stopPropagation()
-    console.log('공유 : ', cardInfo)
+    setIsModalOpen(!isModalOpen)
   }
   const handleDelete = () => {
     if (teamAlbumId) {
       // 팀 앨범의 명함 삭제
-      teamAlbumDeleteMutation.mutate({cardId: cardInfo.cardId, teamAlbumId: +teamAlbumId})
+      teamAlbumDeleteMutation.mutate({
+        cardId: cardInfo.cardId,
+        teamAlbumId: +teamAlbumId,
+      })
       return
     }
     myAlbumDeletemutation.mutate(cardInfo.cardId)
     console.log('삭제 : ', cardInfo.cardId)
   }
+  const shareCardMutation = useShareCard()
+  const [isEmail, setIsEmail] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [emailInput, setEmailInput] = useState('')
+  const handleEmailClick = (event: React.MouseEvent) => {
+    event.stopPropagation()
+    setIsEmail(!isEmail)
+  }
+  const handleModalOpen = () => {
+    setIsModalOpen(!isModalOpen)
+  }
+  const handleEmailInput = (e: any) => {
+    setEmailInput(e.target.value)
+  }
+
+  const handleEmailSubmit = (event: React.MouseEvent) => {
+    event.stopPropagation()
+    console.log(emailInput)
+    shareCardMutation.mutate({ id: cardInfo.cardId, email: emailInput })
+    setIsModalOpen(!isModalOpen)
+  }
+
   const navigate = useNavigate()
   return (
     <div
@@ -83,9 +123,14 @@ const CardThumbnail = ({
           setIsChecked(!isChecked)
           onSelect(cardInfo.cardId)
         } else {
-          console.log(teamAlbumId? '팀앨범' : '내앨범')
-          teamAlbumId? navigate(`${cardInfo.cardId}`, {state: { cardInfo, teamAlbumId }}) :
-          navigate(`/myAlbum/${userId}/${cardInfo.cardId}`, {state: { cardInfo }})
+          console.log(teamAlbumId ? '팀앨범' : '내앨범')
+          teamAlbumId
+            ? navigate(`${cardInfo.cardId}`, {
+                state: { cardInfo, teamAlbumId },
+              })
+            : navigate(`/myAlbum/${userId}/${cardInfo.cardId}`, {
+                state: { cardInfo },
+              })
         }
       }}
     >
@@ -96,18 +141,19 @@ const CardThumbnail = ({
       )}
       <Flex direction="row" justify="space-around" align="center">
         <Flex direction="column" justify="center" align="center" css={infoCss}>
-          <Text typography="t7" bold={true}>
-            {cardInfo.name.length > 3 &&
+          <Text typography="t8" bold={true}>
+            {cardInfo.name.length > 6 &&
             /[\u3131-\u314e|\u314f-\u3163|\uac00-\ud7a3]/g.test(cardInfo.name)
-              ? `${cardInfo.name.slice(0, 3)}...`
-              : cardInfo.name.length > 6
               ? `${cardInfo.name.slice(0, 6)}...`
+              : cardInfo.name.length > 15
+              ? `${cardInfo.name.slice(0, 15)}...`
               : cardInfo.name.padEnd(6, ' ')}
           </Text>
-          <Text
-            typography="t9"
-            css={infoContent}
-          >{`${cardInfo.department} / ${cardInfo.position}`}</Text>
+          <Text typography="t9" css={infoContent}>
+            {cardInfo.department && cardInfo.position
+              ? `${cardInfo.department} / ${cardInfo.position}`
+              : cardInfo.department || cardInfo.position}
+          </Text>
           <Text typography="t9" css={infoContent}>
             {cardInfo.company}
           </Text>
@@ -130,12 +176,107 @@ const CardThumbnail = ({
         )}
         {!forShare && (
           <Flex direction="column" justify="space-around" align="center">
-            {isfavorite ? (
+            {/* {isfavorite ? (
               <Star24Filled css={iconCss} onClick={handleFavorite} />
             ) : (
               <Star24Regular css={i} onClick={handleFavorite} />
-            )}
-            <ShareAndroid24Filled css={i} onClick={handleShare} />
+            )} */}
+            <div onClick={event => event.stopPropagation()}>
+              <Dialog
+                modalType="alert"
+                open={isModalOpen}
+                inertTrapFocus={true}
+              >
+                <DialogTrigger disableButtonEnhancement>
+                  <ShareAndroid24Filled css={i} onClick={handleShare} />
+                </DialogTrigger>
+                <DialogSurface css={surface}>
+                  <DialogBody css={body}>
+                    <DialogTitle>{'공유 방법 선택'}</DialogTitle>
+                    <DialogContent css={content}>
+                      <Spacing size={20} direction="vertical" />
+                      {isEmail && (
+                        <>
+                          <Input
+                            onClick={event => event.stopPropagation()}
+                            onChange={handleEmailInput}
+                            placeholder="이메일 주소를 입력해주세요"
+                            css={inputCss}
+                          />
+                          <Spacing size={20} direction="vertical" />
+                        </>
+                      )}
+                      {!isEmail ? (
+                        <Flex direction="row" align="center" justify="center">
+                          <DialogActions css={fui}>
+                            <div css={dismissCss}>
+                              <DialogTrigger disableButtonEnhancement>
+                                <Flex
+                                  direction="column"
+                                  align="center"
+                                  justify="center"
+                                  onClick={() => setIsModalOpen(false)}
+                                >
+                                  <Dismiss24Filled />
+                                </Flex>
+                              </DialogTrigger>
+                            </div>
+                            <DialogTrigger disableButtonEnhancement>
+                              <Flex
+                                direction="column"
+                                align="center"
+                                justify="center"
+                                onClick={handleEmailClick}
+                              >
+                                <MailRead48Filled />
+                                <Text typography="t9">이메일</Text>
+                              </Flex>
+                            </DialogTrigger>
+                            {/* <DialogTrigger disableButtonEnhancement>
+                              <Flex
+                                direction="column"
+                                align="center"
+                                justify="center"
+                                onClick={event => event.stopPropagation()}
+                              >
+                                <ArrowCircleDown48Filled />
+                                <Text typography="t9">파일 저장</Text>
+                              </Flex>
+                            </DialogTrigger> */}
+                          </DialogActions>
+                        </Flex>
+                      ) : (
+                        <Flex direction="row" align="center" justify="center">
+                          <DialogActions css={fui}>
+                            <DialogTrigger disableButtonEnhancement>
+                              <Button
+                                appearance="primary"
+                                onClick={handleEmailSubmit}
+                              >
+                                공유하기
+                              </Button>
+                            </DialogTrigger>
+                            <DialogTrigger disableButtonEnhancement>
+                              <Button
+                                appearance="secondary"
+                                onClick={(event: React.MouseEvent) => {
+                                  event.stopPropagation()
+                                  handleModalOpen()
+                                  setIsEmail(!isEmail)
+                                }}
+                              >
+                                취소
+                              </Button>
+                            </DialogTrigger>
+                          </DialogActions>
+                        </Flex>
+                      )}
+                    </DialogContent>
+                  </DialogBody>
+                </DialogSurface>
+              </Dialog>
+            </div>
+
             <SmallModal
               icon={<Delete24Filled />}
               dialogTitle="명함 삭제"
@@ -190,10 +331,6 @@ const cardContainer = (forShare: boolean, scale: number) => css`
   }
 `
 
-const iconCss = css`
-  color: yellow;
-  margin-bottom: 15px;
-`
 const i = css`
   margin-bottom: 15px;
 `
@@ -210,4 +347,53 @@ const infoCss = css`
 `
 const imgStyle = css`
   width: 115px;
+`
+
+const inputCss = css`
+  width: 80%;
+`
+
+// css
+
+const fui = css`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+`
+
+const dismissCss = css`
+  position: absolute;
+  right: 0;
+  top: 0;
+`
+
+const body = css`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: fit-content;
+  width: 80vw;
+  padding: 0;
+  margin: 0;
+`
+
+const surface = css`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: fit-content;
+  width: 70vw;
+`
+
+const content = css`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: fit-content;
+  width: 80vw;
+  padding: 0;
+  margin: 0;
 `
