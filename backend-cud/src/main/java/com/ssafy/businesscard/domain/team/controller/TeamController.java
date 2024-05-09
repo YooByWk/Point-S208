@@ -75,8 +75,8 @@ public class TeamController {
     @PostMapping("/{userId}/{teamId}/ocr")
     public ResponseEntity<MessageUtils> registCard(@PathVariable("userId") Long userId,
                                                    @PathVariable("teamId") Long teamAlbumId,
-                                                   @RequestPart MultipartFile image,
-                                                   @RequestPart CardRequest request){
+                                                   @RequestPart("image") MultipartFile image,
+                                                   @RequestPart("request") CardRequest request){
         teamAlbumService.registCard(userId, teamAlbumId, image, request);
         log.info("[Regist Card] : {}", request);
         return ResponseEntity.ok().body(MessageUtils.success("명함이 등록되었습니다."));

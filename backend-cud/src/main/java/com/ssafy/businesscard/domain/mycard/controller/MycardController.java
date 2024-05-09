@@ -30,8 +30,8 @@ public class MycardController {
     // 내 명함 등록 OCR
     @PostMapping("/{userId}/ocr")
     public ResponseEntity<MessageUtils> registCard(@PathVariable("userId") Long userId,
-                                                   @RequestPart MultipartFile image,
-                                                   @RequestPart MycardRegistRequest request) {
+                                                   @RequestPart("image") MultipartFile image,
+                                                   @RequestPart("request") MycardRegistRequest request) {
         mycardService.registCard(userId, image, request);
         log.info("[Regist Card] : {}", request);
         return ResponseEntity.ok().body(MessageUtils.success("명함이 등록되었습니다."));
@@ -55,4 +55,12 @@ public class MycardController {
         return ResponseEntity.ok().body(MessageUtils.success("명함이 삭제되었습니다."));
     }
 
+    // 디지털 명함 저장
+    @PostMapping("/{userId}/{cardId}/save")
+    public ResponseEntity<MessageUtils> save(@PathVariable("userId") Long userId,
+                                             @PathVariable("cardId") Long cardId,
+                                             @RequestPart("file") MultipartFile file) {
+        mycardService.save(userId, cardId, file);
+        return ResponseEntity.ok().body(MessageUtils.success("디지털 명함이 저장되었습니다."));
+    }
 }

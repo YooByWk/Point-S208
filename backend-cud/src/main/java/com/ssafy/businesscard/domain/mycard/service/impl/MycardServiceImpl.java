@@ -25,6 +25,7 @@ public class MycardServiceImpl implements MycardService {
     private final BusinesscardRepository businesscardRepository;
     private final AmazonS3Service amazonS3Service;
 
+
     // 내 명함 직접 입력으로 등록
     @Override
     public void regist(Long userId, MycardRegistRequest registRequest) {
@@ -132,6 +133,16 @@ public class MycardServiceImpl implements MycardService {
     public void delete(Long userId) {
         List<Businesscard> myBusinessCards = businesscardRepository.findAllByUser_userId(userId);
         businesscardRepository.deleteAll(myBusinessCards);
+    }
+
+    // 디지털 명함 저장
+    @Override
+    public void save(Long userId, Long cardId, MultipartFile file) {
+        User user = findUser(userId);
+        Businesscard myBusinessCard = businesscardRepository.findByUser_userIdAndCardId(userId, cardId);
+        String url = amazonS3Service.uploadThunmail(file).getUrl();
+        myBusinessCard.setDigitalPicture(url);
+        businesscardRepository.save(myBusinessCard);
     }
 
 
