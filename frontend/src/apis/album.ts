@@ -70,7 +70,7 @@ export const ocrRegOtherCard = async (params: OcrCardType) => {
 export const searchMyAlbumCard = async (params: searchType) => {
   return authRequest
     .get(`${ReadUrl}/${params.id}/search`, {
-      params: { info: params.userInput },
+      params: { info: typeof params.userInput === 'string' ? params.userInput.toLowerCase() : params.userInput },
     })
     .then(res => {
       console.log(res)

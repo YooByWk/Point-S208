@@ -68,7 +68,9 @@ export const RegisterTeamCard = async (params: RegisterTeammCardType) => {
 // 팀 카드 검색
 export const searchTeamCard = async (teamAlbumId: number, userInput: string | number) => {
   return authRequest
-    .get(`${ReadUrl}/${teamAlbumId}/search`, { params: { info: userInput } })
+    .get(`${ReadUrl}/${teamAlbumId}/search`, {
+      params: { info: typeof userInput === 'string' ? userInput.toLowerCase() : userInput },
+    })
     .then(res => res.data)
     .catch(err => console.log(err))
 }
