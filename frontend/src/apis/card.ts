@@ -2,6 +2,7 @@ import {
   deleteCardType,
   EditCardType,
   OcrCardType,
+  saveDigitalCardType,
   shareCardType,
   WriteCardType,
 } from '@/types/cardInput'
@@ -73,6 +74,14 @@ export const shareMyCard = async (params: shareCardType) => {
     .post(`${baseUrl}/${params.id}/share/email/digital`, {
       recipientEmail: params.email,
     })
+    .then(res => res.data)
+    .catch(err => console.log(err))
+}
+
+// 디지털 명함 이미지로 저장
+export const saveMyDigitalCard = async (params: saveDigitalCardType) => {
+  return authRequest
+    .post(`${url}/${params.userId}/${params.cardId}/save`, params.file)
     .then(res => res.data)
     .catch(err => console.log(err))
 }
