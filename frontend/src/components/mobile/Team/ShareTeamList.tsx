@@ -66,11 +66,13 @@ const TeamList = () => {
       param.state.selectedCards,
     )
     await queryClient.invalidateQueries({ queryKey: ['fetchTeamCardsList'] })
-    navigate(`/myTeam/${selectedTeam.teamAlbumId}`, {
-      state: { teamAlbumId: selectedTeam },
-    })
-    console.log(`/myTeam/${selectedTeam.teamAlbumId}`, 'aaaaaaaaaaaaaaaaaa')
-    window.location.reload()
+    // navigate(`/myTeam/${selectedTeam.teamAlbumId}`, {
+      // state: { teamAlbumId: selectedTeam },
+    // })
+    navigate(`/myAlbum`, {state : {isShare: false}})
+    console.log(`/myAlbum`, 'aaaaaaaaaaaaaaaaaa')
+    alert('명함을 팀에 공유했습니다')
+    // window.location.reload()
   }
   if (!data || data.length === 0) {
     return (
