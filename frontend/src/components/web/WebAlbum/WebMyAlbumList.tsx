@@ -78,6 +78,7 @@ const WebMyAlbumList = ({
   const [isAddCard, setIsAddCard] = useState(false)
 
   const handleAdd = () => {
+    setIsAddCard(!isAddCard)
     console.log('이미지로 명함 추가')
   }
 
@@ -156,7 +157,11 @@ const WebMyAlbumList = ({
         )}
       </div>
       {isAddCard && (
-        <AddCard isAddCard={isAddCard} setIsAddCard={setIsAddCard} />
+        <AddCard
+          isAddCard={isAddCard}
+          setIsAddCard={setIsAddCard}
+          isWeb={true}
+        />
       )}
     </>
   )

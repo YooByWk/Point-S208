@@ -12,6 +12,7 @@ import {
   CameraAdd48Regular,
   SlideTextPerson48Regular,
   Dismiss24Regular,
+  Image48Regular,
 } from '@fluentui/react-icons'
 import Spacing from '@/components/shared/Spacing'
 import { useState } from 'react'
@@ -21,47 +22,82 @@ import { TeamListType } from '@/types/TeamListType'
 interface AddCardProps {
   isAddCard: boolean
   setIsAddCard: (isAddCard: boolean) => void
-  teamInfo? : TeamListType
+  isWeb?: boolean
+  teamInfo?: TeamListType
 }
 
-const AddCard = ({ isAddCard, setIsAddCard, teamInfo }: AddCardProps) => {
+const AddCard = ({
+  isAddCard,
+  setIsAddCard,
+  isWeb = false,
+  teamInfo,
+}: AddCardProps) => {
   const userId = useRecoilValue(userState).userId
   const [isCameraInput, setIsCameraInput] = useState(false)
   const [isDirectInput, setIsDirectInput] = useState(false)
   console.log('팀앨범아이디', teamInfo?.teamAlbumId)
   const navigate = useNavigate()
-  
+
   const handleClose = () => {
     setIsAddCard(!isAddCard) // 닫기
   }
-  
+
   const handleDirectInput = () => {
     console.log('직접 입력 클릭')
-    setIsAddCard(false);
-    setIsDirectInput(true);
-    navigate(`/myAlbum/register/${userId}`, { state: { isDirectInput: true, teamInfo: teamInfo  } })
+    setIsAddCard(false)
+    setIsDirectInput(true)
+    navigate(`/myAlbum/register/${userId}`, {
+      state: { isDirectInput: true, teamInfo: teamInfo },
+    })
   }
   const handleCameraInput = () => {
     console.log('카메라입력클릭')
-    setIsAddCard(false);
-    setIsCameraInput(true);
+    setIsAddCard(false)
+    setIsCameraInput(true)
     navigate(`/myAlbum/register/${userId}`, { state: { isCameraInput: true } })
-  };
+  }
   return (
     <>
-       <Dimmed>
-        <Flex direction="column" justify="center" align="center" css={container}>
+      <Dimmed>
+        <Flex
+          direction="column"
+          justify="center"
+          align="center"
+          css={container}
+        >
           <div className="in">
             <Dismiss24Regular className="X" onClick={handleClose} />
             <Text>명함 등록 방식</Text>
             <Spacing size={20} direction="vertical" />
             <Flex direction="row" justify="space-around" align="center">
-              <Flex direction="column" justify="center" align="center" onClick={handleCameraInput}>
-                <CameraAdd48Regular />
-                <Text typography="t7">사진 촬영</Text>
-              </Flex>
+              {isWeb ? (
+                <Flex
+                  direction="column"
+                  justify="center"
+                  align="center"
+                  onClick={handleCameraInput}
+                >
+                  <Image48Regular />
+                  <Text typography="t7">이미지 등록</Text>
+                </Flex>
+              ) : (
+                <Flex
+                  direction="column"
+                  justify="center"
+                  align="center"
+                  onClick={handleCameraInput}
+                >
+                  <CameraAdd48Regular />
+                  <Text typography="t7">사진 촬영</Text>
+                </Flex>
+              )}
               <Spacing size={20} direction="horizontal" />
-              <Flex direction="column" justify="center" align="center" onClick={handleDirectInput}>
+              <Flex
+                direction="column"
+                justify="center"
+                align="center"
+                onClick={handleDirectInput}
+              >
                 <SlideTextPerson48Regular />
                 <Text typography="t7">직접 입력</Text>
               </Flex>
