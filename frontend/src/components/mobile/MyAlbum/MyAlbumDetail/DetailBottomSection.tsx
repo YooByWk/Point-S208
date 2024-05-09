@@ -30,6 +30,8 @@ import ShareModal from './shareModal'
 import { MailRead48Filled, ArrowCircleDown48Filled, Dismiss24Filled  } from '@fluentui/react-icons'
 import Input from '@/components/shared/Input'
 import LargeButton from '@/components/shared/LargeButton'
+import { useShareCard } from '@/hooks/useShareCard'
+import ResModal from '@/components/shared/resModal'
 
 
 const DetailBottomSection = () => {
@@ -39,7 +41,9 @@ const DetailBottomSection = () => {
     setOpenItems(data.openItems)
   }
   const params = useParams()
+  const cardId: number = Number(params.cardId)
   console.log(params)
+  const shareCardMutation = useShareCard()
 
   const [isEmail, setIsEmail] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -56,7 +60,9 @@ const DetailBottomSection = () => {
   
   const handleEmailSubmit = () => {
     console.log(emailInput)
+    shareCardMutation.mutate({id: cardId, email: emailInput})
     setIsModalOpen(!isModalOpen)
+    
   }
 
   return (
