@@ -98,7 +98,7 @@ export const deleteMyAlbumCard = async (params: deleteAlbumCardType) => {
 // 명함지갑 내 명함 공유
 export const shareCard = async (params: shareCardType) => {
   return authRequest
-    .post(`${cudBaseUrl}/${params.cardId}/share/email`, {
+    .post(`${cudBaseUrl}/${params.id}/share/email`, {
       recipientEmail: params.email,
     })
     .then(res => res.data)
@@ -182,6 +182,6 @@ export const deleteMyAlbumCards = async (params: deleteAlbumCardArrayType) => {
 }
 
 // export const fetchFilterByCard = async() => {
-  // return authRequest
-  // .get(`${ReadUrl}/${userId}/filter`)
+// return authRequest
+// .get(`${ReadUrl}/${userId}/filter`)
 // }

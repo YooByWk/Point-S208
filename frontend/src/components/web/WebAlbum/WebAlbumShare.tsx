@@ -22,12 +22,16 @@ import { ChangeEvent, useCallback, useState } from 'react'
 import { ARIAButtonType } from '@fluentui/react-aria'
 import { ExternalCardType } from '@/types/ExternalCard'
 import { CardType } from '@/types/cardType'
+import { shareMyCard } from '@/apis/card'
+import { userState } from '@/stores/user'
 
 const WebAlbumShare = ({
   card,
+  isDigital = false,
   children,
 }: {
   card: ExternalCardType | CardType
+  isDigital?: boolean
   children:
     | React.ReactElement<any, string | React.JSXElementConstructor<any>>
     | ((
@@ -37,10 +41,11 @@ const WebAlbumShare = ({
     | undefined
 }) => {
   const [inputEmail, setInputEmail] = useState('')
+  const userId = useRecoilValue(userState).userId
 
   const { mutate } = useMutation({
-    mutationKey: ['shareCard'],
-    mutationFn: shareCard,
+    mutationKey: isDigital ? ['shareMyCard'] : ['shareCard'],
+    mutationFn: isDigital ? shareMyCard : shareCard,
     onSuccess(result) {
       console.log('공유 성공', result)
     },
@@ -50,7 +55,9 @@ const WebAlbumShare = ({
   })
 
   const handleShare = async () => {
-    mutate({ cardId: card.cardId, email: inputEmail })
+    isDigital
+      ? mutate({ id: userId, email: inputEmail })
+      : mutate({ id: card.cardId, email: inputEmail })
     alert('이메일을 전송하였습니다.')
   }
 
@@ -70,6 +77,7 @@ const WebAlbumShare = ({
                 <Button
                   shape="circular"
                   disabled={
+                    !isDigital &&
                     !(Boolean(card.realPicture) && card.realPicture.length > 0)
                   }
                 >

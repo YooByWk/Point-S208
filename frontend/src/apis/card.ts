@@ -2,11 +2,13 @@ import {
   deleteCardType,
   EditCardType,
   OcrCardType,
+  shareCardType,
   WriteCardType,
 } from '@/types/cardInput'
 import { authRequest } from '@/utils/requestMethod'
 
 const url = '/cud/api/my-card'
+const baseUrl = '/cud/api'
 const readUrl = '/read/api/my-card'
 
 // 내 명함 조회
@@ -61,6 +63,16 @@ export const clipPhoto = async (data: FormData) => {
 export const ocrRegMyCard = async (params: OcrCardType) => {
   return authRequest
     .post(`${url}/${params.userId}/ocr`, params.data)
+    .then(res => res.data)
+    .catch(err => console.log(err))
+}
+
+// 내 디지털 명함 공유
+export const shareMyCard = async (params: shareCardType) => {
+  return authRequest
+    .post(`${baseUrl}/${params.id}/share/email/digital`, {
+      recipientEmail: params.email,
+    })
     .then(res => res.data)
     .catch(err => console.log(err))
 }

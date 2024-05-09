@@ -55,10 +55,9 @@ export type OcrCardType = {
 }
 
 export type shareCardType = {
-  cardId: number
+  id: number | undefined
   email: string
 }
-
 
 export type editTeamMemoType = {
   userId: number | undefined
