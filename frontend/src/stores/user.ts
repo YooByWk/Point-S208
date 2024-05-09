@@ -18,3 +18,8 @@ export const userState = atom<UserType>({
   default: defaultUser,
   effects_UNSTABLE: [persistAtom],
 })
+
+export const isUserinStorageState = atom({
+  key: 'isUserinStorageState',
+  default: false,
+})

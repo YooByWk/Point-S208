@@ -1,22 +1,39 @@
-import { BooleanStateType } from '@/types/commonType'
 import styled from '@emotion/styled'
 import { colors } from '@/styles/colorPalette'
 import { useMutation } from '@tanstack/react-query'
 import { userReg } from '@/apis/auth'
-import { useRecoilState } from 'recoil'
-import { userState } from '@/stores/user'
+import { useRecoilState, useSetRecoilState } from 'recoil'
+import { isUserinStorageState, userState } from '@/stores/user'
+import { useContext, useEffect } from 'react'
+import { TeamsFxContext } from './Context'
+import { useData } from '@microsoft/teamsfx-react'
 
-const Tutorial = (props: BooleanStateType) => {
-  const { setValue } = props
+const Tutorial = () => {
+  const setIsUserinStorage = useSetRecoilState(isUserinStorageState)
   const [user, setUser] = useRecoilState(userState)
 
+  // 유저 정보 조회
+  const { teamsUserCredential } = useContext(TeamsFxContext)
+  useData(async () => {
+    if (teamsUserCredential) {
+      const userInfo = await teamsUserCredential.getUserInfo()
+      console.log(userInfo)
+      setUser({
+        name: userInfo.displayName,
+        email: userInfo.preferredUserName,
+      })
+      return userInfo
+    }
+  })
+
+  // 유저 등록
   const { mutate } = useMutation({
     mutationKey: ['userReg'],
     mutationFn: userReg,
     onSuccess(result) {
       console.log('등록 성공', result)
       setUser(prev => ({ ...prev, userId: result.data_body }))
-      setValue(true)
+      setIsUserinStorage(true)
     },
     onError(error) {
       console.error('등록 실패:', error)
@@ -31,6 +48,14 @@ const Tutorial = (props: BooleanStateType) => {
 
     mutate(userData)
   }
+
+  useEffect(() => {
+    if (user.userId) {
+      setIsUserinStorage(true)
+    } else {
+      setIsUserinStorage(false)
+    }
+  }, [setIsUserinStorage, user.userId])
 
   return (
     <Container>

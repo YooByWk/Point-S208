@@ -6,14 +6,14 @@ import {
   tokens,
 } from '@fluentui/react-components'
 import { HashRouter as Router } from 'react-router-dom'
-import { useData, useTeamsUserCredential } from '@microsoft/teamsfx-react'
+import { useTeamsUserCredential } from '@microsoft/teamsfx-react'
 import { TeamsFxContext } from './Context'
 import config from './sample/lib/config'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import AuthRouter from '@/routers/AuthRouter'
 import { themeState } from '@/stores/common'
-import { useEffect, useState } from 'react'
-import { userState } from '@/stores/user'
+import { useEffect } from 'react'
+import { isUserinStorageState } from '@/stores/user'
 import { customLightTheme, customDarkTheme } from '@/styles/colorRamp'
 import Tutorial from './Tutorial'
 
@@ -28,27 +28,11 @@ export default function App() {
       clientId: config.clientId!,
     })
   const setTheme = useSetRecoilState(themeState)
-  const [user, setUser] = useRecoilState(userState)
-  const [isUserInfoinLocal, setIsUserInfoinLocal] = useState(true)
+  const isUserinStorage = useRecoilValue(isUserinStorageState)
 
   useEffect(() => {
     setTheme(themeString)
   }, [setTheme, themeString])
-
-  useData(async () => {
-    if (teamsUserCredential) {
-      // console.log('teamsUserCredential', teamsUserCredential)
-      const userInfo = await teamsUserCredential.getUserInfo()
-      setUser({
-        name: userInfo.displayName,
-        email: userInfo.preferredUserName,
-      })
-
-      if (!user.userId) {
-        setIsUserInfoinLocal(false)
-      }
-    }
-  })
 
   return (
     <TeamsFxContext.Provider
@@ -70,12 +54,12 @@ export default function App() {
       >
         {loading ? (
           <Spinner style={{ margin: 100 }} />
-        ) : isUserInfoinLocal ? (
+        ) : isUserinStorage ? (
           <Router>
             <AuthRouter />
           </Router>
         ) : (
-          <Tutorial value={isUserInfoinLocal} setValue={setIsUserInfoinLocal} />
+          <Tutorial />
         )}
       </FluentProvider>
     </TeamsFxContext.Provider>

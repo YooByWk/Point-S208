@@ -100,17 +100,6 @@ const AlbumList = () => {
   
   return (
     <>
-      {<button
-        onClick={() =>
-          setUser({
-            name: '유 병욱',
-            email: 'tls1919@ssafys208.onmicrosoft.com',
-            userId: 3,
-          })
-        }
-      >
-        로컬 전용 아이디 하드코딩 : 수정하기
-      </button>/* */}
       {(searchValue.trim() !== '' &&
         searchResults !== undefined &&
         searchResults.length > 0 &&
