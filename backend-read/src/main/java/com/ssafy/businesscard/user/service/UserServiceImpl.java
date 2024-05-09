@@ -98,14 +98,15 @@ public class UserServiceImpl implements UserService{
 
         List<PrivateAlbum> privateAlbums = privateAlbumRepository.findByUser_userId(userId);
         List<PrivateAlbumResponseDto> dtos = new ArrayList<>();
-        //검색 조건(이름, 이메일)에 맞게 검색된거 dto에
+        //검색 조건(이름, 이메일, 회사)에 맞게 검색된거 dto에
         for (PrivateAlbum privateAlbum : privateAlbums) {
             Businesscard businesscard = privateAlbum.getBusinesscard();
 
             String name = businesscard.getName();
             String email = businesscard.getEmail();
+            String company = businesscard.getCompany();
 
-            if (name.contains(info) || email.contains(info)) {
+            if (name.contains(info) || email.contains(info) || company.contains(info)) {
 
                 dtos.add(PrivateAlbumResponseDto.builder()
                         .cardId(businesscard.getCardId())

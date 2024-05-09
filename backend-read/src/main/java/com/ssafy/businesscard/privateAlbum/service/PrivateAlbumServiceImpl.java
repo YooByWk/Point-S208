@@ -46,27 +46,27 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
         return dtos;
     }
 
-    //명함 상세 조회
-    @Override
-    public PrivateAlbumResponseDto getAlbumDtail(Long userId, Long cardId){
-        Optional<PrivateAlbum> optionalPrivateAlbum = privateAlbumRepository.findByUser_userIdAndBusinesscard_cardId(userId, cardId);
-        if (optionalPrivateAlbum.isPresent()) {
-            PrivateAlbum privateAlbum = optionalPrivateAlbum.get();
-            return PrivateAlbumResponseDto.builder()
-                    .cardId(privateAlbum.getBusinesscard().getCardId())
-                    .name(privateAlbum.getBusinesscard().getName())
-                    .company(privateAlbum.getBusinesscard().getCompany())
-                    .position(privateAlbum.getBusinesscard().getPosition())
-                    .rank(privateAlbum.getBusinesscard().getRank())
-                    .department(privateAlbum.getBusinesscard().getDepartment())
-                    .email(privateAlbum.getBusinesscard().getEmail())
-                    .landlineNumber(privateAlbum.getBusinesscard().getLandlineNumber())
-                    .faxNumber(privateAlbum.getBusinesscard().getFaxNumber())
-                    .phoneNumber(privateAlbum.getBusinesscard().getPhoneNumber())
-                    .address(privateAlbum.getBusinesscard().getAddress())
-                    .realPicture(privateAlbum.getBusinesscard().getRealPicture())
-                    .frontBack(privateAlbum.getBusinesscard().getFrontBack())
-                    .domainUrl(privateAlbum.getBusinesscard().getDomainUrl())
+        //명함 상세 조회
+        @Override
+        public PrivateAlbumResponseDto getAlbumDtail(Long userId, Long cardId){
+            Optional<PrivateAlbum> optionalPrivateAlbum = privateAlbumRepository.findByUser_userIdAndBusinesscard_cardId(userId, cardId);
+            if (optionalPrivateAlbum.isPresent()) {
+                PrivateAlbum privateAlbum = optionalPrivateAlbum.get();
+                return PrivateAlbumResponseDto.builder()
+                        .cardId(privateAlbum.getBusinesscard().getCardId())
+                        .name(privateAlbum.getBusinesscard().getName())
+                        .company(privateAlbum.getBusinesscard().getCompany())
+                        .position(privateAlbum.getBusinesscard().getPosition())
+                        .rank(privateAlbum.getBusinesscard().getRank())
+                        .department(privateAlbum.getBusinesscard().getDepartment())
+                        .email(privateAlbum.getBusinesscard().getEmail())
+                        .landlineNumber(privateAlbum.getBusinesscard().getLandlineNumber())
+                        .faxNumber(privateAlbum.getBusinesscard().getFaxNumber())
+                        .phoneNumber(privateAlbum.getBusinesscard().getPhoneNumber())
+                        .address(privateAlbum.getBusinesscard().getAddress())
+                        .realPicture(privateAlbum.getBusinesscard().getRealPicture())
+                        .frontBack(privateAlbum.getBusinesscard().getFrontBack())
+                        .domainUrl(privateAlbum.getBusinesscard().getDomainUrl())
                     .memo(privateAlbum.getMemo())
                     .build();
         } else {
