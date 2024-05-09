@@ -31,7 +31,8 @@ import { useMutation } from '@tanstack/react-query'
 import { deleteMyCard } from '@apis/card'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { userState } from '@stores/user'
-import { isFrontState, isRealState } from '@/stores/card'
+import { frontCardState, isFrontState, isRealState } from '@/stores/card'
+import WebAlbumShare from '../../WebAlbum/WebAlbumShare'
 
 const WebTopBar = ({
   isFront,
@@ -46,6 +47,7 @@ const WebTopBar = ({
 }) => {
   const userId = useRecoilValue(userState).userId
   const setFront = useSetRecoilState(isFrontState)
+  const frontCard = useRecoilValue(frontCardState)
   const [isReal, setIsReal] = useRecoilState(isRealState)
 
   const { mutate } = useMutation({
@@ -69,11 +71,13 @@ const WebTopBar = ({
       <Flex justify="space-between">
         <Text typography="t7">내 명함</Text>
         <Flex>
-          <Button shape="circular">
-            <Text typography="t7">
-              <ShareAndroid16Filled /> 공유
-            </Text>
-          </Button>
+          <WebAlbumShare card={frontCard} isDigital={true}>
+            <Button shape="circular">
+              <Text typography="t7">
+                <ShareAndroid16Filled /> 공유
+              </Text>
+            </Button>
+          </WebAlbumShare>
 
           <Spacing size={10} direction="horizontal" />
           <Menu>

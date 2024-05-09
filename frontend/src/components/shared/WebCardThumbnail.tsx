@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
 import { useEffect, useState } from 'react'
 import type { CardType } from '@/types/cardType'
 import Flex from '@shared/Flex'
-import { css } from '@emotion/react'
 import Spacing from '@shared/Spacing'
 import { Checkbox, Image } from '@fluentui/react-components'
 import {

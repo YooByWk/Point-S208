@@ -5,11 +5,30 @@ import { useRecoilValue } from 'recoil'
 import { isFrontState, isRealState } from '@/stores/card'
 import { frontCardState, backCardState } from '@/stores/card'
 import MyDigitalCard from '@components/mobile/MyCard/MyDigitalCard'
+import { useEffect, useRef } from 'react'
+import { toPng } from 'html-to-image'
 
 const CardComponent = (isFront: boolean) => {
   const isReal = useRecoilValue(isRealState)
   const frontCard = useRecoilValue(frontCardState)
   const backCard = useRecoilValue(backCardState)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!containerRef.current) return
+
+    toPng(containerRef.current)
+      .then(dataUrl => {
+        // 이미지 생성 성공 시 처리할 작업
+        const img = new Image()
+        img.src = dataUrl
+        // document.body.appendChild(img) // 이미지를 DOM에 추가하거나 원하는 작업 수행
+      })
+      .catch(error => {
+        // 오류 처리
+        console.error('이미지 생성 오류:', error.message)
+      })
+  }, [frontCard, backCard])
 
   return (
     <>
@@ -26,9 +45,13 @@ const CardComponent = (isFront: boolean) => {
           <NoCard>모바일에서 실물 명함을 추가해 주세요</NoCard>
         )
       ) : isFront ? (
-        <MyDigitalCard cardInfo={frontCard} scale={1} border={false} />
+        <div ref={containerRef}>
+          <MyDigitalCard cardInfo={frontCard} scale={1} border={false} />
+        </div>
       ) : (
-        <MyDigitalCard cardInfo={backCard} scale={1} border={false} />
+        <div ref={containerRef}>
+          <MyDigitalCard cardInfo={backCard} scale={1} border={false} />
+        </div>
       )}
     </>
   )

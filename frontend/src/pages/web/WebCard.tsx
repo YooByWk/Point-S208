@@ -6,6 +6,8 @@ import WriteCardInfo from '@components/mobile/MyCard/WriteCardInfo'
 import WebMyCard from '@components/web/WebCard/WebMyCard'
 import WebEditOtherCardInfo from '@/components/web/WebAlbum/WebEditOtherCardInfo'
 import WebAlbumDetail from '@/components/web/WebAlbum/WebAlbumDetail'
+import MyDigitalCardToImage from '@/components/shared/MyDigitalCardToImage'
+import { frontCardState } from '@/stores/card'
 
 const WebCard = () => {
   const [isCard, setIsCard] = useState(true)
@@ -13,16 +15,20 @@ const WebCard = () => {
   const writeInfo = useRecoilValue(writeInfoState)
   const [editOpen, setEditOpen] = useState(false)
   const [isDetail, setIsDetail] = useState(false)
+  const frontCard = useRecoilValue(frontCardState)
 
   const renderContent = () => {
+    // 내 명함 수정
     if (editOpen) {
       return <WebEditOtherCardInfo setEditOpen={setEditOpen} />
     }
+    // 새로 추가된 명함 상세
     if (isDetail) {
       return (
         <WebAlbumDetail setIsDetail={setIsDetail} setEditOpen={setEditOpen} />
       )
     }
+    // 내 명함 정보 입력
     if (writeInfo)
       return (
         <WriteCardInfo
@@ -31,16 +37,21 @@ const WebCard = () => {
           refetch={() => {}}
         />
       )
-    if (isCard)
+    // 등록된 명함 정보가 있을 때
+    if (isCard) {
       return (
-        <WebMyCard
-          isCard={isCard}
-          setIsEnglish={setIsEnglish}
-          setIsCard={setIsCard}
-          setIsDetail={setIsDetail}
-        />
+        <>
+          <WebMyCard
+            isCard={isCard}
+            setIsEnglish={setIsEnglish}
+            setIsCard={setIsCard}
+            setIsDetail={setIsDetail}
+          />
+        </>
       )
+    }
 
+    // 등록된 명함 정보가 없을 때
     return <WebEmptyCard setIsDetail={setIsDetail} />
   }
 
