@@ -139,8 +139,9 @@ public class UserServiceImpl implements UserService{
 
             String name = businesscard.getName();
             String email = businesscard.getEmail();
+            String company = businesscard.getCompany();
 
-            if (name.contains(info) || email.contains(info)) {
+            if (name.contains(info) || email.contains(info) || company.contains(info)) {
                 dtos.add(PrivateAlbumResponseDto.builder()
                         .cardId(businesscard.getCardId())
                         .name(name)
