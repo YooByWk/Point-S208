@@ -19,6 +19,8 @@ import { useParams } from 'react-router-dom'
 import { userState } from '@/stores/user'
 import { useRecoilValue } from 'recoil'
 import * as XLSX from 'xlsx'
+import { useQuery } from '@tanstack/react-query'
+import { fetchAllAlbum } from '@/apis/album'
 
 interface MultiSelectBarProps {
   selectedCards: number[]
@@ -33,9 +35,9 @@ const MultiSelectBar = ({
 }: MultiSelectBarProps) => {
   const myAlbumDeletemutation = useDeleteAlbumCards()
   const teamAlubmDeleteMutation = useDeleteTeamAlbumCards()
-  const teamAlbumId: number = useParams()?.teamAlbumId as unknown as number 
+  const teamAlbumId: number = useParams()?.teamAlbumId as unknown as number
   const userId = useRecoilValue(userState).userId
-  console.log('teamAlbumId: ', teamAlbumId);
+  console.log('teamAlbumId: ', teamAlbumId)
 
   const handleSelectAll = () => {
     if (allCards.length === selectedCards.length) {
@@ -51,7 +53,7 @@ const MultiSelectBar = ({
     const selectedCardDetails: CardType[] = allCards.filter(card =>
       selectedCards.includes(card.cardId),
     )
-    
+
     const data = [
       [
         '이름',
@@ -88,12 +90,12 @@ const MultiSelectBar = ({
     console.log('selectedCardDetails: ', selectedCardDetails)
   }
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (teamAlbumId) {
       const params = {
         teamAlbumId: teamAlbumId,
         cardIdArray: selectedCards,
-        userId: userId
+        userId: userId,
       }
       console.log('teamAlbumId: ', teamAlbumId)
       // teamAlubmDeleteMutation.mutate(selectedCards)
@@ -102,7 +104,13 @@ const MultiSelectBar = ({
     }
     console.log('handleDelete: ', selectedCards)
     myAlbumDeletemutation.mutate(selectedCards)
-  } 
+  }
+
+  // 명함지갑 내 명함 총 개수 조회
+  const { data } = useQuery({
+    queryKey: ['fetchMyCard'],
+    queryFn: () => fetchAllAlbum({ userId }),
+  })
 
   return (
     <Flex
@@ -118,9 +126,13 @@ const MultiSelectBar = ({
           <Circle24Regular onClick={handleSelectAll} />
         )}
         <Spacing size={10} direction="horizontal" />
-        {selectedCards.length > 0 && (
+        {selectedCards.length > 0 ? (
           <Text typography="t9" color="themeMainBlue">
             {selectedCards.length}개 선택됨
+          </Text>
+        ) : (
+          <Text typography="t9" color="themeMainBlue">
+            보유명함 : 총 {data ? data.data_body.length : 0}개
           </Text>
         )}
       </Flex>
