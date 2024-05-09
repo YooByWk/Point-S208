@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
 import { css } from '@emotion/react'
-import { tokens } from '@fluentui/react-components'
+import { Textarea, tokens } from '@fluentui/react-components'
 import React, { useState } from 'react'
 import Flex from '@shared/Flex'
 import Text from '@shared/Text'
@@ -27,18 +27,25 @@ const MemoSection = ({ card }: MemoSectionProps) => {
   const teamId = useParams()?.teamAlbumId as unknown as number
   const userId = useRecoilValue(userState).userId as unknown as number
   const cardId = useParams()?.cardId as unknown as number
-  const [editvalue, setEditValue] = useState(card.memo)
-  const [displayMemo, setDisplayMemo] = useState(card.memo)
+
   console.log('teamId: ', teamId)
   const queryClient = useQueryClient()
   
-  const memoText = useQuery({
+  const {data:memoText} = useQuery({
     queryKey: ['fetchCardMemo'],
     queryFn: () => {
       return  getAlbumDetail({userId, cardId})
-    }
+    },
+    enabled: !teamId
   })
+  const memo = teamId ? card.memo : memoText?.data_body.memo;  
+  // teamId가 있는 경우에는 card.memo를 사용, 없는 경우에는 memoText.data_body.memo를 사용
+
+  const [editvalue, setEditValue] = useState(memo);
+  const [displayMemo, setDisplayMemo] = useState(memo);
+
   
+  console.log(memoText)
   const [isEdit, setIsEdit] = useState(false)
   const editAlbumMutation = useEditAlbumMemo({
     userId: userId,
@@ -61,6 +68,8 @@ const MemoSection = ({ card }: MemoSectionProps) => {
     editAlbumMutation.mutate({memo: editvalue})
     // card.memo = editvalue
     setDisplayMemo(editvalue)
+    queryClient.invalidateQueries({queryKey:['fetchCardMemo']});
+
   }
   
   
@@ -68,13 +77,13 @@ const MemoSection = ({ card }: MemoSectionProps) => {
     <>
       <div css={memoBoxStyles}>
         {isEdit ? (
-          <>
-            <TextField value={editvalue} onChange={handleInputChange} css={textInputCss}/>
-            <button onClick={handleSaveClick}>저장</button>
-          </>
+        <>
+        <Textarea value={editvalue} onChange={(e) => setEditValue(e.target.value)} css={textInputCss}/>
+        <button onClick={handleSaveClick}>저장</button>
+      </>
         ) : (
           <Text typography="t8" css={textInputCss}>
-            {card.memo ? displayMemo : '등록된 메모가 없습니다.'}
+            {displayMemo ? displayMemo : '등록된 메모가 없습니다.'}
           </Text>
         )}
         <div css={iconCss}>
@@ -116,5 +125,7 @@ const iconCss = css`
 
 const textInputCss = css`
   margin-top: 10;
+  width: 100%;
+  height: 15vh;
   background-color: ${tokens.colorNeutralBackground1Selected};
 `
