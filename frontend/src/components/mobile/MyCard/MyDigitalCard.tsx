@@ -10,6 +10,7 @@ import { useMutation } from '@tanstack/react-query'
 import { saveMyDigitalCard } from '@/apis/card'
 import { useRecoilValue } from 'recoil'
 import { userState } from '@/stores/user'
+import { backCardState, frontCardState } from '@/stores/card'
 
 interface MyDigitalCardProps {
   cardInfo: CardType
@@ -50,6 +51,8 @@ const MyDigitalCard: React.FC<MyDigitalCardProps> = ({
   // const cardInfo = props.cardInfo
   const containerRef = useRef<HTMLDivElement>(null)
   const userId = useRecoilValue(userState).userId
+  const frontCard = useRecoilValue(frontCardState)
+  const backCard = useRecoilValue(backCardState)
 
   const { mutate } = useMutation({
     mutationKey: ['saveMyDigitalCard'],
@@ -84,12 +87,16 @@ const MyDigitalCard: React.FC<MyDigitalCardProps> = ({
           })
       }
     }
-
     if (
-      cardInfo.digitalPicture === null ||
-      cardInfo.digitalPicture.trim() === ''
+      frontCard.cardId === cardInfo.cardId ||
+      backCard.cardId === cardInfo.cardId
     )
-      handleSaveAsJpg()
+      if (
+        cardInfo.digitalPicture === null ||
+        cardInfo.digitalPicture === undefined ||
+        cardInfo.digitalPicture.trim() === ''
+      )
+        handleSaveAsJpg()
   }, [mutate, userId, cardInfo])
 
   return (
