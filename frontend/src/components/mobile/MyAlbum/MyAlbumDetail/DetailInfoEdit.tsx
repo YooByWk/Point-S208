@@ -3,27 +3,29 @@ import Flex from '@shared/Flex'
 import Spacing from '@shared/Spacing'
 import TextField from '@shared/TextField'
 import { cardInput } from '@/types/cardInput'
-import {
-  ChangeEvent,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react'
+import { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { css } from '@emotion/react'
 import { Button } from '@fluentui/react-components'
-import {  useRecoilValue,  } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import { userState } from '@/stores/user'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { editMyAlbumCard } from '@/apis/album'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { TeamListType } from '@/types/TeamListType';
+import { TeamListType } from '@/types/TeamListType'
 import { BooleanStateType } from '@/types/commonType'
 import { CardType } from '@/types/cardType'
 import { useTeamCardEdit } from '@/hooks/useTeamCardEdit'
+import { ExternalCardType } from '@/types/ExternalCard'
 
-const DetailInfoEdit = ({isEdit, card}:{isEdit: BooleanStateType, card: CardType}) => {
+const DetailInfoEdit = ({
+  isEdit,
+  card,
+}: {
+  isEdit: BooleanStateType
+  card: CardType | ExternalCardType
+}) => {
   console.log(card)
-  const {value: edit, setValue: setEdit} = isEdit
+  const { value: edit, setValue: setEdit } = isEdit
   const [cardInputs, setCardInputs] = useState({
     name: card.name,
     company: card.company,
@@ -37,7 +39,7 @@ const DetailInfoEdit = ({isEdit, card}:{isEdit: BooleanStateType, card: CardType
     address: card.address,
     domainUrl: card.domainUrl,
   })
-  
+
   const userId = useRecoilValue(userState).userId
   const location = useLocation()
   // const teamAlbumId: TeamListType = location.state.teamAlbumId
@@ -65,15 +67,15 @@ const DetailInfoEdit = ({isEdit, card}:{isEdit: BooleanStateType, card: CardType
     mutationFn: editMyAlbumCard,
     onSuccess: res => {
       console.log('명함 수정 성공', res)
-      queryClient.invalidateQueries({queryKey: ['fetchMyAlbum']})
-      navigate(-1)
+      queryClient.invalidateQueries({ queryKey: ['fetchMyAlbum'] })
+      setEdit(false)
     },
     onError: error => {
       console.log('error: ', error)
     },
   })
 
-  const handleRegisterCard = async(cardInputs: cardInput) => {
+  const handleRegisterCard = async (cardInputs: cardInput) => {
     var params = {
       userId: userId as number,
       cardId: card.cardId,
@@ -88,24 +90,24 @@ const DetailInfoEdit = ({isEdit, card}:{isEdit: BooleanStateType, card: CardType
         faxNumber: cardInputs.faxNumber,
         address: cardInputs.address,
         domainUrl: cardInputs.domainUrl,
-        frontBack: 'FRONT' // 첫 추가는 앞면.
+        frontBack: 'FRONT', // 첫 추가는 앞면.
       },
     }
     if (teamAlbumId === undefined) {
-    console.log('팀이아님');
-    mutate(params)
-    return
+      console.log('팀이아님')
+      mutate(params)
+      return
     }
-    
+
     if (teamAlbumId !== undefined) {
-      console.log('팀 환경에서의 명함 수정')  
+      console.log('팀 환경에서의 명함 수정')
       teamCardMutation.mutate({
         userId: userId as number,
         teamAlbumId: teamAlbumId as unknown as number,
         cardId: card.cardId,
-        data: params.data
+        data: params.data,
       })
-      navigate(-1)
+      setEdit(false)
     }
   }
 
@@ -221,7 +223,7 @@ const DetailInfoEdit = ({isEdit, card}:{isEdit: BooleanStateType, card: CardType
           onBlur={handleBlur}
         />
         <Spacing size={16} />
-        
+
         <TextField
           label="주소"
           type="address"
@@ -241,7 +243,7 @@ const DetailInfoEdit = ({isEdit, card}:{isEdit: BooleanStateType, card: CardType
           <Button
             shape="circular"
             onClick={() => {
-              navigate(-1)
+              setEdit(false)
             }}
           >
             취소
@@ -292,8 +294,5 @@ function validate(cardInput: cardInput) {
 const formContainerStyles = css`
   padding: 24px;
 `
-      
 
-
-
-export default DetailInfoEdit;
+export default DetailInfoEdit

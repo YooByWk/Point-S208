@@ -32,9 +32,7 @@ const TeamList = () => {
     queryFn: () => fetchTeamList(userId as number),
   })
   const teamList: TeamListType[] = data || []
-  
-  
-  
+
   if (isLoading) {
     return <Flex direction='column' justify='center' align='center' style={{height:'100vh'}}>
       <Spinner />

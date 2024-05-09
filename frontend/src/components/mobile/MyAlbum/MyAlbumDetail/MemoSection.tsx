@@ -19,8 +19,9 @@ import {
 import TextField from '@/components/shared/TextField'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getAlbumDetail } from '@/apis/album'
+import { ExternalCardType } from '@/types/ExternalCard'
 interface MemoSectionProps {
-  card: CardType
+  card: CardType | ExternalCardType
 }
 
 const MemoSection = ({ card }: MemoSectionProps) => {
@@ -29,19 +30,19 @@ const MemoSection = ({ card }: MemoSectionProps) => {
   const cardId = useParams()?.cardId as unknown as number
 
   const queryClient = useQueryClient()
-  
-  const {data:memoText} = useQuery({
+
+  const { data: memoText } = useQuery({
     queryKey: ['fetchCardMemo'],
     queryFn: () => {
-      return  getAlbumDetail({userId, cardId})
+      return getAlbumDetail({ userId, cardId })
     },
-    enabled: !teamId
+    enabled: !teamId,
   })
-  const memo = teamId ? card.memo : memoText?.data_body.memo;  
-  console.log(memo,'메모')
+  const memo = teamId ? card.memo : memoText?.data_body.memo
+  console.log(memo, '메모')
   // teamId가 있는 경우에는 card.memo를 사용, 없는 경우에는 memoText.data_body.memo를 사용
-  const [editvalue, setEditValue] = useState(memo);
-  const [displayMemo, setDisplayMemo] = useState(memo);
+  const [editvalue, setEditValue] = useState(memo)
+  const [displayMemo, setDisplayMemo] = useState(memo)
 
   console.log(card.cardId, teamId, '카드 / 팀 ', userId)
   const [isEdit, setIsEdit] = useState(false)
@@ -57,32 +58,35 @@ const MemoSection = ({ card }: MemoSectionProps) => {
     setIsEdit(!isEdit)
     setEditValue(memo)
   }
-  
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEditValue(event.target.value)
   }
 
   const handleSaveClick = () => {
     setIsEdit(false)
-    editAlbumMutation.mutate({memo: editvalue})
+    editAlbumMutation.mutate({ memo: editvalue })
     // card.memo = editvalue
     setDisplayMemo(editvalue)
-    queryClient.invalidateQueries({queryKey:['fetchCardMemo']});
-
+    queryClient.invalidateQueries({ queryKey: ['fetchCardMemo'] })
   }
-  
+
   useEffect(() => {
-    setEditValue(memo);
-    setDisplayMemo(memo);
-  }, [memo]);
+    setEditValue(memo)
+    setDisplayMemo(memo)
+  }, [memo])
   return (
     <>
       <div css={memoBoxStyles}>
         {isEdit ? (
-        <>
-        <Textarea value={editvalue} onChange={(e) => setEditValue(e.target.value)} css={textInputCss}/>
-        <button onClick={handleSaveClick}>저장</button>
-      </>
+          <>
+            <Textarea
+              value={editvalue}
+              onChange={e => setEditValue(e.target.value)}
+              css={textInputCss}
+            />
+            <button onClick={handleSaveClick}>저장</button>
+          </>
         ) : (
           <Text typography="t8" css={textInputCss}>
             {displayMemo ? displayMemo : '등록된 메모가 없습니다.'}
@@ -92,8 +96,8 @@ const MemoSection = ({ card }: MemoSectionProps) => {
           {isEdit ? (
             <Flex>
               <ArrowEnterLeft20Filled />
-              <Spacing direction='horizontal' size={8}/>
-              <Dismiss20Filled onClick={handleIconClick}/>
+              <Spacing direction="horizontal" size={8} />
+              <Dismiss20Filled onClick={handleIconClick} />
             </Flex>
           ) : (
             <Edit20Regular onClick={handleIconClick} />
@@ -116,13 +120,12 @@ const memoBoxStyles = css`
   padding: 10px;
   overflow-y: scroll;
   position: relative;
-
 `
 
 const iconCss = css`
   position: absolute;
-  top:0;
-  right:0;
+  top: 0;
+  right: 0;
 `
 
 const textInputCss = css`

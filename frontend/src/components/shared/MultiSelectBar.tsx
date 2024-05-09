@@ -24,18 +24,20 @@ interface MultiSelectBarProps {
   selectedCards: number[]
   allCards: CardType[]
   setSelectedCards: (cards: number[]) => void
+  cardCnt: number
 }
 
 const MultiSelectBar = ({
   selectedCards,
   allCards,
   setSelectedCards,
+  cardCnt,
 }: MultiSelectBarProps) => {
   const myAlbumDeletemutation = useDeleteAlbumCards()
   const teamAlubmDeleteMutation = useDeleteTeamAlbumCards()
-  const teamAlbumId: number = useParams()?.teamAlbumId as unknown as number 
+  const teamAlbumId: number = useParams()?.teamAlbumId as unknown as number
   const userId = useRecoilValue(userState).userId
-  console.log('teamAlbumId: ', teamAlbumId);
+  console.log('teamAlbumId: ', teamAlbumId)
 
   const handleSelectAll = () => {
     if (allCards.length === selectedCards.length) {
@@ -51,7 +53,7 @@ const MultiSelectBar = ({
     const selectedCardDetails: CardType[] = allCards.filter(card =>
       selectedCards.includes(card.cardId),
     )
-    
+
     const data = [
       [
         '이름',
@@ -88,12 +90,12 @@ const MultiSelectBar = ({
     console.log('selectedCardDetails: ', selectedCardDetails)
   }
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (teamAlbumId) {
       const params = {
         teamAlbumId: teamAlbumId,
         cardIdArray: selectedCards,
-        userId: userId
+        userId: userId,
       }
       console.log('teamAlbumId: ', teamAlbumId)
       // teamAlubmDeleteMutation.mutate(selectedCards)
@@ -102,7 +104,7 @@ const MultiSelectBar = ({
     }
     console.log('handleDelete: ', selectedCards)
     myAlbumDeletemutation.mutate(selectedCards)
-  } 
+  }
 
   return (
     <Flex
@@ -118,9 +120,13 @@ const MultiSelectBar = ({
           <Circle24Regular onClick={handleSelectAll} />
         )}
         <Spacing size={10} direction="horizontal" />
-        {selectedCards.length > 0 && (
+        {selectedCards.length > 0 ? (
           <Text typography="t9" color="themeMainBlue">
             {selectedCards.length}개 선택됨
+          </Text>
+        ) : (
+          <Text typography="t9" color="themeMainBlue">
+            보유명함 : 총 {cardCnt}개
           </Text>
         )}
       </Flex>

@@ -10,7 +10,8 @@ export const useDeleteTeamAlbumCards = () => {
     mutationFn: ({userId, cardIdArray, teamAlbumId} : deleteTeamCardArrayType) => deleteTeamCards({userId: userId as number, cardIdArray: cardIdArray, teamAlbumId: teamAlbumId as number }),
     onSuccess: () => {
       console.log("삭제 성공");
-      queryClient.invalidateQueries({ queryKey: ["fetchTeamCardsList"]})    
+      queryClient.invalidateQueries({ queryKey: ["fetchTeamCardsList"]})
+      window.location.reload()
     },
     onError: (error) => {
       console.log("삭제 실패", error);
