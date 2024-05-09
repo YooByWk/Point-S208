@@ -189,7 +189,7 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
             TeamAlbumDetail teamAlbumDetail = teamAlbumDetailRepository.findByTeamAlbum_TeamAlbumIdAndBusinesscard_Email(
                     teamId, businesscard.getEmail()
             );
-            System.out.println("teamAlbumDeatil : " + teamAlbumDetail);
+//            System.out.println("teamAlbumDeatil : " + teamAlbumDetail);
             if (teamAlbumDetail != null) {
                 throw new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.ALREADY_IN_CARD);
             }
