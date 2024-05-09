@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { colors } from '@/styles/colorPalette'
 import { CardType } from '@/types/cardType'
+import { ExternalCardType } from '@/types/ExternalCard'
 import { css } from '@emotion/react'
 import Flex from '@shared/Flex'
 import Spacing from '@shared/Spacing'
@@ -18,7 +19,7 @@ interface LatLng {
   y: number
 }
 
-const DetailMapSection = ({card, }:{card:CardType}) => {
+const DetailMapSection = ({ card }: { card: CardType | ExternalCardType }) => {
   const mapContainer = useRef(null)
   const [positionArr, setPositionArr] = useState<LatLng>({
     y: 37.3891408885668,

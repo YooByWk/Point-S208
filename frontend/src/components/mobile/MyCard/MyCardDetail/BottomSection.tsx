@@ -18,8 +18,17 @@ import { useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { backCardState, frontCardState, isFrontState } from '@/stores/card'
 import { cameraState } from '@/stores/emptyCard'
+import { ExternalCardType } from '@/types/ExternalCard'
+import { CardType } from '@/types/cardType'
+import NewlyAdded from './NewlyAdded'
 
-const BottomSection = () => {
+const BottomSection = ({
+  list,
+  setIsDetail,
+}: {
+  list: ExternalCardType[] | CardType[]
+  setIsDetail: React.Dispatch<React.SetStateAction<boolean>>
+}) => {
   const theme = useRecoilValue(themeState)
   const setCamera = useSetRecoilState(cameraState)
   const isFront = useRecoilValue(isFrontState)
@@ -45,14 +54,29 @@ const BottomSection = () => {
             <Text typography="t8">최근 등록한 명함</Text>
           </AccordionHeader>
           <AccordionPanel>
-            <Wrap>
-              <Card />
-              <Card />
-              <Card />
-            </Wrap>
+            <Flex css={setMaxHeight}>
+              {list.length === 0 ? (
+                <>
+                  <Text textAlign="center" typography="t9">
+                    새로 추가된 명함이 없습니다.
+                  </Text>
+                </>
+              ) : (
+                list.slice(0, 5).map(
+                  (
+                    card,
+                    index, // Use slice(0, 5) to get only the first 5 cards
+                  ) => (
+                    <div key={index}>
+                      <NewlyAdded card={card} setIsDetail={setIsDetail} />
+                    </div>
+                  ),
+                )
+              )}
+            </Flex>
           </AccordionPanel>
         </AccordionItem>
-        <AccordionItem value="2" css={itemStyle(theme)}>
+        {/* <AccordionItem value="2" css={itemStyle(theme)}>
           <AccordionHeader expandIconPosition="end">
             <Text typography="t8">빠른 공유</Text>
           </AccordionHeader>
@@ -68,7 +92,7 @@ const BottomSection = () => {
               </Flex>
             </Wrap>
           </AccordionPanel>
-        </AccordionItem>
+        </AccordionItem> */}
       </Accordion>
 
       <Spacing size={12} />
@@ -124,4 +148,9 @@ const containerStyle = css`
 const itemStyle = (theme: string) => css`
   background-color: ${theme === 'dark' ? '#242424' : '#fafafa'};
   border-radius: 15px;
+`
+
+const setMaxHeight = css`
+  max-height: 100px;
+  overflow-x: auto;
 `

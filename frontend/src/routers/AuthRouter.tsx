@@ -13,6 +13,7 @@ import { Route, Routes } from 'react-router-dom'
 import AppAlbumList from '@/components/mobile/MyAlbum/AlbumList'
 import RegisterCard from '@/components/mobile/MyAlbum/RegisterCard'
 import AlbumCardDetail from '@/components/mobile/MyAlbum/MyAlbumDetail/AlbumCardDetail'
+import ShareTeamList from '@/components/mobile/Team/ShareTeamList'
 
 const AuthRouter = () => {
   const width = useWindowSize()
@@ -26,8 +27,8 @@ const AuthRouter = () => {
       ) : (
         <Route path="/myAlbum" element={<AppAlbum />}>
           <Route index element={<AppAlbumList />} />
-          <Route path='register/:userId' element={<RegisterCard/>} />
-          <Route path=':userId/:cardId' element={<AlbumCardDetail/>} />
+          <Route path='register/:userId' element={<RegisterCard />} />
+          <Route path=':userId/:cardId' element={<AlbumCardDetail />} />
           {/* <Route path=':cardId' element={<CardDetail />} /> */}
           {/* <Route path=":teamId" element={<TeamDetail />} /> */}
         </Route>
@@ -41,6 +42,8 @@ const AuthRouter = () => {
           {/* <Route path=':teamId' element={<CardList />}/>  */}
           <Route path=":teamAlbumId/:cardId" element={<AlbumCardDetail />} />
           <Route path=":teamAlbumId" element={<TeamDetail />} />
+          <Route path="share" element={<ShareTeamList />} />
+
         </Route>
       )}
       <Route path="*" element={<MyCard />} />

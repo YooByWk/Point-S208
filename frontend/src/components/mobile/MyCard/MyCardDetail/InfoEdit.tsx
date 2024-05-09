@@ -14,8 +14,13 @@ import { useMutation } from '@tanstack/react-query'
 import { editMyCard } from '@/apis/card'
 import { userState } from '@/stores/user'
 
-const InfoEdit = (props: BooleanStateType) => {
-  const { setValue } = props
+const InfoEdit = ({
+  value,
+  setValue,
+}: {
+  value: boolean
+  setValue: React.Dispatch<React.SetStateAction<boolean>>
+}) => {
   const isFront = useRecoilValue(isFrontState)
   const [frontCard, setFrontCard] = useRecoilState(frontCardState)
   const [backCard, setBackCard] = useRecoilState(backCardState)
@@ -51,6 +56,8 @@ const InfoEdit = (props: BooleanStateType) => {
     console.log(params)
 
     mutate(params)
+
+    setValue(false)
   }
 
   useEffect(() => {
@@ -149,7 +156,12 @@ const InfoEdit = (props: BooleanStateType) => {
         >
           취소
         </Button>
-        <Button shape="circular" onClick={() => onSubmit()}>
+        <Button
+          shape="circular"
+          onClick={() => {
+            onSubmit()
+          }}
+        >
           저장
         </Button>
       </Flex>
