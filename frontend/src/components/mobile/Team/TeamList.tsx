@@ -26,6 +26,7 @@ const TeamList = () => {
   )
   const navigate = useNavigate()
   const userId = useRecoilValue(userState).userId
+
   const [searchResults, setSearchResults] = useState<TeamListType[]>([])
   const {data,isLoading} = useQuery({
     queryKey: ['fetchTeamList', userId],

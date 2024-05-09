@@ -27,15 +27,15 @@ interface SearchBoxProps {
   onSearch: (value: ExternalCardListType | UserListType ) => void
   isSearchingMember?: boolean
   isTeam?: boolean
+  disabled?: boolean
 }
-
-
 /**
  *
  * [searchValue, setSearchValue] = useState('');를
  * 각각 value와 onChange로 받아서 사용
  */
 const SearchBox: React.FC<SearchBoxProps> = ({
+  disabled=false,
   placeholder,
   filterIcon,
   memberIcon,
@@ -84,6 +84,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
       css={mainContainerCss}>
         <div  css={searchBoxContainerCss(width? width : '70%')}>
           <FluentSearchBox
+          disabled={disabled}
             size='large'
             placeholder={placeholder}
             onChange={onChange}

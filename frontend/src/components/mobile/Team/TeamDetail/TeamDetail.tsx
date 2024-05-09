@@ -17,12 +17,15 @@ import { isLookingMemberState } from '@/stores/team';
 import TeamMember from '@/components/mobile/Team/TeamDetail/TeamMember'
 import { TeamListType } from '@/types/TeamListType'
 import { isAlbumState } from '@/stores/emptyCard'
+import SearchBox from '@/components/shared/SearchBox'
 
 
 const TeamDetail = () => {
   const isPageChanged = useRecoilValue(pageChanged)
   const [isAddCard, setIsAddCard] = useState(false)
   const {teamAlbumId} = useParams() 
+  console.log(teamAlbumId)
+
   const teamInfo:TeamListType = useLocation().state
   // console.log(teamInfo)
   const teamAlbumIdNumber = teamAlbumId ? +teamAlbumId : 0
@@ -79,12 +82,16 @@ const TeamDetail = () => {
       </>
     )
   }
+  if (isLookingMember) {
+    return <TeamMember team={teamInfo}/>
+  }
   
   if (!data || teamCardList.length === 0) {
     return (
       <>
       
       <BackArrow />
+      <SearchBox isTeam={true} value={''} onSearch={()=> {}} disabled={true} />
       <Flex direction='column' justify='center' align='center' style={{height:'100vh'}}>
         <Text>팀에 명함이 없습니다. </Text>
         <Text>명함을 추가해주세요. </Text>
@@ -94,9 +101,7 @@ const TeamDetail = () => {
       </>
     )
   }
-  if (isLookingMember) {
-    return <TeamMember team={teamInfo}/>
-  }
+
 
   return (
     <>
