@@ -233,6 +233,7 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
 
     // 팀 명함지갑에 명함 수정
     @Override
+    @Transactional
     public void updateCard(Long userId, Long teamAlbumId, Long cardId, CardRequest request) {
         TeamAlbumDetail teamAlbumDetail = teamAlbumDetailRepository.findByTeamAlbum_teamAlbumIdAndBusinesscard_CardId(
                 teamAlbumId, cardId);
