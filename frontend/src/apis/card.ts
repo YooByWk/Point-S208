@@ -51,7 +51,15 @@ export const postOCR = async (data: FormData) => {
     .catch(err => console.log(err))
 }
 
-// 사진 자르기
+// 사진 자르기 (포스코 기준)
+export const clipPhotoPosco = async (data: FormData) => {
+  return authRequest
+    .post(`/ocr/process_image/scanv3/`, data)
+    .then(res => res.data)
+    .catch(err => console.log(err))
+}
+
+// 사진 자르기 (포스코 기준)
 export const clipPhoto = async (data: FormData) => {
   return authRequest
     .post(`/ocr/process_image/scanv4/`, data)

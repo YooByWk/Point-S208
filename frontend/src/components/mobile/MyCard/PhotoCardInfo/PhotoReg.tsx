@@ -16,7 +16,7 @@ import { colors } from '@/styles/colorPalette'
 import SwipeableImg from './SwipeableImg'
 import { isFirstCardState } from '@/stores/card'
 import { useMutation } from '@tanstack/react-query'
-import { clipPhoto, ocrRegMyCard, postOCR } from '@/apis/card'
+import { clipPhoto, clipPhotoPosco, ocrRegMyCard, postOCR } from '@/apis/card'
 import base64ToBlob from '@/utils/base64ToBlob'
 import { userState } from '@/stores/user'
 import { InfoLabel } from '@fluentui/react-components'
@@ -132,6 +132,31 @@ const PhotoReg = (props: { isMyCard: boolean; refetch: any }) => {
     },
   })
 
+  // 명함 영역 자르기 (포스코 기준)
+  const { mutate: clipPhotoPoscoMutate } = useMutation({
+    mutationKey: ['clipPhotoPosco'],
+    mutationFn: clipPhotoPosco,
+    onSuccess(result) {
+      // Base64 문자열을 Blob 객체로 변환
+      const blob = base64ToBlob(result, 'image/jpeg')
+
+      // Blob 객체를 사용하여 File 객체 생성
+      const file = new File([blob], 'image.jpg', { type: 'image/jpeg' })
+
+      if (isFront) {
+        setFrontImgSrc(file)
+        setIsFrontClip(true)
+      } else {
+        setBackImgSrc(file)
+        setIsBackClip(true)
+      }
+    },
+    onError(error) {
+      console.error('등록 실패:', error)
+      alert('명함 변환에 실패하였습니다.')
+    },
+  })
+
   // ocr 추출
   const { mutate: ocrMutate } = useMutation({
     mutationKey: ['postOCR'],
@@ -139,7 +164,8 @@ const PhotoReg = (props: { isMyCard: boolean; refetch: any }) => {
     onSuccess(result) {
       if (result) {
         const data = result.images[0].nameCard.result
-
+        console.log(result)
+        console.log(data)
         const imgSrc = isFront ? frontImgSrc : backImgSrc
 
         const formData = new FormData()
@@ -159,7 +185,7 @@ const PhotoReg = (props: { isMyCard: boolean; refetch: any }) => {
                   department: data.department?.[0].text || '',
                   position: data.position?.[0].text || '',
                   email: data.email?.[0].text || '',
-                  landlineNumber: data.landlineNumber?.[0].text || '',
+                  landlineNumber: data.tel?.[0].text || '',
                   phoneNumber:
                     data.mobile?.[0].text || data.tel?.[0].text || '',
                   frontBack: isFront ? 'FRONT' : 'BACK',
@@ -188,14 +214,14 @@ const PhotoReg = (props: { isMyCard: boolean; refetch: any }) => {
                   department: data.department?.[0].text || '',
                   position: data.position?.[0].text || '',
                   email: data.email?.[0].text || '',
-                  landlineNumber: data.landlineNumber?.[0].text || '',
+                  landlineNumber: data.tel?.[0].text || '',
                   phoneNumber:
                     data.mobile?.[0].text || data.tel?.[0].text || '',
                   frontBack: isFront ? 'FRONT' : 'BACK',
                   rank: data.rank?.[0].text || '',
-                  faxNumber: data.faxNumber?.[0].text || '',
+                  faxNumber: data.fax?.[0].text || '',
                   address: data.address?.[0].text || '',
-                  domainUrl: data.domainUrl?.[0].text || '',
+                  domainUrl: data.homepage?.[0].text || '',
                 }),
               ],
               {
@@ -277,7 +303,11 @@ const PhotoReg = (props: { isMyCard: boolean; refetch: any }) => {
 
       formData.append('image', imgSrc)
 
-      clipPhotoMutate(formData)
+      if (isMyCard) {
+        clipPhotoPoscoMutate(formData)
+      } else {
+        clipPhotoPoscoMutate(formData)
+      }
     }
   }
 
