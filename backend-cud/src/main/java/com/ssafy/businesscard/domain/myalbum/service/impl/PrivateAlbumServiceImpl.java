@@ -101,12 +101,12 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
         cardSharedRequest.cardIds().forEach(aLong -> {
             Businesscard businesscard = businesscardRepository.findById(aLong)
                     .orElseThrow(() -> new GlobalExceptionHandler.UserException(
-                                    GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_CARD));
+                            GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_CARD));
             businesscards.add(businesscard);
 
             List<PrivateAlbum> privateAlbum = privateAlbumRepository.findByUser_userIdAndBusinesscard_email(userId, businesscard.getEmail());
 
-            if(privateAlbum.size()!=0){
+            if (privateAlbum.size() != 0) {
                 throw new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.ALREADY_IN_CARD);
             }
 
@@ -139,13 +139,13 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
 //            if (privateAlbum1 != null) {
 //                throw new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.ALREADY_IN_CARD);
 //            } else {
-                PrivateAlbumRequest privateAlbumRequest = PrivateAlbumRequest.builder()
-                        .user(user)
-                        .businesscard(newbusinesscard)
-                        .favorite(false)
-                        .build();
+            PrivateAlbumRequest privateAlbumRequest = PrivateAlbumRequest.builder()
+                    .user(user)
+                    .businesscard(newbusinesscard)
+                    .favorite(false)
+                    .build();
 
-                addPrivateAlbum(privateAlbumRequest);
+            addPrivateAlbum(privateAlbumRequest);
 //            }
 
         });
@@ -190,10 +190,11 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
                     teamId, businesscard.getEmail()
             );
 //            log.info("teamAlbumDeatil : " + teamAlbumDetail);
-            if (teamAlbumDetail != null) {
-                throw new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.ALREADY_IN_CARD);
-            }
-            businesscardList.add(businesscard);
+//            if (teamAlbumDetail != null) {
+//                throw new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.ALREADY_IN_CARD);
+//            }
+            if (teamAlbumDetail == null)
+                businesscardList.add(businesscard);
         });
         System.out.println("businesscardList : " + businesscardList.size());
         // businesscardList를 반복하여 businesscard를 db에 저장하고 teamAlbumDetail에 저장
@@ -201,6 +202,8 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
             CardRequest cardRequest = businesscardMapper.toDto(businesscard);
             Businesscard card = businesscardMapper.toEntity(cardRequest);
             System.out.println("businesscard : " + card);
+
+
             businesscardRepository.save(card);
             teamAlbumDetailRepository.save(TeamAlbumDetail.builder()
                     .teamAlbum(teamAlbum)
