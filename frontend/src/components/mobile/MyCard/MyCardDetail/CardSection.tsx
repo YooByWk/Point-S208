@@ -138,6 +138,7 @@ const RealCard = styled.div<{ $url: string }>`
   height: 100%;
   background: url(${props => props.$url});
   background-size: contain;
+  background-repeat: no-repeat;
 `
 
 const NoCard = styled.div`

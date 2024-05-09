@@ -88,7 +88,7 @@ const DetailCardSection = ({
       ) : (
         ''
       )}
-            <Wrap>
+      <Wrap>
         <Card $isReal={false}>{DetailCardComponent(!isReal, card)}</Card>
         <Card $isReal={true}>{DetailCardComponent(isReal, card)}</Card>
       </Wrap>
@@ -138,7 +138,8 @@ const RealCard = styled.div<{ $url: string }>`
   width: 100%;
   height: 100%;
   background: url(${props => props.$url});
-  background-size: cover;
+  background-size: contain;
+  background-repeat: no-repeat;
 `
 
 const NoCard = styled.div`
