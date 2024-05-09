@@ -12,7 +12,7 @@ import config from './sample/lib/config'
 import { useRecoilState, useSetRecoilState } from 'recoil'
 import AuthRouter from '@/routers/AuthRouter'
 import { themeState } from '@/stores/common'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { userState } from '@/stores/user'
 import { customLightTheme, customDarkTheme } from '@/styles/colorRamp'
 import Tutorial from './Tutorial'
@@ -35,28 +35,20 @@ export default function App() {
     setTheme(themeString)
   }, [setTheme, themeString])
 
-  const { teamsUserCredential: teamsFxContext } = useContext(TeamsFxContext)
-
-  const { data } = useData(async () => {
-    if (teamsFxContext) {
+  useData(async () => {
+    if (teamsUserCredential) {
       // console.log('teamsUserCredential', teamsUserCredential)
-      const userInfo = await teamsFxContext.getUserInfo()
-      return userInfo
-    }
-  })
-
-  useEffect(() => {
-    if (data) {
+      const userInfo = await teamsUserCredential.getUserInfo()
       setUser({
-        name: data.displayName,
-        email: data.preferredUserName,
+        name: userInfo.displayName,
+        email: userInfo.preferredUserName,
       })
 
       if (!user.userId) {
         setIsUserInfoinLocal(false)
       }
     }
-  }, [data, setUser, user.userId])
+  })
 
   return (
     <TeamsFxContext.Provider
