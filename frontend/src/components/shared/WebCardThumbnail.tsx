@@ -77,13 +77,13 @@ const WebCardThumbnail = ({
 
   return (
     <>
-      <Flex justify="center" align="center" css={content}>
+      <Flex justify="center" align="center">
         <div onClick={handleDetailSelect} css={imgContainerStyles}>
           {cardInfo.realPicture ? (
             <Image
               fit="contain"
               src={cardInfo.realPicture}
-              alt={`${cardInfo.name}'s card`}
+              alt={`${cardInfo.name}님의 명함`}
             />
           ) : (
             <WebMakeBusinessCard cardInfo={cardInfo} />
@@ -132,8 +132,6 @@ const i = css`
   margin-bottom: 15px;
 `
 
-const content = css``
-
 const checkboxStyles = css`
   padding-left: 13px;
 `
@@ -141,4 +139,5 @@ const checkboxStyles = css`
 const imgContainerStyles = css`
   width: 263px;
   height: 150px;
+  overflow-y: hidden;
 `

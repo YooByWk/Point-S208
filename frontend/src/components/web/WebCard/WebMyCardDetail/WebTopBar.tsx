@@ -46,7 +46,6 @@ const WebTopBar = ({
 }) => {
   const userId = useRecoilValue(userState).userId
   const setFront = useSetRecoilState(isFrontState)
-  const frontCard = useRecoilValue(isFrontState)
   const [isReal, setIsReal] = useRecoilState(isRealState)
 
   const { mutate } = useMutation({

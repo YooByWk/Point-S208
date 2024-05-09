@@ -182,7 +182,7 @@ const WebAlbumTopBar = ({
             width="100%"
           />
           <Flex align="center">
-            <ArrowSort24Filled css={iconStyles} />
+            {/* <ArrowSort24Filled css={iconStyles} />
             <TabList defaultSelectedValue="newly">
               <Tab value="newly">최신순</Tab>
               <Tab value="name">이름순</Tab>
@@ -193,7 +193,7 @@ const WebAlbumTopBar = ({
               <Tab value="none">필터 없음</Tab>
               <Tab value="stared">즐겨찾기 한 명함</Tab>
               <Tab value="received">받은 명함</Tab>
-            </TabList>
+            </TabList> */}
           </Flex>
         </Flex>
         <Spacing size={10} />

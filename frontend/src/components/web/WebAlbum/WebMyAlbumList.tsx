@@ -40,7 +40,8 @@ const WebMyAlbumList = ({
       queryKey: ['fetchMyAlbum'],
       queryFn: ({ pageParam = 0 }) => fetchMyAlbum(userId as number, pageParam),
       getNextPageParam: (lastPage, allPages) => {
-        return Array.isArray(lastPage) && lastPage.length > 0
+        return Array.isArray(lastPage.data_body) &&
+          lastPage.data_body.length > 0
           ? allPages.length
           : undefined
       },
@@ -54,7 +55,6 @@ const WebMyAlbumList = ({
   }, [data, setCards])
 
   useEffect(() => {
-    console.log('refetch')
     if (cards.length === 1 && cards[0].cardId === 0) {
       refetch()
     }
@@ -62,11 +62,9 @@ const WebMyAlbumList = ({
   }, [isRefreshed, refetch, cards])
 
   useEffect(() => {
+    console.log(hasNextPage)
     const handleScroll = () => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop ===
-        document.documentElement.offsetHeight
-      )
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight)
         return
       if (hasNextPage) {
         fetchNextPage()
@@ -190,5 +188,5 @@ const gridStyles = css`
 `
 const boxStyles = css`
   padding-top: 100px;
-  margin-bottom: 50px;
+  padding-bottom: 50px;
 `
