@@ -50,12 +50,13 @@ const Tutorial = () => {
   }
 
   useEffect(() => {
-    if (user.userId) {
-      setIsUserinStorage(true)
-    } else {
-      setIsUserinStorage(false)
+    let userData = {
+      name: user.name,
+      email: user.email,
     }
-  }, [setIsUserinStorage, user.userId])
+
+    mutate(userData)
+  }, [mutate, user])
 
   return (
     <Container>
