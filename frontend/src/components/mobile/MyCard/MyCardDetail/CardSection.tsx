@@ -50,6 +50,7 @@ const CardSection = () => {
   const [isReal, setIsReal] = useRecoilState(isRealState)
   const [isFront, setIsFront] = useRecoilState(isFrontState)
   const frontCard = useRecoilValue(frontCardState)
+  const backCard = useRecoilValue(backCardState)
   const onChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setIsReal(e.currentTarget.checked)
@@ -63,7 +64,7 @@ const CardSection = () => {
 
   return (
     <Container $theme={theme}>
-      {frontCard.realPicture ? (
+      {frontCard.realPicture || backCard.realPicture ? (
         <SwitchBtn>
           <Switch
             checked={isReal}

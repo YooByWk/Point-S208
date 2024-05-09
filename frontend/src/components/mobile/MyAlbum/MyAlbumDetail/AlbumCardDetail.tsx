@@ -45,5 +45,5 @@ const AlbumCardDetail = () => {
 export default AlbumCardDetail;
 
 const Container = styled.div`
-  height: 100vh;
+  height: 100dvh;
 `
