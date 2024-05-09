@@ -28,7 +28,7 @@ public class EmailController {
             @Valid @RequestBody EmailsendRequest emailsendRequest
     ) {
 
-        emailService.sendEmail(emailsendRequest.recipientEmail(), card_id);
+        emailService.sendEmail(emailsendRequest.recipientEmail(), card_id );
 
         return ResponseEntity.ok().body(MessageUtils.success("명함이 등록되었습니다."));
     }

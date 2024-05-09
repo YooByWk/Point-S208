@@ -2,9 +2,12 @@ package com.ssafy.businesscard.domain.email.service;
 
 import com.ssafy.businesscard.domain.card.entity.Businesscard;
 import com.ssafy.businesscard.domain.card.repository.BusinesscardRepository;
+import com.ssafy.businesscard.domain.user.entity.User;
+import com.ssafy.businesscard.domain.user.repository.UserRepository;
 import com.ssafy.businesscard.global.config.EmailConfig;
 import com.ssafy.businesscard.global.exception.GlobalExceptionHandler;
 import jakarta.mail.MessagingException;
+import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.FileSystemResource;
@@ -26,6 +29,7 @@ public class EmailService {
     private final JavaMailSender mailSender;
     private final EmailConfig emailConfig;
     private final BusinesscardRepository businesscardRepository;
+    private final UserRepository userRepository;
 
     //
 //    @Transactional
@@ -56,7 +60,7 @@ public class EmailService {
 //            throw new RuntimeException("메일 생성 오류", e);
 //        }
 //    }
-    public void sendEmail(String recipientEmail, Long cardId) {
+    public void sendEmail(String recipientEmail, Long cardId ) {
 
 
         Businesscard businesscard = businesscardRepository.findById(cardId).
@@ -66,7 +70,16 @@ public class EmailService {
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper messageHelper = new MimeMessageHelper(message, true);
-            messageHelper.setFrom(emailConfig.getUserName());
+
+//            messageHelper.setFrom(emailConfig.getUserName());
+
+//            User user = userRepository.findById(senderId).orElseThrow(() -> new GlobalExceptionHandler.
+//                    UserException(GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_USER));
+
+//            messageHelper.setFrom(user.getEmail());
+//            messageHelper.setFrom(new InternetAddress( emailConfig.getUserName(), "SSAFYS208@ssafys208.onmicrosoft.com"));
+            messageHelper.setFrom(new InternetAddress( emailConfig.getUserName(), "SSAFYS208@ssafys208.onmicrosoft.com"));
+
             messageHelper.setTo(recipientEmail);
             messageHelper.setSubject("명함 정보입니다.");
             messageHelper.setText(toEmailString(businesscard), true);
