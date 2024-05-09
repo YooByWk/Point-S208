@@ -180,3 +180,8 @@ export const deleteMyAlbumCards = async (params: deleteAlbumCardArrayType) => {
 
   return Promise.all(deleteRequests)
 }
+
+// export const fetchFilterByCard = async() => {
+  // return authRequest
+  // .get(`${ReadUrl}/${userId}/filter`)
+// }

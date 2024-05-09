@@ -10,6 +10,8 @@ import styled from '@emotion/styled';
 import BackArrow from '@/components/shared/BackArrow';
 import DetailMapSection from '@components/mobile/MyAlbum/MyAlbumDetail/DetailMapSection';
 import DetailFilter from './DetailFilter';
+import MemoSection from '@components/mobile/MyAlbum/MyAlbumDetail/MemoSection'
+
 
 const AlbumCardDetail = () => {
   const params = useParams()
@@ -29,7 +31,9 @@ const AlbumCardDetail = () => {
         <DetailInfoSection card={card} isEdit={{value: isEdit, setValue: setIsEdit}}/>
         <DetailMapSection card={card} />
         <DetailBottomSection />
-        <DetailFilter cardId={cardId}/>
+        {/*  memo section necesita */}
+        {/* <DetailFilter cardId={cardId}/> */}
+        <MemoSection card={card}/>
       </Container>
       // 지도 : 수정하기 
       // 메모 : 수정하기

@@ -1,4 +1,5 @@
 import { AddTeamMemberType, CreateTeamSkipType, CreateTeamType, RegisterTeammCardType, deleteTeamAlbumCardType, deleteTeamCardArrayType } from '@/types/TeamListType'
+import { editTeamMemoType } from '@/types/cardInput'
 import { authRequest } from '@/utils/requestMethod'
 
 const CudUrl = '/cud/api/teams'
@@ -121,3 +122,11 @@ export const ocrRegTeamCard = async (params: any) => {
     .then(res => res.data)
     .catch(err => console.log(err))
 }
+export const editTeamAlbumMemo = async (params: editTeamMemoType) => {
+  console.log(params)
+  return authRequest
+  .post(`${CudUrl}/${params.userId}/${params.teamAlbumId}/${params.cardId}/memo`, params.data)
+  .then(res => res.data)
+  .catch(err => console.log(err))
+}
+
