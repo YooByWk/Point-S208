@@ -90,6 +90,7 @@ public class EmailService {
 
             System.out.println("rrrrrrrr" + businesscard.getRealPicture());
 //            FileSystemResource image = new FileSystemResource(new File(businesscard.getRealPicture()));
+
             URL imageUrl = new URL(businesscard.getRealPicture());
             File tempFile = File.createTempFile("temp", ".jpg");
 
@@ -112,7 +113,12 @@ public class EmailService {
     public void sendEmailDigital(String recipientEmail, Long user_id) {
 
         List<Businesscard> businesscards = businesscardRepository.findAllByUser_userId(user_id);
+        if (businesscards.size() == 0) {
+            throw new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_CARD);
+        }
+
         log.info("businesscards" + businesscards);
+
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper messageHelper = new MimeMessageHelper(message, true);
@@ -122,14 +128,15 @@ public class EmailService {
             messageHelper.setSubject("digital 명함 정보입니다.");
 
             messageHelper.setText(toEmailString(businesscards.get(0)), true);
-            log.info("imageUrl" + businesscards.get(0).getDigitalPicture());
+//            log.info("imageUrl" + businesscards.get(0).getDigitalPicture());
 
 //            FileSystemResource image = new FileSystemResource(new File(businesscard.getRealPicture()));
 
-            URL imageUrl = new URL(businesscards.get(0).getDigitalPicture());
+
 //            log.info("sizzzzzzzzzz" + businesscards.size());
 
-            if (businesscards.size() == 2) {
+            if (businesscards.size() == 2 && !businesscards.get(1).getDigitalPicture().isEmpty()) {
+
                 URL backimageUrl = new URL(businesscards.get(1).getDigitalPicture());
                 File BacktempFile = File.createTempFile("temp2", ".jpg");
 
@@ -142,17 +149,23 @@ public class EmailService {
 
             }
 
-            File FronttempFile = File.createTempFile("temp", ".jpg");
+            if (!businesscards.get(0).getDigitalPicture().isEmpty()) {
+
+                URL imageUrl = new URL(businesscards.get(0).getDigitalPicture());
+
+                File FronttempFile = File.createTempFile("temp", ".jpg");
 
 
-            try (FileOutputStream fos = new FileOutputStream(FronttempFile)) {
-                fos.write(imageUrl.openStream().readAllBytes());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+                try (FileOutputStream fos = new FileOutputStream(FronttempFile)) {
+                    fos.write(imageUrl.openStream().readAllBytes());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+
+                messageHelper.addAttachment("image.jpg", FronttempFile);
             }
 
-
-            messageHelper.addAttachment("image.jpg", FronttempFile);
             mailSender.send(message);
 
         } catch (MessagingException e) {

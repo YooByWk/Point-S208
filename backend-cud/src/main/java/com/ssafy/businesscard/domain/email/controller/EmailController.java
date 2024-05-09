@@ -21,6 +21,7 @@ public class EmailController {
     private final EmailService emailService;
     private final UserService userService;
 
+    // 명함공유
     @PostMapping("/{card_id}/share/email")
 
     public ResponseEntity<MessageUtils> sharerealpicture(
@@ -32,6 +33,8 @@ public class EmailController {
 
         return ResponseEntity.ok().body(MessageUtils.success("명함이 전송되었습니다."));
     }
+
+    // 나 자신의 디지털 명함 공유
     @PostMapping("/{user_id}/share/email/digital")
     public ResponseEntity<MessageUtils> sharedigital(
             @PathVariable("user_id") Long user_id,
