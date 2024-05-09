@@ -48,7 +48,8 @@ const Tutorial = () => {
     }
 
     mutate(userData)
-  }, [mutate, user])
+    setIsUserinStorage(true)
+  }, [])
 
   return (
     <Spinner label="로딩 중..." style={{ height: '100vh' }} />
