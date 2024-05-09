@@ -13,7 +13,7 @@ interface TeamCardThumbnailProps {
   teamAlbumId: number;
 }
 
-const TeamCardThumbnail: React.FC<TeamCardThumbnailProps>= ({teamAlbumId}) => {
+const TeamCardThumbnail: any= ({teamAlbumId}: {teamAlbumId: any}) => {
   /* 팀 명함 정보*/
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['fetchTeamCardsList', null],
