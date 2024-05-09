@@ -65,3 +65,9 @@ export type editTeamMemoType = {
   teamAlbumId: number | undefined
   data: { memo: string }
 }
+
+export type saveDigitalCardType = {
+  userId: number | undefined
+  cardId: number
+  file: FormData
+}

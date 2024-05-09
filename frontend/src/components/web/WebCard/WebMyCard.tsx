@@ -76,7 +76,7 @@ const WebMyCard = ({
   const [isFront, setIsFront] = useState(true)
 
   if (loading) return <div>Loading...</div>
-  if (error) return <div>Error loading data!</div>
+  // if (error) return <div>Error loading data!</div>
   if (!data) return <div>No data available</div>
   if (!isFront && data.back === null) {
     setIsEnglish(true)

@@ -4,6 +4,12 @@ import Flex from '@/components/shared/Flex'
 import { colors } from '@/styles/colorPalette'
 import type { CardType } from '@/types/cardType'
 import styled from '@emotion/styled'
+import { useEffect, useRef } from 'react'
+import { toJpeg } from 'html-to-image'
+import { useMutation } from '@tanstack/react-query'
+import { saveMyDigitalCard } from '@/apis/card'
+import { useRecoilValue } from 'recoil'
+import { userState } from '@/stores/user'
 
 interface MyDigitalCardProps {
   cardInfo: CardType
@@ -16,6 +22,22 @@ interface MainContainerProps {
   border?: boolean
 }
 
+function dataURLtoBlob(dataURL: string) {
+  const arr = dataURL.split(',')
+  const mimeMatch = arr[0].match(/:(.*?);/)
+  if (!mimeMatch) {
+    throw new Error('Invalid data URL format')
+  }
+  const mime = mimeMatch[1]
+  const bstr = atob(arr[1])
+  let n = bstr.length
+  const u8arr = new Uint8Array(n)
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n)
+  }
+  return new Blob([u8arr], { type: mime })
+}
+
 const MyDigitalCard: React.FC<MyDigitalCardProps> = ({
   cardInfo,
   scale,
@@ -26,8 +48,53 @@ const MyDigitalCard: React.FC<MyDigitalCardProps> = ({
     scale = 1.1
   }
   // const cardInfo = props.cardInfo
+  const containerRef = useRef<HTMLDivElement>(null)
+  const userId = useRecoilValue(userState).userId
+
+  const { mutate } = useMutation({
+    mutationKey: ['saveMyDigitalCard'],
+    mutationFn: saveMyDigitalCard,
+    onSuccess(result) {
+      console.log('저장 성공', result)
+    },
+    onError(error) {
+      console.error('저장 실패:', error)
+    },
+  })
+
+  useEffect(() => {
+    const handleSaveAsJpg = () => {
+      if (containerRef.current) {
+        toJpeg(containerRef.current)
+          .then(function (dataUrl) {
+            console.log('dataUrl', dataUrl)
+            const blob = dataURLtoBlob(dataUrl)
+            console.log('blob', blob)
+            const file = new File([blob], 'my_component.jpg', {
+              type: 'image/jpeg',
+            })
+
+            const formData = new FormData()
+            formData.append('file', file)
+            console.log('formData', formData)
+            mutate({ userId: userId, cardId: cardInfo.cardId, file: formData })
+          })
+          .catch(function (error) {
+            console.error('이미지 생성 오류:', error.message)
+          })
+      }
+    }
+
+    if (cardInfo.digitalPicture === null) handleSaveAsJpg()
+  }, [mutate, userId, cardInfo])
+
   return (
-    <div css={MainContainer({ scale, border })}>
+    <Flex
+      direction="column"
+      justify="space-between"
+      css={MainContainer({ scale, border })}
+      ref={containerRef}
+    >
       <Flex justify="flex-end" css={ImageBox}>
         <img src="logo.png" alt="포스코 인터내셔널" />
       </Flex>
@@ -50,7 +117,7 @@ const MyDigitalCard: React.FC<MyDigitalCardProps> = ({
           <Desc>E-mail {cardInfo?.email}</Desc>
         </RightFlex>
       </Flex>
-    </div>
+    </Flex>
   )
 }
 
@@ -60,13 +127,13 @@ export default MyDigitalCard
 const LeftFlex = styled.div`
   display: flex;
   flex-direction: column;
-  width: 40%;
+  width: 38%;
 `
 
 const RightFlex = styled.div`
   display: flex;
   flex-direction: column;
-  width: 55%;
+  width: 60%;
 `
 
 const Name = styled.p`
@@ -98,11 +165,10 @@ const MainContainer = (props: MainContainerProps) => css`
   height: 135px;
   border-radius: 10px;
   border: ${props.border ? '1px solid ' + colors.black : 'none'};
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   padding: 20px 10px 20px 15px;
   transform: scale(${props.scale});
+  overflow-y: hidden;
+  overflow-x: auto;
 `
 
 const ImageBox = css`

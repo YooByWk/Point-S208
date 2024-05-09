@@ -18,7 +18,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { userState } from '@/stores/user'
 import { useMutation } from '@tanstack/react-query'
 import { writeMyCard } from '@/apis/card'
-import { isFirstCardState } from '@/stores/card'
+import { isBackCardState, isFirstCardState } from '@/stores/card'
 
 const WriteCardInfo = ({
   setIsCard,
@@ -47,6 +47,7 @@ const WriteCardInfo = ({
 
   const setWriteInfo = useSetRecoilState(writeInfoState)
   const setIsFirstCard = useSetRecoilState(isFirstCardState)
+  const setIsBackCard = useSetRecoilState(isBackCardState)
 
   const [dirty, setDirty] = useState<Partial<cardInput>>({})
 
@@ -72,6 +73,9 @@ const WriteCardInfo = ({
       setWriteInfo(false)
       setIsFirstCard(false)
       refetch()
+      if (isEnglish) {
+        setIsBackCard(true)
+      }
     },
     onError(error) {
       console.error('등록 실패:', error)
