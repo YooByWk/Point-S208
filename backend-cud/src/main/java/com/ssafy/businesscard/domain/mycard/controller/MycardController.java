@@ -55,4 +55,12 @@ public class MycardController {
         return ResponseEntity.ok().body(MessageUtils.success("명함이 삭제되었습니다."));
     }
 
+    // 디지털 명함 저장
+    @PostMapping("/{userId}/{cardId}/save")
+    public ResponseEntity<MessageUtils> save(@PathVariable("userId") Long userId,
+                                             @PathVariable("cardId") Long cardId,
+                                             @RequestPart("file") MultipartFile file) {
+        mycardService.save(userId, cardId, file);
+        return ResponseEntity.ok().body(MessageUtils.success("디지털 명함이 저장되었습니다."));
+    }
 }

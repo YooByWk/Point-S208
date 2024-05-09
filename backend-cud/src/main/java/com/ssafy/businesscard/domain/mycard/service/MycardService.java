@@ -8,4 +8,5 @@ public interface MycardService {
     void registCard(Long userId, MultipartFile image, MycardRegistRequest mycardRegistRequest);
     void update(Long userId, Long cardId, MycardRegistRequest registRequest);
     void delete(Long userId);
+    void save(Long userId, Long cardId, MultipartFile file);
 }
