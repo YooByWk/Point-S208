@@ -75,7 +75,7 @@ const DetailCardSection = ({
   )
   return (
     <Container $theme={theme}>
-      {card.realPicture ? (
+      {/* {card.realPicture ? (
         <SwitchBtn>
           <Switch
             checked={isReal}
@@ -95,15 +95,15 @@ const DetailCardSection = ({
         </SwitchBtn>
       ) : (
         ''
-      )}
+      )} */}
       <Wrap>
-        <Card $isReal={false}>{DetailCardComponent(!isReal, card)}</Card>
+        {/* <Card $isReal={false}>{DetailCardComponent(!isReal, card)}</Card> */}
         <Card $isReal={true}>{DetailCardComponent(isReal, card)}</Card>
       </Wrap>
-      <ArrowHookUpLeft28Regular
+      {/* <ArrowHookUpLeft28Regular
         css={changeStyle}
         onClick={() => setIsReal(!isReal)}
-      />
+      /> */}
       <Desc>{isReal ? '실물' : '디지털'}</Desc>
     </Container>
   )
@@ -145,7 +145,7 @@ const Card = styled.div<{ $isReal: boolean }>`
   filter: drop-shadow(2px 4px 4px rgba(0, 0, 0, 0.25));
   ${props =>
     props.$isReal
-      ? `left: 0; bottom: 0;`
+      ? `left: 50%; bottom: 50%; transform: translate(-50%, 50%);`
       : `right: 0; filter: brightness(50%);`}
 `
 

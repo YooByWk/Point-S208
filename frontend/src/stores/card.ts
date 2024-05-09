@@ -36,6 +36,11 @@ export const isFrontState = atom({
   default: true,
 })
 
+export const isBackCardState = atom({
+  key: 'isBackCardState',
+  default: false,
+})
+
 export const isRealState = atom({
   key: 'isRealState',
   default: false,
