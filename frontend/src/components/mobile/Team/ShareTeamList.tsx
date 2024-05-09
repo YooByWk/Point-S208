@@ -8,7 +8,7 @@ import * as teamState from '@/stores/team'
 import { css } from '@emotion/react'
 import LargeButton from '@/components/shared/LargeButton'
 import AddTeam from '@/components/mobile/Team/AddTeam'
-import { Spinner, tokens } from '@fluentui/react-components';
+import { Spinner, tokens } from '@fluentui/react-components'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { fetchTeamList } from '@/apis/team'
@@ -19,6 +19,10 @@ import { TeamListType } from '@/types/TeamListType'
 import ShareTeamCard from './ShareTeamCard'
 import { shareToTeamCard } from '@/apis/album'
 
+import {
+  CheckmarkCircle24Regular,
+  Circle24Regular,
+} from '@fluentui/react-icons'
 
 const TeamList = () => {
   const [searchValue, setSearchValue] = useState('')
@@ -39,28 +43,47 @@ const TeamList = () => {
   const param = useLocation()
   const negro = useParams()
   console.log(negro)
-  console.log('ppppppppppp',param?.state)
+  console.log('ppppppppppp', param?.state)
   if (isLoading) {
-    return <Flex direction='column' justify='center' align='center' style={{ height: '100vh' }}>
-      <Spinner />
-      <Text>로딩중...</Text></Flex>
+    return (
+      <Flex
+        direction="column"
+        justify="center"
+        align="center"
+        style={{ height: '100vh' }}
+      >
+        <Spinner />
+        <Text>로딩중...</Text>
+      </Flex>
+    )
   }
   const handleShareClick = async () => {
     console.log('이 로그 아래, 즉여기에 로직 넣으면 됨')
-    console.log(param,param.state.cardId, typeof param.state)
-    shareToTeamCard(userId as number,selectedTeam.teamAlbumId, param.state.selectedCards )
-    await queryClient.invalidateQueries({queryKey:['fetchTeamCardsList']})
-    navigate(`/myTeam/${selectedTeam.teamAlbumId}`, {state: {teamAlbumId:selectedTeam} })
-    console.log(`/myTeam/${selectedTeam.teamAlbumId}`,'aaaaaaaaaaaaaaaaaa')
+    console.log(param, param.state.cardId, typeof param.state)
+    shareToTeamCard(
+      userId as number,
+      selectedTeam.teamAlbumId,
+      param.state.selectedCards,
+    )
+    await queryClient.invalidateQueries({ queryKey: ['fetchTeamCardsList'] })
+    navigate(`/myTeam/${selectedTeam.teamAlbumId}`, {
+      state: { teamAlbumId: selectedTeam },
+    })
+    console.log(`/myTeam/${selectedTeam.teamAlbumId}`, 'aaaaaaaaaaaaaaaaaa')
     window.location.reload()
   }
   if (!data || data.length === 0) {
     return (
-      <Flex direction='column' justify='center' align='center' style={{ height: '100vh' }}>
+      <Flex
+        direction="column"
+        justify="center"
+        align="center"
+        style={{ height: '100vh' }}
+      >
         <Text>팀이 없습니다. </Text>
         <Text>팀을 생성해주세요. </Text>
-        <Spacing size={20} direction='vertical'></Spacing>
-        <LargeButton text='팀 선택' onClick={() => setIsWrite(!isWrite)} />
+        <Spacing size={20} direction="vertical"></Spacing>
+        <LargeButton text="팀 선택" onClick={() => setIsWrite(!isWrite)} />
       </Flex>
     )
   }
@@ -79,25 +102,24 @@ const TeamList = () => {
         placeholder="팀 검색"
       />
       <Spacing size={30} />
-      {
-        searchResults.map(team => (
-          <ShareTeamCard
-            teamInfo={team}
-            key={team.teamAlbumId}
-            onClick={() => {
-              setSelectedTeam(team)
-              console.log('선택완로ㅛ'+selectedTeam.teamAlbumId)
-              // navigate(`/myTeam/${team.teamAlbumId}`, {state: team}) 나중
-            }} />))
-      }
+      {searchResults.map(team => (
+        <div key={team.teamAlbumId} onClick={() => setSelectedTeam(team)} css={iconCont}>
+          <ShareTeamCard teamInfo={team} />
+          {selectedTeam.teamAlbumId === team.teamAlbumId ? (
+            <CheckmarkCircle24Regular css={iconCss}/>
+          ) : (
+            <Circle24Regular css={iconCss} />
+          )}
+        </div>
+      ))}
       <Spacing size={30} direction="vertical" />
       <div css={buttonCss}>
-        <LargeButton text='팀에 공유하기' width='80%' onClick={handleShareClick}
-
+        <LargeButton
+          text="팀에 공유하기"
+          width="80%"
+          onClick={handleShareClick}
         />
-
       </div>
-
     </>
   )
 }
@@ -109,8 +131,7 @@ const buttonCss = css`
   bottom: 0vh;
   z-index: 999;
   background-color: ${tokens.colorNeutralBackground1};
-  `
-
+`
 
 /*
   const handleAddCard = () => {
@@ -122,3 +143,12 @@ const buttonCss = css`
   setTeamAlbumId(+currentteamAlbumId )
 }
 */
+const iconCont = css`
+  position: relative;
+`
+
+const iconCss = css`
+  position: absolute;
+  top: 0;
+  right: 10%;
+`

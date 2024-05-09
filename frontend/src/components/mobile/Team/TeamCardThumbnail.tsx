@@ -19,7 +19,7 @@ const TeamCardThumbnail: any= ({teamAlbumId}: {teamAlbumId: any}) => {
     queryKey: ['fetchTeamCardsList', null],
     queryFn: () => fetchTeamCardsList(teamAlbumId, 0),
   })
-  !isLoading && console.log(teamAlbumId, data.data_body)
+  // !isLoading && console.log(teamAlbumId, data.data_body)
   
   return (
     <div css={TeamCardThumbnailContainer}>
