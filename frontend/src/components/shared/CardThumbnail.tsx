@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import {  useState } from 'react'
+import { useState } from 'react'
 import type { CardType } from '@/types/cardType'
 import Flex from '@/components/shared/Flex'
 import Text from '@/components/shared/Text'
@@ -42,7 +42,7 @@ const CardThumbnail = ({
   const [isfavorite, setIsFavorite] = useState(false)
   const [isChecked, setIsChecked] = useState(false)
   const isSelected = selectedCards.includes(cardInfo.cardId)
-  const userId = useRecoilValue(userState).userId 
+  const userId = useRecoilValue(userState).userId
   const myAlbumDeletemutation = useDeleteAlbumCard()
   const teamAlbumDeleteMutation = useDeleteTeamAlbumCard()
   const teamAlbumId = useParams()?.teamAlbumId
@@ -68,7 +68,10 @@ const CardThumbnail = ({
   const handleDelete = () => {
     if (teamAlbumId) {
       // 팀 앨범의 명함 삭제
-      teamAlbumDeleteMutation.mutate({cardId: cardInfo.cardId, teamAlbumId: +teamAlbumId})
+      teamAlbumDeleteMutation.mutate({
+        cardId: cardInfo.cardId,
+        teamAlbumId: +teamAlbumId,
+      })
       return
     }
     myAlbumDeletemutation.mutate(cardInfo.cardId)
@@ -83,9 +86,14 @@ const CardThumbnail = ({
           setIsChecked(!isChecked)
           onSelect(cardInfo.cardId)
         } else {
-          console.log(teamAlbumId? '팀앨범' : '내앨범')
-          teamAlbumId? navigate(`${cardInfo.cardId}`, {state: { cardInfo, teamAlbumId }}) :
-          navigate(`/myAlbum/${userId}/${cardInfo.cardId}`, {state: { cardInfo }})
+          console.log(teamAlbumId ? '팀앨범' : '내앨범')
+          teamAlbumId
+            ? navigate(`${cardInfo.cardId}`, {
+                state: { cardInfo, teamAlbumId },
+              })
+            : navigate(`/myAlbum/${userId}/${cardInfo.cardId}`, {
+                state: { cardInfo },
+              })
         }
       }}
     >
@@ -96,18 +104,19 @@ const CardThumbnail = ({
       )}
       <Flex direction="row" justify="space-around" align="center">
         <Flex direction="column" justify="center" align="center" css={infoCss}>
-          <Text typography="t7" bold={true}>
-            {cardInfo.name.length > 3 &&
+          <Text typography="t8" bold={true}>
+            {cardInfo.name.length > 6 &&
             /[\u3131-\u314e|\u314f-\u3163|\uac00-\ud7a3]/g.test(cardInfo.name)
-              ? `${cardInfo.name.slice(0, 3)}...`
-              : cardInfo.name.length > 6
               ? `${cardInfo.name.slice(0, 6)}...`
+              : cardInfo.name.length > 15
+              ? `${cardInfo.name.slice(0, 15)}...`
               : cardInfo.name.padEnd(6, ' ')}
           </Text>
-          <Text
-            typography="t9"
-            css={infoContent}
-          >{`${cardInfo.department} / ${cardInfo.position}`}</Text>
+          <Text typography="t9" css={infoContent}>
+            {cardInfo.department && cardInfo.position
+              ? `${cardInfo.department} / ${cardInfo.position}`
+              : cardInfo.department || cardInfo.position}
+          </Text>
           <Text typography="t9" css={infoContent}>
             {cardInfo.company}
           </Text>

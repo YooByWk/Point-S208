@@ -47,7 +47,9 @@ const DetailInfoSection: React.FC<DetailInfoSectionProps> = ({
           {card.name}
         </Text>
         <Text typography="t7">
-          {card.position} / {card.department}
+          {card.position && card.department
+            ? `${card.position} / ${card.department}`
+            : card.position || card.department}
         </Text>
         <Edit
           onClick={() => {
@@ -70,9 +72,14 @@ const DetailInfoSection: React.FC<DetailInfoSectionProps> = ({
             명함 정보
           </Text>
         </Flex>
-        <DeatilCardInfo name={'회사'} value={card.company} />
-        <DeatilCardInfo name={'부서'} value={card.department} />
-        <DeatilCardInfo name={'직책'} value={card.position} />
+        {card.company && <DeatilCardInfo name={'회사'} value={card.company} />}
+        {card.department && (
+          <DeatilCardInfo name={'부서'} value={card.department} />
+        )}
+        {card.rank && <DeatilCardInfo name={'직무'} value={card.rank} />}
+        {card.position && (
+          <DeatilCardInfo name={'직책'} value={card.position} />
+        )}
       </Wrap>
 
       <BreackLine />
@@ -85,9 +92,24 @@ const DetailInfoSection: React.FC<DetailInfoSectionProps> = ({
             연락처
           </Text>
         </Flex>
-        <DeatilCardInfo name={'이메일'} value={card.email} />
-        <DeatilCardInfo name={'유선전화'} value={card.landlineNumber} />
-        <DeatilCardInfo name={'휴대전화'} value={card.phoneNumber} />
+        {card.email && card.email.trim() && (
+          <DeatilCardInfo name={'이메일'} value={card.email} />
+        )}
+        {card.landlineNumber && card.landlineNumber.trim() && (
+          <DeatilCardInfo name={'유선전화'} value={card.landlineNumber} />
+        )}
+        {card.phoneNumber && card.phoneNumber.trim() && (
+          <DeatilCardInfo name={'휴대전화'} value={card.phoneNumber} />
+        )}
+        {card.faxNumber && card.faxNumber.trim() && (
+          <DeatilCardInfo name={'팩스'} value={card.faxNumber} />
+        )}
+        {card.domainUrl && card.domainUrl.trim() && (
+          <DeatilCardInfo name={'웹사이트'} value={card.domainUrl} />
+        )}
+        {card.address && card.address.trim() && (
+          <DeatilCardInfo name={'주소'} value={card.address} />
+        )}
       </Wrap>
 
       <BreackLine />
