@@ -16,6 +16,9 @@ import { ExternalCardListType } from '@/types/ExternalCard'
 import { ExternalCardType } from '@/types/ExternalCard'
 import { UserListType } from '@/types/userType'
 import { filterState } from '@/stores/album'
+import { useQuery } from '@tanstack/react-query'
+import { fetchAllAlbum } from '@/apis/album'
+import { userState } from '@/stores/user'
 
 interface CardListProps {
   cards: CardType[]
@@ -27,7 +30,7 @@ interface CardListProps {
 const CardList = ({
   parentisLoading = false,
   cards,
-  isTeam=false,
+  isTeam = false,
   handleAdd,
 }: CardListProps) => {
   const [isPageChanged, setPageChanged] = useRecoilState(pageChanged)
@@ -35,8 +38,6 @@ const CardList = ({
   const [searchValue, setSearchValue] = useState('')
   const [selectedCards, setSelectedCards] = useState<number[]>([])
   const [isShare, setIsShare] = useState(false) // 공유창 여닫는 state
-
-
 
   const handleCardSelect = (cardId: number) => {
     setSelectedCards(prev =>
@@ -61,7 +62,6 @@ const CardList = ({
     ExternalCardListType | undefined
   >(undefined)
 
-
   const handleResult = (data: ExternalCardListType | UserListType) => {
     if (data === undefined) {
       setSearchResults([])
@@ -71,6 +71,13 @@ const CardList = ({
       setSearchResults(data as ExternalCardListType)
     }
   }
+
+  const userId = useRecoilValue(userState).userId
+  // 명함지갑 내 명함 총 개수 조회
+  const { data } = useQuery({
+    queryKey: ['fetchMyCard'],
+    queryFn: () => fetchAllAlbum({ userId }),
+  })
 
   return (
     <>
@@ -94,6 +101,7 @@ const CardList = ({
             selectedCards={selectedCards}
             allCards={cards}
             setSelectedCards={setSelectedCards}
+            cardCnt={isTeam ? cards.length : data ? data.data_body.length : 0}
           />
           <Flex direction="column" justify="center" align="center">
             {searchResults !== undefined &&
@@ -117,7 +125,7 @@ const CardList = ({
                   검색 결과가 없습니다
                 </Flex>
               )
-            ) :  cards.length > 0  ? (
+            ) : cards.length > 0 ? (
               cards.map((card: ExternalCardType | CardType, index: number) => {
                 return (
                   <CardThumbnail
@@ -128,14 +136,24 @@ const CardList = ({
                   />
                 )
               })
-            ) : (
-              isfilter.filterId ? 
-              (<Flex direction="column" justify="center" align="center" style={{height:'50vh'}}>
+            ) : isfilter.filterId ? (
+              <Flex
+                direction="column"
+                justify="center"
+                align="center"
+                style={{ height: '50vh' }}
+              >
                 해당 필터에 명함이 없습니다
-              </Flex>) : 
-              (<Flex direction="column" justify="center" align="center" style={{height:'50vh'}}>
-              명함지갑에 명함이 없습니다
-            </Flex>)
+              </Flex>
+            ) : (
+              <Flex
+                direction="column"
+                justify="center"
+                align="center"
+                style={{ height: '50vh' }}
+              >
+                명함지갑에 명함이 없습니다
+              </Flex>
             )}
             <Spacing size={40} direction="vertical" />
           </Flex>

@@ -83,6 +83,7 @@ const ShareCard = ({
         selectedCards={selectedCards}
         allCards={cards}
         setSelectedCards={setSelectedCards}
+        cardCnt={cards.length}
       />
       <Spacing size={5} />
       <Flex direction="column" justify="center" align="center">
