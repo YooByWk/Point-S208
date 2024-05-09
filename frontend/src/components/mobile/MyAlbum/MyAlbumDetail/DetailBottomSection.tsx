@@ -17,6 +17,7 @@ import {
 } from '@fluentui/react-components'
 import { useState } from 'react'
 import { useRecoilValue } from 'recoil'
+import { useParams } from 'react-router-dom'
 
 
 
@@ -27,7 +28,8 @@ const DetailBottomSection = () => {
   const handleToggle: AccordionToggleEventHandler<string> = (event, data) => {
     setOpenItems(data.openItems)
   }
-
+  const params = useParams()
+  console.log(params)
   return (
     <>
       <Accordion

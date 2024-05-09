@@ -17,6 +17,7 @@ import {
   ArrowHookUpLeft28Regular,
 } from '@fluentui/react-icons'
 import { BooleanStateType } from '@/types/commonType'
+import WebMakeBusinessCard from '@/components/web/WebAlbum/WebMakeBusinessCard'
 
 const DetailCardComponent = (isReal: boolean, card: CardType) => {
   const dummyUrl =
@@ -28,13 +29,19 @@ const DetailCardComponent = (isReal: boolean, card: CardType) => {
   if (isReal) {
     return (
       card.cardId && ( // 타인의 카드는 사진으로 등록하니까.
-        <RealCard $url={dummyUrl} />
+        <RealCard $url={card.realPicture} />
       )
     )
   } else {
     return (
       card.cardId && ( // 타인 카드에 대한 디지털 생성물 올리기.
-        <RealCard $url={dummyUrl2} />
+        // <RealCard $url={card.digitalPicture} />
+        <WebMakeBusinessCard
+          cardInfo={card}
+          width="245px"
+          height="135px"
+          typoSmall="t10"
+        />
       )
     )
   }

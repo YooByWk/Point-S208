@@ -90,6 +90,7 @@ const RegisterOtherCardInfo = ({isEnglish, params}: {
     if (teamInfo === undefined) {
     console.log('팀이아님');
     mutate(params)
+    return
     }
     
     if (teamInfo !== undefined) {
