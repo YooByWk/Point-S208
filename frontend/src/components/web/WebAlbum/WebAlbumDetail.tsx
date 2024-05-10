@@ -52,7 +52,7 @@ const WebAlbumDetail = ({
   const [positionArr, setPositionArr] = useState<LatLng>({
     y: 37.3891408885668,
     x: 126.644442676851,
-    loc: '포스코인터네셔널 송도본사',
+    loc: '포스코인터내셔널 송도본사',
   })
   const [editMemo, setEditMemo] = useState(selectedCard.memo)
   const [modalOpen, setModalOpen] = useState(false)

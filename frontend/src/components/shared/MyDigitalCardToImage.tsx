@@ -68,7 +68,7 @@ const MyDigitalCardToImage = ({
             <RightFlex>
               <Company>
                 {cardInfo.frontBack === 'FRONT'
-                  ? '포스코 인터네셔널'
+                  ? '포스코 인터내셔널'
                   : 'POSCO INTERNATIONAL'}
               </Company>
               <Desc>Tel {cardInfo.landlineNumber}</Desc>

@@ -91,7 +91,7 @@ const WriteCardInfo = ({
           cardInputs.company.length === 0
             ? isEnglish
               ? 'POSCO INTERNATIONAL'
-              : '포스코인터네셔널'
+              : '포스코인터내셔널'
             : cardInputs.company,
         department: cardInputs.department,
         position: cardInputs.position,
