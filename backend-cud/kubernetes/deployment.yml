@@ -15,5 +15,7 @@ spec:
       containers:
         - name: backend-cud
           image: junwon1131/s208-backend-cud-kubernetes:latest
+          imagePullPolicy: IfNotPresent # 또는 Never
           ports:
             - containerPort: 8080
+    
