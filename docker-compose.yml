@@ -18,7 +18,7 @@ services:
 
   backend-cud-service:
     container_name: your-new-service
-    image: your-new-image:latest
+    image: junwon1131/s208-backend-cud-kubernetes:latest
     build:
       context: ./backend-cud
       dockerfile: Dockerfile.kubernetes
