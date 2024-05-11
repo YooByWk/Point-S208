@@ -20,8 +20,8 @@ services:
     container_name: your-new-service
     image: your-new-image:latest
     build:
-      context: ./your-new-service
-      dockerfile: Dockerfile
+      context: ./backend-cud
+      dockerfile: Dockerfile.kubernetes
     restart: unless-stopped
     ports:
       - "8081:8081"
