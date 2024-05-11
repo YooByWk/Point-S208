@@ -18,7 +18,7 @@ RUN chmod +x ./gradlew
 RUN ./gradlew bootJar
 
 # 2단계: Java Runtime 이미지 안에 빌드 결과물을 넣어 실행
-FROM adoptopenjdk/openjdk17:alpine
+FROM openjdk:17-alpine
 
 WORKDIR /app
 
