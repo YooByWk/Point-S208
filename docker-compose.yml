@@ -2,8 +2,6 @@ version: '3.8'
 
 services:
 
-   
- 
   backend-cud:
     container_name: backend-cud
     image: junwon1131/s208-backend-cud:latest
@@ -17,6 +15,18 @@ services:
       - jenkins-network
 #    depends_on:
 #      - redis
+
+  backend-cud-service:
+    container_name: your-new-service
+    image: your-new-image:latest
+    build:
+      context: ./your-new-service
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    networks:
+      - jenkins-network
 
 networks:
   jenkins-network:

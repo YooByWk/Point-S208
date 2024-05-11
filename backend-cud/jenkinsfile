@@ -1,5 +1,6 @@
 def component = [
     'backend-cud': true,
+    'backend-cud-service': true,
 
 ]
 
@@ -179,7 +180,7 @@ pipeline {
         stage('Up') {
             steps {
                 script {
-                                         sh "docker-compose -f docker-compose.yml -p develop-server up -d backend-cud"
+                     sh "docker-compose -f docker-compose.yml -p develop-server up -d backend-cud"
 
                     sh 'pwd'
                     sh 'ls -al'
