@@ -143,6 +143,7 @@ pipeline {
                     sh 'ls -al'
                     // 특정 서비스만 푸시
                     sh 'docker-compose -f docker-compose.yml push backend-cud'
+                    sh 'docker-compose -f docker-compose.yml push backend-cud-service'
                 }
             }
         }
