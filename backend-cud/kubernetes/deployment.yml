@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: backend-cud
-          image: my-docker-registry/my-webapp-image:latest
+          image: junwon1131/s208-backend-cud-kubernetes:latest
           ports:
             - containerPort: 8080
