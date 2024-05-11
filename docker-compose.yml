@@ -17,7 +17,7 @@ services:
 #      - redis
 
   backend-cud-service:
-    container_name: your-new-service
+    container_name: backend-cud-service
     image: junwon1131/s208-backend-cud-kubernetes:latest
     build:
       context: ./backend-cud
