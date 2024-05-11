@@ -15,7 +15,8 @@ spec:
       containers:
         - name: backend-cud
           image: junwon1131/s208-backend-cud-kubernetes:latest
-          imagePullPolicy: IfNotPresent # 또는 Never
+          imagePullPolicy: IfNotPresent # 또는 Never에 따라 필요에 맞게 변경
           ports:
             - containerPort: 8080
-    
+      imagePullSecrets: # 이미지 풀 시크릿 추가
+        - name: myregistrykey
