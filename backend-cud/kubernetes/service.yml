@@ -7,6 +7,6 @@ spec:
     app: backend-cud
   ports:
     - protocol: TCP
-      port: 80
+      port: 8080  # 여기를 80에서 8080으로 변경
       targetPort: 8080
   type: LoadBalancer
