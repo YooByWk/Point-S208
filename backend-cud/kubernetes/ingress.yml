@@ -4,7 +4,8 @@ metadata:
   name: backend-cud-ingress
 spec:
   rules:
-    - http:
+    - host: hello-minikube.local
+      http:
         paths:
           - path: /
             pathType: Prefix
