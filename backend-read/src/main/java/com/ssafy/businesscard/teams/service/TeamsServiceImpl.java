@@ -117,28 +117,6 @@ public class TeamsServiceImpl implements TeamsService{
     @Override
     public PrivateAlbumResponseDto getTeamAlbumDtail(Long teamAlbumId, Long cardId){
         Optional<TeamAlbumDetail> optionalTeamAlbumDetail = teamAlbumDetailRepository.findByTeamAlbum_TeamAlbumIdAndBusinesscard_cardId(teamAlbumId, cardId);
-//        if(optionalTeamAlbumDetail.isPresent()){
-//            TeamAlbumDetail teamAlbumDetail = optionalTeamAlbumDetail.get();
-//            return PrivateAlbumResponseDto.builder()
-//                    .cardId(teamAlbumDetail.getBusinesscard().getCardId())
-//                    .name(teamAlbumDetail.getBusinesscard().getName())
-//                    .company(teamAlbumDetail.getBusinesscard().getCompany())
-//                    .position(teamAlbumDetail.getBusinesscard().getPosition())
-//                    .rank(teamAlbumDetail.getBusinesscard().getRank())
-//                    .department(teamAlbumDetail.getBusinesscard().getDepartment())
-//                    .email(teamAlbumDetail.getBusinesscard().getEmail())
-//                    .landlineNumber(teamAlbumDetail.getBusinesscard().getLandlineNumber())
-//                    .faxNumber(teamAlbumDetail.getBusinesscard().getFaxNumber())
-//                    .phoneNumber(teamAlbumDetail.getBusinesscard().getPhoneNumber())
-//                    .address(teamAlbumDetail.getBusinesscard().getAddress())
-//                    .realPicture(teamAlbumDetail.getBusinesscard().getRealPicture())
-//                    .frontBack(teamAlbumDetail.getBusinesscard().getFrontBack())
-//                    .domainUrl(teamAlbumDetail.getBusinesscard().getDomainUrl())
-//                    .memo(teamAlbumDetail.getMemo())
-//                    .build();
-//        } else {
-//            throw new NoSuchElementException("카드가 없음");
-//        }
         if(optionalTeamAlbumDetail.isPresent()){
             TeamAlbumDetail teamAlbumDetail = optionalTeamAlbumDetail.get();
             return teamsMapper.toDto(teamAlbumDetail.getBusinesscard());
