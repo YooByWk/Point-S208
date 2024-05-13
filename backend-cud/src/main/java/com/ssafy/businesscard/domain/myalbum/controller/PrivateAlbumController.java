@@ -44,18 +44,11 @@ public class PrivateAlbumController {
         return ResponseEntity.ok().body(MessageUtils.success("명함이 등록되었습니다."));
     }
 
-    //    /api/{user_id}/{card_id}/share/email
+   // 팀 명함지갑에 있는 명함 명함지갑에 저장
     @PostMapping("/{userId}/save")
     public ResponseEntity<MessageUtils> registSharedCard(@PathVariable("userId") Long userId,
                                                          @RequestBody CardSharedRequest cardSharedRequest) {
-// 팀명함 에 공유 -> 명함 아이디 안다 -> 명함 아이디로 명함정보 추출 -> 정보를 내 private-album 테이블에 추출한 정보 저장 ->
-//        추출한 정보로 저장햇으므로, 팀명함에서 해당 명함 삭제해도 내 명함지갑에는 유지된다.
-
-// 1 . 채팅 을 통한 공유된 명함을 내명함지갑에 저장.
-// 2 팀 명함에 공유된 명함을 내명함지갑 에 저장 .
-
         privateAlbumService.registSharedCard(userId, cardSharedRequest);
-//        log.info("Regist Card : {}", request);
         return ResponseEntity.ok().body(MessageUtils.success("나의 명함지갑에 등록되었습니다"));
     }
 
@@ -106,5 +99,15 @@ public class PrivateAlbumController {
         privateAlbumService.deleteCard(userId, cardId);
         log.info("[Delete Card] : {} 명함이 명함지갑에서 삭제되었습니다.", cardId);
         return ResponseEntity.ok().body(MessageUtils.success("명함이 삭제되었습니다."));
+    }
+
+    // 명함에 등록된 필터 삭제
+    @DeleteMapping("/{userId}/{cardId}/filter/{filterId}")
+    public ResponseEntity<MessageUtils> deleteFilter(@PathVariable("userId") Long userId,
+                                                     @PathVariable("cardId") Long cardId,
+                                                     @PathVariable("filterId") Long filterId) {
+        privateAlbumService.deleteFilter(userId, cardId, filterId);
+        log.info("[Delete Filter] : {}", filterId);
+        return ResponseEntity.ok().body(MessageUtils.success("명함에서 필터가 제거되었습니다."));
     }
 }

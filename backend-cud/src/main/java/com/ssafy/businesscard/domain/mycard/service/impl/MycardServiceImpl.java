@@ -2,12 +2,12 @@ package com.ssafy.businesscard.domain.mycard.service.impl;
 
 import com.ssafy.businesscard.domain.card.entity.Businesscard;
 import com.ssafy.businesscard.domain.card.repository.BusinesscardRepository;
-import com.ssafy.businesscard.global.exception.GlobalExceptionHandler;
 import com.ssafy.businesscard.domain.mycard.dto.request.MycardRegistRequest;
 import com.ssafy.businesscard.domain.mycard.service.MycardService;
 import com.ssafy.businesscard.domain.user.entity.User;
 import com.ssafy.businesscard.domain.user.repository.UserRepository;
-import com.ssafy.businesscard.global.s3.model.entity.response.S3OneFileResponse;
+import com.ssafy.businesscard.global.exception.UserErrorCode;
+import com.ssafy.businesscard.global.exception.UserException;
 import com.ssafy.businesscard.global.s3.servcie.AmazonS3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -147,9 +147,6 @@ public class MycardServiceImpl implements MycardService {
 
 
     private User findUser(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new GlobalExceptionHandler.UserException(
-                GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_USER
-        ));
-        return user;
+        return userRepository.findById(userId).orElseThrow(() -> new UserException(UserErrorCode.NOT_EXISTS_USER));
     }
 }
