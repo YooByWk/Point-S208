@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
+import * as XLSX from 'xlsx'
 import {
   ShareAndroid24Filled,
   Delete24Filled,
@@ -32,12 +33,89 @@ import { selectedTeamAlbumIdState } from '@/stores/team'
 import styled from '@emotion/styled'
 import { useState } from 'react'
 import { themeState } from '@/stores/common'
+import { userState } from '@/stores/user'
+import { CardType } from '@/types/cardType'
+import { ExternalCardListType } from '@/types/ExternalCard'
+import { UserListType } from '@/types/userType'
 
-const WebTeamDetailHeader = (props: Partial<TabListProps>) => {
+const WebTeamDetailHeader = ({
+  allCards,
+  selectedCards,
+  setSelectedCards,
+  searchResults,
+  setSearchResults,
+  searchValue,
+  setSearchValue,
+}: {
+  allCards: CardType[]
+  selectedCards: number[]
+  setSelectedCards: React.Dispatch<React.SetStateAction<number[]>>
+  searchResults: ExternalCardListType | undefined
+  setSearchResults: React.Dispatch<
+    React.SetStateAction<ExternalCardListType | undefined>
+  >
+  searchValue: string
+  setSearchValue: React.Dispatch<React.SetStateAction<string>>
+}) => {
+  const userId = useRecoilValue(userState).userId
   const selectedTeam = useRecoilValue(selectedTeamAlbumIdState)
   const resetSelectedTeam = useResetRecoilState(selectedTeamAlbumIdState)
   const theme = useRecoilValue(themeState)
-  const [value, setValue] = useState('')
+
+  const handleResult = (data: ExternalCardListType | UserListType) => {
+    if (Array.isArray(data)) {
+      setSearchResults(data as ExternalCardListType)
+    }
+  }
+
+  const handleSelectAll = () => {
+    if (allCards.length === selectedCards.length) {
+      setSelectedCards([])
+    } else {
+      setSelectedCards(allCards.map(card => card.cardId))
+    }
+  }
+
+  const handleDownload = () => {
+    const selectedCardDetails: CardType[] = allCards.filter(card =>
+      selectedCards.includes(card.cardId),
+    )
+
+    const data = [
+      [
+        '이름',
+        '회사',
+        '부서',
+        '직무',
+        '직책',
+        '이메일',
+        '유선전화',
+        '휴대전화',
+        '팩스번호',
+        '웹사이트',
+        '주소',
+      ],
+      ...selectedCardDetails.map(card => [
+        card.name,
+        card.company,
+        card.department,
+        card.rank,
+        card.position,
+        card.email,
+        card.landlineNumber,
+        card.phoneNumber,
+        card.faxNumber,
+        card.domainUrl,
+        card.address,
+      ]),
+    ]
+
+    const wb = XLSX.utils.book_new()
+    const ws = XLSX.utils.aoa_to_sheet(data)
+    XLSX.utils.book_append_sheet(wb, ws, '사용자 정보')
+
+    XLSX.writeFile(wb, '명함.xlsx')
+  }
 
   return (
     <>
@@ -52,18 +130,18 @@ const WebTeamDetailHeader = (props: Partial<TabListProps>) => {
             <SearchBox
               appearance="underline"
               placeholder="명함을 검색해 주세요"
-              onChange={(e: any) => setValue(e.target.value)}
+              onChange={(e: any) => setSearchValue(e.target.value)}
             />
           </Flex>
           <Flex align="center">
             <ArrowSort24Filled css={iconStyles} />
-            <TabList {...props} defaultSelectedValue="newly">
+            <TabList defaultSelectedValue="newly">
               <Tab value="newly">최신순</Tab>
               <Tab value="name">이름순</Tab>
               <Tab value="company">회사명순</Tab>
             </TabList>
             <Filter24Filled css={iconStyles} />
-            <TabList {...props} defaultSelectedValue="none">
+            <TabList defaultSelectedValue="none">
               <Tab value="none">필터 없음</Tab>
               <Tab value="stared">즐겨찾기 한 명함</Tab>
               <Tab value="received">받은 명함</Tab>
@@ -74,25 +152,25 @@ const WebTeamDetailHeader = (props: Partial<TabListProps>) => {
         <Flex justify="space-between" align="center">
           <Text>{selectedTeam.teamName}</Text>
           <Flex align="center">
-            <Checkbox shape="circular" label="" />
-            <Menu>
-              <MenuTrigger disableButtonEnhancement>
-                <MenuButton
-                  appearance="transparent"
-                  icon={<ChevronDownRegular />}
-                />
-              </MenuTrigger>
+            <Checkbox
+              shape="circular"
+              label=""
+              checked={
+                allCards.length === selectedCards.length
+                  ? true
+                  : selectedCards.length > 0
+                  ? 'mixed'
+                  : false
+              }
+              onClick={handleSelectAll}
+            />
+            
+            <div css={wordBoxStyles}>
+              <Text typography="t9" color="themeMainBlue" textAlign="center">
+                {selectedCards.length}개 선택됨
+              </Text>
+            </div>
 
-              <MenuPopover>
-                <MenuList>
-                  <MenuItem>전체 선택</MenuItem>
-                  <MenuItem>전체 취소</MenuItem>
-                </MenuList>
-              </MenuPopover>
-            </Menu>
-            <Text typography="t9" color="themeMainBlue">
-              0개 선택됨
-            </Text>
             <Button appearance="transparent" size="small" css={buttonStyles}>
               <ShareAndroid24Filled />
             </Button>
@@ -137,4 +215,9 @@ const iconStyles = css`
 const buttonStyles = css`
   padding: 0;
   margin: 0;
+`
+
+const wordBoxStyles = css`
+  width: 100px;
+  text-align: center;
 `
