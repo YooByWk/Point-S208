@@ -7,6 +7,7 @@ import WebTeamHeader from '@/components/web/WebTeam/WebTeamHeader'
 import WebTeamList from '@/components/web/WebTeam/WebTeamList'
 import { hasSelectedTeam as hasSelectedTeamState } from '@/stores/team'
 import { userState } from '@/stores/user'
+import { TeamListType } from '@/types/TeamListType'
 import { Spinner } from '@fluentui/react-components'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
@@ -18,6 +19,7 @@ const WebTeam = () => {
   const [selectedCards, setSelectedCards] = useState<number[]>([])
   const [isDetail, setIsDetail] = useState(false)
   const [isAdd, setIsAdd] = useState(false)
+  const [searchTeamList, setSearchTeamList] = useState<TeamListType[]>([]) // 팀 검색 목록
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['fetchTeamList'],
@@ -49,8 +51,17 @@ const WebTeam = () => {
       {isLoading && <Spinner label="로딩 중..." style={{ height: '100vh' }} />}
       {!isLoading && (
         <>
-          <WebTeamHeader value={isAdd} setValue={setIsAdd} />
-          <WebTeamList data={data} value={isAdd} setValue={setIsAdd} />
+          <WebTeamHeader
+            data={data}
+            setSearchTeamList={setSearchTeamList}
+            value={isAdd}
+            setValue={setIsAdd}
+          />
+          <WebTeamList
+            data={searchTeamList}
+            value={isAdd}
+            setValue={setIsAdd}
+          />
         </>
       )}
       {isAdd && (

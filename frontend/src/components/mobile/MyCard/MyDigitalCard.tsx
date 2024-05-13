@@ -70,16 +70,16 @@ const MyDigitalCard: React.FC<MyDigitalCardProps> = ({
       if (containerRef.current) {
         toJpeg(containerRef.current)
           .then(function (dataUrl) {
-            console.log('dataUrl', dataUrl)
+            // console.log('dataUrl', dataUrl)
             const blob = dataURLtoBlob(dataUrl)
-            console.log('blob', blob)
+            // console.log('blob', blob)
             const file = new File([blob], 'my_component.jpg', {
               type: 'image/jpeg',
             })
 
             const formData = new FormData()
             formData.append('file', file)
-            console.log('formData', formData)
+            // console.log('formData', formData)
             mutate({ userId: userId, cardId: cardInfo.cardId, file: formData })
           })
           .catch(function (error) {
@@ -99,7 +99,7 @@ const MyDigitalCard: React.FC<MyDigitalCardProps> = ({
         )
           handleSaveAsJpg()
     }
-  }, [mutate, userId, cardInfo])
+  }, [])
 
   return (
     <Flex

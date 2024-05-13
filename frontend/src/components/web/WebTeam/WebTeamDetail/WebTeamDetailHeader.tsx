@@ -31,15 +31,17 @@ import { useRecoilValue, useResetRecoilState } from 'recoil'
 import { selectedTeamAlbumIdState } from '@/stores/team'
 import styled from '@emotion/styled'
 import { useState } from 'react'
+import { themeState } from '@/stores/common'
 
 const WebTeamDetailHeader = (props: Partial<TabListProps>) => {
   const selectedTeam = useRecoilValue(selectedTeamAlbumIdState)
   const resetSelectedTeam = useResetRecoilState(selectedTeamAlbumIdState)
+  const theme = useRecoilValue(themeState)
   const [value, setValue] = useState('')
 
   return (
     <>
-      <Flex direction="column" css={boxStyles}>
+      <Flex direction="column" css={boxStyles(theme)}>
         <Flex justify="space-between" align="center">
           <Flex align="center">
             <BackButton onClick={() => resetSelectedTeam()}>
@@ -120,11 +122,12 @@ const BackButton = styled.div`
 
 // css
 
-const boxStyles = css`
+const boxStyles = (theme: string) => css`
   position: fixed;
   padding: 5px 24px;
   width: 100%;
   z-index: 1000;
+  background-color: ${theme === 'dark' ? colors.black01 : '#fff'};
 `
 
 const iconStyles = css`
