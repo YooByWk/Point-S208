@@ -31,9 +31,9 @@ public class TeamFilterServiceImpl implements TeamFilterService {
         if (request.filterName().isEmpty()) {
             throw new UserException(UserErrorCode.INVALID_FILTER_NAME);
         } else {
-            teamAlbumFilterRepository.findByFilterName(request.filterName()).ifPresent(
-                    filter -> {throw new UserException(UserErrorCode.ALREADY_IN_FILTER);
-            });
+            teamAlbumMemberRepository.findByTeamAlbum_TeamAlbumIdAndFilter_FilterName(teamAlbumId, request.filterName())
+                    .ifPresent(filter -> {throw new UserException(UserErrorCode.ALREADY_IN_FILTER);
+                    });
             Filter filter = filterMapper.toEntity(request);
             teamAlbumFilterRepository.save(filter);
             saveFilter(teamAlbumId, filter.getFilterId());
