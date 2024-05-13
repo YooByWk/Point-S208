@@ -2,6 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: backend-cud-ingress
+  namespace: ingress-nginx
 spec:
   rules:
     - host: hello-minikube.local
