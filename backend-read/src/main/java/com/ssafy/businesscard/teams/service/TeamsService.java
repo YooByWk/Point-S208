@@ -16,4 +16,5 @@ public interface TeamsService {
     public PrivateAlbumResponseDto getTeamAlbumDtail(Long teamAlbumId, Long cardId);
     public List<FilterListResponseDto> getFilter(Long teamsAlbumDetailId);
     public FilterCardResponseDto getFilterCard(Long teamAlbumId, Long filterId);
+    public List<FilterListResponseDto> getAlbumDtailFilter(Long teamAlbumId, Long cardId);
 }

@@ -1,5 +1,7 @@
 package com.ssafy.businesscard.teams.service;
 
+import com.ssafy.businesscard.global.exception.UserErrorCode;
+import com.ssafy.businesscard.global.exception.UserException;
 import com.ssafy.businesscard.mycard.entity.Businesscard;
 import com.ssafy.businesscard.privateAlbum.dto.FilterCardResponseDto;
 import com.ssafy.businesscard.privateAlbum.dto.FilterListResponseDto;
@@ -19,6 +21,7 @@ import com.ssafy.businesscard.teams.repository.TeamAlbumMemberRepository;
 import com.ssafy.businesscard.teams.repository.TeamAlbumRepository;
 import com.ssafy.businesscard.teams.repository.TeamMemberRepository;
 import com.ssafy.businesscard.user.entity.User;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -116,12 +119,13 @@ public class TeamsServiceImpl implements TeamsService{
     //팀 명함 상세 조회
     @Override
     public PrivateAlbumResponseDto getTeamAlbumDtail(Long teamAlbumId, Long cardId){
-        Optional<TeamAlbumDetail> optionalTeamAlbumDetail = teamAlbumDetailRepository.findByTeamAlbum_TeamAlbumIdAndBusinesscard_cardId(teamAlbumId, cardId);
-        if(optionalTeamAlbumDetail.isPresent()){
-            TeamAlbumDetail teamAlbumDetail = optionalTeamAlbumDetail.get();
-            return teamsMapper.toDto(teamAlbumDetail.getBusinesscard());
-        } else {
-            throw new NoSuchElementException("카드가 없음");
+        Optional<TeamAlbumDetail> teamAlbumDetailOptional  = teamAlbumDetailRepository.findByTeamAlbum_TeamAlbumIdAndBusinesscard_cardId(teamAlbumId, cardId);
+        if(teamAlbumDetailOptional.isPresent()){
+            TeamAlbumDetail teamAlbumDetail = teamAlbumDetailOptional.get();
+            Businesscard businesscard = teamAlbumDetail.getBusinesscard();
+            return teamsMapper.toDto(businesscard);
+        }else{
+            throw new UserException(UserErrorCode.NO_CARD);
         }
     }
 
@@ -155,4 +159,14 @@ public class TeamsServiceImpl implements TeamsService{
     }
 
     //상세보기에서 명함마다 필터 뭐있는지 조회
+    @Override
+    @Transactional
+    public List<FilterListResponseDto> getAlbumDtailFilter(Long teamAlbumId, Long cardId){
+        Optional<TeamAlbumDetail> teamAlbumDetails = teamAlbumDetailRepository.findByTeamAlbum_TeamAlbumIdAndBusinesscard_cardId(teamAlbumId, cardId);
+        TeamAlbumDetail teamAlbumDetail = teamAlbumDetails.get();
+        List<TeamAlbumMember> teamAlbumMembers = teamAlbumDetail.getTeamAlbumMemberList();
+        List<Filter> filters = teamAlbumMembers.stream().map(teamAlbumMember -> teamAlbumMember.getFilter()).toList();
+        List<FilterListResponseDto> dtos = filters.stream().map(teamsMapper::toDto).toList();
+        return dtos;
+    }
 }

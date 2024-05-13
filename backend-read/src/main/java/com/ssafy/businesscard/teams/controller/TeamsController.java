@@ -76,10 +76,11 @@ public class TeamsController {
         return ResponseEntity.ok().body(MessageUtils.success(dto));
     }
     //상세보기에서 명함마다 필터 뭐있는지 조회
-//    @GetMapping("/teams/{team_album_id}/{card_id}/filter")
-//    public ResponseEntity<?> getCardFilter(
-//            @PathVariable("team_album_id")Long teamAlbumId,
-//            @PathVariable("card_id")Long cardId){
-//        List<FilterListResponseDto> dtos =
-//    }
+    @GetMapping("/teams/{team_album_id}/{card_id}/filter")
+    public ResponseEntity<?> getCardFilter(
+            @PathVariable("team_album_id")Long teamAlbumId,
+            @PathVariable("card_id")Long cardId){
+        List<FilterListResponseDto> dtos = teamsService.getAlbumDtailFilter(teamAlbumId, cardId);
+        return ResponseEntity.ok().body(MessageUtils.success(dtos));
+    }
 }
