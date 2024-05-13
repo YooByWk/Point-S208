@@ -29,9 +29,10 @@ public class PrivateAlbumFilterServiceImpl implements PrivateAlbumFilterService 
         if (request.filterName().isEmpty()) {
             throw new UserException(UserErrorCode.INVALID_FILTER_NAME);
         } else {
-            privateAlbumFilterRepository.findByFilterName(request.filterName()).ifPresent(
-                    filter -> {throw new UserException(UserErrorCode.ALREADY_IN_FILTER);
-            });
+            // 필터 중복 검사
+            privateAlbumMemberRepository.findByUser_UserIdAndFilter_FilterName(userId, request.filterName())
+                    .ifPresent(filter -> {throw new UserException(UserErrorCode.ALREADY_IN_FILTER);
+                    });
             Filter filter = privateAlbumFilterRepository.save(Filter.builder()
                     .filterName(request.filterName())
                     .build());

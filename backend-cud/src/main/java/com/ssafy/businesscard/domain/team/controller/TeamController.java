@@ -147,5 +147,14 @@ public class TeamController {
         return ResponseEntity.ok().body(MessageUtils.success("구성원을 방출했습니다."));
     }
 
-
+    // 팀 내 명함에 추가된 필터 제거
+    @DeleteMapping("/{userId}/{teamId}/{cardId}/filter/{filterId}")
+    public ResponseEntity<MessageUtils> deleteFilter(@PathVariable("userId") Long userId,
+                                                     @PathVariable("teamId") Long teamAlbumId,
+                                                     @PathVariable("cardId") Long cardId,
+                                                     @PathVariable("filterId") Long filterId) {
+        teamAlbumService.deleteFilter(userId, teamAlbumId, cardId, filterId);
+        log.info("[Delete Filter] : {}", filterId);
+        return ResponseEntity.ok().body(MessageUtils.success("명함에서 필터가 제거되었습니다."));
+    }
 }

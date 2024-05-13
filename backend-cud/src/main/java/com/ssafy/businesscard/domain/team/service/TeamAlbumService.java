@@ -31,4 +31,5 @@ public interface TeamAlbumService {
 
     void deleteMember(Long userId, Long teamAlbumId, Long memberId);
 
+    void deleteFilter(Long userId, Long teamAlbumId, Long cardId, Long filterId);
 }

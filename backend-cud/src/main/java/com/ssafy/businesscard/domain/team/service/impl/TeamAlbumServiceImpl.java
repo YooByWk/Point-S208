@@ -312,6 +312,16 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
         teamMemberRepository.delete(teamMember);
     }
 
+    // 팀 내 명함에 추가된 필터 제거
+    @Override
+    public void deleteFilter(Long userId, Long teamAlbumId, Long cardId, Long filterId) {
+        User user = findUser(userId);
+        TeamAlbumMember teamAlbumMember = teamAlbumMemberRepository.findByTeamAlbumDetail_Businesscard_CardIdAndFilter_FilterId(
+                cardId, filterId
+        ).orElseThrow(() -> new UserException(UserErrorCode.BAD_REQUEST));
+        teamAlbumMemberRepository.delete(teamAlbumMember);
+    }
+
     private User findUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new UserException(UserErrorCode.NOT_EXISTS_USER));
     }
