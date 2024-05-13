@@ -14,6 +14,8 @@ import WebCardThumbnail from '@/components/shared/WebCardThumbnail'
 import { isRefreshedAlbumState } from '@/stores/card'
 import { CardType } from '@/types/cardType'
 import { ExternalCardListType, ExternalCardType } from '@/types/ExternalCard'
+import WebAddCard from './WebAddCard'
+import { isAddCardByInfoState } from '@/stores/album'
 
 const WebMyAlbumList = ({
   cards,
@@ -34,6 +36,7 @@ const WebMyAlbumList = ({
 }) => {
   const userId = useRecoilValue(userState).userId
   const isRefreshed = useRecoilValue(isRefreshedAlbumState)
+  const isAddCardByInfo = useRecoilValue(isAddCardByInfoState)
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
     useInfiniteQuery({
@@ -59,7 +62,7 @@ const WebMyAlbumList = ({
       refetch()
     }
     refetch()
-  }, [isRefreshed, refetch, cards])
+  }, [isRefreshed, refetch, cards, isAddCardByInfo])
 
   useEffect(() => {
     console.log(hasNextPage)
@@ -157,11 +160,7 @@ const WebMyAlbumList = ({
         )}
       </div>
       {isAddCard && (
-        <AddCard
-          isAddCard={isAddCard}
-          setIsAddCard={setIsAddCard}
-          isWeb={true}
-        />
+        <WebAddCard isAddCard={isAddCard} setIsAddCard={setIsAddCard} />
       )}
     </>
   )

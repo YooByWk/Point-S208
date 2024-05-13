@@ -1,10 +1,12 @@
 import WebAlbumDetail from '@/components/web/WebAlbum/WebAlbumDetail'
-import WebEditOtherCardInfo from '@/components/web/WebAlbum/WebEditOtherCardInfo'
+import WebOtherCardInfo from '@/components/web/WebAlbum/WebOtherCardInfo'
+import { isAddCardByInfoState } from '@/stores/album'
 import { CardType } from '@/types/cardType'
 import { ExternalCardListType } from '@/types/ExternalCard'
 import WebAlbumTopBar from '@components/web/WebAlbum/WebAlbumTopBar'
 import WebMyAlbumList from '@components/web/WebAlbum/WebMyAlbumList'
 import { useState } from 'react'
+import { useRecoilValue } from 'recoil'
 
 const WebAlbum = () => {
   const [selectedCards, setSelectedCards] = useState<number[]>([])
@@ -15,10 +17,13 @@ const WebAlbum = () => {
     ExternalCardListType | undefined
   >(undefined)
   const [searchValue, setSearchValue] = useState('')
+  const isAddCardByInfo = useRecoilValue(isAddCardByInfoState)
 
   const renderContent = () => {
+    if (isAddCardByInfo)
+      return <WebOtherCardInfo setEditOpen={setEditOpen} isEdit={false} />
     if (editOpen) {
-      return <WebEditOtherCardInfo setEditOpen={setEditOpen} />
+      return <WebOtherCardInfo setEditOpen={setEditOpen} isEdit={true} />
     }
     if (isDetail) {
       return (

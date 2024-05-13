@@ -4,10 +4,8 @@ import { useState } from 'react'
 import WebEmptyCard from '@components/web/WebCard/WebEmptyCard'
 import WriteCardInfo from '@components/mobile/MyCard/WriteCardInfo'
 import WebMyCard from '@components/web/WebCard/WebMyCard'
-import WebEditOtherCardInfo from '@/components/web/WebAlbum/WebEditOtherCardInfo'
+import WebOtherCardInfo from '@/components/web/WebAlbum/WebOtherCardInfo'
 import WebAlbumDetail from '@/components/web/WebAlbum/WebAlbumDetail'
-import MyDigitalCardToImage from '@/components/shared/MyDigitalCardToImage'
-import { frontCardState } from '@/stores/card'
 
 const WebCard = () => {
   const [isCard, setIsCard] = useState(true)
@@ -15,12 +13,11 @@ const WebCard = () => {
   const writeInfo = useRecoilValue(writeInfoState)
   const [editOpen, setEditOpen] = useState(false)
   const [isDetail, setIsDetail] = useState(false)
-  const frontCard = useRecoilValue(frontCardState)
 
   const renderContent = () => {
     // 내 명함 수정
     if (editOpen) {
-      return <WebEditOtherCardInfo setEditOpen={setEditOpen} />
+      return <WebOtherCardInfo setEditOpen={setEditOpen} isEdit={true} />
     }
     // 새로 추가된 명함 상세
     if (isDetail) {

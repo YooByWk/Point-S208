@@ -12,45 +12,34 @@ import {
   CameraAdd48Regular,
   SlideTextPerson48Regular,
   Dismiss24Regular,
+  Image48Regular,
 } from '@fluentui/react-icons'
 import Spacing from '@/components/shared/Spacing'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { TeamListType } from '@/types/TeamListType'
 import { cameraState } from '@/stores/emptyCard'
+import { isAddCardByInfoState } from '@/stores/album'
 interface AddCardProps {
   isAddCard: boolean
   setIsAddCard: (isAddCard: boolean) => void
-  teamInfo?: TeamListType
 }
 
-const AddCard = ({ isAddCard, setIsAddCard, teamInfo }: AddCardProps) => {
+const WebAddCard = ({ isAddCard, setIsAddCard }: AddCardProps) => {
   const userId = useRecoilValue(userState).userId
-  const [isDirectInput, setIsDirectInput] = useState(false)
-  console.log('팀앨범아이디', teamInfo?.teamAlbumId)
+  const setIsAddCardByInfo = useSetRecoilState(isAddCardByInfoState)
 
   const handleClose = () => {
     setIsAddCard(!isAddCard) // 닫기
   }
 
-  const setCamera = useSetRecoilState(cameraState)
-
-  const navigate = useNavigate()
-
   const handleDirectInput = () => {
     console.log('직접 입력 클릭')
-    setIsAddCard(false)
-    setIsDirectInput(true)
-    navigate(`/myAlbum/register/${userId}`, {
-      state: { isDirectInput: true, teamInfo: teamInfo },
-    })
+    setIsAddCard(!isAddCard) // 닫기
+    setIsAddCardByInfo(true)
   }
 
-  const handleCameraInput = () => {
-    console.log('카메라입력클릭')
-    setIsAddCard(false)
-    setCamera(true)
-    navigate(`/myAlbum/register/${userId}`, { state: { isCameraInput: true } })
+  const handleImageInput = () => {
+    console.log('이미지 등록 클릭')
   }
 
   return (
@@ -63,27 +52,32 @@ const AddCard = ({ isAddCard, setIsAddCard, teamInfo }: AddCardProps) => {
           css={container}
         >
           <div className="in">
-            <Dismiss24Regular className="X" onClick={handleClose} />
+            <Dismiss24Regular
+              className="X"
+              onClick={handleClose}
+              style={{ cursor: 'pointer' }}
+            />
             <Text>명함 등록 방식</Text>
             <Spacing size={20} direction="vertical" />
             <Flex direction="row" justify="space-around" align="center">
-              (
               <Flex
                 direction="column"
                 justify="center"
                 align="center"
-                onClick={handleCameraInput}
+                onClick={handleImageInput}
+                style={{ cursor: 'pointer' }}
               >
-                <CameraAdd48Regular />
-                <Text typography="t7">사진 촬영</Text>
+                <Image48Regular />
+                <Text typography="t7">이미지 등록</Text>
               </Flex>
-              )
+
               <Spacing size={20} direction="horizontal" />
               <Flex
                 direction="column"
                 justify="center"
                 align="center"
                 onClick={handleDirectInput}
+                style={{ cursor: 'pointer' }}
               >
                 <SlideTextPerson48Regular />
                 <Text typography="t7">직접 입력</Text>
@@ -96,7 +90,7 @@ const AddCard = ({ isAddCard, setIsAddCard, teamInfo }: AddCardProps) => {
   )
 }
 
-export default AddCard
+export default WebAddCard
 
 const container = css`
   height: 100%;

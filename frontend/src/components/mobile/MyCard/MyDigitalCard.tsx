@@ -107,7 +107,7 @@ const MyDigitalCard: React.FC<MyDigitalCardProps> = ({
       ref={containerRef}
     >
       <Flex justify="flex-end" css={ImageBox}>
-        <img src="logo.png" alt="포스코 인터내셔널" />
+        <img src="logo.png" alt="포스코인터내셔널" />
       </Flex>
 
       <Flex justify="space-between">
@@ -120,7 +120,7 @@ const MyDigitalCard: React.FC<MyDigitalCardProps> = ({
         <RightFlex>
           <Company>
             {cardInfo?.frontBack === 'FRONT'
-              ? '포스코 인터내셔널'
+              ? '포스코인터내셔널'
               : 'POSCO INTERNATIONAL'}
           </Company>
           <Desc>Tel {cardInfo?.landlineNumber}</Desc>
