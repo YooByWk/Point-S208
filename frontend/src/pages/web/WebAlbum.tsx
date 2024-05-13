@@ -1,6 +1,8 @@
 import WebAlbumDetail from '@/components/web/WebAlbum/WebAlbumDetail'
 import WebOtherCardInfo from '@/components/web/WebAlbum/WebOtherCardInfo'
+import WebReg from '@/components/web/WebReg'
 import { isAddCardByInfoState } from '@/stores/album'
+import { cameraState } from '@/stores/emptyCard'
 import { CardType } from '@/types/cardType'
 import { ExternalCardListType } from '@/types/ExternalCard'
 import WebAlbumTopBar from '@components/web/WebAlbum/WebAlbumTopBar'
@@ -18,10 +20,13 @@ const WebAlbum = () => {
   >(undefined)
   const [searchValue, setSearchValue] = useState('')
   const isAddCardByInfo = useRecoilValue(isAddCardByInfoState)
+  const camera = useRecoilValue(cameraState)
 
   const renderContent = () => {
     if (isAddCardByInfo)
       return <WebOtherCardInfo setEditOpen={setEditOpen} isEdit={false} />
+    if (camera)
+      return <WebReg state='album' /> // state => myCard, album, team
     if (editOpen) {
       return <WebOtherCardInfo setEditOpen={setEditOpen} isEdit={true} />
     }

@@ -27,6 +27,7 @@ interface AddCardProps {
 const WebAddCard = ({ isAddCard, setIsAddCard }: AddCardProps) => {
   const userId = useRecoilValue(userState).userId
   const setIsAddCardByInfo = useSetRecoilState(isAddCardByInfoState)
+  const setCamera = useSetRecoilState(cameraState)
 
   const handleClose = () => {
     setIsAddCard(!isAddCard) // 닫기
@@ -40,6 +41,8 @@ const WebAddCard = ({ isAddCard, setIsAddCard }: AddCardProps) => {
 
   const handleImageInput = () => {
     console.log('이미지 등록 클릭')
+    setIsAddCard(!isAddCard) // 닫기
+    setCamera(true)
   }
 
   return (

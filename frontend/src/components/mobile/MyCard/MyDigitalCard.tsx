@@ -87,16 +87,18 @@ const MyDigitalCard: React.FC<MyDigitalCardProps> = ({
           })
       }
     }
-    if (
-      frontCard.cardId === cardInfo.cardId ||
-      backCard.cardId === cardInfo.cardId
-    )
+    if (cardInfo) {
       if (
-        cardInfo.digitalPicture === null ||
-        cardInfo.digitalPicture === undefined ||
-        cardInfo.digitalPicture.trim() === ''
+        frontCard.cardId === cardInfo.cardId ||
+        backCard.cardId === cardInfo.cardId
       )
-        handleSaveAsJpg()
+        if (
+          cardInfo.digitalPicture === null ||
+          cardInfo.digitalPicture === undefined ||
+          cardInfo.digitalPicture.trim() === ''
+        )
+          handleSaveAsJpg()
+    }
   }, [mutate, userId, cardInfo])
 
   return (
