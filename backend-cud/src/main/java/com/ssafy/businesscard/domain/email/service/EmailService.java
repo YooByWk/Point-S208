@@ -6,6 +6,8 @@ import com.ssafy.businesscard.domain.user.entity.User;
 import com.ssafy.businesscard.domain.user.repository.UserRepository;
 import com.ssafy.businesscard.global.config.EmailConfig;
 import com.ssafy.businesscard.global.exception.GlobalExceptionHandler;
+import com.ssafy.businesscard.global.exception.UserErrorCode;
+import com.ssafy.businesscard.global.exception.UserException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -34,53 +36,15 @@ public class EmailService {
     private final BusinesscardRepository businesscardRepository;
     private final UserRepository userRepository;
 
-    //
-//    @Transactional
-//    public void sendCodeMail(String email){
-//        //인증번호 생성
-//        String number = certificationUtil.createNumber();
-//        log.debug("인증번호 생성 = {}", number);
-//        CertificationNumber certificationNumber = CertificationNumber
-//                .builder()
-//                .email(email)
-//                .number(number)
-//                .build();
-//
-//        //레디스에 저장
-//        repository.save(certificationNumber);
-//        //메일 생성 및 전송
-//
-//        try {
-//            MimeMessage message = mailSender.createMimeMessage();
-//            MimeMessageHelper messageHelper = new MimeMessageHelper(message, true);
-//            messageHelper.setFrom(emailConfig.getUserName());
-//            messageHelper.setTo(email);
-//            messageHelper.setSubject("[FLOWERING] 이메일 인증 번호입니다.");
-//            messageHelper.setText(makeCodeTemplate(number),true);
-//
-//            mailSender.send(message);
-//        } catch (MessagingException e) {
-//            throw new RuntimeException("메일 생성 오류", e);
-//        }
-//    }
     public void sendEmail(String recipientEmail, Long cardId) {
 
-
         Businesscard businesscard = businesscardRepository.findById(cardId).
-                orElseThrow(() -> new GlobalExceptionHandler.
-                        UserException(GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_CARD));
+                orElseThrow(() -> new UserException(UserErrorCode.NOT_EXISTS_CARD));
 
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper messageHelper = new MimeMessageHelper(message, true);
 
-//            messageHelper.setFrom(emailConfig.getUserName());
-
-//            User user = userRepository.findById(senderId).orElseThrow(() -> new GlobalExceptionHandler.
-//                    UserException(GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_USER));
-
-//            messageHelper.setFrom(user.getEmail());
-//            messageHelper.setFrom(new InternetAddress( emailConfig.getUserName(), "SSAFYS208@ssafys208.onmicrosoft.com"));
             messageHelper.setFrom(new InternetAddress(emailConfig.getUserName(), "SSAFYS208@ssafys208.onmicrosoft.com"));
 
             messageHelper.setTo(recipientEmail);
@@ -89,7 +53,6 @@ public class EmailService {
 
 
             System.out.println("rrrrrrrr" + businesscard.getRealPicture());
-//            FileSystemResource image = new FileSystemResource(new File(businesscard.getRealPicture()));
 
             if (businesscard.getRealPicture() != null && !businesscard.getRealPicture().isEmpty()) {
 
@@ -118,7 +81,7 @@ public class EmailService {
 
         List<Businesscard> businesscards = businesscardRepository.findAllByUser_userId(user_id);
         if (businesscards.size() == 0) {
-            throw new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_CARD);
+            throw new UserException(UserErrorCode.NOT_EXISTS_CARD);
         }
 
         log.info("businesscards" + businesscards);
@@ -132,12 +95,6 @@ public class EmailService {
             messageHelper.setSubject("digital 명함 정보입니다.");
 
             messageHelper.setText(toEmailString(businesscards.get(0)), true);
-//            log.info("imageUrl" + businesscards.get(0).getDigitalPicture());
-
-//            FileSystemResource image = new FileSystemResource(new File(businesscard.getRealPicture()));
-
-
-//            log.info("sizzzzzzzzzz" + businesscards.size());
 
             if (businesscards.size() == 2 && businesscards.get(1).getDigitalPicture() != null && !businesscards.get(1).getDigitalPicture().isEmpty()) {
 

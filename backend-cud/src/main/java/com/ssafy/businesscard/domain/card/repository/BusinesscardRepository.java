@@ -15,5 +15,4 @@ public interface BusinesscardRepository extends JpaRepository<Businesscard, Long
 
     List<Businesscard> findAllByUser_userId(Long userId);
 
-    List<Businesscard> findAllByCardId(Long cardId);
 }

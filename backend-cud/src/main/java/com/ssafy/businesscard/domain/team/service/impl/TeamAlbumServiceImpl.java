@@ -19,7 +19,8 @@ import com.ssafy.businesscard.domain.team.repository.*;
 import com.ssafy.businesscard.domain.team.service.TeamAlbumService;
 import com.ssafy.businesscard.domain.user.entity.User;
 import com.ssafy.businesscard.domain.user.repository.UserRepository;
-import com.ssafy.businesscard.global.exception.GlobalExceptionHandler;
+import com.ssafy.businesscard.global.exception.UserErrorCode;
+import com.ssafy.businesscard.global.exception.UserException;
 import com.ssafy.businesscard.global.s3.servcie.AmazonS3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -61,9 +62,7 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
                     .build();
             addTeamMember(teamMemberRequest);
         } else {
-            throw new GlobalExceptionHandler.UserException(
-                    GlobalExceptionHandler.UserErrorCode.ALREADY_IN_TEAM
-            );
+            throw new UserException(UserErrorCode.ALREADY_IN_TEAM);
         }
     }
 
@@ -86,18 +85,14 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
                 addMemberList(teamAlbum, teamAlbumRequest.userList());
             }
         } else {
-            throw new GlobalExceptionHandler.UserException(
-                    GlobalExceptionHandler.UserErrorCode.ALREADY_IN_TEAM
-            );
+            throw new UserException(UserErrorCode.ALREADY_IN_TEAM);
         }
     }
 
     private void addMemberList(TeamAlbum teamAlbum, List<Long> userIdList){
         List<User> userList = new ArrayList<>();
         for (Long userInfo : userIdList) {
-            User user = userRepository.findById(userInfo).orElseThrow(() -> new GlobalExceptionHandler.UserException(
-                    GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_USER
-            ));
+            User user = userRepository.findById(userInfo).orElseThrow(() -> new UserException(UserErrorCode.NOT_EXISTS_USER));
             userList.add(user);
         }
         for (User user : userList) {
@@ -120,7 +115,7 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
                     .teamAlbum(teamMemberRequest.teamAlbum())
                     .build());
         } else {
-            throw new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.ALREADY_IN_TEAMMEMBER);
+            throw new UserException(UserErrorCode.ALREADY_IN_TEAMMEMBER);
         }
     }
 
@@ -163,15 +158,11 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
     @Transactional
     public void regist(Long userId, Long teamAlbumId, CardRequest request) {
         TeamAlbum teamAlbum = teamAlbumRepository.findById(teamAlbumId)
-                .orElseThrow(() -> new GlobalExceptionHandler.UserException(
-                        GlobalExceptionHandler.UserErrorCode.NOT_EXITSTS_TEAM
-                ));
+                .orElseThrow(() -> new UserException(UserErrorCode.NOT_EXITSTS_TEAM));
         Businesscard businesscard = businesscardMapper.toEntity(request);
 
         if (isCardExist(teamAlbum.getTeamAlbumId(), businesscard)) {
-            throw new GlobalExceptionHandler.UserException(
-                    GlobalExceptionHandler.UserErrorCode.ALREADY_IN_CARD
-            );
+            throw new UserException(UserErrorCode.ALREADY_IN_CARD);
         } else {
             businesscardRepository.save(businesscard);
             TeamAlbumDetailRequest teamAlbumDetailRequest = TeamAlbumDetailRequest.builder()
@@ -188,17 +179,13 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
     @Transactional
     public void registCard(Long userId, Long teamAlbumId, MultipartFile image, CardRequest request) {
         TeamAlbum teamAlbum = teamAlbumRepository.findById(teamAlbumId)
-                .orElseThrow(() -> new GlobalExceptionHandler.UserException(
-                        GlobalExceptionHandler.UserErrorCode.NOT_EXITSTS_TEAM
-                ));
+                .orElseThrow(() -> new UserException(UserErrorCode.NOT_EXITSTS_TEAM));
         String url = amazonS3Service.uploadThunmail(image).getUrl();
         Businesscard businesscard = businesscardMapper.toEntity(request);
         businesscard.setRealPicture(url);
 
         if (isCardExist(teamAlbum.getTeamAlbumId(), businesscard)) {
-            throw new GlobalExceptionHandler.UserException(
-                    GlobalExceptionHandler.UserErrorCode.ALREADY_IN_CARD
-            );
+            throw new UserException(UserErrorCode.ALREADY_IN_CARD);
         } else {
             businesscardRepository.save(businesscard);
             TeamAlbumDetailRequest teamAlbumDetailRequest = TeamAlbumDetailRequest.builder()
@@ -273,9 +260,7 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
 
         for (Long filterId : filterIdList) {
             Filter filter = teamAlbumFilterRepository.findById(filterId)
-                    .orElseThrow(() -> new GlobalExceptionHandler.UserException(
-                            GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_FILTER
-                    ));
+                    .orElseThrow(() -> new UserException(UserErrorCode.NOT_EXISTS_FILTER));
             TeamAlbumDetail teamAlbumDetail = teamAlbumDetailRepository.findByTeamAlbum_teamAlbumIdAndBusinesscard_CardId(
                     teamAlbumId, cardId);
             teamAlbumMemberRepository.save(TeamAlbumMember.builder()
@@ -316,9 +301,7 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
     @Override
     public void addMember(Long userId, Long teamAlbumId, MemberRequest request) {
         TeamAlbum teamAlbum = teamAlbumRepository.findById(teamAlbumId)
-                .orElseThrow(() -> new GlobalExceptionHandler.UserException(
-                        GlobalExceptionHandler.UserErrorCode.NOT_EXITSTS_TEAM
-                ));
+                .orElseThrow(() -> new UserException(UserErrorCode.NOT_EXITSTS_TEAM));
         addMemberList(teamAlbum, request.userList());
     }
 
@@ -330,17 +313,12 @@ public class TeamAlbumServiceImpl implements TeamAlbumService {
     }
 
     private User findUser(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new GlobalExceptionHandler.UserException(
-                GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_USER
-        ));
-        return user;
+        return userRepository.findById(userId).orElseThrow(() -> new UserException(UserErrorCode.NOT_EXISTS_USER));
     }
 
     private TeamAlbum findTeam(Long teamId) {
-        TeamAlbum teamAlbum = teamAlbumRepository.findById(teamId).orElseThrow(() -> new GlobalExceptionHandler.UserException(
-                GlobalExceptionHandler.UserErrorCode.NOT_EXITSTS_TEAM
-        ));
-        return teamAlbum;
+        return teamAlbumRepository.findById(teamId)
+                .orElseThrow(() -> new UserException(UserErrorCode.NOT_EXITSTS_TEAM));
     }
 }
 

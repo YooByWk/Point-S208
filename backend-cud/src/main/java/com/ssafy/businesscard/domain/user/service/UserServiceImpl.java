@@ -3,8 +3,8 @@ package com.ssafy.businesscard.domain.user.service;
 import com.ssafy.businesscard.domain.user.repository.UserRepository;
 import com.ssafy.businesscard.domain.user.dto.UserRequestDto;
 import com.ssafy.businesscard.domain.user.entity.User;
-import com.ssafy.businesscard.domain.user.mapper.UserMapper;
-import com.ssafy.businesscard.global.exception.GlobalExceptionHandler;
+import com.ssafy.businesscard.global.exception.UserErrorCode;
+import com.ssafy.businesscard.global.exception.UserException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
-
 
     /**
      * userId return을 위한 tutorial
@@ -33,12 +31,10 @@ public class UserServiceImpl implements UserService {
             return saveUser.getUserId();
         }
     }
-
     @Override
     public User findUserById(Long userid) {
-        User user = userRepository.findById(userid).orElseThrow(() ->
-                new GlobalExceptionHandler.UserException(GlobalExceptionHandler.UserErrorCode.NOT_EXISTS_USER));
-        return user;
+        return userRepository.findById(userid).orElseThrow(() ->
+                new UserException(UserErrorCode.NOT_EXISTS_USER));
 
     }
 }
