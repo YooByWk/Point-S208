@@ -219,7 +219,7 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
         User user = findUser(userId);
         PrivateAlbumMember privateAlbumMember = privateAlbumMemberRepository.findByPrivateAlbum_Businesscard_CardIdAndFilter_FilterId(
                 cardId, filterId)
-                .orElseThrow(() -> new UserException(UserErrorCode.NOT_EXISTS_CARD));
+                .orElseThrow(() -> new UserException(UserErrorCode.BAD_REQUEST));
         privateAlbumMemberRepository.delete(privateAlbumMember);
     }
 
