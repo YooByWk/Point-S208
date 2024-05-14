@@ -148,10 +148,10 @@ public class TeamAlbumCardServiceImpl implements TeamAlbumCardService {
         for (Long filterId : filterIdList) {
             Filter filter = teamAlbumFilterRepository.findById(filterId)
                     .orElseThrow(() -> new UserException(UserErrorCode.NOT_EXISTS_FILTER));
-            log.info("[filter] : {}", filter);
+
             TeamAlbumDetail teamAlbumDetail = teamAlbumDetailRepository.findByTeamAlbum_teamAlbumIdAndBusinesscard_CardId(
                     teamAlbumId, cardId);
-            log.info("[teamAlbumDetail] : {}", teamAlbumDetail);
+
             teamAlbumMemberRepository.findByTeamAlbumDetail_Businesscard_CardIdAndFilter_FilterId(
                     teamAlbumDetail.getBusinesscard().getCardId(), filterId
             ).ifPresent(teamAlbumMember -> {throw new UserException(UserErrorCode.ALREADY_ADD_FILTER);
