@@ -46,6 +46,31 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
         return dtos;
     }
 
+    //명함지갑에서 목록조회 정렬(이름, 회사, 최신)
+    @Override
+    public List<PrivateAlbumResponseDto> getAlbumListSort(Long userId, int page, String sort){
+        int size = 12;
+        if(sort.equals("이름순")){
+            Pageable pageable = PageRequest.of(page, size, Sort.by("businesscard.name"));
+            Page<PrivateAlbum> albumPage = privateAlbumRepository.findByUser_userId(userId, pageable);
+            List<Businesscard> pages = albumPage.stream().map(card -> card.getBusinesscard()).toList();
+            List<PrivateAlbumResponseDto> dtos = pages.stream().map(privateAlbumMapper::toDto).toList();
+            return dtos;
+        } else if (sort.equals("회사순")) {
+            Pageable pageable = PageRequest.of(page, size, Sort.by("businesscard.company"));
+            Page<PrivateAlbum> albumPage = privateAlbumRepository.findByUser_userId(userId, pageable);
+            List<Businesscard> pages = albumPage.stream().map(card -> card.getBusinesscard()).toList();
+            List<PrivateAlbumResponseDto> dtos = pages.stream().map(privateAlbumMapper::toDto).toList();
+            return dtos;
+        } else{
+            Pageable pageable = PageRequest.of(page, size, Sort.by("businesscard.cardId").descending());
+            Page<PrivateAlbum> albumPage = privateAlbumRepository.findByUser_userId(userId, pageable);
+            List<Businesscard> pages = albumPage.stream().map(card -> card.getBusinesscard()).toList();
+            List<PrivateAlbumResponseDto> dtos = pages.stream().map(privateAlbumMapper::toDto).toList();
+            return dtos;
+        }
+    }
+
         //명함 상세 조회
         @Override
         public PrivateAlbumResponseDto getAlbumDtail(Long userId, Long cardId){

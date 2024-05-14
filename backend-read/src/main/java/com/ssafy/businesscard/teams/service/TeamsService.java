@@ -13,6 +13,7 @@ public interface TeamsService {
     public List<PrivateAlbumResponseDto> getTeamAlbumList(Long teamAlbumId, int page);
     public List<TeamMemberListResponseDto> getTeamMemberList(Long userId, Long teamAlbumId);
     public List<PrivateAlbumResponseDto> getTeamAlbumAllList(Long teamAlbumId);
+    public List<PrivateAlbumResponseDto> getTeamAlbumListSort(Long teamAlbumId, int page, String sort);
     public PrivateAlbumResponseDto getTeamAlbumDtail(Long teamAlbumId, Long cardId);
     public List<FilterListResponseDto> getFilter(Long teamsAlbumDetailId);
     public FilterCardResponseDto getFilterCard(Long teamAlbumId, Long filterId);

@@ -32,8 +32,20 @@ public class TeamsController {
 
     //팀 내 명함 조회
     @GetMapping("/teams/list/{team_album_id}/{page}")
-    public ResponseEntity<?> getTeamAlbumList(@PathVariable("team_album_id")Long teamAlbumId, @PathVariable("page")int page){
+    public ResponseEntity<?> getTeamAlbumList(
+            @PathVariable("team_album_id")Long teamAlbumId,
+            @PathVariable("page")int page){
         List<PrivateAlbumResponseDto> dtos = teamsService.getTeamAlbumList(teamAlbumId, page);
+        return ResponseEntity.ok().body(MessageUtils.success(dtos));
+    }
+
+    //팀 명함에서 목록조회 정렬(이름, 회사, 최신)
+    @GetMapping("/teams/list/{team_album_id}/{page}/sort")
+    public ResponseEntity<?> getTeamAlbumListSort(
+            @PathVariable("team_album_id")Long teamAlbumId,
+            @PathVariable("page")int page,
+            @RequestParam("sort")String sort){
+        List<PrivateAlbumResponseDto> dtos = teamsService.getTeamAlbumListSort(teamAlbumId, page, sort);
         return ResponseEntity.ok().body(MessageUtils.success(dtos));
     }
 

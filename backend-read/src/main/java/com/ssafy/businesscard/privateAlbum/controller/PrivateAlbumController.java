@@ -32,6 +32,17 @@ public class PrivateAlbumController {
         return ResponseEntity.ok().body(MessageUtils.success(list));
     }
 
+    //명함지갑에서 목록조회 정렬(이름순, 회사순, 최신순)
+    @GetMapping("/my-album/list/{user_id}/{page}/sort")
+    public ResponseEntity<?> getAlbumListSort(
+            @PathVariable("user_id")Long userId,
+            @PathVariable("page")int page,
+            @RequestParam("sort")String sort){
+        List<PrivateAlbumResponseDto> dtos = privateAlbumService.getAlbumListSort(userId, page, sort);
+        return ResponseEntity.ok().body(MessageUtils.success(dtos));
+    }
+
+
     //명함 상세 조회
     @GetMapping("/my-album/{user_id}/{card_id}")
     public ResponseEntity<?> getAlbumDtail(

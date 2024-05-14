@@ -52,7 +52,7 @@ public class TeamsServiceImpl implements TeamsService{
     public List<TeamListResponseDto> getTeamList(Long userId){
         List<TeamMember> teamMembers = teamMemberRepository.findByUser_UserId(userId);
 
-        List<TeamListResponseDto> teamList = teamMembers.stream()
+        List<TeamListResponseDto> dtos = teamMembers.stream()
                 .map(teamMember -> {
 
                     TeamAlbum teamAlbum = teamMember.getTeamAlbum();
@@ -66,7 +66,7 @@ public class TeamsServiceImpl implements TeamsService{
                 })
                 .collect(Collectors.toList());
 
-        return teamList;
+        return dtos;
     }
 
     //팀 내 명함 조회
@@ -76,44 +76,57 @@ public class TeamsServiceImpl implements TeamsService{
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("businesscard.cardId").descending());
         Page<TeamAlbumDetail> teamAlbumPage = teamAlbumDetailRepository.findByTeamAlbum_TeamAlbumId(teamAlbumId, pageable);
+        List<Businesscard> businesscards = teamAlbumPage.stream().map(bc -> bc.getBusinesscard()).toList();
+        List<PrivateAlbumResponseDto> dtos = businesscards.stream().map(teamsMapper::toDto).toList();
 
-        List<PrivateAlbumResponseDto> responseDtoList = teamAlbumPage.getContent().stream()
-                .map(teamAlbumDetail -> new PrivateAlbumResponseDto(
-                        teamAlbumDetail.getBusinesscard().getCardId(),
-                        teamAlbumDetail.getBusinesscard().getName(),
-                        teamAlbumDetail.getBusinesscard().getCompany(),
-                        teamAlbumDetail.getBusinesscard().getPosition(),
-                        teamAlbumDetail.getBusinesscard().getRank(),
-                        teamAlbumDetail.getBusinesscard().getDepartment(),
-                        teamAlbumDetail.getBusinesscard().getEmail(),
-                        teamAlbumDetail.getBusinesscard().getLandlineNumber(),
-                        teamAlbumDetail.getBusinesscard().getFaxNumber(),
-                        teamAlbumDetail.getBusinesscard().getPhoneNumber(),
-                        teamAlbumDetail.getBusinesscard().getAddress(),
-                        teamAlbumDetail.getBusinesscard().getRealPicture(),
-                        teamAlbumDetail.getBusinesscard().getFrontBack(),
-                        teamAlbumDetail.getBusinesscard().getDomainUrl(),
-                        teamAlbumDetail.getMemo()
-                )).collect(Collectors.toList());
+        return dtos;
+    }
 
-        return responseDtoList;
+    //명함지갑에서 목록조회 정렬(이름, 회사, 최신)
+    @Override
+    public List<PrivateAlbumResponseDto> getTeamAlbumListSort(Long teamAlbumId, int page, String sort){
+        int size = 12;
+        if(sort.equals("이름순")){
+
+            Pageable pageable = PageRequest.of(page, size, Sort.by("businesscard.name"));
+            Page<TeamAlbumDetail> teamAlbumPage = teamAlbumDetailRepository.findByTeamAlbum_TeamAlbumId(teamAlbumId, pageable);
+            List<Businesscard> businesscards = teamAlbumPage.stream().map(bc -> bc.getBusinesscard()).toList();
+            List<PrivateAlbumResponseDto> dtos = businesscards.stream().map(teamsMapper::toDto).toList();
+            return dtos;
+
+        } else if (sort.equals("회사순")) {
+
+            Pageable pageable = PageRequest.of(page, size, Sort.by("businesscard.company"));
+            Page<TeamAlbumDetail> teamAlbumPage = teamAlbumDetailRepository.findByTeamAlbum_TeamAlbumId(teamAlbumId, pageable);
+            List<Businesscard> businesscards = teamAlbumPage.stream().map(bc -> bc.getBusinesscard()).toList();
+            List<PrivateAlbumResponseDto> dtos = businesscards.stream().map(teamsMapper::toDto).toList();
+            return dtos;
+
+        }else {
+
+            Pageable pageable = PageRequest.of(page, size, Sort.by("businesscard.cardId").descending());
+            Page<TeamAlbumDetail> teamAlbumPage = teamAlbumDetailRepository.findByTeamAlbum_TeamAlbumId(teamAlbumId, pageable);
+            List<Businesscard> businesscards = teamAlbumPage.stream().map(bc -> bc.getBusinesscard()).toList();
+            List<PrivateAlbumResponseDto> dtos = businesscards.stream().map(teamsMapper::toDto).toList();
+            return dtos;
+        }
     }
 
     //팀의 팀원 조회
     @Override
     public List<TeamMemberListResponseDto> getTeamMemberList(Long userId, Long teamAlbumId){
-        List<TeamMemberListResponseDto> teamMembers = new ArrayList<>();
+        List<TeamMemberListResponseDto> dtos = new ArrayList<>();
         //me
         TeamMember me = teamMemberRepository.findByUser_userIdAndTeamAlbum_TeamAlbumId(userId, teamAlbumId);
         if (me != null) {
-            teamMembers.add(new TeamMemberListResponseDto(me.getUser().getUserId(), me.getUser().getEmail(), me.getUser().getName()));
+            dtos.add(new TeamMemberListResponseDto(me.getUser().getUserId(), me.getUser().getEmail(), me.getUser().getName()));
         }
         //other member
         List<TeamMember> otherMembers = teamMemberRepository.findByTeamAlbum_TeamAlbumIdAndUser_UserIdNot(teamAlbumId, userId);
         for (TeamMember member : otherMembers) {
-            teamMembers.add(new TeamMemberListResponseDto(member.getUser().getUserId(), member.getUser().getEmail(), member.getUser().getName()));
+            dtos.add(new TeamMemberListResponseDto(member.getUser().getUserId(), member.getUser().getEmail(), member.getUser().getName()));
         }
-        return teamMembers;
+        return dtos;
     }
 
     //팀 명함 상세 조회

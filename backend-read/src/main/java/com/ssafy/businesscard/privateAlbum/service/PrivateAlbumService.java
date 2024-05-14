@@ -11,6 +11,7 @@ import java.util.List;
 public interface PrivateAlbumService {
 
     public List<PrivateAlbumResponseDto> getAlbumList(Long userId, int page);
+    public List<PrivateAlbumResponseDto> getAlbumListSort(Long userId, int page, String sort);
     public PrivateAlbumResponseDto getAlbumDtail(Long userId, Long cardId);
     public List<FilterListResponseDto> getFilter(Long userId);
     public FilterCardResponseDto getFilterCard(Long userId, Long filterId);
