@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface PrivateAlbumMemberRepository extends JpaRepository<PrivateAlbumMember, Long> {
     Optional<PrivateAlbumMember> findByPrivateAlbum_Businesscard_CardIdAndFilter_FilterId(Long cardId, Long filterId);
     Optional<PrivateAlbumMember> findByUser_UserIdAndFilter_FilterName(Long userId, String filterName);
+    PrivateAlbumMember findByUser_UserIdAndFilter_FilterId(Long userId, Long filterId);
 }
