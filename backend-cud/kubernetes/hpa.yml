@@ -10,13 +10,10 @@ spec:
   minReplicas: 1
   maxReplicas: 10
   metrics:
-    - type: Object
-      object:
+    - type: Pods
+      pods:
         metric:
           name: http_requests
-        describedObject:
-          kind: Service
-          name: backend-cud-service
         target:
           type: Value
           value: 100
