@@ -76,9 +76,9 @@ public class TeamsServiceImpl implements TeamsService{
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("businesscard.cardId").descending());
         Page<TeamAlbumDetail> teamAlbumPage = teamAlbumDetailRepository.findByTeamAlbum_TeamAlbumId(teamAlbumId, pageable);
-        List<Businesscard> businesscards = teamAlbumPage.stream().map(bc -> bc.getBusinesscard()).toList();
-        List<PrivateAlbumResponseDto> dtos = businesscards.stream().map(teamsMapper::toDto).toList();
-
+        List<PrivateAlbumResponseDto> dtos = teamAlbumPage.stream()
+                .map(bc -> bc.getBusinesscard())
+                .map(teamsMapper::toDto).toList();
         return dtos;
     }
 
