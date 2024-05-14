@@ -1,6 +1,5 @@
 import { editMyAlbumMemo } from '@/apis/album'
 import { editTeamAlbumMemo } from '@/apis/team'
-import { editMemoType } from '@/types/cardInput'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 export const useEditAlbumMemo = ({
@@ -22,8 +21,8 @@ export const useEditAlbumMemo = ({
   const onSuccess = () => {
     console.log('성공')
     teamAlbumId
-      ? queryClient.invalidateQueries({ queryKey: ['fetchTeamCardsList'] })
-      : queryClient.invalidateQueries({ queryKey: ['fetchMyAlbum'] })
+      ? queryClient.invalidateQueries({ queryKey: ['fetchTeamCardsList', teamAlbumId, 0] })
+      : queryClient.invalidateQueries({ queryKey: ['fetchMyAlbum', userId, 0] })
   }
 
   const mutation = useMutation({

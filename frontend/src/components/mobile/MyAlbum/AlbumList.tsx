@@ -32,7 +32,7 @@ const AlbumList = () => {
 
   const { data, fetchNextPage, hasNextPage, isError, isFetchingNextPage, refetch: refetchAlbum } =
     useInfiniteQuery({
-      queryKey: ['fetchMyAlbum'],
+      queryKey: ['fetchMyAlbum', userId, 0],
       queryFn: ({ pageParam = 0 }) => fetchMyAlbum(userId as number, pageParam),
       getNextPageParam: (lastPage, allPages) => {
         return Array.isArray(lastPage.data_body) &&

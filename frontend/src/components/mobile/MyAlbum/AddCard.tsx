@@ -67,7 +67,6 @@ const AddCard = ({ isAddCard, setIsAddCard, teamInfo }: AddCardProps) => {
             <Text>명함 등록 방식</Text>
             <Spacing size={20} direction="vertical" />
             <Flex direction="row" justify="space-around" align="center">
-              (
               <Flex
                 direction="column"
                 justify="center"
@@ -77,7 +76,7 @@ const AddCard = ({ isAddCard, setIsAddCard, teamInfo }: AddCardProps) => {
                 <CameraAdd48Regular />
                 <Text typography="t7">사진 촬영</Text>
               </Flex>
-              )
+
               <Spacing size={20} direction="horizontal" />
               <Flex
                 direction="column"
