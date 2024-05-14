@@ -28,9 +28,11 @@ public class TeamAlbum {
     private User user;
 
     @OneToMany(mappedBy = "teamAlbum" ,cascade = CascadeType.ALL)
-    private List<TeamAlbumDetail> teamAlbumDetail;
+    private List<TeamAlbumDetail> teamAlbumDetailList;
 
     @OneToMany(mappedBy = "teamAlbum", cascade = CascadeType.ALL)
-    private List<TeamMember> teamMembers;
+    private List<TeamMember> teamMemberList;
 
+    @OneToMany(mappedBy = "teamAlbum", cascade = CascadeType.ALL)
+    private List<TeamAlbumMember> teamAlbumMemberList;
 }
