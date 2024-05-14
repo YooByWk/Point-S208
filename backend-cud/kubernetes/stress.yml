@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: stress-pod
+spec:
+  containers:
+    - name: stress-container
+      image: progrium/stress
+      args:
+        - "-c"
+        - "1"
