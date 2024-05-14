@@ -179,3 +179,21 @@ export const fetchTemaCardsForExcel = async (teamAlbumId: number) => {
     .then(res => res.data)
     .catch(err => console.log(err))
 }
+
+// 팀 삭제
+export const deleteTeam = async (params: any) => {
+  return authRequest
+    .delete(`${CudUrl}/${params.userId}/${params.teamAlbumId}`)
+    .then(res => res.data)
+    .catch(err => console.log(err))
+}
+
+// 팀 이름 변경
+export const editTeamName = async (params: any) => {
+  return authRequest
+    .patch(`${CudUrl}/${params.userId}/${params.teamAlbumId}`, {
+      teamName: params.newName,
+    })
+    .then(res => res.data)
+    .catch(err => console.log(err))
+}

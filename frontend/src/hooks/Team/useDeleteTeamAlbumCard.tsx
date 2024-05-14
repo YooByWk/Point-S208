@@ -1,10 +1,12 @@
 import { deleteTeamCard } from "@/apis/team";
+import { selectedTeamAlbumIdState } from "@/stores/team";
 import { userState } from "@/stores/user";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRecoilValue } from "recoil";
 
 export const useDeleteTeamAlbumCard = () => {
-  const userId = useRecoilValue(userState).userId 
+  const userId = useRecoilValue(userState).userId
+  const selectedAlbumId = useRecoilValue(selectedTeamAlbumIdState).teamAlbumId as number
   const queryClient = useQueryClient()
   
   const mutation = useMutation({
@@ -12,8 +14,7 @@ export const useDeleteTeamAlbumCard = () => {
     mutationFn: ({cardId, teamAlbumId} : {cardId: number, teamAlbumId: number}) => deleteTeamCard({userId: userId as number, cardId: cardId, teamAlbumId: teamAlbumId}),
     onSuccess: () => {
       console.log("삭제 성공");
-      queryClient.invalidateQueries({ queryKey: ["fetchTeamCardsList"]})
-      window.location.reload()
+      queryClient.invalidateQueries({ queryKey: ["fetchTeamCardsList", selectedAlbumId, 0]})
     },
     onError: (error) => {
       console.log("삭제 실패", error);

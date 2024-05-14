@@ -45,7 +45,7 @@ const TeamDetail = () => {
   }, [teamAlbumId])
 
   const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
-    queryKey: ['fetchTeamCardsList'],
+    queryKey: ['fetchTeamCardsList', teamAlbumIdNumber, 0],
     queryFn: ({ pageParam = 0 }) =>
       fetchTeamCardsList(teamAlbumIdNumber, pageParam),
     getNextPageParam: (lastPage, allPages) => {

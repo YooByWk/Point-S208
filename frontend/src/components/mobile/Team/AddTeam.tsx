@@ -75,13 +75,12 @@ const AddTeam = ({ setIsWrite, isWrite }: AddTeamProps) => {
   const handleCreateTeam = () => {
     console.log(selectedMember, 'selectedMember')
     const userList: number[] = selectedMember
-    .map(member => member.userId)
-    .filter((id): id is number => id !== undefined)
+      .map(member => member.userId)
+      .filter((id): id is number => id !== undefined)
     setIsWrite(!isWrite)
-    console.log(userList,'userList')
+    console.log(userList, 'userList')
     if (!userList || userList.length === 0) return
     createTeamMutation.mutate({ teamName, userList })
-    
   }
 
   return (
@@ -119,7 +118,7 @@ const AddTeam = ({ setIsWrite, isWrite }: AddTeamProps) => {
                 css={inputCss}
               />
             </Flex>
-            <Flex css={btnContainer} justify="flex-end">
+            <Flex css={btnContainer} justify="space-between">
               <LargeButton
                 text="취소"
                 secondary={true}
@@ -127,18 +126,15 @@ const AddTeam = ({ setIsWrite, isWrite }: AddTeamProps) => {
                 onClick={() => setIsWrite(!isWrite)}
               />
               <Spacing size={20} direction="horizontal" />
-              {teamName.length > 0 ? (
-                <LargeButton
-                  text="다음"
-                  width="35vw"
-                  onClick={() => {
-                    setStep(2)
-                    console.log(teamName)
-                  }}
-                />
-              ) : (
-                <LargeButton text="다음" width="35vw" disabled={true} />
-              )}
+              <LargeButton
+                text="다음"
+                width="35vw"
+                onClick={() => {
+                  setStep(2)
+                  console.log(teamName)
+                }}
+                disabled={!teamName.length}
+              />
             </Flex>
           </Flex>
         </div>

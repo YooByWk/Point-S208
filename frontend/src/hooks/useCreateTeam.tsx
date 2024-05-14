@@ -12,7 +12,7 @@ export const useCreateTeam = () => {
     mutationFn: ({teamName, userList}: {teamName: string, userList: number[]}) => CreateTeam({userId: userId as number, data: {teamName, userList} }),
     onSuccess: () => {
       console.log(" 멤버 포함 팀 생성 성공");
-      queryClient.invalidateQueries({ queryKey: ["fetchTeamList"]})    
+      queryClient.invalidateQueries({ queryKey: ["fetchTeamList", userId]})
     },
     onError: (error) => {
       console.log("팀 생성 실패", error);

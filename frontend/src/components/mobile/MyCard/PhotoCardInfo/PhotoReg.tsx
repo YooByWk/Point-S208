@@ -164,15 +164,14 @@ const PhotoReg = (props: { isMyCard: boolean; refetch: any }) => {
     onSuccess(result) {
       if (result) {
         const data = result.images[0].nameCard.result
-        console.log(result)
-        console.log(data)
+
         const imgSrc = isFront ? frontImgSrc : backImgSrc
 
         const formData = new FormData()
 
         imgSrc && formData.append('image', imgSrc)
 
-        setIsFront(!isFront)
+        isMyCard && setIsFront(!isFront)
         if (isMyCard) {
           // 내 명함 등록 api
           formData.append(
@@ -391,9 +390,9 @@ const PhotoReg = (props: { isMyCard: boolean; refetch: any }) => {
               typography="t8"
               textAlign="center"
               style={{ marginTop: '2%' }}
-              onClick={() => (isFront && !backImgSrc ? setIsFront(false) : '')}
+              onClick={() => (isMyCard && isFront && !backImgSrc ? setIsFront(false) : '')}
             >
-              {!backImgSrc ? '영문추가 >' : isFront ? '국문' : '영문'}
+              {isMyCard && !backImgSrc ? '영문추가 >' : isFront ? '국문' : '영문'}
             </Text>
           </Flex>
           <Grid2>

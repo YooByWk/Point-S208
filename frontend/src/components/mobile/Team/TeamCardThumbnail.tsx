@@ -1,36 +1,70 @@
 /** @jsxImportSource @emotion/react */
-
 import { css } from '@emotion/react'
-// import MyDigitalCard from './../MyCard/MyDigitalCard'
 import MyDigitalCard from '@components/mobile/MyCard/MyDigitalCard'
-import type { CardType } from '@/types/cardType'
 import { useQuery } from '@tanstack/react-query'
 import { fetchTeamCardsList } from '@/apis/team'
-import { Key } from 'react'
-// import { dummyCard } from '@/assets/data/dummyCard'
-
-interface TeamCardThumbnailProps {
-  teamAlbumId: number
-}
+import styled from '@emotion/styled'
+import Text from '@/components/shared/Text'
 
 const TeamCardThumbnail: any = ({ teamAlbumId }: { teamAlbumId: any }) => {
   /* 팀 명함 정보*/
-  const { data, isLoading, refetch } = useQuery({
-    queryKey: ['fetchTeamCardsList', null],
+  const { data, isLoading } = useQuery({
+    queryKey: ['fetchTeamCardsList', teamAlbumId],
     queryFn: () => fetchTeamCardsList(teamAlbumId, 0),
   })
-  // !isLoading && console.log(teamAlbumId, data.data_body)
-  
+
+  const dataLength = (num: number) => {
+    return data && data.data_body.length > num
+  }
+
   return (
     <div css={TeamCardThumbnailContainer}>
-      {!isLoading && data ? (
-        data.data_body.slice(0, 3).map((card: CardType, index: number) => (
-          <div key={index} css={cardStyle(index * 18)}>
-            <MyDigitalCard cardInfo={card} scale={0.5} border={true} />
-          </div>
-        ))
+      {!isLoading && data && data.data_body.length ? (
+        <Thumbnail>
+          {dataLength(1) ? (
+            <>
+              <Third>
+                {dataLength(2) && (
+                  <MyDigitalCard
+                    cardInfo={data.data_body[2]}
+                    scale={1}
+                    border={true}
+                  />
+                )}
+              </Third>
+              <Second>
+                {dataLength(1) && (
+                  <MyDigitalCard
+                    cardInfo={data.data_body[1]}
+                    scale={1}
+                    border={true}
+                  />
+                )}
+              </Second>
+              <First>
+                {dataLength(0) && (
+                  <MyDigitalCard
+                    cardInfo={data.data_body[0]}
+                    scale={1}
+                    border={true}
+                  />
+                )}
+              </First>
+            </>
+          ) : (
+            <Second>
+              {dataLength(0) && (
+                <MyDigitalCard
+                  cardInfo={data.data_body[0]}
+                  scale={1}
+                  border={true}
+                />
+              )}
+            </Second>
+          )}
+        </Thumbnail>
       ) : (
-        <div css={emptyCardStyle} />
+        <Text typography="t9">등록된 명함이 없습니다</Text>
       )}
     </div>
   )
@@ -39,27 +73,40 @@ const TeamCardThumbnail: any = ({ teamAlbumId }: { teamAlbumId: any }) => {
 export default TeamCardThumbnail
 const TeamCardThumbnailContainer = css`
   /* 세개의 카드가 겹친 모양 */
-  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  /* margin:auto; */
-  /* background-color: red; */
   width: 60%;
   height: 100%;
-  min-height: 120px;
-  margin-top: 5px;
 `
-const cardStyle = (offset: number) => css`
+
+// style
+
+const Thumbnail = styled.div`
+  position: relative;
+  width: 150px;
+  height: 100px;
+`
+
+const First = styled.div`
   position: absolute;
-  left: ${offset - 70}px;
-  top: -${offset}px;
-
-  /* transform: translate(${offset}px, -${offset}px); */
-  z-index: ${36 - offset};
+  transform: scale(0.5);
+  transform-origin: left bottom;
+  bottom: 0;
 `
 
-const emptyCardStyle = css`
-  width: 245px;
-  height: 135px;
+const Second = styled.div`
+  position: absolute;
+  transform: scale(0.5);
+  transform-origin: center;
+  translate: -50% -50%;
+  top: 50%;
+  left: 50%;
+`
+
+const Third = styled.div`
+  position: absolute;
+  transform: scale(0.5);
+  transform-origin: top right;
+  right: 0;
 `

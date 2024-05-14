@@ -12,7 +12,7 @@ export const useTeamCreatgeSkip = () => {
     mutationFn: (teamName: string) => CreateTeamSkip({userId: userId as number, data: {teamName} }),
     onSuccess: () => {
       console.log("팀 생성 성공");
-      queryClient.invalidateQueries({ queryKey: ["fetchTeamList"]})    
+      queryClient.invalidateQueries({ queryKey: ['fetchTeamList', userId]})
     },
     onError: (error) => {
       console.log("팀 생성 실패", error);
