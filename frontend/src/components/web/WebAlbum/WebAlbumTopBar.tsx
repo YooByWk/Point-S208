@@ -2,16 +2,12 @@
 import { css } from '@emotion/react'
 import {
   ArrowDownload24Filled,
-  ArrowSort24Filled,
-  Filter24Filled,
   DrawerArrowDownload24Filled,
 } from '@fluentui/react-icons'
 import Flex from '@shared/Flex'
 import Text from '@shared/Text'
 import {
   Checkbox,
-  TabList,
-  Tab,
   Button,
   Popover,
   PopoverTrigger,
@@ -274,11 +270,6 @@ const boxStyles = css`
   background-color: ${colors.themeTextInverted};
   z-index: 1000;
 `
-
-const iconStyles = css`
-  color: ${colors.themeMainBlue};
-`
-
 const buttonStyles = css`
   padding: 0;
   margin: 0;

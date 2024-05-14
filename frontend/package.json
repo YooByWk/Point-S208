@@ -10,6 +10,7 @@
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@fluentui/react-components": "^9.18.0",
+    "@microsoft/live-share": "^1.4.0",
     "@microsoft/teams-js": "^2.13.0",
     "@microsoft/teamsfx": "^2.2.0",
     "@microsoft/teamsfx-react": "^3.0.0",

@@ -5,37 +5,27 @@ import { userState } from '@stores/user'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
-import { Spinner, tokens } from '@fluentui/react-components'
-import LargeButton from '@shared/LargeButton'
+import { Spinner } from '@fluentui/react-components'
 import Flex from '@shared/Flex'
 import Text from '@shared/Text'
-import WebCardThumbnail from '@/components/shared/WebCardThumbnail'
 import { isRefreshedAlbumState } from '@/stores/card'
 import { CardType } from '@/types/cardType'
 import { ExternalCardListType, ExternalCardType } from '@/types/ExternalCard'
-import WebAddCard from './WebAddCard'
 import { isAddCardByInfoState } from '@/stores/album'
+import MeetingCardThumbnail from './MeetingCardThumbnail'
+import SearchBox from '@shared/SearchBox'
+import { UserListType } from '@/types/userType'
+import Spacing from '@shared/Spacing'
 
-const WebMyAlbumList = ({
-  cards,
-  setCards,
-  selectedCards,
-  setSelectedCards,
-  setIsDetail,
-  searchResults,
-  searchValue,
-}: {
-  cards: CardType[]
-  setCards: React.Dispatch<React.SetStateAction<CardType[]>>
-  selectedCards: number[]
-  setSelectedCards: React.Dispatch<React.SetStateAction<number[]>>
-  setIsDetail: (isDetail: boolean) => void
-  searchResults: ExternalCardListType | undefined
-  searchValue: string
-}) => {
+const MeetingAlbumSection = () => {
   const userId = useRecoilValue(userState).userId
   const isRefreshed = useRecoilValue(isRefreshedAlbumState)
   const isAddCardByInfo = useRecoilValue(isAddCardByInfoState)
+  const [cards, setCards] = useState<CardType[]>([])
+  const [searchResults, setSearchResults] = useState<
+    ExternalCardListType | undefined
+  >(undefined)
+  const [searchValue, setSearchValue] = useState('')
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
     useInfiniteQuery({
@@ -77,42 +67,46 @@ const WebMyAlbumList = ({
     return () => window.removeEventListener('scroll', handleScroll)
   }, [fetchNextPage, hasNextPage, data, isRefreshed])
 
-  const [isAddCard, setIsAddCard] = useState(false)
+  const handleResult = (data: ExternalCardListType | UserListType) => {
+    if (Array.isArray(data)) {
+      setSearchResults(data as ExternalCardListType)
+    }
 
-  const handleAdd = () => {
-    setIsAddCard(!isAddCard)
-    console.log('이미지로 명함 추가')
-  }
-
-  const handleCardSelect = (cardId: number) => {
-    setSelectedCards(prev =>
-      prev.includes(cardId)
-        ? prev.filter(id => id !== cardId)
-        : [...prev, cardId],
-    )
+    console.log('searchResult:', searchResults)
   }
 
   return (
-    <>
+    <Flex direction="column">
+      <Flex direction="column" align="flex-start">
+        <Text typography="t9">내 명함지갑</Text>
+        <Spacing direction="vertical" size={10} />
+        <SearchBox
+          onChange={e => {
+            if (e.target.value !== undefined) {
+              setSearchValue(e.target.value)
+            }
+          }}
+          onSearch={handleResult}
+          value={searchValue}
+          placeholder="명함 검색"
+          memberIcon={false}
+          filterIcon={false}
+          sortIcon={false}
+          width="70%"
+          size="small"
+        />
+      </Flex>
       <div css={boxStyles}>
         {cards.length > 0 && cards[0] !== undefined ? (
           <>
-            <div css={gridStyles}>
+            <div>
               {searchResults !== undefined &&
               searchValue !== undefined &&
               searchValue.trim() !== '' ? (
                 searchResults.length > 0 ? (
                   searchResults.map(
                     (card: ExternalCardType | CardType, index: number) => {
-                      return (
-                        <WebCardThumbnail
-                          cardInfo={card}
-                          key={index}
-                          onSelect={handleCardSelect}
-                          setIsDetail={setIsDetail}
-                          selectedCards={selectedCards}
-                        />
-                      )
+                      return <MeetingCardThumbnail card={card} />
                     },
                   )
                 ) : (
@@ -124,15 +118,7 @@ const WebMyAlbumList = ({
                 cards
                   .filter(card => card)
                   .map(card => {
-                    return (
-                      <WebCardThumbnail
-                        cardInfo={card}
-                        key={card.cardId}
-                        selectedCards={selectedCards}
-                        setIsDetail={setIsDetail}
-                        onSelect={handleCardSelect}
-                      />
-                    )
+                    return <MeetingCardThumbnail card={card} />
                   })
               )}
             </div>
@@ -145,27 +131,22 @@ const WebMyAlbumList = ({
               align="center"
               css={nullDivCss}
             >
-              <Text>지갑에 등록된 명함이 없습니다.</Text>
+              <Text typography="t8">지갑에 등록된 명함이 없습니다.</Text>
             </Flex>
           </>
         )}
-        <div css={buttonCss}>
-          <LargeButton text="명함 추가" width="80%" onClick={handleAdd} />
-        </div>
+
         {isFetchingNextPage && (
           <div css={SpinnerCss}>
             <Spinner />
           </div>
         )}
       </div>
-      {isAddCard && (
-        <WebAddCard isAddCard={isAddCard} setIsAddCard={setIsAddCard} />
-      )}
-    </>
+    </Flex>
   )
 }
 
-export default WebMyAlbumList
+export default MeetingAlbumSection
 
 const SpinnerCss = css`
   padding-bottom: 50px;
@@ -176,19 +157,6 @@ const nullDivCss = css`
   padding-bottom: 10vh;
 `
 
-const buttonCss = css`
-  position: fixed;
-  width: 100%;
-  bottom: 0px;
-  height: 45px;
-  background-color: ${tokens.colorNeutralBackground1};
-`
-
-const gridStyles = css`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 20px;
-`
 const boxStyles = css`
   padding-top: 100px;
   padding-bottom: 50px;

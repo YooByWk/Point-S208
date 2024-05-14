@@ -31,6 +31,7 @@ interface SearchBoxProps {
   isSearchingMember?: boolean
   isTeam?: boolean
   disabled?: boolean
+  size?: 'small' | 'large' | 'medium' | undefined
 }
 /**
  *
@@ -52,6 +53,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   onSearch,
   isSearchingMember = false,
   isTeam = false,
+  size = 'large',
 }) => {
   const userId = useRecoilValue(userState).userId
 
@@ -95,7 +97,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
         <div css={searchBoxContainerCss(width ? width : '70%')}>
           <FluentSearchBox
             disabled={disabled}
-            size="large"
+            size={size}
             placeholder={placeholder}
             onChange={onChange}
             css={searchBoxCss(bgColor)}

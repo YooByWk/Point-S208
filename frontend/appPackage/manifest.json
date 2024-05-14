@@ -1,14 +1,13 @@
 {
-    "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.15/MicrosoftTeams.schema.json",
-    "manifestVersion": "1.15",
-    "version": "1.1.2",
+    "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.17/MicrosoftTeams.schema.json",
+    "manifestVersion": "1.17",
+    "version": "1.2.7",
     "id": "${{TEAMS_APP_ID}}",
-    "packageName": "com.microsoft.teams.extension",
     "developer": {
         "name": "Teams App, Inc.",
-        "websiteUrl": "${{TAB_ENDPOINT}}",
-        "privacyUrl": "${{TAB_ENDPOINT}}/index.html#/privacy",
-        "termsOfUseUrl": "${{TAB_ENDPOINT}}/index.html#/termsofuse"
+        "websiteUrl": "https://${{TAB_DOMAIN}}",
+        "privacyUrl": "https://${{TAB_DOMAIN}}/index.html#/privacy",
+        "termsOfUseUrl": "https://${{TAB_DOMAIN}}/index.html#/termsofuse"
     },
     "icons": {
         "color": "BizCard.png",
@@ -27,17 +26,23 @@
     "composeExtensions": [],
     "configurableTabs": [
         {
-            "configurationUrl": "https://${{TAB_DOMAIN}}/configure",
+            "configurationUrl": "https://${{TAB_DOMAIN}}/index.html#/configure",
             "canUpdateConfiguration": true,
             "scopes": [
                 "team",
-                "groupchat"
+                "groupChat"
+            ],
+            "meetingSurfaces": [
+                "sidePanel",
+                "stage"
             ],
             "context": [
-                "meetingSidePanel",
-                "meetingStage",
+                "channelTab",
+                "privateChatTab",
+                "meetingChatTab",
                 "meetingDetailsTab",
-                "meetingChatTab"
+                "meetingSidePanel",
+                "meetingStage"
             ]
         }
     ],
@@ -45,8 +50,8 @@
         {
             "entityId": "myCard",
             "name": "내 명함",
-            "contentUrl": "${{TAB_ENDPOINT}}/index.html#",
-            "websiteUrl": "${{TAB_ENDPOINT}}/index.html#",
+            "contentUrl": "https://${{TAB_DOMAIN}}/index.html#",
+            "websiteUrl": "https://${{TAB_DOMAIN}}/index.html#",
             "scopes": [
                 "personal"
             ]
@@ -54,8 +59,8 @@
         {
             "entityId": "myAlbum",
             "name": "명함 지갑",
-            "contentUrl": "${{TAB_ENDPOINT}}/index.html#/myAlbum",
-            "websiteUrl": "${{TAB_ENDPOINT}}/index.html#/myAlbum",
+            "contentUrl": "https://${{TAB_DOMAIN}}/index.html#/myAlbum",
+            "websiteUrl": "https://${{TAB_DOMAIN}}/index.html#/myAlbum",
             "scopes": [
                 "personal"
             ]
@@ -63,8 +68,8 @@
         {
             "entityId": "myTeam",
             "name": "팀 명함",
-            "contentUrl": "${{TAB_ENDPOINT}}/index.html#/myTeam",
-            "websiteUrl": "${{TAB_ENDPOINT}}/index.html#/myTeam",
+            "contentUrl": "https://${{TAB_DOMAIN}}/index.html#/myTeam",
+            "websiteUrl": "https://${{TAB_DOMAIN}}/index.html#/myTeam",
             "scopes": [
                 "personal"
             ]
@@ -80,5 +85,27 @@
     "webApplicationInfo": {
         "id": "${{AAD_APP_CLIENT_ID}}",
         "resource": "api://${{TAB_DOMAIN}}/${{AAD_APP_CLIENT_ID}}"
+    },
+    "authorization": {
+        "permissions": {
+            "resourceSpecific": [
+                {
+                    "name": "MeetingStage.Write.Chat",
+                    "type": "Delegated"
+                },
+                {
+                    "name": "ChannelMeetingStage.Write.Group",
+                    "type": "Delegated"
+                },
+                {
+                    "name": "LiveShareSession.ReadWrite.Chat",
+                    "type": "Delegated"
+                },
+                {
+                    "name": "LiveShareSession.ReadWrite.Group",
+                    "type": "Delegated"
+                }
+            ]
+        }
     }
 }

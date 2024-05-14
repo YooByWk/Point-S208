@@ -4,7 +4,7 @@ import Flex from '@/components/shared/Flex'
 import { colors } from '@/styles/colorPalette'
 import type { CardType } from '@/types/cardType'
 import styled from '@emotion/styled'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { toJpeg } from 'html-to-image'
 import { useMutation } from '@tanstack/react-query'
 import { saveMyDigitalCard } from '@/apis/card'
@@ -49,10 +49,12 @@ const MyDigitalCard: React.FC<MyDigitalCardProps> = ({
     scale = 1.1
   }
   // const cardInfo = props.cardInfo
+  const [loaded, setLoaded] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const userId = useRecoilValue(userState).userId
   const frontCard = useRecoilValue(frontCardState)
   const backCard = useRecoilValue(backCardState)
+  const src: string = 'logo.png'
 
   const { mutate } = useMutation({
     mutationKey: ['saveMyDigitalCard'],
@@ -87,21 +89,37 @@ const MyDigitalCard: React.FC<MyDigitalCardProps> = ({
           })
       }
     }
-    if (cardInfo) {
-      if (
-        frontCard.cardId === cardInfo.cardId ||
-        backCard.cardId === cardInfo.cardId
-      )
-        if (
-          cardInfo.digitalPicture === null ||
-          cardInfo.digitalPicture === undefined ||
-          cardInfo.digitalPicture.trim() === ''
-        )
-          handleSaveAsJpg()
-    }
-  }, [])
 
-  return (
+    if (loaded)
+      if (cardInfo) {
+        if (
+          frontCard.cardId === cardInfo.cardId ||
+          backCard.cardId === cardInfo.cardId
+        )
+          if (
+            cardInfo.digitalPicture === null ||
+            cardInfo.digitalPicture === undefined ||
+            cardInfo.digitalPicture.trim() === ''
+          )
+            handleSaveAsJpg()
+      }
+  })
+
+  useEffect(() => {
+    const image = new Image()
+    image.src = src
+
+    image.onload = () => {
+      setLoaded(true)
+    }
+
+    return () => {
+      // Clean up by removing event listener
+      image.onload = null
+    }
+  }, [src])
+
+  return loaded ? (
     <Flex
       direction="column"
       justify="space-between"
@@ -131,6 +149,8 @@ const MyDigitalCard: React.FC<MyDigitalCardProps> = ({
         </RightFlex>
       </Flex>
     </Flex>
+  ) : (
+    <div css={MainContainer({ scale, border })}></div>
   )
 }
 
