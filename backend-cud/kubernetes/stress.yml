@@ -5,5 +5,5 @@ metadata:
 spec:
   containers:
     - name: stress-container
-      image: progrium/stress
+      image: polinux/stress
       command: ["stress", "--cpu", "4"]
