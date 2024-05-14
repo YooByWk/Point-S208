@@ -3,17 +3,23 @@ import LargeButton from '@/components/shared/LargeButton'
 import styled from '@emotion/styled'
 import { SearchBox } from '@fluentui/react-components'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { Filter32Regular, ArrowSort28Regular } from '@fluentui/react-icons'
+import {
+  WindowWrench32Regular,
+  WindowWrench32Filled,
+} from '@fluentui/react-icons'
 import { BooleanStateType } from '@/types/commonType'
 import { TeamListType } from '@/types/TeamListType'
+import Text from '@/components/shared/Text'
 
 type WebTeamHeaderType = {
   data: TeamListType[]
   setSearchTeamList: Dispatch<SetStateAction<TeamListType[]>>
+  isEdit: boolean
+  setIsEdit: Dispatch<SetStateAction<boolean>>
 } & BooleanStateType
 
 const WebTeamHeader = (props: WebTeamHeaderType) => {
-  const { data, setSearchTeamList, setValue } = props
+  const { data, setSearchTeamList, setValue, isEdit, setIsEdit } = props
   const [keyword, setKeyword] = useState('')
 
   useEffect(() => {
@@ -39,8 +45,10 @@ const WebTeamHeader = (props: WebTeamHeaderType) => {
         onChange={(e: any) => setKeyword(e.target.value)}
       />
       <LargeButton text="팀 추가" width="20vw" onClick={() => setValue(true)} />
-      <Filter32Regular />
-      <ArrowSort28Regular />
+      <Icon onClick={() => setIsEdit(!isEdit)}>
+        {isEdit ? <WindowWrench32Filled /> : <WindowWrench32Regular />}
+        <Text typography="t7">{isEdit ? '편집모드' : '일반모드'}</Text>
+      </Icon>
     </Container>
   )
 }
@@ -59,4 +67,10 @@ const Container = styled.div`
   button > span {
     font-size: 16px;
   }
+`
+
+const Icon = styled.div`
+  display: flex;
+  gap: 10px;
+  cursor: pointer;
 `

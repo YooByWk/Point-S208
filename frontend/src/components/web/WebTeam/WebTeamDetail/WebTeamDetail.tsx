@@ -1,7 +1,5 @@
 import { useState } from 'react'
 import WebAlbumDetail from '@/components/web/WebAlbum/WebAlbumDetail'
-import WebAlbumTopBar from '@components/web/WebAlbum/WebAlbumTopBar'
-import WebMyAlbumList from '@components/web/WebAlbum/WebMyAlbumList'
 import WebTeamDetailHeader from '@/components/web/WebTeam/WebTeamDetail/WebTeamDetailHeader'
 import WebTeamDetailList from '@/components/web/WebTeam/WebTeamDetail/WebTeamDetailList'
 import { CardType } from '@/types/cardType'
@@ -48,7 +46,7 @@ const WebTeamDetail = () => {
           searchValue={searchValue}
           setSearchValue={setSearchValue}
         />
-        <WebMyAlbumList
+        <WebTeamDetailList
           cards={cards}
           setCards={setCards}
           selectedCards={selectedCards}

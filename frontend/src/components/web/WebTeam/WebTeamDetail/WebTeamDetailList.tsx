@@ -7,45 +7,67 @@ import { Spinner, tokens } from '@fluentui/react-components'
 import LargeButton from '@shared/LargeButton'
 import Flex from '@shared/Flex'
 import Text from '@shared/Text'
-import Spacing from '@shared/Spacing'
-import AddCard from '@components/mobile/MyAlbum/AddCard'
-import WebCardThumbnail from '@/components/shared/WebCardThumbnail'
 import { fetchTeamCardsList } from '@/apis/team'
 import { selectedTeamAlbumIdState } from '@/stores/team'
 import useWindowSize from '@/hooks/useWindowSize'
+import { CardType } from '@/types/cardType'
+import { ExternalCardListType, ExternalCardType } from '@/types/ExternalCard'
+import { isRefreshedAlbumState } from '@/stores/card'
+import { isAddCardByInfoState } from '@/stores/album'
+import WebAddCard from '../../WebAlbum/WebAddCard'
+import WebTeamCardThumbnail from './WebTeamCardThumbnail'
 
 const WebTeamDetailList = ({
+  cards,
+  setCards,
   selectedCards,
-  setIsDetail,
   setSelectedCards,
+  setIsDetail,
+  searchResults,
+  searchValue,
 }: {
+  cards: CardType[]
+  setCards: React.Dispatch<React.SetStateAction<CardType[]>>
   selectedCards: number[]
-  setIsDetail: (isDetail: boolean) => void
   setSelectedCards: React.Dispatch<React.SetStateAction<number[]>>
+  setIsDetail: (isDetail: boolean) => void
+  searchResults: ExternalCardListType | undefined
+  searchValue: string
 }) => {
   const selectedTeam = useRecoilValue(selectedTeamAlbumIdState)
+  const isRefreshed = useRecoilValue(isRefreshedAlbumState)
+  const isAddCardByInfo = useRecoilValue(isAddCardByInfoState)
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
     useInfiniteQuery({
       queryKey: ['fetchTeamCardsList'],
       queryFn: ({ pageParam = 0 }) =>
         fetchTeamCardsList(selectedTeam.teamAlbumId, pageParam),
       getNextPageParam: (lastPage, allPages) => {
-        return Array.isArray(lastPage) && lastPage.length > 0
+        return Array.isArray(lastPage.data_body) &&
+          lastPage.data_body.length > 0
           ? allPages.length
           : undefined
       },
       initialPageParam: 0,
     })
 
-  const cards = data?.pages.flatMap(page => page.data_body) || []
+  useEffect(() => {
+    if (data && data.pages) {
+      setCards(data.pages.flatMap(page => page.data_body) || [])
+    }
+  }, [data, setCards])
+
+  useEffect(() => {
+    if (cards.length === 1 && cards[0].cardId === 0) {
+      refetch()
+    }
+    refetch()
+  }, [isRefreshed, refetch, cards, isAddCardByInfo])
 
   useEffect(() => {
     const handleScroll = () => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop ===
-        document.documentElement.offsetHeight
-      )
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight)
         return
       if (hasNextPage) {
         fetchNextPage()
@@ -54,7 +76,7 @@ const WebTeamDetailList = ({
 
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [fetchNextPage, hasNextPage, data])
+  }, [fetchNextPage, hasNextPage, data, isRefreshed])
 
   const [isAddCard, setIsAddCard] = useState(false)
 
@@ -86,25 +108,42 @@ const WebTeamDetailList = ({
         {cards.length > 0 && cards[0] !== undefined ? (
           <>
             <div css={flexStyles(marginInline)}>
-              {cards
-                .filter(card => card)
-                .map(card => {
-                  return (
-                    <WebCardThumbnail
-                      key={card.cardId}
-                      cardInfo={card}
-                      selectedCards={selectedCards}
-                      setIsDetail={setIsDetail}
-                      onSelect={handleCardSelect}
-                    />
+              {searchResults !== undefined &&
+              searchValue !== undefined &&
+              searchValue.trim() !== '' ? (
+                searchResults.length > 0 ? (
+                  searchResults.map(
+                    (card: ExternalCardType | CardType, index: number) => {
+                      return (
+                        <WebTeamCardThumbnail
+                          cardInfo={card}
+                          key={index}
+                          onSelect={handleCardSelect}
+                          setIsDetail={setIsDetail}
+                          selectedCards={selectedCards}
+                        />
+                      )
+                    },
                   )
-                })}
-            </div>
-            <div css={buttonCss}>
-              {selectedCards.length > 0 ? (
-                <LargeButton text="명함 공유" width="80%" onClick={() => {}} />
+                ) : (
+                  <Flex direction="column" justify="center" align="center">
+                    검색 결과가 없습니다
+                  </Flex>
+                )
               ) : (
-                <LargeButton text="명함 추가" width="80%" onClick={handleAdd} />
+                cards
+                  .filter(card => card)
+                  .map(card => {
+                    return (
+                      <WebTeamCardThumbnail
+                        cardInfo={card}
+                        key={card.cardId}
+                        selectedCards={selectedCards}
+                        setIsDetail={setIsDetail}
+                        onSelect={handleCardSelect}
+                      />
+                    )
+                  })
               )}
             </div>
           </>
@@ -116,16 +155,11 @@ const WebTeamDetailList = ({
             css={nullDivCss}
           >
             <Text>{selectedTeam.teamName}에 등록된 명함이 없습니다.</Text>
-
-            <Spacing size={40} direction="vertical" />
-            <LargeButton
-              text="명함 추가"
-              width="80vw"
-              height="50px"
-              onClick={handleAdd}
-            />
           </Flex>
         )}
+        <div css={buttonCss}>
+          <LargeButton text="명함 추가" width="80%" onClick={handleAdd} />
+        </div>
         {isFetchingNextPage && (
           <div css={SpinnerCss}>
             <Spinner />
@@ -133,7 +167,7 @@ const WebTeamDetailList = ({
         )}
       </div>
       {isAddCard && (
-        <AddCard isAddCard={isAddCard} setIsAddCard={setIsAddCard} />
+        <WebAddCard isAddCard={isAddCard} setIsAddCard={setIsAddCard} />
       )}
     </>
   )

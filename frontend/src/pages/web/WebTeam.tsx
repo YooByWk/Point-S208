@@ -17,6 +17,7 @@ const WebTeam = () => {
   const hasSelectedTeam = useRecoilValue(hasSelectedTeamState)
   const [isAdd, setIsAdd] = useState(false)
   const [searchTeamList, setSearchTeamList] = useState<TeamListType[]>([]) // 검색한 팀 목록
+  const [isEdit, setIsEdit] = useState(false)
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['fetchTeamList'],
@@ -39,11 +40,14 @@ const WebTeam = () => {
             setSearchTeamList={setSearchTeamList}
             value={isAdd}
             setValue={setIsAdd}
+            isEdit={isEdit}
+            setIsEdit={setIsEdit}
           />
           <WebTeamList
             data={searchTeamList}
             value={isAdd}
             setValue={setIsAdd}
+            isEdit={isEdit}
           />
         </>
       )}

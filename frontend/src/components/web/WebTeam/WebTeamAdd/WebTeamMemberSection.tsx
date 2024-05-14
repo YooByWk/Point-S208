@@ -82,7 +82,9 @@ const WebTeamMemberSection = ({
               justify="space-between"
             >
               <Flex align="center">
-                <LastNameCircle>{item.name[0]}</LastNameCircle>
+                <LastNameCircle $num={(item.userId as number) % 10}>
+                  {item.name[0]}
+                </LastNameCircle>
                 <Spacing size={10} direction="horizontal" />
                 <Flex direction="column">
                   <Text typography="t9">{item.name}</Text>
@@ -136,7 +138,9 @@ const WebTeamMemberSection = ({
               justify="space-between"
             >
               <Flex align="center">
-                <LastNameCircle>{item.name[0]}</LastNameCircle>
+                <LastNameCircle $num={(item.userId as number) % 10}>
+                  {item.name[0]}
+                </LastNameCircle>
                 <Spacing size={10} direction="horizontal" />
                 <Flex direction="column">
                   <Text typography="t9">{item.name}</Text>
@@ -203,14 +207,27 @@ const Result = styled.div<{
   `}
 `
 
-const LastNameCircle = styled.div`
+const CircleColors = [
+  '#eba0a0',
+  '#e59661',
+  '#ffff00',
+  '#edffd6',
+  '#adff2f',
+  '#add8e6',
+  '#9898fc',
+  '#f495eb',
+  '#e7e5e5',
+  '#aaadc5',
+]
+
+const LastNameCircle = styled.div<{ $num: number }>`
   display: flex;
   justify-content: center;
   align-items: center;
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background-color: red;
+  background-color: ${props => CircleColors[props.$num]};
 `
 
 // css

@@ -1,4 +1,11 @@
-import { AddTeamMemberType, CreateTeamSkipType, CreateTeamType, RegisterTeammCardType, deleteTeamAlbumCardType, deleteTeamCardArrayType } from '@/types/TeamListType'
+import {
+  AddTeamMemberType,
+  CreateTeamSkipType,
+  CreateTeamType,
+  RegisterTeammCardType,
+  deleteTeamAlbumCardType,
+  deleteTeamCardArrayType,
+} from '@/types/TeamListType'
 import { editTeamMemoType } from '@/types/cardInput'
 import { authRequest } from '@/utils/requestMethod'
 
@@ -62,14 +69,23 @@ export const RegisterTeamCard = async (params: RegisterTeammCardType) => {
   console.log(params.data, typeof params.data)
   return authRequest
     .post(`${CudUrl}/${params.userId}/${params.teamId}/card`, params.data)
-    .then(res => { console.log(res, '팀카드등록'); return res.data })
+    .then(res => {
+      console.log(res, '팀카드등록')
+      return res.data
+    })
     .catch(err => console.log(err))
 }
 // 팀 카드 검색
-export const searchTeamCard = async (teamAlbumId: number, userInput: string | number) => {
+export const searchTeamCard = async (
+  teamAlbumId: number,
+  userInput: string | number,
+) => {
   return authRequest
     .get(`${ReadUrl}/${teamAlbumId}/search`, {
-      params: { info: typeof userInput === 'string' ? userInput.toLowerCase() : userInput },
+      params: {
+        info:
+          typeof userInput === 'string' ? userInput.toLowerCase() : userInput,
+      },
     })
     .then(res => res.data)
     .catch(err => console.log(err))
@@ -90,7 +106,9 @@ export const addTeamMember = async (params: AddTeamMemberType) => {
 // 팀 카드 삭제
 export const deleteTeamCard = async (params: deleteTeamAlbumCardType) => {
   return authRequest
-    .delete(`${CudUrl}/${params.userId}/${params.teamAlbumId}/card/${params.cardId}`)
+    .delete(
+      `${CudUrl}/${params.userId}/${params.teamAlbumId}/card/${params.cardId}`,
+    )
     .then(res => res.data)
     .catch(err => console.log(err))
 }
@@ -103,12 +121,13 @@ export const deleteTeamCards = async (params: deleteTeamCardArrayType) => {
     authRequest
       .delete(`${CudUrl}/${params.userId}/${params.teamAlbumId}/card/${cardId}`)
       .then(res => res.data)
-      .catch(err => console.log(err))
+      .catch(err => console.log(err)),
   )
-  console.log(`${CudUrl}/${params.userId}/${params.teamAlbumId}/card/${params.cardIdArray}`)
+  console.log(
+    `${CudUrl}/${params.userId}/${params.teamAlbumId}/card/${params.cardIdArray}`,
+  )
   return Promise.all(deleteRequests)
 }
-
 
 // export const fetchTeamCardFilter = async (teamAlbumId: number, filter: string) => {
 //   return authRequest
@@ -127,16 +146,36 @@ export const ocrRegTeamCard = async (params: any) => {
 export const editTeamAlbumMemo = async (params: editTeamMemoType) => {
   console.log(params)
   return authRequest
-  .post(`${CudUrl}/${params.userId}/${params.teamAlbumId}/${params.cardId}/memo`, params.data)
-  .then(res => res.data)
-  .catch(err => console.log(err))
+    .post(
+      `${CudUrl}/${params.userId}/${params.teamAlbumId}/${params.cardId}/memo`,
+      params.data,
+    )
+    .then(res => res.data)
+    .catch(err => console.log(err))
 }
 
-
 export const editTeamCard = async (params: any) => {
-  console.log(params,'팀카드 수정 파람')
+  console.log(params, '팀카드 수정 파람')
   return authRequest
-  .patch(`${CudUrl}/${params.userId}/${params.teamAlbumId}/card/${params.cardId}`, params.data)
-  .then(res => res.data)
-  .catch(err => console.log(err))
+    .patch(
+      `${CudUrl}/${params.userId}/${params.teamAlbumId}/card/${params.cardId}`,
+      params.data,
+    )
+    .then(res => res.data)
+    .catch(err => console.log(err))
+}
+
+export const fetchTeamCardDetail = async (params: any) => {
+  return authRequest
+    .get(`${ReadUrl}/${params.teamAlbumId}/${params.cardId}`)
+    .then(res => res.data)
+    .catch(err => console.log(err))
+}
+
+// 엑셀로 내보내기용 팀 명함 내 목록 조회
+export const fetchTemaCardsForExcel = async (teamAlbumId: number) => {
+  return authRequest
+    .get(`${ReadUrl}/list/${teamAlbumId}`)
+    .then(res => res.data)
+    .catch(err => console.log(err))
 }

@@ -2,20 +2,29 @@ import useWindowSize from '@/hooks/useWindowSize'
 import styled from '@emotion/styled'
 import { tokens } from '@fluentui/react-components'
 import { Add48Filled } from '@fluentui/react-icons'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import WebTeamCard from './WebTeamCard'
 import { useSetRecoilState } from 'recoil'
 import { selectedTeamAlbumIdState } from '@/stores/team'
 import { TeamListType } from '@/types/TeamListType'
 import { BooleanStateType } from '@/types/commonType'
+import Modal from '@/components/shared/Modal'
+import WebTeamEdit from './WebTeamEdit'
+import { colors } from '@/styles/colorPalette'
 
 type WebTeamListType = {
   data: TeamListType[]
+  isEdit: boolean
 } & BooleanStateType
 
 const WebTeamList = (props: WebTeamListType) => {
-  const { data, setValue } = props
+  const { data, setValue, isEdit } = props
   const setSelectedTeamId = useSetRecoilState(selectedTeamAlbumIdState)
+  const [isOpen, setIsOpen] = useState(false)
+  const [editSelectedTeam, setEditSelectedTeam] = useState<
+    TeamListType | undefined
+  >()
+
   const width = useWindowSize() - 390 - 17
 
   const marginInline = useMemo(() => {
@@ -27,20 +36,31 @@ const WebTeamList = (props: WebTeamListType) => {
   }, [width, data.length])
 
   return (
-    <Container $marginInline={marginInline}>
-      {data.map(item => (
-        <Box
-          key={item.teamAlbumId}
-          $isAdd={false}
-          onClick={() => setSelectedTeamId(item)}
-        >
-          <WebTeamCard item={item} />
+    <>
+      <Container $marginInline={marginInline}>
+        {data.map(item => (
+          <Box
+            key={item.teamAlbumId}
+            $isAdd={false}
+            $isEdit={isEdit}
+            onClick={() => {
+              setEditSelectedTeam(item)
+              isEdit ? setIsOpen(true) : setSelectedTeamId(item)
+            }}
+          >
+            <WebTeamCard item={item} />
+          </Box>
+        ))}
+        <Box onClick={() => setValue(true)} $isAdd={true} $isEdit={false}>
+          <Add48Filled />
         </Box>
-      ))}
-      <Box onClick={() => setValue(true)} $isAdd={true}>
-        <Add48Filled />
-      </Box>
-    </Container>
+      </Container>
+      {isOpen && (
+        <Modal onClose={() => setIsOpen(false)}>
+          <WebTeamEdit team={editSelectedTeam} data={data} />
+        </Modal>
+      )}
+    </>
   )
 }
 
@@ -55,7 +75,7 @@ const Container = styled.div<{ $marginInline: number }>`
   gap: 50px;
 `
 
-const Box = styled.div<{ $isAdd: boolean }>`
+const Box = styled.div<{ $isAdd: boolean; $isEdit: boolean }>`
   display: flex;
   justify-content: ${props => (props.$isAdd ? 'center' : 'space-between')};
   align-items: center;
@@ -65,4 +85,19 @@ const Box = styled.div<{ $isAdd: boolean }>`
   border-radius: 10px;
   padding: 20px;
   cursor: pointer;
+
+  @keyframes borderBlink {
+    0% {
+      border-color: ${colors.themeText};
+    }
+    50% {
+      border-color: transparent;
+    }
+    100% {
+      border-color: ${colors.themeText};
+    }
+  }
+  border: ${props =>
+    props.$isEdit ? `1px solid ${colors.themeText}` : 'none'};
+  animation: ${props => (props.$isEdit ? 'borderBlink 2s infinite' : 'none')};
 `
