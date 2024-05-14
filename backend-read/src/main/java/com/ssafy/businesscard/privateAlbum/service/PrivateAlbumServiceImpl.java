@@ -1,5 +1,7 @@
 package com.ssafy.businesscard.privateAlbum.service;
 
+import com.ssafy.businesscard.global.exception.UserErrorCode;
+import com.ssafy.businesscard.global.exception.UserException;
 import com.ssafy.businesscard.mycard.entity.Businesscard;
 import com.ssafy.businesscard.mycard.repository.BusinesscardRepository;
 import com.ssafy.businesscard.privateAlbum.dto.FilterCardResponseDto;
@@ -22,7 +24,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -74,78 +75,39 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
         //명함 상세 조회
         @Override
         public PrivateAlbumResponseDto getAlbumDtail(Long userId, Long cardId){
-            Optional<PrivateAlbum> optionalPrivateAlbum = privateAlbumRepository.findByUser_userIdAndBusinesscard_cardId(userId, cardId);
-            if (optionalPrivateAlbum.isPresent()) {
-                PrivateAlbum privateAlbum = optionalPrivateAlbum.get();
-                return PrivateAlbumResponseDto.builder()
-                        .cardId(privateAlbum.getBusinesscard().getCardId())
-                        .name(privateAlbum.getBusinesscard().getName())
-                        .company(privateAlbum.getBusinesscard().getCompany())
-                        .position(privateAlbum.getBusinesscard().getPosition())
-                        .rank(privateAlbum.getBusinesscard().getRank())
-                        .department(privateAlbum.getBusinesscard().getDepartment())
-                        .email(privateAlbum.getBusinesscard().getEmail())
-                        .landlineNumber(privateAlbum.getBusinesscard().getLandlineNumber())
-                        .faxNumber(privateAlbum.getBusinesscard().getFaxNumber())
-                        .phoneNumber(privateAlbum.getBusinesscard().getPhoneNumber())
-                        .address(privateAlbum.getBusinesscard().getAddress())
-                        .realPicture(privateAlbum.getBusinesscard().getRealPicture())
-                        .frontBack(privateAlbum.getBusinesscard().getFrontBack())
-                        .domainUrl(privateAlbum.getBusinesscard().getDomainUrl())
-                    .memo(privateAlbum.getMemo())
-                    .build();
-        } else {
-            throw new NoSuchElementException("카드가 없음");
-        }
+            Optional<PrivateAlbum> privateAlbumOptional = privateAlbumRepository.findByUser_userIdAndBusinesscard_cardId(userId, cardId);
+            if(privateAlbumOptional.isPresent()){
+                PrivateAlbum privateAlbum = privateAlbumOptional.get();
+                Businesscard businesscard = privateAlbum.getBusinesscard();
+                return privateAlbumMapper.toDto(businesscard);
+            } else {
+                throw new UserException(UserErrorCode.NO_CARD);
+            }
     }
 
     //필터 목록 조회
     @Override
     public List<FilterListResponseDto> getFilter(Long userId){
         List<PrivateAlbumMember> privateAlbumMembers = privateAlbumMemberRepository.findByUser_userId(userId);
-        List<FilterListResponseDto> filterListResponseDtoList = privateAlbumMembers.stream()
-                .map(privateAlbumMember -> new FilterListResponseDto(
-                        privateAlbumMember.getFilter().getFilterId(),
-                        privateAlbumMember.getFilter().getFilterName()
-                ))
-                .collect(Collectors.toList());
-
-        return filterListResponseDtoList;
+        List<FilterListResponseDto> dtos = privateAlbumMembers.stream()
+                .map(privateAlbumMember -> privateAlbumMember.getFilter())
+                .filter(Objects::nonNull)       //null 에러 제거
+                .map(privateAlbumMapper::toDto).distinct().toList();    //distinct : 중복 제거
+        return dtos;
     }
 
     //필터 별 명함 조회
     @Override
-    public FilterCardResponseDto getFilterCard(Long userId, Long filterId){
-        //filterId와 userId가 일치하는 privateAlbumId를 찾고 privateAlbumId에 해당하는 카드 Id의 해당하는 카드들을 저장
+    public FilterCardResponseDto getFilterCard(Long userId, Long filterId) {
+        
         List<PrivateAlbumMember> members = privateAlbumMemberRepository.findByFilter_FilterIdAndUser_UserId(filterId, userId);
-
         List<PrivateAlbumResponseDto> cards = members.stream()
-                .filter(member -> member.getPrivateAlbum() != null) // null뭐시기 에러떠서 추가
+                .filter(member -> member.getPrivateAlbum() != null) // null에러 제거
                 .map(member -> member.getPrivateAlbum())
                 .map(album -> album.getBusinesscard())
-                .filter(bc -> bc != null) // null뭐시기 에러떠서 추가
-                .map(bc -> PrivateAlbumResponseDto.builder()
-                        .cardId(bc.getCardId())
-                        .name(bc.getName())
-                        .company(bc.getCompany())
-                        .position(bc.getPosition())
-                        .rank(bc.getRank())
-                        .department(bc.getDepartment())
-                        .email(bc.getEmail())
-                        .landlineNumber(bc.getLandlineNumber())
-                        .faxNumber(bc.getFaxNumber())
-                        .phoneNumber(bc.getPhoneNumber())
-                        .address(bc.getAddress())
-                        .realPicture(bc.getRealPicture())
-                        .frontBack(bc.getFrontBack())
-                        .domainUrl(bc.getDomainUrl())
-                        .build())
-                .collect(Collectors.toList());
-
-        return FilterCardResponseDto.builder()
-                .filterId(filterId)
-                .cardList(cards)
-                .build();
+                .filter(bc -> bc != null) // null에러 제거
+                .map(privateAlbumMapper::toDto).toList();
+        return new FilterCardResponseDto(filterId, cards);
     }
 
     //상세보기에서 명함마다 필터 뭐있는지 조회
@@ -169,8 +131,6 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
             return Collections.emptyList();
         }
     }
-
-
 
     //엑셀로 내보내기용 명함지갑목록조회
     @Override

@@ -1,7 +1,9 @@
 package com.ssafy.businesscard.privateAlbum.mapper;
 
 import com.ssafy.businesscard.mycard.entity.Businesscard;
+import com.ssafy.businesscard.privateAlbum.dto.FilterListResponseDto;
 import com.ssafy.businesscard.privateAlbum.dto.PrivateAlbumResponseDto;
+import com.ssafy.businesscard.privateAlbum.entity.Filter;
 import com.ssafy.businesscard.privateAlbum.entity.PrivateAlbum;
 import org.mapstruct.Mapper;
 
@@ -10,4 +12,5 @@ public interface PrivateAlbumMapper {
 
     PrivateAlbumResponseDto toDto(PrivateAlbum privateAlbum);
     PrivateAlbumResponseDto toDto(Businesscard businesscard);
+    FilterListResponseDto toDto(Filter filter);
 }
