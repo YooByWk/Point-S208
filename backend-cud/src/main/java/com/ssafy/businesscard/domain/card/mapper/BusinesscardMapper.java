@@ -9,4 +9,5 @@ public interface BusinesscardMapper {
 
     Businesscard toEntity(CardRequest cardRequest);
     CardRequest toDto(Businesscard businesscard);
+    Businesscard fromEntity(Businesscard businesscard);
 }
