@@ -22,9 +22,9 @@ public enum UserErrorCode {
     NOT_EXITSTS_TEAM("존재하지 않는 팀 입니다.", HttpStatus.BAD_REQUEST),
     ALREADY_IN_TEAM("이미 존재하는 팀입니다.", HttpStatus.BAD_REQUEST),
     ALREADY_IN_TEAMMEMBER("이미 추가된 회원입니다.", HttpStatus.BAD_REQUEST),
+    NOT_TEAM_OWNER("팀 OWNER가 아닙니다.", HttpStatus.BAD_REQUEST),
 
-    BAD_REQUEST("잘못된 요청입니다.", HttpStatus.BAD_REQUEST)
-    ;
+    BAD_REQUEST("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
 
     private final String message;
     private final HttpStatus httpStatus;
