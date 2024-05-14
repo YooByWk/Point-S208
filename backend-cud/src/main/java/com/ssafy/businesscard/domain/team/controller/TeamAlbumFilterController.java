@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin("*")
 @RequiredArgsConstructor
 @RequestMapping("/api/teams")
-public class TeamFilterController {
+public class TeamAlbumFilterController {
 
     private final TeamFilterService teamFilterService;
 

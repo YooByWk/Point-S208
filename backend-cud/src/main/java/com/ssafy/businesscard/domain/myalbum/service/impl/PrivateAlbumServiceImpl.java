@@ -154,7 +154,6 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
         request.cardIds().forEach(cardId -> {
             Businesscard businesscard = businesscardRepository.findById(cardId)
                     .orElseThrow(() -> new UserException(UserErrorCode.NOT_EXISTS_CARD));
-
             // 이미 등록된 명함이 있는지 확인
             TeamAlbumDetail teamAlbumDetail = teamAlbumDetailRepository.findByTeamAlbum_TeamAlbumIdAndBusinesscard_Email(
                     teamId, businesscard.getEmail()

@@ -10,26 +10,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface TeamAlbumService {
-
     void create(Long userId, TeamAlbumRegistRequest teamAlbumRegistRequest);
     void createTeamAlbum(Long userId, TeamAlbumRegistRequest teamAlbumRequest);
-    String update(Long userId, Long teamId, TeamAlbumRegistRequest teamAlbumRegistRequest);
-
-    String delete(Long userId, Long teamId);
-
-    void regist(Long userId, Long teamAlbumId, CardRequest request);
-    void registCard(Long userId, Long teamAlbumId, MultipartFile image, CardRequest request);
-    void updateCard(Long userId, Long teamAlbumId, Long cardId, CardRequest request);
-
-    void deleteCard(Long userId, Long teamAlbumId, Long cardId);
-
-    void addFilter(Long userId, Long teamAlbumId, Long cardId, List<CardAddFilterRequest> requestList);
-
-    String cardMemo(Long userId, Long teamAlbumId, Long cardId, MemoRequest request);
-
+    void update(Long userId, Long teamId, TeamAlbumRegistRequest teamAlbumRegistRequest);
+    void delete(Long userId, Long teamId);
     void addMember(Long userId, Long teamAlbumId, MemberRequest request);
-
     void deleteMember(Long userId, Long teamAlbumId, Long memberId);
-
-    void deleteFilter(Long userId, Long teamAlbumId, Long cardId, Long filterId);
 }
