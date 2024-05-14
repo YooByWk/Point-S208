@@ -32,6 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Slf4j
@@ -94,10 +95,12 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
     public void registSharedCard(Long userId, CardSharedRequest cardSharedRequest) {
         User user = findUser(userId);
         List<Businesscard> businesscards = new ArrayList<>();
-
+        // List<CardReqeust> requests = new ArrayList<>();
         cardSharedRequest.cardIds().forEach(aLong -> {
             Businesscard businesscard = businesscardRepository.findById(aLong)
                     .orElseThrow(() -> new UserException(UserErrorCode.NOT_EXISTS_CARD));
+            // CardReqeust request = businesscardMapper.toDto(businesscard)
+            // requests.add(request)
             businesscards.add(businesscard);
 
             List<PrivateAlbum> privateAlbum = privateAlbumRepository.findByUser_userIdAndBusinesscard_email(userId, businesscard.getEmail());
@@ -109,7 +112,9 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
         });
 
         businesscards.forEach(businesscard1 -> {
-            Businesscard newbusinesscard = businesscardRepository.save(Businesscard.builder()
+            // Businesscard newbusinesscard1 = businesscardMapper.toEntity(businesscard1)
+            // businesscardRepository.save(newbusinesscard1)
+            Businesscard newbusinesscard1 = businesscardRepository.save(Businesscard.builder()
                     .email(businesscard1.getEmail())
                     .department(businesscard1.getDepartment())
                     .name(businesscard1.getName())
@@ -129,7 +134,7 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
 
             PrivateAlbumRequest privateAlbumRequest = PrivateAlbumRequest.builder()
                     .user(user)
-                    .businesscard(newbusinesscard)
+                    .businesscard(newbusinesscard1)
                     .favorite(false)
                     .build();
 
@@ -138,6 +143,7 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
 
     }
 
+    // 내 명함지갑에 있는 명함 팀 명함에 공유
     @Override
     @Transactional
     public void shareCard(Long userId, Long teamId, CardSharedRequest request) {
@@ -205,6 +211,10 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
                     .orElseThrow(() -> new UserException(UserErrorCode.NOT_EXISTS_FILTER));
             PrivateAlbum privateAlbum = privateAlbumRepository.
                     findByUser_userIdAndBusinesscard_cardId(userId, cardId);
+            privateAlbumMemberRepository.findByPrivateAlbum_Businesscard_CardIdAndFilter_FilterId(
+                    privateAlbum.getBusinesscard().getCardId(), filterId
+            ).ifPresent(privateAlbumMember1 -> {throw new UserException(UserErrorCode.ALREADY_ADD_FILTER);
+            });
             privateAlbumMemberRepository.save(PrivateAlbumMember.builder()
                     .filter(filter)
                     .user(user)
@@ -262,7 +272,6 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
     @Override
     public String cardMemo(Long userId, Long cardId, MemoRequest request) {
         PrivateAlbum privateAlbum = privateAlbumRepository.findByUser_userIdAndBusinesscard_cardId(userId, cardId);
-        log.info("[Memo] : {}", privateAlbum.getMemo());
         // 메모가 없다면 메모 등록
         if (privateAlbum.getMemo() == null) {
             privateAlbumRepository.save(PrivateAlbum.builder()
