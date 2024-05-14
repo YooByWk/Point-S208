@@ -109,11 +109,11 @@ const FilterIconModal: React.FC<LargeModalProps> = ({
     queryKey: ['fetchFilterList'],
     queryFn: () => fetchFilter(userId as number),
   })
-
   let filterList: FilterListType = useMemo(() => {
+    
     return data?.data_body || []
   }, [data])
-
+  console.log(filterList)
   const handleAddFilter = () => {
     setIsAddFilter(!isAddFilter)
   }

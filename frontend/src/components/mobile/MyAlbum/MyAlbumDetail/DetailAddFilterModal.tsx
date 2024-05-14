@@ -12,8 +12,8 @@ import {
 } from '@fluentui/react-components'
 
 
-import { useQuery } from '@tanstack/react-query'
-import { fetchFilter } from '@/apis/album'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { addFilterToCard, fetchFilter } from '@/apis/album'
 import { useRecoilValue } from 'recoil'
 import { userState } from '@/stores/user'
 import { FilterListType } from '@/types/FilterType'
@@ -35,7 +35,8 @@ const DetailAddFilterModal: React.FC<LargeModalProps> = ({
   dialogTitle,
   dialogContent,
   closeButtonText,
-  icon
+  icon,
+  cardId
 }) => {
   const userId = useRecoilValue(userState).userId
   const { data } = useQuery({
@@ -44,7 +45,8 @@ const DetailAddFilterModal: React.FC<LargeModalProps> = ({
   })
   const filterList: FilterListType = data?.data_body || []
 
-  
+  console.log(userId,'유저아이디')
+  console.log(cardId,'카드아이디')
   return (
     <Dialog modalType="alert">
       <DialogTrigger disableButtonEnhancement>
@@ -58,7 +60,7 @@ const DetailAddFilterModal: React.FC<LargeModalProps> = ({
               <>
                 {filterList !== undefined ? (
                   filterList.map((filter, index) => {
-                    return <div onClick={()=>console.log(filter.filterId)}>{filter.filterName}</div>
+                    return <div onClick={()=>addFilterToCard(userId as number,cardId as number,filter.filterId)}>{filter.filterName}</div>
                   })
                 ) : (
                   <p>명함 필터가 없습니다. 필터를 생성해주세요</p>

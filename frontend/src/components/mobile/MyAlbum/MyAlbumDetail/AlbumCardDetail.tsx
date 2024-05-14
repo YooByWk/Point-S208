@@ -21,7 +21,8 @@ const AlbumCardDetail = () => {
   const [card, setCard] = useState<CardType>(locationState)
   const [isEdit, setIsEdit] = useState(false)
   const [isReal, setIsReal] = useState(true)
-  
+  console.log(cardId)
+  console.log(card)
   const renderContent = () => {
     if (isEdit) return <DetailInfoEdit isEdit={{value: isEdit, setValue: setIsEdit}} card={card} />
     return (
@@ -32,7 +33,7 @@ const AlbumCardDetail = () => {
         <DetailMapSection card={card} />
         <DetailBottomSection />
         {/*  memo section necesita */}
-        {/* <DetailFilter cardId={cardId}/> */}
+        <DetailFilter cardId={cardId}/>
         <MemoSection card={card}/>
       </Container>
       // 지도 : 수정하기 

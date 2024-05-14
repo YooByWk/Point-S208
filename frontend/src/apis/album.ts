@@ -103,7 +103,7 @@ export const shareCard = async (params: shareCardType) => {
     })
     .then(res => res.data)
     .catch(err => console.log(err))
-}
+}                             
 
 
 
@@ -151,7 +151,7 @@ export const addFilterToCard = async (
   filterId: number,
 ) => {
   return authRequest
-    .post(`${CudUrl}/${userId}/${cardId}`, { params: { filterId } })
+    .post(`${CudUrl}/${userId}/${cardId}`, [{filterId}])
     .then(res => res.data)
     .catch(err => console.log(err))
 }
@@ -206,4 +206,11 @@ export const saveToMyAlbum = async (userId: number, cardIds: number[]) => {
   .post(`${CudUrl}/${userId}/save`, { cardIds })
   .then(res => res.data)
   .catch(err => console.log(err))  
+}
+
+
+export const fetchCardsFilter = async (userId: number|undefined, cardId: number|undefined) => {
+  if (!userId || !cardId) return
+  return authRequest
+  .get(`${ReadUrl}/${userId}/${cardId}/filter`)
 }

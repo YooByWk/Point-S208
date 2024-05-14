@@ -13,6 +13,8 @@ import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import { userState } from '@/stores/user'
+import { useQuery } from '@tanstack/react-query'
+import { fetchCardsFilter } from '@/apis/album'
 
 const DetailFilter = ({ cardId }: { cardId: number }) => {
   const [filters, setFilters] = useState<string[]>([])
@@ -20,6 +22,8 @@ const DetailFilter = ({ cardId }: { cardId: number }) => {
   const userId = useRecoilValue(userState).userId
   const params = useParams()
   console.log(params)
+  
+  /**/
   // 우선 더미 데이터로 대체
   const dummyData: FilterListType = [
     {
@@ -36,14 +40,19 @@ const DetailFilter = ({ cardId }: { cardId: number }) => {
     },
   ]
 
+  const {data} = useQuery({
+    queryKey: ['fetchCardsFilterList', cardId],
+    queryFn: () => fetchCardsFilter(userId as number, cardId),
+  }) 
+  const filter = data?.data.data_body || []
+  console.log(filter,'로그로그로그')
   // 필터 추가하는 곳 - useMutation 사용
-  
-    
+  /**/
   
   return (
     <Flex direction="column" align="center">
       <Flex justify="flex-start" align="center" css={container}>
-        {dummyData.map((filter: FilterType, index: number) => {
+        {filter.map((filter: FilterType, index: number) => {
           return (
             <Flex
               align="center"

@@ -55,7 +55,7 @@ const PeopleFilterSortIcons: React.FC<PeopleFilterSortIconsProps> = ({
         )
       ) : null}
 
-      {/* {filterIcon? 
+      {filterIcon? 
       
       (!isNaN(filterState.filterId) ? <Filter28Filled onClick={handleFilterIconClick} css={activeIcon}/> :
       <FilterIconModal 
@@ -70,7 +70,7 @@ const PeopleFilterSortIcons: React.FC<PeopleFilterSortIconsProps> = ({
         onClick={() => {
           console.log('정렬')
         }}
-      /> : null} */}
+      /> : null}
     </Flex>
   )
 }
