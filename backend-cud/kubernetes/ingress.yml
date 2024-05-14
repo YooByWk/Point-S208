@@ -3,14 +3,12 @@ kind: Ingress
 metadata:
   name: backend-cud-ingress
   namespace: ingress-nginx
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /api/$2
 spec:
   rules:
     - host: hello-minikube.local
       http:
         paths:
-          - path: /cud(/|$)(.*)
+          - path: /
             pathType: ImplementationSpecific
             backend:
               service:
