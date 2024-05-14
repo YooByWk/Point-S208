@@ -15,5 +15,5 @@ spec:
         metric:
           name: http_requests
         target:
-          type: Value
-          value: 100
+          type: AverageValue
+          averageValue: "100" # 양수인 타겟 평균값을 지정
