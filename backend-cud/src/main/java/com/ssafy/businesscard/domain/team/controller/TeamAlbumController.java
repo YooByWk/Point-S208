@@ -41,7 +41,7 @@ public class TeamAlbumController {
     public ResponseEntity<?> update(@PathVariable("userId") Long userId,
                                     @PathVariable("teamId") Long teamId,
                                     @RequestBody TeamAlbumRegistRequest teamAlbumRegistRequest) {
-        update(userId, teamId, teamAlbumRegistRequest);
+        teamAlbumService.update(userId, teamId, teamAlbumRegistRequest);
         log.info("[Update Team] : {}", teamAlbumRegistRequest);
         return ResponseEntity.ok().body(MessageUtils.success("명함이 수정되었습니다."));
     }
