@@ -51,13 +51,13 @@ const CardList = ({
 
   const handleBtn = () => {
     setPageChanged(!isPageChanged)
-    console.log('isPageChanged: ', isPageChanged)
+    // console.log('isPageChanged: ', isPageChanged)
   }
 
   const handleShare = () => {
     handleBtn()
     setIsShare(!isShare)
-    console.log('isShare: ', isShare)
+    // console.log('isShare: ', isShare)
   }
 
   const [searchResults, setSearchResults] = useState<
@@ -74,9 +74,9 @@ const CardList = ({
     }
   }
   const teamAlbumId  = useParams().teamAlbumId
-  console.log('teamAlbumId: ', teamAlbumId);
+  // console.log('teamAlbumId: ', teamAlbumId);
   const loc = useLocation()
-  console.log('loc: ', loc);
+  // console.log('loc: ', loc);
   const userId = useRecoilValue(userState).userId
   // 명함지갑 내 명함 총 개수 조회
   const { data } = useQuery({

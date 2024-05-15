@@ -214,3 +214,12 @@ export const fetchCardsFilter = async (userId: number|undefined, cardId: number|
   return authRequest
   .get(`${ReadUrl}/${userId}/${cardId}/filter`)
 }
+
+export const fetchAlbumCardDetail = async (userId: number | undefined,cardId:number|undefined) => {
+  if (!userId || !cardId) return
+  return authRequest
+  .get(`${ReadUrl}/${userId}/${cardId}`)
+  .then(res => res.data)
+  // .catch(err => {console.log(err)})
+}
+

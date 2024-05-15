@@ -1,11 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import {
-  ReactElement,
-  useEffect,
-  useMemo,
-  useReducer,
-  useState,
-} from 'react'
+import { ReactElement, useEffect, useMemo, useReducer, useState } from 'react'
 import {
   Dialog,
   DialogTrigger,
@@ -34,6 +28,7 @@ import {
   FilterNameAction,
   FilterNameState,
   FilterType,
+  editTeamFilterType,
 } from '@/types/FilterType'
 import LargeButton from '@shared/LargeButton'
 import Flex from '@/components/shared/Flex'
@@ -41,13 +36,11 @@ import Spacing from '@shared/Spacing'
 import { css } from '@emotion/react'
 import AddFilter from '@/components/mobile/MyAlbum/Filter/AddFillter'
 import React from 'react'
-import { filterState  as filterStoreState} from '@/stores/album'
+import { filterState as filterStoreState } from '@/stores/album'
+import { useParams } from 'react-router-dom'
+import { deleteTeamFilter, editTeamFilter, fetchTeamFilterList } from '@/apis/team'
 ///
-const NoFilter = ({
-  handleAddFilter,
-}: {
-  handleAddFilter: () => void
-}) => {
+const NoFilter = ({ handleAddFilter }: { handleAddFilter: () => void }) => {
   return (
     <Flex direction="column" justify="space-evenly">
       <Text typography="t7" textAlign="center">
@@ -77,11 +70,13 @@ const Filter = ({
 }) => {
   return (
     <Flex direction="row" justify="center" align="center">
-      <Text typography='t7'>{filterName}</Text>
+      <Text typography="t7">{filterName}</Text>
       <Spacing size={30} direction="horizontal" />
       <Edit16Filled onClick={onClick} />
       <Spacing size={15} direction="horizontal" />
-      <Delete16Filled onClick={()=>onDelete(filterId, filterName)}/>
+      <Delete16Filled onClick={(e) => {
+        e.stopPropagation()
+        onDelete(filterId, filterName)}} />
     </Flex>
   )
 }
@@ -104,13 +99,17 @@ const FilterIconModal: React.FC<LargeModalProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [filterState, setFilterState] = useRecoilState(filterStoreState)
   const queryClient = useQueryClient()
-
+  const params = useParams()
+  const teamAlbumId = Number(params['teamAlbumId'])
+  
+  // 팀여부 확인완료
   const { data } = useQuery({
-    queryKey: ['fetchFilterList'],
-    queryFn: () => fetchFilter(userId as number),
+    queryKey: teamAlbumId ? ['fetchTeamFilterList'] : ['fetchFilterList'],
+    queryFn: teamAlbumId
+      ? () => fetchTeamFilterList(teamAlbumId)
+      : () => fetchFilter(userId as number),
   })
   let filterList: FilterListType = useMemo(() => {
-    
     return data?.data_body || []
   }, [data])
   console.log(filterList)
@@ -122,7 +121,7 @@ const FilterIconModal: React.FC<LargeModalProps> = ({
     setIsModalOpen(!isModalOpen)
   }
 
-  const handleEditClick = (filterId: number)  => {
+  const handleEditClick = (filterId: number) => {
     setEditingFilterId(filterId)
   }
 
@@ -132,9 +131,8 @@ const FilterIconModal: React.FC<LargeModalProps> = ({
       filterName: filter.filterName,
     })
     handleModalOpen()
-  };
-  
-  
+  }
+
   const filterNameReducer = (
     state: FilterNameState,
     action: FilterNameAction,
@@ -161,29 +159,42 @@ const FilterIconModal: React.FC<LargeModalProps> = ({
       })
     }
   }, [filterList])
-
+  
+  // 팀여부 확인완료
   const { mutate: mutateFilter } = useMutation({
     mutationKey: ['editFilter'],
-    mutationFn: ({ userId, filterId, filterName }: EditFilterArgs) =>
-      editFilter(userId, filterId, filterName),
+    mutationFn: teamAlbumId
+      ? ({ userId, filterId, filterName, teamAlbumId }: editTeamFilterType) =>
+          editTeamFilter({ userId, filterId, filterName, teamAlbumId })
+      : ({ userId, filterId, filterName }: EditFilterArgs) =>
+          editFilter(userId, filterId, filterName),
+    onSuccess() {
+      queryClient.invalidateQueries({
+        queryKey: teamAlbumId
+          ? ['fetchTeamFilterList', teamAlbumId]
+          : ['fetchFilterList'],
+      })
+    },
+  })
+  // 팀여부 확인완료
+
+  const { mutate: mutateDeleteFilter } = useMutation({
+    mutationKey: ['deleteFilter'],
+    mutationFn: teamAlbumId
+      ? ({ userId, filterId, teamAlbumId }: { userId: number; filterId: number, teamAlbumId:number }) => deleteTeamFilter(userId, teamAlbumId, filterId)
+      :({ userId, filterId }: { userId: number; filterId: number }) =>
+      deleteFilter(userId, filterId),
     onSuccess() {
       queryClient.invalidateQueries({ queryKey: ['fetchFilterList'] })
     },
   })
-  
-  const { mutate: mutateDeleteFilter } = useMutation({ 
-    mutationKey: ['deleteFilter'],
-    mutationFn: ({ userId, filterId }: { userId: number, filterId: number }) => deleteFilter(userId, filterId),
-    onSuccess() {
-      queryClient.invalidateQueries({ queryKey: ['fetchFilterList'] })
-    }
-  })
-  
+
   const handleFilterNameSave = (filterId: number) => {
     let editData = {
       userId: userId as number,
       filterId: filterId,
       filterName: filterNames[filterId],
+      teamAlbumId
     }
     mutateFilter(editData)
     setEditingFilterId(null)
@@ -191,20 +202,19 @@ const FilterIconModal: React.FC<LargeModalProps> = ({
 
   const handleDeleteFilter = (filterId: number, filterName: string) => {
     if (window.confirm(`${filterName}을/를 삭제하시겠습니까?`)) {
-      mutateDeleteFilter({ userId: userId as number, filterId: filterId })
+      mutateDeleteFilter({ userId: userId as number, filterId: filterId, teamAlbumId })
     }
   }
-  
-  const handleFilterNameChange =
-  (filterId: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({ type: 'SET_NAME', filterId, name: e.target.value })
-  }
 
-  
+  const handleFilterNameChange =
+    (filterId: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      dispatch({ type: 'SET_NAME', filterId, name: e.target.value })
+    }
+
   return (
     <Dialog modalType="alert" open={isModalOpen}>
       <DialogTrigger disableButtonEnhancement>
-        <div onClick={handleModalOpen} >{icon}</div>
+        <div onClick={handleModalOpen}>{icon}</div>
       </DialogTrigger>
       <DialogSurface>
         {isAddFilter ? (
@@ -221,8 +231,8 @@ const FilterIconModal: React.FC<LargeModalProps> = ({
                 {filterList !== undefined && (
                   <Flex>
                     <Add16Filled
-                    color={tokens.colorBrandForeground1}
-                    onClick={() => {
+                      color={tokens.colorBrandForeground1}
+                      onClick={() => {
                         setIsAddFilter(!isAddFilter)
                       }}
                     />
@@ -249,19 +259,25 @@ const FilterIconModal: React.FC<LargeModalProps> = ({
                               />
                               <Button
                                 appearance="primary"
-                                onClick={() =>handleFilterNameSave(filter.filterId)}
-                                css={btnCss}>
+                                onClick={() =>
+                                  handleFilterNameSave(filter.filterId)
+                                }
+                                css={btnCss}
+                              >
                                 완료
                               </Button>
                             </Flex>
                           ) : (
-                            <div key={index} onClick={() => handleCardClick(filter)}>
-                            <Filter
-                              filterId={filter.filterId}
-                              filterName={filter.filterName}
-                              onClick={() => handleEditClick(filter.filterId)}
-                              onDelete={handleDeleteFilter}
-                            />
+                            <div
+                              key={index}
+                              onClick={() => handleCardClick(filter)}
+                            >
+                              <Filter
+                                filterId={filter.filterId}
+                                filterName={filter.filterName}
+                                onClick={() => handleEditClick(filter.filterId)}
+                                onDelete={handleDeleteFilter}
+                              />
                             </div>
                           )}
                         </div>

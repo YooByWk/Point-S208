@@ -22,10 +22,8 @@ const TeamDetail = () => {
   const isPageChanged = useRecoilValue(pageChanged)
   const [isAddCard, setIsAddCard] = useState(false)
   const { teamAlbumId } = useParams()
-  console.log(teamAlbumId)
 
   const teamInfo: TeamListType = useLocation().state
-  // console.log(teamInfo)
   const teamAlbumIdNumber = teamAlbumId ? +teamAlbumId : 0
   const navigate = useNavigate()
   const isLookingMember = useRecoilValue(isLookingMemberState)
@@ -63,7 +61,7 @@ const TeamDetail = () => {
     const handleScroll = () => {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
         if (hasNextPage) {
-          console.log('더불러오기')
+          // console.log('더불러오기')
           fetchNextPage()
         }
       }

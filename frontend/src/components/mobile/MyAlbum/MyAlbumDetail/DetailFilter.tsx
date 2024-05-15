@@ -75,8 +75,7 @@ const DetailFilter = ({ cardId }: { cardId: number }) => {
             onClick={() => {
               console.log('필터 목록 보여주기: 수정하기')
             }}
-            dialogContent="필터 추가하기 : 수정"
-            dialogTitle="명함에 태그 추가하기"
+            dialogTitle="명함에 추가할 태그를 선택해주세요"
           />
         </div>
       </Flex>

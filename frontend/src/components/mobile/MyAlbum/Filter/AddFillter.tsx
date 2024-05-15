@@ -12,6 +12,9 @@ import Text from '@shared/Text'
 import Input from '@shared/Input'
 import { createFilter } from '@/apis/album'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useParams } from 'react-router-dom'
+import { createTeamFilter } from '@/apis/team'
+
 
 
 const AddFilter = ({
@@ -26,13 +29,17 @@ const AddFilter = ({
 }) => {
   const [filterNameInput, setFilterNameInput] = useState('')
   const queryClient = useQueryClient()
+  const teamAlbumId = Number(useParams().teamAlbumId)
+  console.log(teamAlbumId,'생성앨범')
+  
+  
   const { mutate } = useMutation({
-    mutationKey: ['createFilter', userId, filterNameInput],
-    mutationFn: () => createFilter({userId:userId, filterName:filterNameInput}),
+    mutationKey: teamAlbumId? ['createTeamFilter', teamAlbumId, filterNameInput] :['createFilter', userId, filterNameInput],
+    mutationFn: teamAlbumId? ()=> createTeamFilter(userId, teamAlbumId,filterNameInput) :() => createFilter({userId:userId, filterName:filterNameInput}),
     onSuccess(res) {
       console.log(res)
       handleAddFilter()
-      queryClient.invalidateQueries({queryKey : ['fetchFilterList']})
+      queryClient.invalidateQueries({queryKey : teamAlbumId? ['fetchTeamFilterList', teamAlbumId]:['fetchFilterList']})
     },
     onError(err) {
       console.log(err)

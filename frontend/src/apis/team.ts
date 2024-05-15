@@ -8,6 +8,7 @@ import {
 } from '@/types/TeamListType'
 import { editTeamMemoType } from '@/types/cardInput'
 import { authRequest } from '@/utils/requestMethod'
+// import { deleteTeam } from '@/apis/team';
 
 const CudUrl = '/cud/api/teams'
 const ReadUrl = '/read/api/teams'
@@ -166,6 +167,7 @@ export const editTeamCard = async (params: any) => {
 }
 
 export const fetchTeamCardDetail = async (params: any) => {
+  console.log('호출');
   return authRequest
     .get(`${ReadUrl}/${params.teamAlbumId}/${params.cardId}`)
     .then(res => res.data)
@@ -197,3 +199,45 @@ export const editTeamName = async (params: any) => {
     .then(res => res.data)
     .catch(err => console.log(err))
 }
+
+
+export const fetchTeamFilterList = async (teamAlbumId: number) => {
+  return authRequest
+    .get(`${ReadUrl}/${teamAlbumId}/filter`)
+    .then(res => res.data)
+    .catch(err => console.log(err))
+
+}
+
+export const fetchTeamCardsFilter = async (teamAlbumId: number,cardId: number) => {
+  return authRequest
+    .get(`${ReadUrl}/${teamAlbumId}/${cardId}/filter`)
+    .then(res => res.data)
+    .catch(err => console.log(err))
+} 
+
+
+export const createTeamFilter = async (userId: number, teamAlbumId: number, filterName:any) => {
+  console.log('팀 필터 생성', userId, teamAlbumId);
+  return authRequest
+    .post(`${CudUrl}/${userId}/${teamAlbumId}/filter`, { filterName })
+    .then(res => res.data)
+    .catch(err => console.log(err))
+}
+
+export const deleteTeamFilter = async (userId: number, teamAlbumId: number, filterId: number) => {
+  return authRequest
+    .delete(`${CudUrl}/${userId}/${teamAlbumId}/filter/${filterId}`)
+    .then(res => res.data)
+    .catch(err => console.log(err))
+}
+
+
+export const editTeamFilter = async ({userId, filterId, filterName, teamAlbumId}:{userId: number, teamAlbumId: number, filterId: number, filterName: string }) => {
+  return authRequest
+    .patch(`${CudUrl}/${userId}/${teamAlbumId}/filter/${filterId}`, { filterName })
+    .then(res => res.data)
+    .catch(err => console.log(err))
+}
+
+

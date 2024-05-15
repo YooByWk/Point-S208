@@ -36,3 +36,10 @@ export type CreateFilterType = {
   userId: number | undefined
   filterName: string | undefined
 }
+
+export type editTeamFilterType ={
+  userId : number
+  filterId : number
+  filterName : string 
+  teamAlbumId : number
+}

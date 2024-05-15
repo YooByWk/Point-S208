@@ -28,7 +28,8 @@ const MemoSection = ({ card }: MemoSectionProps) => {
   const teamId = useParams()?.teamAlbumId as unknown as number
   const userId = useRecoilValue(userState).userId as unknown as number
   const cardId = useParams()?.cardId as unknown as number
-
+  console.log(card, '카드 프롭')
+  const cardInfo = card as CardType
   const queryClient = useQueryClient()
 
   const { data: memoText } = useQuery({
@@ -38,21 +39,23 @@ const MemoSection = ({ card }: MemoSectionProps) => {
     },
     enabled: !teamId,
   })
-  const memo = teamId ? card.memo : memoText?.data_body.memo
-  console.log(memo, '메모')
-  // teamId가 있는 경우에는 card.memo를 사용, 없는 경우에는 memoText.data_body.memo를 사용
+  
+  const memo = card.memo 
+
   const [editvalue, setEditValue] = useState(memo)
   const [displayMemo, setDisplayMemo] = useState(memo)
 
-  console.log(card.cardId, teamId, '카드 / 팀 ', userId)
+  console.log(card.cardId, teamId, '카드아이디 / 팀아이디 ', userId)
   const [isEdit, setIsEdit] = useState(false)
+  
   const editAlbumMutation = useEditAlbumMemo({
     userId: userId,
     teamAlbumId: teamId,
     cardId: card.cardId,
     data: { memo: editvalue },
   })
-
+  
+  console.log(cardId,'asdfhjklasdfhjkasdfjkhlasdfhjklasdfhjklasdfhkjl')
   const handleIconClick = () => {
     console.log(editvalue)
     setIsEdit(!isEdit)
@@ -64,12 +67,15 @@ const MemoSection = ({ card }: MemoSectionProps) => {
   }
 
   const handleSaveClick = () => {
+    console.log(card, '카아드')
     setIsEdit(false)
     editAlbumMutation.mutate({ memo: editvalue })
     // card.memo = editvalue
     setDisplayMemo(editvalue)
-    queryClient.invalidateQueries({ queryKey: ['fetchCardMemo'] })
-  }
+    
+    teamId
+    ? queryClient.invalidateQueries({ queryKey: ['fetchTeamCardDetail', userId, teamId, cardId] })
+    : queryClient.invalidateQueries({ queryKey: ['fetchAlbumCardDetail',userId, cardId] });  }
 
   useEffect(() => {
     setEditValue(memo)

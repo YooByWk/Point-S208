@@ -37,7 +37,6 @@ const MultiSelectBar = ({
   const teamAlubmDeleteMutation = useDeleteTeamAlbumCards()
   const teamAlbumId: number = useParams()?.teamAlbumId as unknown as number
   const userId = useRecoilValue(userState).userId
-  console.log('teamAlbumId: ', teamAlbumId)
 
   const handleSelectAll = () => {
     if (allCards.length === selectedCards.length) {
@@ -48,7 +47,6 @@ const MultiSelectBar = ({
   }
 
   const handleDownload = () => {
-    console.log('handleDownload: ', selectedCards)
     // id로 카드 정보 가져오기
     const selectedCardDetails: CardType[] = allCards.filter(card =>
       selectedCards.includes(card.cardId),
@@ -87,7 +85,7 @@ const MultiSelectBar = ({
     XLSX.utils.book_append_sheet(wb, ws, '사용자 정보')
 
     XLSX.writeFile(wb, '명함.xlsx')
-    console.log('selectedCardDetails: ', selectedCardDetails)
+    // console.log('selectedCardDetails: ', selectedCardDetails)
   }
 
   const handleDelete = async () => {
@@ -97,12 +95,12 @@ const MultiSelectBar = ({
         cardIdArray: selectedCards,
         userId: userId,
       }
-      console.log('teamAlbumId: ', teamAlbumId)
+      // console.log('teamAlbumId: ', teamAlbumId)
       // teamAlubmDeleteMutation.mutate(selectedCards)
       teamAlubmDeleteMutation.mutate(params)
       return
     }
-    console.log('handleDelete: ', selectedCards)
+    // console.log('handleDelete: ', selectedCards)
     myAlbumDeletemutation.mutate(selectedCards)
   }
 

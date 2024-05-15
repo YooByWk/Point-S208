@@ -45,7 +45,6 @@ const DetailBottomSection = () => {
   }
   const params = useParams()
   const cardId: number = Number(params.cardId)
-  console.log(params)
   const shareCardMutation = useShareCard()
 
   const [isEmail, setIsEmail] = useState(false)
@@ -62,7 +61,7 @@ const DetailBottomSection = () => {
   }
 
   const handleEmailSubmit = () => {
-    console.log(emailInput)
+    // console.log(emailInput)
     shareCardMutation.mutate({ id: cardId, email: emailInput })
     setIsModalOpen(!isModalOpen)
   }
