@@ -64,6 +64,9 @@ dependencies {
     // https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client
     implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '3.3.3'
 
+
+    implementation 'io.prometheus:simpleclient:0.10.0' // 사용 중인 버전에 따라 수정
+
 }
 
 tasks.named('test') {
