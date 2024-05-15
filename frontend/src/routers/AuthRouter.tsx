@@ -6,7 +6,7 @@ import AppAlbum from '@/pages/mobile/AppAlbum'
 import AppTeam from '@/pages/mobile/AppTeam'
 import WebAlbum from '@/pages/web/WebAlbum'
 import WebTeam from '@/pages/web/WebTeam'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes,  } from 'react-router-dom'
 import AppAlbumList from '@/components/mobile/MyAlbum/AlbumList'
 import RegisterCard from '@/components/mobile/MyAlbum/RegisterCard'
 import AlbumCardDetail from '@/components/mobile/MyAlbum/MyAlbumDetail/AlbumCardDetail'
@@ -16,7 +16,6 @@ import SidePanel from '@/pages/Meeting/SidePanel'
 
 const AuthRouter = () => {
   const width = useWindowSize()
-
   return (
     <Routes>
       <Route path="/configure" element={<Meeting />} />
@@ -52,3 +51,5 @@ const AuthRouter = () => {
 }
 
 export default AuthRouter
+
+
