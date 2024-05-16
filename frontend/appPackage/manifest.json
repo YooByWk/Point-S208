@@ -104,6 +104,10 @@
                 {
                     "name": "LiveShareSession.ReadWrite.Group",
                     "type": "Delegated"
+                },
+                {
+                    "name": "OnlineMeetingNotification.Send.Chat",
+                    "type": "Application"
                 }
             ]
         }
