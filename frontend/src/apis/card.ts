@@ -1,16 +1,19 @@
 import {
   deleteCardType,
   EditCardType,
+  getCardInfoType,
   OcrCardType,
   saveDigitalCardType,
   shareCardType,
   WriteCardType,
 } from '@/types/cardInput'
 import { authRequest } from '@/utils/requestMethod'
+import { AxiosRequestConfig } from 'axios'
 
 const url = '/cud/api/my-card'
 const baseUrl = '/cud/api'
 const readUrl = '/read/api/my-card'
+const baseReadUrl = '/read/api'
 
 // 내 명함 조회
 export const fetchMyCard = async (userId: number | undefined) => {
@@ -90,6 +93,20 @@ export const shareMyCard = async (params: shareCardType) => {
 export const saveMyDigitalCard = async (params: saveDigitalCardType) => {
   return authRequest
     .post(`${url}/${params.userId}/${params.cardId}/save`, params.file)
+    .then(res => res.data)
+    .catch(err => console.log(err))
+}
+
+// card ID, email로 카드 정보 불러오기
+export const getCardInfo = async (params: getCardInfoType) => {
+  const config: AxiosRequestConfig = {
+    params: {
+      email: params.email,
+    },
+  }
+
+  return authRequest
+    .get(`${baseReadUrl}/share/${params.cardId}`, config)
     .then(res => res.data)
     .catch(err => console.log(err))
 }

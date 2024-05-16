@@ -64,7 +64,6 @@ const WebMyAlbumList = ({
   }, [isRefreshed, refetch, cards, isAddCardByInfo])
 
   useEffect(() => {
-    console.log(hasNextPage)
     const handleScroll = () => {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight)
         return
@@ -81,7 +80,6 @@ const WebMyAlbumList = ({
 
   const handleAdd = () => {
     setIsAddCard(!isAddCard)
-    console.log('이미지로 명함 추가')
   }
 
   const handleCardSelect = (cardId: number) => {

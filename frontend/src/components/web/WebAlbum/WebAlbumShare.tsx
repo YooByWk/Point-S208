@@ -15,7 +15,6 @@ import {
 import { useMutation } from '@tanstack/react-query'
 import { useRecoilValue } from 'recoil'
 import { shareCard } from '@/apis/album'
-import { selectedCardState } from '@/stores/card'
 import { colors } from '@/styles/colorPalette'
 import TextField from '@/components/shared/TextField'
 import { ChangeEvent, useCallback, useState } from 'react'
@@ -42,6 +41,7 @@ const WebAlbumShare = ({
 }) => {
   const [inputEmail, setInputEmail] = useState('')
   const userId = useRecoilValue(userState).userId
+  const hostname = window.location.hostname
 
   const { mutate } = useMutation({
     mutationKey: isDigital ? ['shareMyCard'] : ['shareCard'],
@@ -65,12 +65,23 @@ const WebAlbumShare = ({
     setInputEmail(e.target.value)
   }, [])
 
+  const handleShareWithLink = async () => {
+    const shareableUrl = `https://${hostname}/index.html#/${card.cardId}/share?email=${card.email}&appId=${process.env.REACT_APP_TEAMS_APP_ID}`
+
+    try {
+      await navigator.clipboard.writeText(shareableUrl)
+      alert('URL이 클립보드에 복사되었습니다.')
+    } catch (error) {
+      console.error('URL 복사 중 오류가 발생했습니다:', error)
+    }
+  }
+
   return (
     <Dialog>
       <DialogTrigger disableButtonEnhancement>{children}</DialogTrigger>
       <DialogSurface>
         <DialogBody>
-          <DialogTitle>공유 방식 선택</DialogTitle>
+          <DialogTitle>공유 방법 선택</DialogTitle>
           <DialogContent>
             <Dialog>
               <DialogTrigger disableButtonEnhancement>
@@ -80,6 +91,7 @@ const WebAlbumShare = ({
                     !isDigital &&
                     !(Boolean(card.realPicture) && card.realPicture.length > 0)
                   }
+                  css={buttonStyles}
                 >
                   이메일
                 </Button>
@@ -108,6 +120,13 @@ const WebAlbumShare = ({
                 </DialogBody>
               </DialogSurface>
             </Dialog>
+            <Button
+              shape="circular"
+              onClick={handleShareWithLink}
+              css={buttonStyles}
+            >
+              링크
+            </Button>
           </DialogContent>
           <DialogActions>
             <DialogTrigger disableButtonEnhancement>
@@ -127,4 +146,8 @@ export default WebAlbumShare
 const buttonStyles2 = css`
   background-color: ${colors.poscoSilver};
   color: white;
+`
+
+const buttonStyles = css`
+  margin: 0 5px;
 `

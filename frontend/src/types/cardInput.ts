@@ -71,3 +71,8 @@ export type saveDigitalCardType = {
   cardId: number
   file: FormData
 }
+
+export type getCardInfoType = {
+  cardId: number
+  email: string
+}

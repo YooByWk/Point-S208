@@ -23,6 +23,12 @@ const WebAlbumCardInfo = () => {
               src={selectedCard.realPicture}
               alt={`${selectedCard.name}'s card`}
             />
+          ) : selectedCard.digitalPicture ? (
+            <Image
+              fit="contain"
+              src={selectedCard.digitalPicture}
+              alt={`${selectedCard.name}'s card`}
+            />
           ) : (
             <WebMakeBusinessCard cardInfo={selectedCard} />
           )}

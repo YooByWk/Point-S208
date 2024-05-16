@@ -1,24 +1,37 @@
 /** @jsxImportSource @emotion/react */
-
-import Text from '@shared/Text'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { userState } from '@/stores/user'
-import Dimmed from '@/components/shared/Dimmed'
-import Flex from '@/components/shared/Flex'
 import { css } from '@emotion/react'
-import { tokens } from '@fluentui/react-components'
-
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { ChangeEvent, useCallback, useState } from 'react'
+import { cameraState } from '@/stores/emptyCard'
+import { isAddCardByInfoState } from '@/stores/album'
 import {
-  CameraAdd48Regular,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogBody,
+  DialogContent,
+  DialogSurface,
+  DialogTitle,
+  DialogTrigger,
+  tokens,
+} from '@fluentui/react-components'
+import {
   SlideTextPerson48Regular,
   Dismiss24Regular,
   Image48Regular,
+  PersonLink48Filled,
 } from '@fluentui/react-icons'
-import Spacing from '@/components/shared/Spacing'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { cameraState } from '@/stores/emptyCard'
-import { isAddCardByInfoState } from '@/stores/album'
+import Dimmed from '@shared/Dimmed'
+import Flex from '@shared/Flex'
+import Text from '@shared/Text'
+import Spacing from '@shared/Spacing'
+import TextField from '@/components/shared/TextField'
+import { useMutation } from '@tanstack/react-query'
+import { getCardInfo } from '@/apis/card'
+import { RegisterOtherCard } from '@/apis/album'
+import { userState } from '@/stores/user'
+import { isRefreshedAlbumState } from '@/stores/card'
+
 interface AddCardProps {
   isAddCard: boolean
   setIsAddCard: (isAddCard: boolean) => void
@@ -28,21 +41,72 @@ const WebAddCard = ({ isAddCard, setIsAddCard }: AddCardProps) => {
   const userId = useRecoilValue(userState).userId
   const setIsAddCardByInfo = useSetRecoilState(isAddCardByInfoState)
   const setCamera = useSetRecoilState(cameraState)
+  const [isRefreshAlbum, setIsRefreshAlbum] = useRecoilState(
+    isRefreshedAlbumState,
+  )
+  const [modalOpen, setModalOpen] = useState(false)
+  const [inputLink, setInputLink] = useState('')
 
   const handleClose = () => {
     setIsAddCard(!isAddCard) // 닫기
   }
 
   const handleDirectInput = () => {
-    console.log('직접 입력 클릭')
     setIsAddCard(!isAddCard) // 닫기
     setIsAddCardByInfo(true)
   }
 
   const handleImageInput = () => {
-    console.log('이미지 등록 클릭')
     setIsAddCard(!isAddCard) // 닫기
     setCamera(true)
+  }
+
+  const { mutate: addOtherCard } = useMutation({
+    mutationKey: ['RegisterOtherCard'],
+    mutationFn: RegisterOtherCard,
+    onSuccess(result) {
+      console.log('타인 명함 등록 성공', result)
+      setIsRefreshAlbum(!isRefreshAlbum)
+    },
+    onError(error) {
+      console.error('타인 명함 등록 실패:', error)
+    },
+  })
+
+  const { mutate: getCardInfoMutation } = useMutation({
+    mutationKey: ['getCardInfo'],
+    mutationFn: getCardInfo,
+    onSuccess(result) {
+      console.log('읽어오기 성공', result)
+      let params = {
+        userId: userId as number,
+        data: result,
+      }
+      addOtherCard(params)
+    },
+    onError(error) {
+      console.error('읽어오기 실패:', error)
+    },
+  })
+
+  const handleLinkInput = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setInputLink(e.target.value)
+  }, [])
+
+  const handleAddFromLink = () => {
+    const cardIdRegex = /\/(\d+)\/share/
+    const cardIdMatch = inputLink.match(cardIdRegex)
+    const cardId = cardIdMatch ? cardIdMatch[1] : null
+    const cardIdNum = cardId ? parseInt(cardId) : 0
+
+    const emailRegex = /email=([^&]+)/
+    const emailMatch = inputLink.match(emailRegex)
+    const email = emailMatch ? emailMatch[1] : ''
+
+    getCardInfoMutation({ cardId: cardIdNum, email: email })
+
+    setModalOpen(false)
+    setIsAddCard(!isAddCard) // 닫기
   }
 
   return (
@@ -85,6 +149,47 @@ const WebAddCard = ({ isAddCard, setIsAddCard }: AddCardProps) => {
                 <SlideTextPerson48Regular />
                 <Text typography="t7">직접 입력</Text>
               </Flex>
+
+              <Spacing size={20} direction="horizontal" />
+              <Dialog open={modalOpen}>
+                <DialogTrigger disableButtonEnhancement>
+                  <Flex
+                    direction="column"
+                    justify="center"
+                    align="center"
+                    onClick={() => {
+                      setModalOpen(true)
+                    }}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <PersonLink48Filled />
+                    <Text typography="t7">링크로 등록</Text>
+                  </Flex>
+                </DialogTrigger>
+                <DialogSurface>
+                  <DialogBody>
+                    <DialogTitle>링크를 입력해주세요</DialogTitle>
+                    <DialogContent>
+                      <TextField onChange={handleLinkInput} />
+                    </DialogContent>
+                    <DialogActions>
+                      <DialogTrigger disableButtonEnhancement>
+                        <Button
+                          appearance="secondary"
+                          onClick={() => {
+                            setModalOpen(false)
+                          }}
+                        >
+                          취소
+                        </Button>
+                      </DialogTrigger>
+                      <Button appearance="primary" onClick={handleAddFromLink}>
+                        명함 등록
+                      </Button>
+                    </DialogActions>
+                  </DialogBody>
+                </DialogSurface>
+              </Dialog>
             </Flex>
           </div>
         </Flex>
@@ -104,7 +209,7 @@ const container = css`
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 80%;
-    max-width: 300px;
+    max-width: 400px;
     text-align: center;
   }
   .X {
