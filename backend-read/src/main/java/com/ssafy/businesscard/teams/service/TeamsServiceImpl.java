@@ -135,8 +135,8 @@ public class TeamsServiceImpl implements TeamsService{
         Optional<TeamAlbumDetail> teamAlbumDetailOptional  = teamAlbumDetailRepository.findByTeamAlbum_TeamAlbumIdAndBusinesscard_cardId(teamAlbumId, cardId);
         if(teamAlbumDetailOptional.isPresent()){
             TeamAlbumDetail teamAlbumDetail = teamAlbumDetailOptional.get();
-            Businesscard businesscard = teamAlbumDetail.getBusinesscard();
-            return teamsMapper.toDto(businesscard);
+//            Businesscard businesscard = teamAlbumDetail.getBusinesscard();
+            return teamsMapper.toDto(teamAlbumDetail);
         }else{
             throw new UserException(UserErrorCode.NO_CARD);
         }

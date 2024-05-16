@@ -79,7 +79,8 @@ public class PrivateAlbumServiceImpl implements PrivateAlbumService {
             if(privateAlbumOptional.isPresent()){
                 PrivateAlbum privateAlbum = privateAlbumOptional.get();
                 Businesscard businesscard = privateAlbum.getBusinesscard();
-                return privateAlbumMapper.toDto(businesscard);
+
+                return privateAlbumMapper.toDto(privateAlbum);
             } else {
                 throw new UserException(UserErrorCode.NO_CARD);
             }
