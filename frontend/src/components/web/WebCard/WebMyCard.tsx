@@ -72,7 +72,7 @@ const WebMyCard = ({
 }) => {
   const userId = useRecoilValue(userState).userId
   const [editOpen, setEditOpen] = useState(false)
-  const { data, loading, error } = useFetchCardData(userId, isCard, editOpen)
+  const { data, loading } = useFetchCardData(userId, isCard, editOpen)
   const [isFront, setIsFront] = useState(true)
 
   if (loading) return <div>Loading...</div>
