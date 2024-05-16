@@ -8,7 +8,7 @@ import Flex from '@shared/Flex'
 import Text from '@shared/Text'
 import { colors } from '@styles/colorPalette'
 import { Image } from '@fluentui/react-components'
-import WebMakeBusinessCard from '../web/WebAlbum/WebMakeBusinessCard'
+import styled from '@emotion/styled'
 
 const MeetingCardThumbnail = ({
   card,
@@ -16,9 +16,9 @@ const MeetingCardThumbnail = ({
   card: ExternalCardType | CardType
 }) => {
   return (
-    <>
-      <Flex css={boxBorderStyles} align="center">
-        <Flex align="center">
+    <Flex css={boxBorderStyles} align="center">
+      <Flex align="center">
+        <Flex direction="column" align="center" justify="center">
           {/* 사진 */}
           <Flex css={boxStyles} align="center">
             {card.realPicture ? (
@@ -28,39 +28,43 @@ const MeetingCardThumbnail = ({
                 alt={`${card.name}'s card`}
               />
             ) : (
-              <WebMakeBusinessCard
-                cardInfo={card}
-                width="10vw"
-                height="6vw"
-                typoLarge="t11"
-                typoMedium="t11"
-                typoSmall="t11"
-              />
+              <NoCard>실물 명함이 없습니다.</NoCard>
             )}
+            {/* 공유버튼 */}
           </Flex>
-          {/* 정보 */}
-          <Flex direction="column" justify="center" css={boxBorderStyles2}>
-            <Text typography="t9">{card.company}</Text>
-            <Text typography="t9">{card.name}</Text>
-            <Text typography="t9">{card.phoneNumber}</Text>
-            <Text typography="t9">{card.email}</Text>
-          </Flex>
+          <Button appearance="transparent">
+            <ShareAndroid16Filled /> 공유
+          </Button>
+        </Flex>
+        {/* 정보 */}
+        <Flex direction="column" justify="center" css={boxBorderStyles2}>
+          <Text typography="t9">{card.company}</Text>
+          <Text typography="t9">{card.name}</Text>
+          <Text typography="t9">{card.phoneNumber}</Text>
+          <Text typography="t9">{card.email}</Text>
         </Flex>
       </Flex>
-      {/* 공유버튼 */}
-
-      <Button appearance="transparent">
-        <ShareAndroid16Filled /> 공유
-      </Button>
-    </>
+    </Flex>
   )
 }
 
 export default MeetingCardThumbnail
 
+const NoCard = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #242424;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 6px;
+`
+
 const boxStyles = css`
-  width: 10vw;
-  height: 5vw;
+  width: 50px;
+  height: 30px;
   margin: 10px;
 `
 
@@ -69,7 +73,7 @@ const boxBorderStyles = css`
 `
 
 const boxBorderStyles2 = css`
-  width: 25vw;
+  width: 50vw;
   border-left: 1px solid ${colors.themeGray};
   padding: 10px 0 10px 10px;
 `
