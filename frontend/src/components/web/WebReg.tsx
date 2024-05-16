@@ -254,7 +254,10 @@ const WebReg = (props: { state: string }) => {
           size="large"
           info={<>변환에 성공한 카드만 등록할 수 있습니다 </>}
         />
-        <Dismiss20Filled onClick={onClickDismiss} />
+        <Dismiss20Filled
+          onClick={onClickDismiss}
+          style={{ cursor: 'pointer' }}
+        />
       </Top>
       <Flex justify="center">{renderImage()}</Flex>
       {imgSrc ? (
@@ -280,10 +283,21 @@ const WebReg = (props: { state: string }) => {
               ref={fileInput}
               onChange={handleFileSelect}
             />
-            <Image32Regular onClick={() => fileInput.current?.click()} />
-            <Text typography="t8">사진첩</Text>
+            <Flex
+              direction="column"
+              align="center"
+              style={{ cursor: 'pointer' }}
+            >
+              <Image32Regular onClick={() => fileInput.current?.click()} />
+              <Text typography="t8">사진첩</Text>
+            </Flex>
           </Flex>
-          <Flex direction="column" align="center" onClick={onClickDismiss}>
+          <Flex
+            direction="column"
+            align="center"
+            onClick={onClickDismiss}
+            style={{ cursor: 'pointer' }}
+          >
             <ArrowHookUpLeft28Regular style={{ transform: 'scale(1.2)' }} />
             <Text typography="t8">취소</Text>
           </Flex>
