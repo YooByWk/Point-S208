@@ -102,12 +102,23 @@ public class UserServiceImpl implements UserService{
         for (PrivateAlbum privateAlbum : privateAlbums) {
             Businesscard businesscard = privateAlbum.getBusinesscard();
 
-//            String name = businesscard.getName();
-//            String email = businesscard.getEmail();
-//            String company = businesscard.getCompany();
-            String name = businesscard.getName().toLowerCase();
-            String email = businesscard.getEmail().toLowerCase();
-            String company = businesscard.getCompany().toLowerCase();
+//            String name = businesscard.getName().toLowerCase();
+//            String email = businesscard.getEmail().toLowerCase();
+//            String company = businesscard.getCompany().toLowerCase();
+            String name = businesscard.getName();
+            String email = businesscard.getEmail();
+            String company = businesscard.getCompany();
+
+            // null 체크 후 소문자 변환
+            if (name != null) {
+                name = name.toLowerCase();
+            }
+            if (email != null) {
+                email = email.toLowerCase();
+            }
+            if (company != null) {
+                company = company.toLowerCase();
+            }
 
             if (name.contains(info) || email.contains(info) || company.contains(info)) {
 
@@ -140,12 +151,23 @@ public class UserServiceImpl implements UserService{
         for (TeamAlbumDetail teamAlbumDetail : teamAlbumDetails){
             Businesscard businesscard = teamAlbumDetail.getBusinesscard();
 
-//            String name = businesscard.getName();
-//            String email = businesscard.getEmail();
-//            String company = businesscard.getCompany();
-            String name = businesscard.getName().toLowerCase();
-            String email = businesscard.getEmail().toLowerCase();
-            String company = businesscard.getCompany().toLowerCase();
+//            String name = businesscard.getName().toLowerCase();
+//            String email = businesscard.getEmail().toLowerCase();
+//            String company = businesscard.getCompany().toLowerCase();
+            String name = businesscard.getName();
+            String email = businesscard.getEmail();
+            String company = businesscard.getCompany();
+
+            // null 체크 후 소문자 변환
+            if (name != null) {
+                name = name.toLowerCase();
+            }
+            if (email != null) {
+                email = email.toLowerCase();
+            }
+            if (company != null) {
+                company = company.toLowerCase();
+            }
 
             if (name.contains(info) || email.contains(info) || company.contains(info)) {
                 dtos.add(PrivateAlbumResponseDto.builder()
