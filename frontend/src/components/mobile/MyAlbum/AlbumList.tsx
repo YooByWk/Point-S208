@@ -30,7 +30,7 @@ const AlbumList = () => {
     queryFn: ({ pageParam = 0 }) => fetchMyAlbum(userId as number, pageParam),
     getNextPageParam: (lastPage, allPages) => {
       return Array.isArray(lastPage.data_body) && lastPage.data_body.length > 0
-        ? allPages.length + 1
+        ? allPages.length
         : undefined
     },
     initialPageParam: 0,
@@ -80,7 +80,15 @@ const AlbumList = () => {
 
   const renderCards = () => {
     if (cards.length > 0 && cards[0] !== undefined) {
-      return <CardList cards={cards} isTeam={false} handleAdd={handleAdd} />
+      return (
+        <CardList
+          cards={cards}
+          isTeam={false}
+          handleAdd={handleAdd}
+          isFetchingNextPage={isFetchingNextPage}
+          hasNextPage={hasNextPage}
+        />
+      )
     } else {
       return <CardList cards={[]} isTeam={false} handleAdd={handleAdd} />
     }

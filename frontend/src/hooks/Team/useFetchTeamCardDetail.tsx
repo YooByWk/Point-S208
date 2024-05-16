@@ -1,7 +1,5 @@
 import {fetchTeamCardDetail} from '@apis/team'
 import { useQuery } from "@tanstack/react-query"
-import { useRecoilValue } from "recoil";
-import { userState } from "@/stores/user";
 
 export const useFetchTeamCardDetail = ({cardId, teamAlbumId}: {cardId: number, teamAlbumId: number | undefined}) => {
 

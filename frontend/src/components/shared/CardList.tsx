@@ -6,10 +6,10 @@ import SearchBox from '@/components/shared/SearchBox'
 import { useState } from 'react'
 import MultiSelectBar from '@/components/shared/MultiSelectBar'
 import Spacing from '@/components/shared/Spacing'
-import { css } from '@emotion/react'
+import { css, keyframes } from '@emotion/react'
 import LargeButton from './LargeButton'
 import ShareCard from '@/components/mobile/Team/ShareCard'
-import { tokens } from '@fluentui/react-components'
+import { Spinner, tokens } from '@fluentui/react-components'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { pageChanged } from '@stores/team'
 import { ExternalCardListType } from '@/types/ExternalCard'
@@ -19,7 +19,7 @@ import { filterState } from '@/stores/album'
 import { useQuery } from '@tanstack/react-query'
 import { fetchAllAlbum } from '@/apis/album'
 import { userState } from '@/stores/user'
-import { useLocation, useParams } from 'react-router-dom'
+import { Transition } from 'react-transition-group';
 import { useSaveToMyAlbum } from '@/hooks/useSaveToMyAlbum'
 
 interface CardListProps {
@@ -27,6 +27,8 @@ interface CardListProps {
   isTeam?: boolean
   parentisLoading?: boolean
   handleAdd?: () => void
+  isFetchingNextPage?: boolean
+  hasNextPage?: boolean
 }
 
 const CardList = ({
@@ -34,6 +36,8 @@ const CardList = ({
   cards,
   isTeam = false,
   handleAdd,
+  isFetchingNextPage,
+  hasNextPage,
 }: CardListProps) => {
   const [isPageChanged, setPageChanged] = useRecoilState(pageChanged)
   const isfilter = useRecoilValue(filterState)
@@ -41,6 +45,10 @@ const CardList = ({
   const [selectedCards, setSelectedCards] = useState<number[]>([])
   const [isShare, setIsShare] = useState(false) // 공유창 여닫는 state
   const saveToMyAlbumMutation = useSaveToMyAlbum()
+  const userId = useRecoilValue(userState).userId
+
+  
+    
   const handleCardSelect = (cardId: number) => {
     setSelectedCards(prev =>
       prev.includes(cardId)
@@ -51,13 +59,11 @@ const CardList = ({
 
   const handleBtn = () => {
     setPageChanged(!isPageChanged)
-    // console.log('isPageChanged: ', isPageChanged)
   }
 
   const handleShare = () => {
     handleBtn()
     setIsShare(!isShare)
-    // console.log('isShare: ', isShare)
   }
 
   const [searchResults, setSearchResults] = useState<
@@ -73,26 +79,21 @@ const CardList = ({
       setSearchResults(data as ExternalCardListType)
     }
   }
-  const teamAlbumId  = useParams().teamAlbumId
-  // console.log('teamAlbumId: ', teamAlbumId);
-  const loc = useLocation()
-  // console.log('loc: ', loc);
-  const userId = useRecoilValue(userState).userId
+
   // 명함지갑 내 명함 총 개수 조회
   const { data } = useQuery({
     queryKey: ['fetchMyCard'],
     queryFn: () => fetchAllAlbum({ userId }),
   })
-  
-  
-  
+
+  // 내 명함지갑에 명함 내려받기
   const handleAddToMyCard = async () => {
-    const tmp = await fetchAllAlbum({userId})
+    const tmp = await fetchAllAlbum({ userId })
     const myList = tmp.data_body.map((card: CardType) => card.cardId)
     console.log(myList, '팀에서 유저에게 전송')
-    const filteredCards = selectedCards.filter(card => !myList.includes(card));
+    const filteredCards = selectedCards.filter(card => !myList.includes(card))
     if (userId !== undefined) {
-    saveToMyAlbumMutation.mutate({ userId , cardIds: filteredCards })
+      saveToMyAlbumMutation.mutate({ userId, cardIds: filteredCards })
     }
     alert('내 명함지갑에 추가되었습니다.')
     setSelectedCards([])
@@ -114,6 +115,7 @@ const CardList = ({
             placeholder={isTeam ? '팀 명함 검색' : '명함 검색'}
             memberIcon={isTeam ? true : false}
             spacing={false}
+            filterIcon={false}
           />
           <Spacing size={15} />
           <MultiSelectBar
@@ -133,6 +135,7 @@ const CardList = ({
                       <CardThumbnail
                         cardInfo={card}
                         key={index}
+                        index={index}
                         onSelect={handleCardSelect}
                         selectedCards={selectedCards}
                       />
@@ -145,16 +148,22 @@ const CardList = ({
                 </Flex>
               )
             ) : cards.length > 0 ? (
-              cards.map((card: ExternalCardType | CardType, index: number) => {
-                return (
-                  <CardThumbnail
-                    cardInfo={card}
-                    key={index}
-                    onSelect={handleCardSelect}
-                    selectedCards={selectedCards}
-                  />
-                )
-              })
+              <>
+                {cards.map(
+                  (card: ExternalCardType | CardType, index: number) => {
+                    return (
+                      <CardThumbnail
+                        cardInfo={card}
+                        index={index}
+                        key={index}
+                        onSelect={handleCardSelect}
+                        selectedCards={selectedCards}
+                      />
+                    )
+                  },
+                )}
+                {isFetchingNextPage && hasNextPage && <Spinner />}
+              </>
             ) : isfilter.filterId ? (
               <Flex
                 direction="column"
@@ -177,15 +186,23 @@ const CardList = ({
             <Spacing size={40} direction="vertical" />
           </Flex>
           <div css={buttonCss}>
-{selectedCards.length > 0 ? (
-  isTeam ? (
-    <LargeButton text="내 명함지갑에 추가" width="80%" onClick={handleAddToMyCard} />
-  ) : (
-    <LargeButton text="명함 공유" width="80%" onClick={handleShare} />
-  )
-) : (
-  <LargeButton text="명함 추가" width="80%" onClick={handleAdd} />
-)}
+            {selectedCards.length > 0 ? (
+              isTeam ? (
+                <LargeButton
+                  text="내 명함지갑에 추가"
+                  width="80%"
+                  onClick={handleAddToMyCard}
+                />
+              ) : (
+                <LargeButton
+                  text="명함 공유"
+                  width="80%"
+                  onClick={handleShare}
+                />
+              )
+            ) : (
+              <LargeButton text="명함 추가" width="80%" onClick={handleAdd} />
+            )}
           </div>{' '}
         </>
       ) : (
@@ -208,6 +225,9 @@ const CardList = ({
 }
 
 export default CardList
+
+
+// css
 
 const buttonCss = css`
   position: fixed;

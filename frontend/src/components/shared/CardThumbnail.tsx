@@ -3,7 +3,7 @@ import { useState } from 'react'
 import type { CardType } from '@/types/cardType'
 import Flex from '@/components/shared/Flex'
 import Text from '@/components/shared/Text'
-import { css } from '@emotion/react'
+import { css, keyframes } from '@emotion/react'
 import Spacing from '@/components/shared/Spacing'
 import {
   Button,
@@ -45,6 +45,7 @@ interface CardThumbnailProps {
   forShare?: boolean
   scale?: number
   teamId?: number
+  index?: number
 }
 
 const CardThumbnail = ({
@@ -53,6 +54,7 @@ const CardThumbnail = ({
   selectedCards,
   forShare = false,
   scale = 1,
+  index =NaN,
 }: CardThumbnailProps) => {
   const [isfavorite, setIsFavorite] = useState(false)
   const [isChecked, setIsChecked] = useState(false)
@@ -117,7 +119,7 @@ const CardThumbnail = ({
   const navigate = useNavigate()
   return (
     <div
-      css={cardContainer(forShare, scale)}
+      css={cardContainer(forShare, scale, index)}
       onClick={() => {
         if (forShare) {
           setIsChecked(!isChecked)
@@ -298,7 +300,9 @@ const CardThumbnail = ({
 
 export default CardThumbnail
 
-const cardContainer = (forShare: boolean, scale: number) => css`
+// css
+
+const cardContainer = (forShare: boolean, scale: number, index:number) => css`
   border-radius: 10px;
   width: 85%;
   min-height: 120px;
@@ -307,12 +311,15 @@ const cardContainer = (forShare: boolean, scale: number) => css`
   background-color: ${tokens.colorNeutralBackground1Selected};
   min-height: 100px;
   scale: ${forShare ? scale : 1};
+  animation: ${fadeIn} 0.125s linear forwards;
+  opacity: 0;
+  animation-delay: ${isNaN(index)? 0: index * 0.12}s;
   /* padding: 10px; */
 
   &:hover,
   &:active,
   &.wave {
-    animation: wave 1.2s ease forwards;
+    animation: wave 1.2s ease ;
     background: linear-gradient(
       90deg,
       ${tokens.colorNeutralBackground1Selected} 0%,
@@ -352,8 +359,6 @@ const imgStyle = css`
 const inputCss = css`
   width: 80%;
 `
-
-// css
 
 const fui = css`
   display: flex;
@@ -396,4 +401,13 @@ const content = css`
   width: 80vw;
   padding: 0;
   margin: 0;
+`
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 `

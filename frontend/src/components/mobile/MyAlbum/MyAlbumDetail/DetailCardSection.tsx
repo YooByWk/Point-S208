@@ -18,21 +18,17 @@ import {
 } from '@fluentui/react-icons'
 import { BooleanStateType } from '@/types/commonType'
 import WebMakeBusinessCard from '@/components/web/WebAlbum/WebMakeBusinessCard'
-import EmptyCard from '../../MyCard/EmptyCard'
+
 import { ExternalCardType } from '@/types/ExternalCard'
 
 const DetailCardComponent = ({
   isReal,
   card,
-}: {
+}: { 
   isReal: boolean
   card: CardType | ExternalCardType
 }) => {
-  const dummyUrl =
-    'https://1drv.ms/i/c/60d1136c8e1eeac5/IQPtHI8a_PwASK5IZLcow2yZAdjLhrrPZqV_cjryVMdkpRA?width=150&height=120'
-
-  const dummyUrl2 =
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvwfOm9MLrCGGlftO1mP678gIUIA41LG8P2ssanQH-oQ&s'
+  
 
   if (isReal) {
     return card?.cardId ? (

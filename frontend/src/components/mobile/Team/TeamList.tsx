@@ -30,7 +30,6 @@ const TeamList = () => {
   const setSelectedTeam = useSetRecoilState(teamState.selectedTeamAlbumIdState)
   const navigate = useNavigate()
   const userId = useRecoilValue(userState).userId
-
   const [searchResults, setSearchResults] = useState<TeamListType[]>([])
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['fetchTeamList', userId],
@@ -77,6 +76,7 @@ const TeamList = () => {
           searchResult={searchResults}
           setSearchResult={setSearchResults}
           value={searchValue}
+          sortIcon={false}
           setSearchValue={setSearchValue}
           onChange={(e: any) => {
             setSearchValue(e.target.value)

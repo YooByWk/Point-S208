@@ -42,17 +42,19 @@ const TeamDetail = () => {
     }
   }, [teamAlbumId])
 
-  const { data, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery({
-    queryKey: ['fetchTeamCardsList', teamAlbumIdNumber, 0],
-    queryFn: ({ pageParam = 0 }) =>
-      fetchTeamCardsList(teamAlbumIdNumber, pageParam),
-    getNextPageParam: (lastPage, allPages) => {
-      return Array.isArray(lastPage.data_body) && lastPage.length > 0
-        ? allPages.length
-        : undefined
-    },
-    initialPageParam: 0,
-  })
+  const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: ['fetchTeamCardsList', teamAlbumIdNumber, 0],
+      queryFn: ({ pageParam = 0 }) =>
+        fetchTeamCardsList(teamAlbumIdNumber, pageParam),
+      getNextPageParam: (lastPage, allPages) => {
+        return Array.isArray(lastPage.data_body) &&
+          lastPage.data_body.length > 0
+          ? allPages.length
+          : undefined
+      },
+      initialPageParam: 0,
+    })
 
   let teamCardList: CardType[] =
     data?.pages.flatMap(page => page.data_body) || []
@@ -61,7 +63,6 @@ const TeamDetail = () => {
     const handleScroll = () => {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
         if (hasNextPage) {
-          // console.log('더불러오기')
           fetchNextPage()
         }
       }
@@ -94,6 +95,7 @@ const TeamDetail = () => {
           value={''}
           onSearch={() => {}}
           disabled={true}
+          filterIcon={false}
         />
 
         <Flex
@@ -116,7 +118,14 @@ const TeamDetail = () => {
       <div>
         {!isPageChanged && <BackArrow />}
         {teamCardList[0] !== undefined && teamCardList.length > 0 ? (
-          <CardList cards={teamCardList} isTeam={true} handleAdd={hadnleAdd} />
+          <CardList
+            cards={teamCardList}
+            isTeam={true}
+            handleAdd={hadnleAdd}
+            isFetchingNextPage={isFetchingNextPage}
+            hasNextPage={hasNextPage}
+            
+          />
         ) : (
           <></>
         )}

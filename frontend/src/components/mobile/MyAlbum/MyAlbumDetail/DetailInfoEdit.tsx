@@ -10,7 +10,7 @@ import { useRecoilValue } from 'recoil'
 import { userState } from '@/stores/user'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { editMyAlbumCard } from '@/apis/album'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { TeamListType } from '@/types/TeamListType'
 import { BooleanStateType } from '@/types/commonType'
 import { CardType } from '@/types/cardType'
@@ -24,7 +24,6 @@ const DetailInfoEdit = ({
   isEdit: BooleanStateType
   card: CardType | ExternalCardType
 }) => {
-  console.log(card)
   const { value: edit, setValue: setEdit } = isEdit
   const [cardInputs, setCardInputs] = useState({
     name: card.name,
@@ -41,12 +40,9 @@ const DetailInfoEdit = ({
   })
 
   const userId = useRecoilValue(userState).userId
-  const location = useLocation()
-  // const teamAlbumId: TeamListType = location.state.teamAlbumId
-  const navigate = useNavigate()
   const [dirty, setDirty] = useState<Partial<cardInput>>({})
   const queryClient = useQueryClient()
-  const teamCardMutation = useTeamCardEdit()
+  const teamCardMutation = useTeamCardEdit(card)
   const param = useParams()
   const teamAlbumId = param.teamAlbumId
   const handleCardInputs = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -61,17 +57,17 @@ const DetailInfoEdit = ({
       [e.target.name]: 'true',
     }))
   }, [])
-
+  
+  // 명함 수정하기 - 개인 앨범
   const { mutate } = useMutation({
     mutationKey: ['editMyAlbumCard'],
     mutationFn: editMyAlbumCard,
     onSuccess: res => {
-      console.log('명함 수정 성공', res)
-      queryClient.invalidateQueries({ queryKey: ['fetchMyAlbum'] })
+      queryClient.invalidateQueries({ queryKey: ['fetchAlbumCardDetail', userId, card.cardId] })
       setEdit(false)
     },
     onError: error => {
-      console.log('error: ', error)
+      console.log('error: ' )
     },
   })
 
@@ -90,23 +86,24 @@ const DetailInfoEdit = ({
         faxNumber: cardInputs.faxNumber,
         address: cardInputs.address,
         domainUrl: cardInputs.domainUrl,
-        frontBack: 'FRONT', // 첫 추가는 앞면.
+        frontBack: 'FRONT', 
       },
     }
     if (teamAlbumId === undefined) {
-      console.log('팀이아님')
+      // console.log('팀이아님')
       mutate(params)
       return
     }
 
+    // 팀 환경에서 명함 수정
     if (teamAlbumId !== undefined) {
-      console.log('팀 환경에서의 명함 수정')
       teamCardMutation.mutate({
         userId: userId as number,
         teamAlbumId: teamAlbumId as unknown as number,
         cardId: card.cardId,
         data: params.data,
       })
+      queryClient.invalidateQueries({ queryKey: ['fetchTeamCardDetail', teamAlbumId, card.cardId] })
       setEdit(false)
     }
   }
@@ -114,7 +111,6 @@ const DetailInfoEdit = ({
   const errors = useMemo(() => validate(cardInputs), [cardInputs])
 
   const isSubmittable = Object.keys(errors).length === 0
-
   return (
     <>
       <Flex direction="column" css={formContainerStyles}>
@@ -264,27 +260,27 @@ const DetailInfoEdit = ({
 function validate(cardInput: cardInput) {
   let errors: Partial<cardInput> = {}
 
-  if (cardInput.name.length === 0) {
+  if (cardInput.name && cardInput.name.length === 0) {
     errors.name = '이름을 입력해주세요'
   }
 
-  if (cardInput.position.length === 0) {
+  if (cardInput.position && cardInput.position.length === 0) {
     errors.position = '직책을 입력해주세요'
   }
 
-  if (cardInput.department.length === 0) {
+  if (cardInput.department && cardInput.department.length === 0) {
     errors.department = '부서를 입력해주세요'
   }
 
-  if (cardInput.email.length === 0) {
+  if (cardInput.email && cardInput.email.length === 0) {
     errors.email = '이메일을 입력해주세요'
   }
 
-  if (cardInput.landlineNumber.length === 0) {
+  if (cardInput.landlineNumber && cardInput.landlineNumber.length === 0) {
     errors.landlineNumber = '유선번호를 입력해주세요'
   }
 
-  if (cardInput.phoneNumber.length === 0) {
+  if (cardInput.phoneNumber && cardInput.phoneNumber.length === 0) {
     errors.phoneNumber = '핸드폰 번호를 입력해주세요'
   }
 
