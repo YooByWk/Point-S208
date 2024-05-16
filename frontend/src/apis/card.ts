@@ -13,7 +13,7 @@ const baseUrl = '/cud/api'
 const readUrl = '/read/api/my-card'
 
 // 내 명함 조회
-export const fetchMyCard = async (userId: number) => {
+export const fetchMyCard = async (userId: number | undefined) => {
   return authRequest
     .get(`${readUrl}/${userId}`)
     .then(res => res.data)

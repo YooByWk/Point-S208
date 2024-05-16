@@ -4,18 +4,26 @@ import { colors } from '@/styles/colorPalette'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { useRecoilState, useRecoilValue } from 'recoil'
+import { Image } from '@fluentui/react-components'
 import { ArrowHookUpLeft28Regular } from '@fluentui/react-icons'
 import { isFrontState } from '@/stores/card'
 import { frontCardState, backCardState } from '@/stores/card'
-import MyDigitalCard from '@components/mobile/MyCard/MyDigitalCard'
+import { CardType } from '@/types/cardType'
+import { useEffect, useState } from 'react'
 
 const CardComponent = (isFront: boolean) => {
   const frontCard = useRecoilValue(frontCardState)
   const backCard = useRecoilValue(backCardState)
-  const card = isFront ? frontCard : backCard
+  const [card, setCard] = useState<CardType>(frontCard)
 
-  return card?.cardId ? (
-    <MyDigitalCard cardInfo={card} scale={1} border={false} />
+  useEffect(() => {
+    isFront ? setCard(frontCard) : setCard(backCard)
+  }, [setCard, frontCard, backCard, isFront])
+
+  return card?.digitalPicture ? (
+    <div>
+      <Image src={card.digitalPicture} fit="contain" />
+    </div>
   ) : (
     <NoCard>
       {isFront ? '국문 명함을 추가해주세요' : '영문 명함을 추가해주세요'}
@@ -52,7 +60,7 @@ const Container = styled.div<{ $theme: string }>`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 240px;
+  height: 150px;
 `
 
 const Wrap = styled.div`
@@ -86,7 +94,7 @@ const NoCard = styled.div`
 
 const Desc = styled.div`
   position: absolute;
-  color: white;
+  color: ${colors.themeText};
   bottom: 0;
   right: 0;
   margin: 3%;

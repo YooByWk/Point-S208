@@ -5,18 +5,9 @@
 
 import * as microsoftTeams from '@microsoft/teams-js'
 import { useEffect, useState } from 'react'
-
-import {
-  mergeClasses,
-  Title2,
-  Subtitle2,
-  Spinner,
-} from '@fluentui/react-components'
+import { mergeClasses, Title2, Subtitle2 } from '@fluentui/react-components'
 import { getFlexColumnStyles } from '@/components/shared/layouts'
-import { useTeamsUserCredential } from '@microsoft/teamsfx-react'
-import config from '@/components/sample/lib/config'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { themeState } from '@/stores/common'
+import { useRecoilValue } from 'recoil'
 import { isUserinStorageState } from '@/stores/user'
 import Tutorial from '@/components/Tutorial'
 
@@ -55,6 +46,7 @@ const Meeting = () => {
   }, [])
 
   const flexColumnStyles = getFlexColumnStyles()
+
   return (
     <>
       {isUserinStorage ? (
