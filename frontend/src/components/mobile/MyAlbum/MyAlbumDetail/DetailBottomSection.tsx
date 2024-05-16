@@ -16,15 +16,22 @@ import {
 } from '@fluentui/react-components'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { MailRead48Filled, Dismiss24Filled } from '@fluentui/react-icons'
+import { MailRead48Filled, Dismiss24Filled, PersonLink48Filled } from '@fluentui/react-icons'
 import Input from '@/components/shared/Input'
 import { useShareCard } from '@/hooks/useShareCard'
+import { ExternalCardType } from '@/types/ExternalCard'
+import { CardType } from '@/types/cardType'
 
-const DetailBottomSection = () => {
+interface DetailBottomSectionProps {
+  card: CardType | ExternalCardType
+
+}
+
+const DetailBottomSection = ({card}: DetailBottomSectionProps ) => {
   const params = useParams()
   const cardId: number = Number(params.cardId)
   const shareCardMutation = useShareCard()
-
+  const hostname = window.location.hostname
   const [isEmail, setIsEmail] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [emailInput, setEmailInput] = useState('')
@@ -43,6 +50,18 @@ const DetailBottomSection = () => {
     setIsModalOpen(!isModalOpen)
   }
 
+  const handleLinkShare = async (event: React.MouseEvent) => {
+    event.stopPropagation()
+    const shareableUrl = `https://${hostname}/index.html#/${card.cardId}/share?email=${card.email}&appId=${process.env.REACT_APP_TEAMS_APP_ID}`
+    try {
+      await navigator.clipboard.writeText(shareableUrl)
+      console.log(shareableUrl)
+      alert('URL이 클립보드에 복사되었습니다.')
+    } catch (error) {
+      console.error('URL 복사 중 오류가 발생했습니다:', error)
+    }
+    setIsModalOpen(false)
+  }
   return (
     <>
       <hr></hr>
@@ -95,6 +114,20 @@ const DetailBottomSection = () => {
                         >
                           <MailRead48Filled />
                           <Text typography="t9">이메일</Text>
+                        </Flex>
+                      </DialogTrigger>
+                      <Spacing size={20} direction="horizontal" />
+                      <DialogTrigger disableButtonEnhancement>
+                        <Flex
+                          direction="column"
+                          align="center"
+                          justify="center"
+                          onClick={e => {
+                            handleLinkShare(e)
+                          }}
+                        >
+                          <PersonLink48Filled />
+                          <Text typography="t9">공유 링크 복사</Text>
                         </Flex>
                       </DialogTrigger>
                       {/* <DialogTrigger disableButtonEnhancement>

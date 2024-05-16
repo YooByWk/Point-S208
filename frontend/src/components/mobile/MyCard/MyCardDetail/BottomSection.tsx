@@ -29,8 +29,13 @@ import { ExternalCardType } from '@/types/ExternalCard'
 import { CardType } from '@/types/cardType'
 import NewlyAdded from './NewlyAdded'
 import { useShareCard } from '@/hooks/useShareCard'
-import { Dismiss24Filled } from '@fluentui/react-icons'
-import { MailRead48Filled } from '@fluentui/react-icons'
+import {
+  MailRead48Filled,
+  Dismiss24Filled,
+  PersonLink48Filled,
+} from '@fluentui/react-icons'
+
+
 
 const BottomSection = ({
   list,
@@ -46,6 +51,8 @@ const BottomSection = ({
   const backCard = useRecoilValue(backCardState)
   const card = isFront ? frontCard : backCard
   const [openItems, setOpenItems] = useState(['0'])
+  const hostname = window.location.hostname
+
   const handleToggle: AccordionToggleEventHandler<string> = (event, data) => {
     setOpenItems(data.openItems)
   }
@@ -67,6 +74,20 @@ const BottomSection = ({
   const handleEmailSubmit = () => {
     shareCardMutation.mutate({ id: card.cardId, email: emailInput })
     setIsModalOpen(!isModalOpen)
+  }
+
+
+  const handleLinkShare = async (event: React.MouseEvent) => {
+    event.stopPropagation()
+    const shareableUrl = `https://${hostname}/index.html#/${card.cardId}/share?email=${card.email}&appId=${process.env.REACT_APP_TEAMS_APP_ID}`
+    try {
+      await navigator.clipboard.writeText(shareableUrl)
+      console.log(shareableUrl)
+      alert('URL이 클립보드에 복사되었습니다.')
+    } catch (error) {
+      console.error('URL 복사 중 오류가 발생했습니다:', error)
+    }
+    setIsModalOpen(false)
   }
 
   return (
@@ -189,6 +210,20 @@ const BottomSection = ({
                           <Text typography="t9">파일 저장</Text>
                         </Flex>
                       </DialogTrigger> */}
+                      <Spacing size={20} direction="horizontal" />
+                      <DialogTrigger disableButtonEnhancement>
+                        <Flex
+                          direction="column"
+                          align="center"
+                          justify="center"
+                          onClick={e => {
+                            handleLinkShare(e)
+                          }}
+                        >
+                          <PersonLink48Filled />
+                          <Text typography="t9">공유 링크 복사</Text>
+                        </Flex>
+                      </DialogTrigger>
                     </DialogActions>
                   </Flex>
                 ) : (

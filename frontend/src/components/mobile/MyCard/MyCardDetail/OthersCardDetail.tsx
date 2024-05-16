@@ -47,7 +47,7 @@ const OthersCardDetail = ({ setIsDetail }: OthersCardDetailProps) => {
           isEdit={{ value: isEdit, setValue: setIsEdit }}
         />
         <DetailMapSection card={selectedCard} />
-        <DetailBottomSection />
+        <DetailBottomSection card={selectedCard} />
         <MemoSection card={selectedCard} />
       </Container>
     )

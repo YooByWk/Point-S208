@@ -32,6 +32,7 @@ const Tutorial = () => {
     mutationFn: userReg,
     onSuccess(result) {
       setUser(prev => ({ ...prev, userId: result.data_body }))
+      console.log('등록 성공:', result)
     },
     onError(error) {
       console.error('등록 실패:', error)

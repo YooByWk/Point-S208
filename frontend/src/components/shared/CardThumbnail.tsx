@@ -24,6 +24,7 @@ import {
   Delete24Filled,
   MailRead48Filled,
   Dismiss24Filled,
+  PersonLink48Filled,
 } from '@fluentui/react-icons'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
@@ -61,6 +62,7 @@ const CardThumbnail = ({
   const teamAlbumDeleteMutation = useDeleteTeamAlbumCard()
   const teamAlbumId = useParams()?.teamAlbumId
   const [isFirstRender, setIsFirstRender] = useState(true)
+  const hostname = window.location.hostname
 
   function delaySetIsFirstRender() {
     setTimeout(() => {
@@ -119,6 +121,22 @@ const CardThumbnail = ({
     shareCardMutation.mutate({ id: cardInfo.cardId, email: emailInput })
     setIsModalOpen(!isModalOpen)
   }
+  
+  const handleLinkShare = async (event : React.MouseEvent) => {
+    
+    event.stopPropagation()
+    const shareableUrl = `https://${hostname}/index.html#/${cardInfo.cardId}/share?email=${cardInfo.email}&appId=${process.env.REACT_APP_TEAMS_APP_ID}`
+    try {
+      await navigator.clipboard.writeText(shareableUrl)
+      console.log(shareableUrl)
+      alert('URL이 클립보드에 복사되었습니다.')
+      
+    } catch (error) {
+      console.error('URL 복사 중 오류가 발생했습니다:', error)
+    }
+    setIsModalOpen(false)
+  } 
+  
 
   const navigate = useNavigate()
   return (
@@ -217,7 +235,7 @@ const CardThumbnail = ({
                         </>
                       )}
                       {!isEmail ? (
-                        <Flex direction="row" align="center" justify="center">
+                        <Flex direction="row" align="center" justify="space-around">
                           <DialogActions css={fui}>
                             <div css={dismissCss}>
                               <DialogTrigger disableButtonEnhancement>
@@ -231,17 +249,30 @@ const CardThumbnail = ({
                                 </Flex>
                               </DialogTrigger>
                             </div>
-                            <DialogTrigger disableButtonEnhancement>
-                              <Flex
-                                direction="column"
-                                align="center"
-                                justify="center"
-                                onClick={handleEmailClick}
-                              >
-                                <MailRead48Filled />
-                                <Text typography="t9">이메일</Text>
-                              </Flex>
-                            </DialogTrigger>
+
+                              <DialogTrigger disableButtonEnhancement>
+                                <Flex
+                                  direction="column"
+                                  align="center"
+                                  justify="center"
+                                  onClick={handleEmailClick}
+                                >
+                                  <MailRead48Filled />
+                                  <Text typography="t9">이메일</Text>
+                                </Flex>
+                              </DialogTrigger>
+                              <Spacing size={20} direction='horizontal'/>
+                              <DialogTrigger disableButtonEnhancement>
+                                <Flex
+                                  direction="column"
+                                  align="center"
+                                  justify="center"
+                                  onClick={(e) => {handleLinkShare(e)}}
+                                >
+                                  <PersonLink48Filled />
+                                  <Text typography="t9">공유 링크 복사</Text>
+                                </Flex>
+                              </DialogTrigger>
                             {/* <DialogTrigger disableButtonEnhancement>
                               <Flex
                                 direction="column"

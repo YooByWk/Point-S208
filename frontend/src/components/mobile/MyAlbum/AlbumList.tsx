@@ -14,8 +14,8 @@ import { isAlbumState } from '@/stores/emptyCard'
 const AlbumList = () => {
   // 내 명함 리스트
   const userId = useRecoilValue(userState).userId
-  const [searchValue, ] = useState('')
-  const [filterState, ] = useRecoilState(filterStoreState)
+  const [searchValue] = useState('')
+  const [filterState] = useRecoilState(filterStoreState)
   const setIsAlbum = useSetRecoilState(isAlbumState)
 
   const {
@@ -57,7 +57,10 @@ const AlbumList = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+      if (
+        window.innerHeight + window.scrollY >=
+        document.body.offsetHeight - 100
+      ) {
         if (hasNextPage) {
           fetchNextPage()
         }
@@ -73,10 +76,8 @@ const AlbumList = () => {
     setIsAlbum(true)
   }
   //
-
-  const [searchResults, ] = useState<
-    ExternalCardListType | undefined
-  >(undefined)
+  console.log(userId)
+  const [searchResults] = useState<ExternalCardListType | undefined>(undefined)
 
   const renderCards = () => {
     if (cards.length > 0 && cards[0] !== undefined) {
@@ -108,9 +109,9 @@ const AlbumList = () => {
       ) : (
         <div>
           {renderCards()}
-          {isFetchingNextPage && (
-            <Spinner label="불러오는 중..." appearance="inverted" />
-          )}
+          {/* {isFetchingNextPage && (
+            <Spinner label="불러오는 중..."  />
+          )} */}
         </div>
       )}
       {isAddCard && (

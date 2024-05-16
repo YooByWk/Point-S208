@@ -69,7 +69,7 @@ const AlbumCardDetail = () => {
           isEdit={{ value: isEdit, setValue: setIsEdit }}
         />
         <DetailMapSection card={cardInfo} />
-        <DetailBottomSection />
+        <DetailBottomSection card={cardInfo}/>
         {/* <DetailFilter cardId={cardInfo.cardId} /> */}
         <MemoSection card={cardInfo} />
       </Container>

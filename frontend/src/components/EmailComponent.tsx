@@ -48,12 +48,12 @@ const EmailComponent = () => {
 
   const handleAdd = async () => {
     app.getContext().then((context: app.Context) => {
-      console.log('context: ', context.page.id)
-      console.log('context: ', context.page.subPageId)
+      // console.log('context: ', context.page.id)
+      // console.log('context: ', context.page.subPageId)
 
-      console.log('appId: ', appId)
+      // console.log('appId: ', appId)
       const externalUrl = `https://teams.microsoft.com/l/entity/${appId}/myAlbum`
-      console.log(externalUrl)
+      // console.log(externalUrl)
       window.location.href = externalUrl
     })
   }
@@ -62,7 +62,7 @@ const EmailComponent = () => {
     mutationKey: ['getCardInfo'],
     mutationFn: getCardInfo,
     onSuccess(result) {
-      console.log('읽어오기 성공', result)
+      // console.log('읽어오기 성공', result)
       setSelectedCard(result)
     },
     onError(error) {
@@ -90,7 +90,7 @@ const EmailComponent = () => {
           selectedCard.address,
           function (result: LatLng[], status: any) {
             if (status === window.kakao.maps.services.Status.OK) {
-              console.log(result)
+              // console.log(result)
               setPositionArr({
                 y: result[0].y,
                 x: result[0].x,
@@ -116,7 +116,7 @@ const EmailComponent = () => {
               )
               marker.setMap(map)
             } else {
-              console.log('kakao map is not available')
+              // console.log('kakao map is not available')
               const position = new window.kakao.maps.LatLng(
                 positionArr.y,
                 positionArr.x,
