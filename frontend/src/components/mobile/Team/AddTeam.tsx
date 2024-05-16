@@ -186,7 +186,7 @@ const AddTeam = ({ setIsWrite, isWrite }: AddTeamProps) => {
                   sortIcon={false}
                   width="70vw"
                 />
-                <LargeButton text="검색" onClick={handleSearch} width="10vw" />
+                <LargeButton  typography='t8' text="검색"  onClick={handleSearch} width="15vw" />
               </Flex>
               <Spacing size={20} direction="vertical" />
               {SearchResults === undefined || SearchResults.length > 0 ? (
@@ -263,7 +263,7 @@ const btnContainer = css`
   width: 100%;
 `
 const inputCss = css`
-  width: 90%;
+  width: 81vw;
   font-size: 16px !important;
   /* margin-left: 5%; */
   background-color: ${tokens.colorNeutralBackground1Hover} !important;

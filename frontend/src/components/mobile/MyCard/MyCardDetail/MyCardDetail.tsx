@@ -14,7 +14,7 @@ const MyCardDetail = ({ list }: { list: ExternalCardType[] | CardType[] }) => {
 
   const renderContent = () => {
     if (editOpen) return <InfoEdit value={editOpen} setValue={setEditOpen} />
-    if (isDetail) return <OthersCardDetail />
+    if (isDetail) return <OthersCardDetail setIsDetail={setIsDetail} />
     return (
       <Container>
         <CardSection />

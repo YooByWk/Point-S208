@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-
 import { useState } from 'react'
 import Flex from '@/components/shared/Flex'
 import {
@@ -85,7 +84,6 @@ const MultiSelectBar = ({
     XLSX.utils.book_append_sheet(wb, ws, '사용자 정보')
 
     XLSX.writeFile(wb, '명함.xlsx')
-    // console.log('selectedCardDetails: ', selectedCardDetails)
   }
 
   const handleDelete = async () => {
@@ -95,7 +93,6 @@ const MultiSelectBar = ({
         cardIdArray: selectedCards,
         userId: userId,
       }
-      // console.log('teamAlbumId: ', teamAlbumId)
       // teamAlubmDeleteMutation.mutate(selectedCards)
       teamAlubmDeleteMutation.mutate(params)
       return
@@ -129,7 +126,7 @@ const MultiSelectBar = ({
         )}
       </Flex>
       <Flex>
-        <ArrowDownload24Regular onClick={handleDownload} />
+        {/* <ArrowDownload24Regular onClick={handleDownload} /> */}
         <SmallModal
           icon={<Delete24Filled />}
           dialogTitle="명함 삭제"

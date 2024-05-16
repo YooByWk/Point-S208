@@ -5,7 +5,7 @@ import Spacing from '@/components/shared/Spacing'
 import { themeState } from '@/stores/common'
 import Input from '@/components/shared/Input'
 import { colors } from '@/styles/colorPalette'
-import { css } from '@emotion/react'
+import { css, keyframes } from '@emotion/react'
 import styled from '@emotion/styled'
 import {
   Accordion,
@@ -21,6 +21,7 @@ import {
   DialogSurface,
   DialogTitle,
   DialogTrigger,
+  tokens,
 } from '@fluentui/react-components'
 import { useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
@@ -50,6 +51,8 @@ const BottomSection = ({
   const [openItems, setOpenItems] = useState(['0'])
   const handleToggle: AccordionToggleEventHandler<string> = (event, data) => {
     setOpenItems(data.openItems)
+    console.log(data.openItems)
+    console.log(openItems.includes('1')? 'true' : 'false');
   }
 
   const shareCardMutation = useShareCard()
@@ -86,7 +89,7 @@ const BottomSection = ({
           <AccordionHeader expandIconPosition="end">
             <Text typography="t8">최근 등록한 명함</Text>
           </AccordionHeader>
-          <AccordionPanel>
+          <AccordionPanel css={slideDownAnimation}>
             <Flex css={setMaxHeight}>
               {list.length === 0 ? (
                 <>
@@ -246,16 +249,33 @@ const inputCss = css`
 
 // css
 
+const slideDown = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+
+
+const slideDownAnimation = css`
+  animation: ${slideDown} 0.55s ease-out forwards;
+`;
+
 const containerStyle = css`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  background-color: ${colors.themeTextInverted};
+  background-color: ${tokens.colorNeutralBackground1};
   padding: 10px;
 `
 
 const itemStyle = (theme: string) => css`
-  background-color: ${theme === 'dark' ? '#242424' : '#fafafa'};
+  background-color: ${tokens.colorNeutralBackground1Selected};
   border-radius: 15px;
 `
 

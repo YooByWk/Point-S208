@@ -44,7 +44,7 @@ const NewlyAdded = ({
 
   return (
     <>
-      <Flex align="center">
+      <Flex align="center" css={bg}>
         <Flex align="center" onClick={handleOnClick}>
           {/* 사진 */}
           <Flex css={boxStyles} align="center">
@@ -53,6 +53,7 @@ const NewlyAdded = ({
                 fit="contain"
                 src={card.realPicture}
                 alt={`${card.name}'s card`}
+                onClick={()=>console.log('여기')}
               />
             ) : (
               <WebMakeBusinessCard
@@ -72,6 +73,12 @@ const NewlyAdded = ({
 }
 
 export default NewlyAdded
+
+// css
+
+const bg = css`
+  
+`
 
 const boxStyles = css`
   width: 40vw;

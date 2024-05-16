@@ -71,6 +71,7 @@ const buttonCss = (props: any) => css`
   &:active{
     background-color: ${props.secondary ? tokens.colorNeutralStroke1Pressed : null};
   }
+  min-width: 20px;
 `;
 
 const searchBoxContainerCss = css`

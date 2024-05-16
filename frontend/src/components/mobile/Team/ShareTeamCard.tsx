@@ -21,12 +21,12 @@ interface TeamCardProps {
 }
 const ShareTeamCard = ({ teamInfo,onClick }: TeamCardProps) => {
   const [isHover, setIsHover] = useState(false)
-  
+  const teamAlbumId = teamInfo.teamAlbumId
   return (
     <div css={container}>
       <div css={bg} onClick={onClick}>
         <Flex direction="row" align="center" justify='space-around'>
-          <TeamCardThumbnail cardInfo={cardInfo} /> 
+          <TeamCardThumbnail cardInfo={cardInfo} teamAlbumId={teamAlbumId} css={teamCss}/> 
           <Flex direction="column" align="center">
             <Text typography="t7" bold={true} color="themeText">
               {teamInfo.teamName}
@@ -49,15 +49,23 @@ const ShareTeamCard = ({ teamInfo,onClick }: TeamCardProps) => {
 export default ShareTeamCard
 
 const container = css`
-    width: 100%;
+  width: 100%;
   display: flex;
   justify-content: center;
+  align-items: center;
 `
 
+const teamCss = css`
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
 const bg = css`
   /* padding-left:3%; */
   width: 85%;
   margin-bottom: 7%;
+  padding-top: 3%;
   background-color: ${tokens.colorNeutralBackground4};
   border-radius: 15px;
   height: 130px;

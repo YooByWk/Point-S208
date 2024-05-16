@@ -6,7 +6,7 @@ import SearchBox from '@/components/shared/SearchBox'
 import { useState } from 'react'
 import MultiSelectBar from '@/components/shared/MultiSelectBar'
 import Spacing from '@/components/shared/Spacing'
-import { css, keyframes } from '@emotion/react'
+import { css } from '@emotion/react'
 import LargeButton from './LargeButton'
 import ShareCard from '@/components/mobile/Team/ShareCard'
 import { Spinner, tokens } from '@fluentui/react-components'
@@ -19,7 +19,6 @@ import { filterState } from '@/stores/album'
 import { useQuery } from '@tanstack/react-query'
 import { fetchAllAlbum } from '@/apis/album'
 import { userState } from '@/stores/user'
-import { Transition } from 'react-transition-group';
 import { useSaveToMyAlbum } from '@/hooks/useSaveToMyAlbum'
 
 interface CardListProps {
@@ -47,8 +46,6 @@ const CardList = ({
   const saveToMyAlbumMutation = useSaveToMyAlbum()
   const userId = useRecoilValue(userState).userId
 
-  
-    
   const handleCardSelect = (cardId: number) => {
     setSelectedCards(prev =>
       prev.includes(cardId)
@@ -90,7 +87,6 @@ const CardList = ({
   const handleAddToMyCard = async () => {
     const tmp = await fetchAllAlbum({ userId })
     const myList = tmp.data_body.map((card: CardType) => card.cardId)
-    console.log(myList, '팀에서 유저에게 전송')
     const filteredCards = selectedCards.filter(card => !myList.includes(card))
     if (userId !== undefined) {
       saveToMyAlbumMutation.mutate({ userId, cardIds: filteredCards })
@@ -116,11 +112,13 @@ const CardList = ({
             memberIcon={isTeam ? true : false}
             spacing={false}
             filterIcon={false}
+            sortIcon={false}
           />
           <Spacing size={15} />
           <MultiSelectBar
             selectedCards={selectedCards}
             allCards={cards}
+            
             setSelectedCards={setSelectedCards}
             cardCnt={isTeam ? cards.length : data ? data.data_body.length : 0}
           />
@@ -225,7 +223,6 @@ const CardList = ({
 }
 
 export default CardList
-
 
 // css
 

@@ -93,7 +93,6 @@ const AlbumList = () => {
       return <CardList cards={[]} isTeam={false} handleAdd={handleAdd} />
     }
   }
-
   if (isLoading) {
     return <Spinner label="로딩 중..." style={{ height: '100vh' }} />
   }

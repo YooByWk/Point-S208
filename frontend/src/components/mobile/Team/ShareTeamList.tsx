@@ -41,9 +41,6 @@ const TeamList = () => {
   const teamList: TeamListType[] = data || []
 
   const param = useLocation()
-  const negro = useParams()
-  console.log(negro)
-  console.log('ppppppppppp', param?.state)
   if (isLoading) {
     return (
       <Flex
@@ -58,8 +55,6 @@ const TeamList = () => {
     )
   }
   const handleShareClick = async () => {
-    console.log('이 로그 아래, 즉여기에 로직 넣으면 됨')
-    console.log(param, param.state.cardId, typeof param.state)
     shareToTeamCard(
       userId as number,
       selectedTeam.teamAlbumId,

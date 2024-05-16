@@ -32,6 +32,7 @@ interface SearchBoxProps {
   isTeam?: boolean
   disabled?: boolean
   size?: 'small' | 'large' | 'medium' | undefined
+  buttonSize?: number
 }
 /**
  *

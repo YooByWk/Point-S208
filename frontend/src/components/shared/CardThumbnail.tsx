@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import type { CardType } from '@/types/cardType'
 import Flex from '@/components/shared/Flex'
 import Text from '@/components/shared/Text'
@@ -54,7 +54,7 @@ const CardThumbnail = ({
   selectedCards,
   forShare = false,
   scale = 1,
-  index =NaN,
+  index = NaN,
 }: CardThumbnailProps) => {
   const [isfavorite, setIsFavorite] = useState(false)
   const [isChecked, setIsChecked] = useState(false)
@@ -63,7 +63,17 @@ const CardThumbnail = ({
   const myAlbumDeletemutation = useDeleteAlbumCard()
   const teamAlbumDeleteMutation = useDeleteTeamAlbumCard()
   const teamAlbumId = useParams()?.teamAlbumId
+  const [isFirstRender, setIsFirstRender] = useState(true)
 
+  
+  function delaySetIsFirstRender() {
+    setTimeout(() => {
+      setIsFirstRender(false);
+    }, index * 200)
+  }
+  useEffect(() => {
+    delaySetIsFirstRender()
+  }, [isFirstRender])
   const handleCheck = (event: React.MouseEvent) => {
     event.stopPropagation()
     setIsChecked(!isChecked)
@@ -75,7 +85,7 @@ const CardThumbnail = ({
 
     setIsFavorite(!isfavorite)
     /*  api 호출 */
-    console.log('즐겨찾기 : ', cardInfo)
+    // console.log('즐겨찾기 : ', cardInfo)
   }
 
   const handleShare = (event: React.MouseEvent) => {
@@ -92,7 +102,6 @@ const CardThumbnail = ({
       return
     }
     myAlbumDeletemutation.mutate(cardInfo.cardId)
-    console.log('삭제 : ', cardInfo.cardId)
   }
   const shareCardMutation = useShareCard()
   const [isEmail, setIsEmail] = useState(false)
@@ -119,13 +128,12 @@ const CardThumbnail = ({
   const navigate = useNavigate()
   return (
     <div
-      css={cardContainer(forShare, scale, index)}
+      css={cardContainer(forShare, scale, index, isFirstRender)}
       onClick={() => {
         if (forShare) {
           setIsChecked(!isChecked)
           onSelect(cardInfo.cardId)
         } else {
-          console.log(teamAlbumId ? '팀앨범' : '내앨범')
           teamAlbumId
             ? navigate(`${cardInfo.cardId}`, {
                 state: { cardInfo, teamAlbumId },
@@ -152,13 +160,19 @@ const CardThumbnail = ({
               : cardInfo.name.padEnd(6, ' ')}
           </Text>
           <Text typography="t9" css={infoContent}>
-            {cardInfo.department && cardInfo.position
-              ? `${cardInfo.department} / ${cardInfo.position}`
-              : cardInfo.department || cardInfo.position}
-          </Text>
-          <Text typography="t9" css={infoContent}>
             {cardInfo.company}
           </Text>
+          {cardInfo.department && (
+            <Text typography="t9" css={infoContent}>
+              {cardInfo.department}
+            </Text>
+          )}
+          {cardInfo.position && (
+            <Text typography="t9" css={infoContent}>
+              {cardInfo.position}
+            </Text>
+          )}
+
         </Flex>
 
         {cardInfo.realPicture || cardInfo.digitalPicture ? (
@@ -300,9 +314,22 @@ const CardThumbnail = ({
 
 export default CardThumbnail
 
-// css
+// css 
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`
 
-const cardContainer = (forShare: boolean, scale: number, index:number) => css`
+const cardContainer = (
+  forShare: boolean,
+  scale: number,
+  index: number,
+  isFirstRender: boolean,
+) => css`
   border-radius: 10px;
   width: 85%;
   min-height: 120px;
@@ -311,18 +338,18 @@ const cardContainer = (forShare: boolean, scale: number, index:number) => css`
   background-color: ${tokens.colorNeutralBackground1Selected};
   min-height: 100px;
   scale: ${forShare ? scale : 1};
-  animation: ${fadeIn} 0.125s linear forwards;
-  opacity: 0;
-  animation-delay: ${isNaN(index)? 0: index * 0.12}s;
+  animation: ${isFirstRender ? css`${fadeIn} 0.15s linear forwards` : 'none'};
+  opacity: ${isFirstRender ? 0 : 1};
+  animation-delay: ${isNaN(index)  ? 0 : index * 0.12}s;
   /* padding: 10px; */
 
   &:hover,
   &:active,
   &.wave {
-    animation: wave 1.2s ease ;
+    animation: wave 1.2s ease;
     background: linear-gradient(
       90deg,
-      ${tokens.colorNeutralBackground1Selected} 0%,
+      ${tokens.colorNeutralBackground1Selected} 6%,
       ${tokens.colorNeutralBackground4Hover} 100%
     );
     background-size: 200% 200%;
@@ -333,10 +360,10 @@ const cardContainer = (forShare: boolean, scale: number, index:number) => css`
     }
     100% {
       background-position: 80% 50%;
-      background: ${tokens.colorNeutralBackground1Selected};
     }
   }
 `
+// css
 
 const i = css`
   margin-bottom: 15px;
@@ -345,6 +372,7 @@ const i = css`
 const infoContent = css`
   overflow: hidden;
   max-width: 140px;
+  text-align: center;
 `
 
 const infoCss = css`
@@ -403,11 +431,4 @@ const content = css`
   margin: 0;
 `
 
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-`
+

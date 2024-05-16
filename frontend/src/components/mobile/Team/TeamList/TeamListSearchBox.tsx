@@ -81,7 +81,7 @@ const TeamListSearchBox: React.FC<SearchBoxProps> = ({
         <PeopleFilterSortIcons
           memberIcon={false}
           filterIcon={false}
-          sortIcon={sortIcon}
+          sortIcon={false}
         />
       </Flex>
     </div>

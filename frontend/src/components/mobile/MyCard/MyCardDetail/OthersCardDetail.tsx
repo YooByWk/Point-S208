@@ -1,7 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { useState } from 'react'
-import { useLocation, useParams } from 'react-router-dom'
-import { CardType } from '@/types/cardType'
 import DetailInfoSection from '@components/mobile/MyAlbum/MyAlbumDetail/DetailSection'
 import DetailInfoEdit from '@components/mobile/MyAlbum/MyAlbumDetail/DetailInfoEdit'
 import DetailCardSection from '@components/mobile/MyAlbum/MyAlbumDetail/DetailCardSection'
@@ -10,11 +8,15 @@ import styled from '@emotion/styled'
 import BackArrow from '@/components/shared/BackArrow'
 import DetailMapSection from '@components/mobile/MyAlbum/MyAlbumDetail/DetailMapSection'
 import MemoSection from '@components/mobile/MyAlbum/MyAlbumDetail/MemoSection'
-import { ExternalCardType } from '@/types/ExternalCard'
 import { useRecoilValue } from 'recoil'
 import { selectedCardState } from '@/stores/card'
+import Spacing from '@/components/shared/Spacing'
 
-const OthersCardDetail = () => {
+interface OthersCardDetailProps {
+  setIsDetail: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+const OthersCardDetail = ({ setIsDetail }: OthersCardDetailProps) => {
   const [isEdit, setIsEdit] = useState(false)
   const [isReal, setIsReal] = useState(true)
   const selectedCard = useRecoilValue(selectedCardState)
@@ -27,9 +29,15 @@ const OthersCardDetail = () => {
           card={selectedCard}
         />
       )
+
+    const handleBack = () => {
+      setIsDetail(false)
+    }
+
     return (
       <Container>
-        <BackArrow />
+        <BackArrow onClick={handleBack} />
+        <Spacing size={20} />
         <DetailCardSection
           isRealState={{ value: isReal, setValue: setIsReal }}
           card={selectedCard}
@@ -40,12 +48,8 @@ const OthersCardDetail = () => {
         />
         <DetailMapSection card={selectedCard} />
         <DetailBottomSection />
-        {/*  memo section necesita */}
-        {/* <DetailFilter cardId={cardId}/> */}
         <MemoSection card={selectedCard} />
       </Container>
-      // 지도 : 수정하기
-      // 메모 : 수정하기
     )
   }
   return <>{renderContent()}</>
