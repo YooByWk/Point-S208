@@ -20,6 +20,8 @@ public interface TeamsMapper {
 
     @Mapping(source = "teamAlbumDetail.businesscard.cardId", target = "cardId")
     @Mapping(source = "teamAlbumDetail.businesscard.name", target = "name")
+    @Mapping(source = "teamAlbumDetail.businesscard.company", target = "company")
+    @Mapping(source = "teamAlbumDetail.businesscard.position", target = "position")
     @Mapping(source = "teamAlbumDetail.businesscard.rank", target = "rank")
     @Mapping(source = "teamAlbumDetail.businesscard.department", target = "department")
     @Mapping(source = "teamAlbumDetail.businesscard.email", target = "email")

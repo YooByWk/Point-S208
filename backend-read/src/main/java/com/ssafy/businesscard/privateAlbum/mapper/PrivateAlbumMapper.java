@@ -16,6 +16,8 @@ public interface PrivateAlbumMapper {
 
     @Mapping(source = "privateAlbum.businesscard.cardId", target = "cardId")
     @Mapping(source = "privateAlbum.businesscard.name", target = "name")
+    @Mapping(source = "privateAlbum.businesscard.company", target = "company")
+    @Mapping(source = "privateAlbum.businesscard.position", target = "position")
     @Mapping(source = "privateAlbum.businesscard.rank", target = "rank")
     @Mapping(source = "privateAlbum.businesscard.department", target = "department")
     @Mapping(source = "privateAlbum.businesscard.email", target = "email")
