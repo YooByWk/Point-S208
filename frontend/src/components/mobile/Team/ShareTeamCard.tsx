@@ -6,12 +6,10 @@ import TeamCardThumbnail from './TeamCardThumbnail'
 import { dummyCard } from '@/assets/data/dummyCard'
 import Flex from '@/components/shared/Flex'
 import Text from '@/components/shared/Text'
-import { colors } from '@/styles/colorPalette'
 import Spacing from '@/components/shared/Spacing'
 import { css } from '@emotion/react'
 import { tokens } from '@fluentui/react-components'
 import type { TeamListType } from '@/types/TeamListType'
-import { useState } from 'react'
 
 /*  유저의 디지털 카드가 필요함*/
 const cardInfo: CardType = dummyCard[0]
@@ -19,14 +17,17 @@ interface TeamCardProps {
   teamInfo: TeamListType
   onClick?: () => void
 }
-const ShareTeamCard = ({ teamInfo,onClick }: TeamCardProps) => {
-  const [isHover, setIsHover] = useState(false)
+const ShareTeamCard = ({ teamInfo, onClick }: TeamCardProps) => {
   const teamAlbumId = teamInfo.teamAlbumId
   return (
     <div css={container}>
       <div css={bg} onClick={onClick}>
-        <Flex direction="row" align="center" justify='space-around'>
-          <TeamCardThumbnail cardInfo={cardInfo} teamAlbumId={teamAlbumId} css={teamCss}/> 
+        <Flex direction="row" align="center" justify="space-around">
+          <TeamCardThumbnail
+            cardInfo={cardInfo}
+            teamAlbumId={teamAlbumId}
+            css={teamCss}
+          />
           <Flex direction="column" align="center">
             <Text typography="t7" bold={true} color="themeText">
               {teamInfo.teamName}
@@ -39,7 +40,7 @@ const ShareTeamCard = ({ teamInfo,onClick }: TeamCardProps) => {
               {teamInfo.cardSize}개의 명함
             </Text>
           </Flex>
-        <Spacing size={15} direction="vertical" />
+          <Spacing size={15} direction="vertical" />
         </Flex>
       </div>
     </div>
@@ -75,17 +76,20 @@ const bg = css`
   &:active,
   &.wave {
     animation: wave 1.2s ease forwards;
-    background: linear-gradient(90deg, ${tokens.colorNeutralBackground4Hover} 0%, ${tokens.colorNeutralBackground1Hover} 100%);
+    background: linear-gradient(
+      90deg,
+      ${tokens.colorNeutralBackground4Hover} 0%,
+      ${tokens.colorNeutralBackground1Hover} 100%
+    );
     background-size: 200% 200%;
   }
   @keyframes wave {
     0% {
-        background-position: 10% 50%;
+      background-position: 10% 50%;
     }
     100% {
-        background-position: 80% 50%;
-        background: ${tokens.colorNeutralBackground4};
+      background-position: 80% 50%;
+      background: ${tokens.colorNeutralBackground4};
     }
   }
 `
-

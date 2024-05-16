@@ -14,8 +14,8 @@ import { isAlbumState } from '@/stores/emptyCard'
 const AlbumList = () => {
   // 내 명함 리스트
   const userId = useRecoilValue(userState).userId
-  const [searchValue, setSearchValue] = useState('')
-  const [filterState, setFilterState] = useRecoilState(filterStoreState)
+  const [searchValue, ] = useState('')
+  const [filterState, ] = useRecoilState(filterStoreState)
   const setIsAlbum = useSetRecoilState(isAlbumState)
 
   const {
@@ -74,7 +74,7 @@ const AlbumList = () => {
   }
   //
 
-  const [searchResults, setSearchResults] = useState<
+  const [searchResults, ] = useState<
     ExternalCardListType | undefined
   >(undefined)
 

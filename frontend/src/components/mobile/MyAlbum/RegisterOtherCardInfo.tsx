@@ -3,24 +3,24 @@ import Flex from '@shared/Flex'
 import Spacing from '@shared/Spacing'
 import TextField from '@shared/TextField'
 import { cardInput } from '@/types/cardInput'
-import {
-  ChangeEvent,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react'
+import { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { css } from '@emotion/react'
 import { Button } from '@fluentui/react-components'
-import {  useRecoilValue,  } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import { userState } from '@/stores/user'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { RegisterOtherCard } from '@/apis/album'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useTeamCardAdd } from '@/hooks/Team/useTeamCardAdd'
-import { TeamListType } from '@/types/TeamListType';
+import { TeamListType } from '@/types/TeamListType'
 
-const RegisterOtherCardInfo = ({isEnglish, params}: {
-  isEnglish:boolean, params?: unknown}) => {
+const RegisterOtherCardInfo = ({
+  isEnglish,
+  params,
+}: {
+  isEnglish: boolean
+  params?: unknown
+}) => {
   const [cardInputs, setCardInputs] = useState({
     name: '',
     company: '',
@@ -34,12 +34,11 @@ const RegisterOtherCardInfo = ({isEnglish, params}: {
     address: '',
     domainUrl: '',
   })
-  
+
   const userId = useRecoilValue(userState).userId
   const location = useLocation()
   const teamInfo: TeamListType = location.state.teamInfo
   const navigate = useNavigate()
-  // console.log(location)
   const [dirty, setDirty] = useState<Partial<cardInput>>({})
   const queryClient = useQueryClient()
   const teamCardMutation = useTeamCardAdd()
@@ -61,8 +60,7 @@ const RegisterOtherCardInfo = ({isEnglish, params}: {
     mutationKey: ['RegisterOtherCard'],
     mutationFn: RegisterOtherCard,
     onSuccess: res => {
-      console.log('명함 등록 성공', res)
-      queryClient.invalidateQueries({queryKey: ['fetchMyAlbum']})
+      queryClient.invalidateQueries({ queryKey: ['fetchMyAlbum'] })
       navigate(-1)
     },
     onError: error => {
@@ -70,7 +68,7 @@ const RegisterOtherCardInfo = ({isEnglish, params}: {
     },
   })
 
-  const handleRegisterCard = async(cardInputs: cardInput) => {
+  const handleRegisterCard = async (cardInputs: cardInput) => {
     var params = {
       userId: userId as number,
       data: {
@@ -84,21 +82,19 @@ const RegisterOtherCardInfo = ({isEnglish, params}: {
         faxNumber: cardInputs.faxNumber,
         address: cardInputs.address,
         domainUrl: cardInputs.domainUrl,
-        frontBack: 'FRONT' // 첫 추가는 앞면.
+        frontBack: 'FRONT', // 첫 추가는 앞면.
       },
     }
     if (teamInfo === undefined) {
-    console.log('팀이아님');
-    mutate(params)
-    return
+      mutate(params)
+      return
     }
-    
+
     if (teamInfo !== undefined) {
-      console.log('팀 환경에서의 명함 등록')  
       teamCardMutation.mutate({
         userId: userId as number,
         teamAlbumId: teamInfo.teamAlbumId,
-        data: params.data
+        data: params.data,
       })
       navigate(-1)
     }
@@ -216,7 +212,7 @@ const RegisterOtherCardInfo = ({isEnglish, params}: {
           onBlur={handleBlur}
         />
         <Spacing size={16} />
-        
+
         <TextField
           label="주소"
           type="address"

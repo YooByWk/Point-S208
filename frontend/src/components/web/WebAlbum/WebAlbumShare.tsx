@@ -15,7 +15,6 @@ import {
 import { useMutation } from '@tanstack/react-query'
 import { useRecoilValue } from 'recoil'
 import { shareCard } from '@/apis/album'
-import { selectedCardState } from '@/stores/card'
 import { colors } from '@/styles/colorPalette'
 import TextField from '@/components/shared/TextField'
 import { ChangeEvent, useCallback, useState } from 'react'
@@ -46,9 +45,7 @@ const WebAlbumShare = ({
   const { mutate } = useMutation({
     mutationKey: isDigital ? ['shareMyCard'] : ['shareCard'],
     mutationFn: isDigital ? shareMyCard : shareCard,
-    onSuccess(result) {
-      console.log('공유 성공', result)
-    },
+    onSuccess(result) {},
     onError(error) {
       console.error('공유 실패:', error)
     },

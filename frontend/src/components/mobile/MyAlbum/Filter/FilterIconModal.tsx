@@ -38,7 +38,11 @@ import AddFilter from '@/components/mobile/MyAlbum/Filter/AddFillter'
 import React from 'react'
 import { filterState as filterStoreState } from '@/stores/album'
 import { useParams } from 'react-router-dom'
-import { deleteTeamFilter, editTeamFilter, fetchTeamFilterList } from '@/apis/team'
+import {
+  deleteTeamFilter,
+  editTeamFilter,
+  fetchTeamFilterList,
+} from '@/apis/team'
 ///
 const NoFilter = ({ handleAddFilter }: { handleAddFilter: () => void }) => {
   return (
@@ -74,9 +78,12 @@ const Filter = ({
       <Spacing size={30} direction="horizontal" />
       <Edit16Filled onClick={onClick} />
       <Spacing size={15} direction="horizontal" />
-      <Delete16Filled onClick={(e) => {
-        e.stopPropagation()
-        onDelete(filterId, filterName)}} />
+      <Delete16Filled
+        onClick={e => {
+          e.stopPropagation()
+          onDelete(filterId, filterName)
+        }}
+      />
     </Flex>
   )
 }
@@ -97,11 +104,11 @@ const FilterIconModal: React.FC<LargeModalProps> = ({
   const [isAddFilter, setIsAddFilter] = useState(false)
   const [editingFilterId, setEditingFilterId] = useState<number | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [filterState, setFilterState] = useRecoilState(filterStoreState)
+  const [, setFilterState] = useRecoilState(filterStoreState)
   const queryClient = useQueryClient()
   const params = useParams()
   const teamAlbumId = Number(params['teamAlbumId'])
-  
+
   // 팀여부 확인완료
   const { data } = useQuery({
     queryKey: teamAlbumId ? ['fetchTeamFilterList'] : ['fetchFilterList'],
@@ -112,7 +119,6 @@ const FilterIconModal: React.FC<LargeModalProps> = ({
   let filterList: FilterListType = useMemo(() => {
     return data?.data_body || []
   }, [data])
-  console.log(filterList)
   const handleAddFilter = () => {
     setIsAddFilter(!isAddFilter)
   }
@@ -159,7 +165,7 @@ const FilterIconModal: React.FC<LargeModalProps> = ({
       })
     }
   }, [filterList])
-  
+
   // 팀여부 확인완료
   const { mutate: mutateFilter } = useMutation({
     mutationKey: ['editFilter'],
@@ -181,9 +187,17 @@ const FilterIconModal: React.FC<LargeModalProps> = ({
   const { mutate: mutateDeleteFilter } = useMutation({
     mutationKey: ['deleteFilter'],
     mutationFn: teamAlbumId
-      ? ({ userId, filterId, teamAlbumId }: { userId: number; filterId: number, teamAlbumId:number }) => deleteTeamFilter(userId, teamAlbumId, filterId)
-      :({ userId, filterId }: { userId: number; filterId: number }) =>
-      deleteFilter(userId, filterId),
+      ? ({
+          userId,
+          filterId,
+          teamAlbumId,
+        }: {
+          userId: number
+          filterId: number
+          teamAlbumId: number
+        }) => deleteTeamFilter(userId, teamAlbumId, filterId)
+      : ({ userId, filterId }: { userId: number; filterId: number }) =>
+          deleteFilter(userId, filterId),
     onSuccess() {
       queryClient.invalidateQueries({ queryKey: ['fetchFilterList'] })
     },
@@ -194,7 +208,7 @@ const FilterIconModal: React.FC<LargeModalProps> = ({
       userId: userId as number,
       filterId: filterId,
       filterName: filterNames[filterId],
-      teamAlbumId
+      teamAlbumId,
     }
     mutateFilter(editData)
     setEditingFilterId(null)
@@ -202,7 +216,11 @@ const FilterIconModal: React.FC<LargeModalProps> = ({
 
   const handleDeleteFilter = (filterId: number, filterName: string) => {
     if (window.confirm(`${filterName}을/를 삭제하시겠습니까?`)) {
-      mutateDeleteFilter({ userId: userId as number, filterId: filterId, teamAlbumId })
+      mutateDeleteFilter({
+        userId: userId as number,
+        filterId: filterId,
+        teamAlbumId,
+      })
     }
   }
 

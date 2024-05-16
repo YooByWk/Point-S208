@@ -3,16 +3,8 @@
 import Text from '@/components/shared/Text'
 import Flex from '@/components/shared/Flex'
 import Spacing from '@/components/shared/Spacing'
-import { themeState } from '@/stores/common'
-import { colors } from '@/styles/colorPalette'
 import { css } from '@emotion/react'
-import styled from '@emotion/styled'
 import {
-  Accordion,
-  AccordionHeader,
-  AccordionItem,
-  AccordionPanel,
-  AccordionToggleEventHandler,
   Button,
   Dialog,
   DialogActions,
@@ -23,26 +15,12 @@ import {
   DialogTrigger,
 } from '@fluentui/react-components'
 import { useState } from 'react'
-import { useRecoilValue } from 'recoil'
 import { useParams } from 'react-router-dom'
-import SmallModal from '@/components/shared/SmallModal'
-import ShareModal from './shareModal'
-import {
-  MailRead48Filled,
-  ArrowCircleDown48Filled,
-  Dismiss24Filled,
-} from '@fluentui/react-icons'
+import { MailRead48Filled, Dismiss24Filled } from '@fluentui/react-icons'
 import Input from '@/components/shared/Input'
-import LargeButton from '@/components/shared/LargeButton'
 import { useShareCard } from '@/hooks/useShareCard'
-import ResModal from '@/components/shared/resModal'
 
 const DetailBottomSection = () => {
-  const theme = useRecoilValue(themeState)
-  const [openItems, setOpenItems] = useState(['0'])
-  const handleToggle: AccordionToggleEventHandler<string> = (event, data) => {
-    setOpenItems(data.openItems)
-  }
   const params = useParams()
   const cardId: number = Number(params.cardId)
   const shareCardMutation = useShareCard()
@@ -61,7 +39,6 @@ const DetailBottomSection = () => {
   }
 
   const handleEmailSubmit = () => {
-    // console.log(emailInput)
     shareCardMutation.mutate({ id: cardId, email: emailInput })
     setIsModalOpen(!isModalOpen)
   }
@@ -171,41 +148,6 @@ export default DetailBottomSection
 
 const inputCss = css`
   width: 80%;
-`
-
-const Wrap = styled.div`
-  display: flex;
-  gap: 30px;
-  margin: 0 20px 20px;
-`
-
-const Card = styled.div`
-  width: 80px;
-  height: 80px;
-  border: 1px solid ${colors.themeText};
-`
-
-const People = styled.div`
-  width: 50px;
-  height: 50px;
-  border: 1px solid ${colors.themeText};
-  border-radius: 50px;
-  margin-bottom: 5px;
-`
-
-// css
-
-const containerStyle = css`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  background-color: ${colors.themeTextInverted};
-  padding: 10px;
-`
-
-const itemStyle = (theme: string) => css`
-  background-color: ${theme === 'dark' ? '#242424' : '#fafafa'};
-  border-radius: 15px;
 `
 
 const fui = css`

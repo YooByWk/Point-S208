@@ -1,32 +1,31 @@
-import { Button, makeStyles, tokens } from '@fluentui/react-components'
-import { colors, Colors } from '@/styles/colorPalette'
-import { CSSProperties } from 'react'
+import { Button, tokens } from '@fluentui/react-components'
+import { colors } from '@/styles/colorPalette'
 /** @jsxImportSource @emotion/react */
 // import type { ButtonProps } from "@fluentui/react-components"
 import Text from '@/components/shared/Text'
 import { css } from '@emotion/react'
 import Flex from './Flex'
-import { Typography, typographyMap } from '@styles/typography'
+import { Typography } from '@styles/typography'
 interface ButtonProps {
   text: string
   onClick?: () => void
-  width?:   string 
-  height?:   string
+  width?: string
+  height?: string
   disabled?: boolean
   secondary?: boolean
   typography?: Typography
 }
 /**
- * @param 
- *  onclick: () => void, 
- * @param 
+ * @param
+ *  onclick: () => void,
+ * @param
  * text: string,
  * @param
- *  width?: string, 
+ *  width?: string,
  * @param
- * height?: string, 
+ * height?: string,
  * @param
- * disabled?: boolean 
+ * disabled?: boolean
  */
 const LargeButton: React.FC<ButtonProps> = ({
   text,
@@ -35,16 +34,18 @@ const LargeButton: React.FC<ButtonProps> = ({
   height,
   disabled,
   secondary,
-  typography='t6'
+  typography = 't6',
 }) => {
   return (
-    <Flex  justify='center' css={searchBoxContainerCss} >
+    <Flex justify="center" css={searchBoxContainerCss}>
       <Button
         shape="rounded"
-        onClick={onClick? onClick : () => {}}
-        appearance= {secondary? "secondary" : disabled ? "secondary" : "primary"}
+        onClick={onClick ? onClick : () => {}}
+        appearance={
+          secondary ? 'secondary' : disabled ? 'secondary' : 'primary'
+        }
         css={buttonCss({ width, height, secondary })}
-        disabled={disabled? disabled : false}
+        disabled={disabled ? disabled : false}
       >
         <Text
           bold={false}
@@ -65,16 +66,19 @@ const buttonCss = (props: any) => css`
   width: ${props.width ? props.width : '50vw'};
   height: ${props.height ? props.height : '2.5rem'};
   background-color: ${props.secondary ? tokens.colorNeutralStroke1 : null};
-  &:hover{
-    background-color: ${props.secondary ? tokens.colorNeutralStroke1Hover : null};
+  &:hover {
+    background-color: ${props.secondary
+      ? tokens.colorNeutralStroke1Hover
+      : null};
   }
-  &:active{
-    background-color: ${props.secondary ? tokens.colorNeutralStroke1Pressed : null};
+  &:active {
+    background-color: ${props.secondary
+      ? tokens.colorNeutralStroke1Pressed
+      : null};
   }
   min-width: 20px;
-`;
+`
 
 const searchBoxContainerCss = css`
   /* background-color: ${tokens.colorNeutralBackground1}; */
 `
-

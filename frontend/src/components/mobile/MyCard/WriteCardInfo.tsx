@@ -69,7 +69,6 @@ const WriteCardInfo = ({
     mutationKey: ['writeMyCard'],
     mutationFn: writeMyCard,
     onSuccess(result) {
-      console.log('등록 성공', result)
       setWriteInfo(false)
       setIsFirstCard(false)
       refetch()

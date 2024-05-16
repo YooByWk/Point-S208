@@ -54,7 +54,6 @@ const TeamListSearchBox: React.FC<SearchBoxProps> = ({
         team.teamName.toLowerCase().includes(value.toString().toLowerCase()),
       )
       setSearchResult(results)
-      console.log(results)
     } else {
       setSearchResult(teams)
     }

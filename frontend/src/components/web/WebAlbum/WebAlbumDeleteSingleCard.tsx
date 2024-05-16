@@ -42,7 +42,6 @@ const WebAlbumDeleteSingleCard = ({
     mutationKey: ['deleteMyAlbumCard'],
     mutationFn: deleteMyAlbumCard,
     onSuccess(result) {
-      console.log('삭제 성공', result)
       setIsRefreshed(!isRefreshed)
     },
     onError(error) {

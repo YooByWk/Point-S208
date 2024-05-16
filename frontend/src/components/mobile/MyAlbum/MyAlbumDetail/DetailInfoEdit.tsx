@@ -11,7 +11,6 @@ import { userState } from '@/stores/user'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { editMyAlbumCard } from '@/apis/album'
 import { useParams } from 'react-router-dom'
-import { TeamListType } from '@/types/TeamListType'
 import { BooleanStateType } from '@/types/commonType'
 import { CardType } from '@/types/cardType'
 import { useTeamCardEdit } from '@/hooks/useTeamCardEdit'
@@ -24,7 +23,7 @@ const DetailInfoEdit = ({
   isEdit: BooleanStateType
   card: CardType | ExternalCardType
 }) => {
-  const { value: edit, setValue: setEdit } = isEdit
+  const { setValue: setEdit } = isEdit
   const [cardInputs, setCardInputs] = useState({
     name: card.name,
     company: card.company,
@@ -57,17 +56,19 @@ const DetailInfoEdit = ({
       [e.target.name]: 'true',
     }))
   }, [])
-  
+
   // 명함 수정하기 - 개인 앨범
   const { mutate } = useMutation({
     mutationKey: ['editMyAlbumCard'],
     mutationFn: editMyAlbumCard,
     onSuccess: res => {
-      queryClient.invalidateQueries({ queryKey: ['fetchAlbumCardDetail', userId, card.cardId] })
+      queryClient.invalidateQueries({
+        queryKey: ['fetchAlbumCardDetail', userId, card.cardId],
+      })
       setEdit(false)
     },
     onError: error => {
-      console.log('error: ' )
+      console.log('error: ')
     },
   })
 
@@ -86,11 +87,10 @@ const DetailInfoEdit = ({
         faxNumber: cardInputs.faxNumber,
         address: cardInputs.address,
         domainUrl: cardInputs.domainUrl,
-        frontBack: 'FRONT', 
+        frontBack: 'FRONT',
       },
     }
     if (teamAlbumId === undefined) {
-      // console.log('팀이아님')
       mutate(params)
       return
     }
@@ -103,7 +103,9 @@ const DetailInfoEdit = ({
         cardId: card.cardId,
         data: params.data,
       })
-      queryClient.invalidateQueries({ queryKey: ['fetchTeamCardDetail', teamAlbumId, card.cardId] })
+      queryClient.invalidateQueries({
+        queryKey: ['fetchTeamCardDetail', teamAlbumId, card.cardId],
+      })
       setEdit(false)
     }
   }

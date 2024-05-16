@@ -20,7 +20,6 @@ const Index = (props: TeamAddType) => {
     mutationKey: ['CreateTeamSkip'],
     mutationFn: CreateTeamSkip,
     onSuccess(result) {
-      console.log('등록 성공', result)
       refetch()
     },
     onError(error) {
@@ -44,7 +43,6 @@ const Index = (props: TeamAddType) => {
     mutationKey: ['CreateTeam'],
     mutationFn: CreateTeam,
     onSuccess(result) {
-      console.log('등록 성공', result)
       refetch()
     },
     onError(error) {

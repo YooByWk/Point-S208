@@ -20,7 +20,6 @@ const SidePanel = () => {
     mutationKey: ['fetchMyCard'],
     mutationFn: fetchMyCard,
     onSuccess(result) {
-      console.log('불러오기 성공', result)
       setFrontCard(result.front)
       setBackCard(result.back)
     },

@@ -34,9 +34,7 @@ const WebUploadFromFile = () => {
   const { mutate } = useMutation({
     mutationKey: ['RegisterOtherCard'],
     mutationFn: RegisterOtherCard,
-    onSuccess(result) {
-      console.log('등록 성공', result)
-    },
+    onSuccess(result) {},
     onError(error) {
       console.error('등록 실패:', error)
     },

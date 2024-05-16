@@ -67,11 +67,9 @@ export const fetchTeamMember = async (teamAlbumId: number, userId: number) => {
 }
 // 팀
 export const RegisterTeamCard = async (params: RegisterTeammCardType) => {
-  console.log(params.data, typeof params.data)
   return authRequest
     .post(`${CudUrl}/${params.userId}/${params.teamId}/card`, params.data)
     .then(res => {
-      console.log(res, '팀카드등록')
       return res.data
     })
     .catch(err => console.log(err))
@@ -95,7 +93,6 @@ export const searchTeamCard = async (
 // 팀 멤버 추가
 export const addTeamMember = async (params: AddTeamMemberType) => {
   if (params.data.userList === undefined) {
-    console.log(params.data.userList, typeof params.data.userList)
     return
   }
   return authRequest
@@ -115,7 +112,6 @@ export const deleteTeamCard = async (params: deleteTeamAlbumCardType) => {
 }
 
 export const deleteTeamCards = async (params: deleteTeamCardArrayType) => {
-  console.log(params.cardIdArray, params.userId, params.teamAlbumId, 'params')
   if (!params.cardIdArray || !params.userId || !params.teamAlbumId) return
 
   const deleteRequests = params.cardIdArray.map(cardId =>
@@ -124,9 +120,7 @@ export const deleteTeamCards = async (params: deleteTeamCardArrayType) => {
       .then(res => res.data)
       .catch(err => console.log(err)),
   )
-  console.log(
-    `${CudUrl}/${params.userId}/${params.teamAlbumId}/card/${params.cardIdArray}`,
-  )
+
   return Promise.all(deleteRequests)
 }
 
@@ -145,7 +139,6 @@ export const ocrRegTeamCard = async (params: any) => {
     .catch(err => console.log(err))
 }
 export const editTeamAlbumMemo = async (params: editTeamMemoType) => {
-  console.log(params)
   return authRequest
     .post(
       `${CudUrl}/${params.userId}/${params.teamAlbumId}/${params.cardId}/memo`,
@@ -156,7 +149,6 @@ export const editTeamAlbumMemo = async (params: editTeamMemoType) => {
 }
 
 export const editTeamCard = async (params: any) => {
-  console.log(params, '팀카드 수정 파람')
   return authRequest
     .patch(
       `${CudUrl}/${params.userId}/${params.teamAlbumId}/card/${params.cardId}`,
@@ -167,7 +159,6 @@ export const editTeamCard = async (params: any) => {
 }
 
 export const fetchTeamCardDetail = async (params: any) => {
-  console.log('호출');
   return authRequest
     .get(`${ReadUrl}/${params.teamAlbumId}/${params.cardId}`)
     .then(res => res.data)
@@ -209,16 +200,15 @@ export const fetchTeamFilterList = async (teamAlbumId: number) => {
 
 }
 
-export const fetchTeamCardsFilter = async (teamAlbumId: number,cardId: number) => {
+export const fetchTeamCardsFilter = async (teamAlbumId: number, cardId: number) => {
   return authRequest
     .get(`${ReadUrl}/${teamAlbumId}/${cardId}/filter`)
     .then(res => res.data)
     .catch(err => console.log(err))
-} 
+}
 
 
-export const createTeamFilter = async (userId: number, teamAlbumId: number, filterName:any) => {
-  console.log('팀 필터 생성', userId, teamAlbumId);
+export const createTeamFilter = async (userId: number, teamAlbumId: number, filterName: any) => {
   return authRequest
     .post(`${CudUrl}/${userId}/${teamAlbumId}/filter`, { filterName })
     .then(res => res.data)
@@ -233,7 +223,7 @@ export const deleteTeamFilter = async (userId: number, teamAlbumId: number, filt
 }
 
 
-export const editTeamFilter = async ({userId, filterId, filterName, teamAlbumId}:{userId: number, teamAlbumId: number, filterId: number, filterName: string }) => {
+export const editTeamFilter = async ({ userId, filterId, filterName, teamAlbumId }: { userId: number, teamAlbumId: number, filterId: number, filterName: string }) => {
   return authRequest
     .patch(`${CudUrl}/${userId}/${teamAlbumId}/filter/${filterId}`, { filterName })
     .then(res => res.data)

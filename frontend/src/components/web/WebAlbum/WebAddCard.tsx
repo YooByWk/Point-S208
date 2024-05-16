@@ -34,13 +34,11 @@ const WebAddCard = ({ isAddCard, setIsAddCard }: AddCardProps) => {
   }
 
   const handleDirectInput = () => {
-    console.log('직접 입력 클릭')
     setIsAddCard(!isAddCard) // 닫기
     setIsAddCardByInfo(true)
   }
 
   const handleImageInput = () => {
-    console.log('이미지 등록 클릭')
     setIsAddCard(!isAddCard) // 닫기
     setCamera(true)
   }

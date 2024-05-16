@@ -19,7 +19,12 @@ const TeamCard = ({ teamInfo, isEdit, onClick }: TeamCardProps) => {
   return (
     <div css={container}>
       <div css={bg(isEdit)} onClick={onClick}>
-        <Flex direction="row" align="center" justify="space-around" style={{ height: '100%'}}>
+        <Flex
+          direction="row"
+          align="center"
+          justify="space-around"
+          style={{ height: '100%' }}
+        >
           <TeamCardThumbnail teamAlbumId={teamInfo.teamAlbumId} />
           <Flex direction="column" align="center">
             <Text typography="t7" bold={true} color="themeText">

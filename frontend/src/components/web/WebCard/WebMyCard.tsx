@@ -96,8 +96,6 @@ const WebMyCard = ({
   }
   if (editOpen) return <InfoEdit value={editOpen} setValue={setEditOpen} />
 
-  console.log(data)
-
   return (
     <>
       <Flex justify="center">

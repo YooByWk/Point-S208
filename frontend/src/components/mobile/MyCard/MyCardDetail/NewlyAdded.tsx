@@ -1,12 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { ShareAndroid16Filled } from '@fluentui/react-icons'
-import { Button } from '@fluentui/react-components'
 import Flex from '@shared/Flex'
-import Text from '@shared/Text'
-import { colors } from '@styles/colorPalette'
 import { Image } from '@fluentui/react-components'
-
 import { ExternalCardType } from '@/types/ExternalCard'
 import { CardType } from '@/types/cardType'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
@@ -53,7 +48,6 @@ const NewlyAdded = ({
                 fit="contain"
                 src={card.realPicture}
                 alt={`${card.name}'s card`}
-                onClick={()=>console.log('여기')}
               />
             ) : (
               <WebMakeBusinessCard
@@ -76,9 +70,7 @@ export default NewlyAdded
 
 // css
 
-const bg = css`
-  
-`
+const bg = css``
 
 const boxStyles = css`
   width: 40vw;

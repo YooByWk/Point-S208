@@ -5,8 +5,9 @@ import { cardInput } from '@/types/cardInput'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useRecoilValue } from 'recoil'
 
-export const useTeamCardEdit = (card:ExternalCardType) => {
-  const selectedAlbumId = useRecoilValue(selectedTeamAlbumIdState).teamAlbumId as number
+export const useTeamCardEdit = (card: ExternalCardType) => {
+  const selectedAlbumId = useRecoilValue(selectedTeamAlbumIdState)
+    .teamAlbumId as number
   const queryClient = useQueryClient()
   const mutation = useMutation({
     mutationKey: ['editTeamCard'],
@@ -20,10 +21,17 @@ export const useTeamCardEdit = (card:ExternalCardType) => {
       cardId: number
       teamAlbumId: number
       data: cardInput
-    }) => editTeamCard({userId: userId, cardId: cardId, teamAlbumId: teamAlbumId, data: data }),
+    }) =>
+      editTeamCard({
+        userId: userId,
+        cardId: cardId,
+        teamAlbumId: teamAlbumId,
+        data: data,
+      }),
     onSuccess: () => {
-      console.log('팀 카드 수정 성공')
-      queryClient.invalidateQueries({ queryKey: ['fetchTeamCardDetail', selectedAlbumId, card.cardId] })
+      queryClient.invalidateQueries({
+        queryKey: ['fetchTeamCardDetail', selectedAlbumId, card.cardId],
+      })
     },
     onError: error => {
       console.log('팀 카드 생성 실패', error, error.message)

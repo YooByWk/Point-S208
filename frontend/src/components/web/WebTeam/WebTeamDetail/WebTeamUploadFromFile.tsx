@@ -35,9 +35,7 @@ const WebTeamUploadFromFile = () => {
   const { mutate } = useMutation({
     mutationKey: ['RegisterTeamCard'],
     mutationFn: RegisterTeamCard,
-    onSuccess(result) {
-      console.log('등록 성공', result)
-    },
+    onSuccess(result) {},
     onError(error) {
       console.error('등록 실패:', error)
     },

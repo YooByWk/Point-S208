@@ -17,7 +17,6 @@ interface BackArrowProps {
 const BackArrow = ({ onClick }: BackArrowProps) => {
   const navigate = useNavigate()
   const handleBackArrow = (e: any) => {
-    console.log('뒤로가기 버튼 클릭')
     if (onClick) {
       onClick()
       return

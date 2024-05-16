@@ -44,7 +44,6 @@ const MyDigitalCard: React.FC<MyDigitalCardProps> = ({
   scale,
   border,
 }) => {
-  // console.log(scale)
   if (!scale) {
     scale = 1.1
   }
@@ -59,9 +58,7 @@ const MyDigitalCard: React.FC<MyDigitalCardProps> = ({
   const { mutate } = useMutation({
     mutationKey: ['saveMyDigitalCard'],
     mutationFn: saveMyDigitalCard,
-    onSuccess(result) {
-      console.log('저장 성공', result)
-    },
+    onSuccess(result) {},
     onError(error) {
       console.error('저장 실패:', error)
     },
@@ -72,16 +69,13 @@ const MyDigitalCard: React.FC<MyDigitalCardProps> = ({
       if (containerRef.current) {
         toJpeg(containerRef.current)
           .then(function (dataUrl) {
-            // console.log('dataUrl', dataUrl)
             const blob = dataURLtoBlob(dataUrl)
-            // console.log('blob', blob)
             const file = new File([blob], 'my_component.jpg', {
               type: 'image/jpeg',
             })
 
             const formData = new FormData()
             formData.append('file', file)
-            // console.log('formData', formData)
             mutate({ userId: userId, cardId: cardInfo.cardId, file: formData })
           })
           .catch(function (error) {

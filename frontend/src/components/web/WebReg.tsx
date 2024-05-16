@@ -168,7 +168,6 @@ const WebReg = (props: { state: string }) => {
     mutationKey: ['ocrRegMyCard'],
     mutationFn: ocrRegMyCard,
     onSuccess(result) {
-      console.log('등록 성공', result)
       setCamera(false)
     },
     onError(error) {
@@ -181,7 +180,6 @@ const WebReg = (props: { state: string }) => {
     mutationKey: ['ocrRegOtherCard'],
     mutationFn: ocrRegOtherCard,
     onSuccess(result) {
-      console.log('등록 성공', result)
       setCamera(false)
     },
     onError(error) {
@@ -194,7 +192,6 @@ const WebReg = (props: { state: string }) => {
     mutationKey: ['ocrRegTeamCard'],
     mutationFn: ocrRegTeamCard,
     onSuccess(result) {
-      console.log('등록 성공', result)
       setCamera(false)
     },
     onError(error) {

@@ -52,8 +52,6 @@ const WebAlbumTopBar = ({
     if (Array.isArray(data)) {
       setSearchResults(data as ExternalCardListType)
     }
-
-    console.log('searchResult:', searchResults)
   }
 
   const handleSelectAll = () => {
@@ -146,7 +144,6 @@ const WebAlbumTopBar = ({
     mutationKey: ['fetchAllAlbum'],
     mutationFn: fetchAllAlbum,
     onSuccess(result) {
-      console.log('읽어오기 성공', result.data_body)
       downloadAsExcel(result.data_body)
     },
     onError(error) {

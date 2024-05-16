@@ -1,7 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react'
-import styled from '@emotion/styled'
-import { CSSProperties } from 'react'
+
 import { ReactNode } from 'react'
 import {
   Dialog,
@@ -13,7 +11,6 @@ import {
   DialogContent,
   Button,
 } from '@fluentui/react-components'
-import { useState } from 'react'
 import { Colors } from '@/styles/colorPalette'
 import * as s from './LargeModal.styled'
 import Text from '@shared/Text'
@@ -59,11 +56,10 @@ const LargeModal: React.FC<LargeModalProps> = ({
           <DialogTitle>{dialogTitle}</DialogTitle>
           <DialogContent>
             {typeof dialogContent === 'string' ? (
-              <Text typography='t9'>{dialogContent}</Text>
+              <Text typography="t9">{dialogContent}</Text>
             ) : (
               dialogContent
             )}
-            {/* 필요한 것 있으면 여기에 넣을 수 있게 수정 */}
           </DialogContent>
           {screenSize < 550 ? (
             <DialogActions>

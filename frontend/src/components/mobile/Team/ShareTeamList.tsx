@@ -62,10 +62,9 @@ const TeamList = () => {
     )
     await queryClient.invalidateQueries({ queryKey: ['fetchTeamCardsList'] })
     // navigate(`/myTeam/${selectedTeam.teamAlbumId}`, {
-      // state: { teamAlbumId: selectedTeam },
+    // state: { teamAlbumId: selectedTeam },
     // })
-    navigate(`/myAlbum`, {state : {isShare: false}})
-    console.log(`/myAlbum`, 'aaaaaaaaaaaaaaaaaa')
+    navigate(`/myAlbum`, { state: { isShare: false } })
     alert('명함을 팀에 공유했습니다')
     // window.location.reload()
   }
@@ -100,10 +99,14 @@ const TeamList = () => {
       />
       <Spacing size={30} />
       {searchResults.map(team => (
-        <div key={team.teamAlbumId} onClick={() => setSelectedTeam(team)} css={iconCont}>
+        <div
+          key={team.teamAlbumId}
+          onClick={() => setSelectedTeam(team)}
+          css={iconCont}
+        >
           <ShareTeamCard teamInfo={team} />
           {selectedTeam.teamAlbumId === team.teamAlbumId ? (
-            <CheckmarkCircle24Regular css={iconCss}/>
+            <CheckmarkCircle24Regular css={iconCss} />
           ) : (
             <Circle24Regular css={iconCss} />
           )}

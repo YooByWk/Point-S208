@@ -3,9 +3,6 @@ import { colors } from '@/styles/colorPalette'
 import { CardType } from '@/types/cardType'
 import { ExternalCardType } from '@/types/ExternalCard'
 import { css } from '@emotion/react'
-import Flex from '@shared/Flex'
-import Spacing from '@shared/Spacing'
-import Text from '@shared/Text'
 import { useEffect, useRef, useState } from 'react'
 
 // declare global {
@@ -41,7 +38,6 @@ const DetailMapSection = ({ card }: { card: CardType | ExternalCardType }) => {
           card.address,
           function (result: LatLng[], status: any) {
             if (status === window.kakao.maps.services.Status.OK) {
-              console.log(result)
               setPositionArr({ y: result[0].y, x: result[0].x })
 
               const position = new window.kakao.maps.LatLng(

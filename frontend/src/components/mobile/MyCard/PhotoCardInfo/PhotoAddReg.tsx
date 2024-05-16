@@ -155,7 +155,6 @@ const PhotoAddReg = (props: { refetch: any }) => {
     mutationKey: ['ocrRegMyCard'],
     mutationFn: ocrRegMyCard,
     onSuccess(result) {
-      console.log('등록 성공', result)
       setCamera(false)
       refetch()
     },

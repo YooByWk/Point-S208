@@ -53,9 +53,7 @@ const WebTopBar = ({
   const { mutate } = useMutation({
     mutationKey: ['deleteMyCard'],
     mutationFn: deleteMyCard,
-    onSuccess(result) {
-      console.log('삭제 성공', result)
-    },
+    onSuccess(result) {},
     onError(error) {
       console.error('삭제 실패:', error)
     },

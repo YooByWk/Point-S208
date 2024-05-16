@@ -54,7 +54,6 @@ const MeetingAlbumSection = () => {
   }, [isRefreshed, refetch, cards, isAddCardByInfo])
 
   useEffect(() => {
-    console.log(hasNextPage)
     const handleScroll = () => {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight)
         return
@@ -71,8 +70,6 @@ const MeetingAlbumSection = () => {
     if (Array.isArray(data)) {
       setSearchResults(data as ExternalCardListType)
     }
-
-    console.log('searchResult:', searchResults)
   }
 
   return (

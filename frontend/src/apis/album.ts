@@ -17,7 +17,6 @@ const ReadUrl = '/read/api/my-album'
 
 // 내 명함지갑에서 목록 조회
 export const fetchMyAlbum = async (userId: number, page: number) => {
-  console.log('페이지: ', page)
   return authRequest
     .get(`${ReadUrl}/list/${userId}/${page}`)
     .then(res => res.data)
@@ -73,7 +72,6 @@ export const searchMyAlbumCard = async (params: searchType) => {
       params: { info: typeof params.userInput === 'string' ? params.userInput.toLowerCase() : params.userInput },
     })
     .then(res => {
-      console.log(res)
       return res.data
     })
     .catch(err => console.log(err))
@@ -109,7 +107,6 @@ export const shareCard = async (params: shareCardType) => {
 
 // 명함지갑 팀 명함에 공유
 export const shareToTeamCard = async (userId: number, teamId: number, params: number[]) => {
-  console.log(params)
   return authRequest
     .post(`${cudBaseUrl}/my-album/${userId}/${teamId}/share`, {
       cardIds: params
@@ -182,7 +179,6 @@ export const editMyAlbumMemo = async (params: editMemoType) => {
 }
 
 export const deleteMyAlbumCards = async (params: deleteAlbumCardArrayType) => {
-  console.log(params.cardIdArray, params.userId, 'params')
   if (!params.cardIdArray || !params.userId) return
 
   const deleteRequests = params.cardIdArray.map(cardId =>

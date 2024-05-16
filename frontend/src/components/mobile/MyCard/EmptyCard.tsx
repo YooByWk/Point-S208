@@ -32,7 +32,6 @@ const EmptyCard = () => {
           direction="column"
           align="center"
           onClick={() => {
-            console.log('직접 촬영')
             setCamera(true)
           }}
           css={linkStyles}
@@ -44,7 +43,6 @@ const EmptyCard = () => {
           direction="column"
           align="center"
           onClick={() => {
-            console.log('직접 입력')
             setWriteInfo(true)
           }}
           css={linkStyles}

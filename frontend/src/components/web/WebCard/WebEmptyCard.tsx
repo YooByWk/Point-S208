@@ -33,7 +33,6 @@ const WebEmptyCard = ({
           direction="column"
           align="center"
           onClick={() => {
-            console.log('직접 입력')
             setWriteInfo(true)
           }}
           css={linkStyles}

@@ -42,35 +42,31 @@ const PeopleFilterSortIcons: React.FC<PeopleFilterSortIconsProps> = ({
           <PeopleTeam28Filled
             onClick={() => {
               setIsLookingMember(!isLookingMember)
-              console.log('isLookingMember: ', isLookingMember)
             }}
           />
         ) : (
           <PeopleTeam28Regular
             onClick={() => {
               setIsLookingMember(!isLookingMember)
-              console.log('isLookingMember: ', isLookingMember)
             }}
           />
         )
       ) : null}
 
-      {filterIcon? 
-      
-      (!isNaN(filterState.filterId) ? <Filter28Filled onClick={handleFilterIconClick} css={activeIcon}/> :
-      <FilterIconModal 
-      icon={<Filter28Regular/>}
-      dialogTitle='명함 필터'
-      />)
-
-      
-      : 
-      null}
-      {sortIcon ?<ArrowSort28Regular
-        onClick={() => {
-          console.log('정렬')
-        }}
-      /> : null}
+      {filterIcon ? (
+        !isNaN(filterState.filterId) ? (
+          <Filter28Filled onClick={handleFilterIconClick} css={activeIcon} />
+        ) : (
+          <FilterIconModal icon={<Filter28Regular />} dialogTitle="명함 필터" />
+        )
+      ) : null}
+      {sortIcon ? (
+        <ArrowSort28Regular
+          onClick={() => {
+            // console.log('정렬')
+          }}
+        />
+      ) : null}
     </Flex>
   )
 }

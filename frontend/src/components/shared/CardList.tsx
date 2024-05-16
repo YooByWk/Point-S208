@@ -118,7 +118,6 @@ const CardList = ({
           <MultiSelectBar
             selectedCards={selectedCards}
             allCards={cards}
-            
             setSelectedCards={setSelectedCards}
             cardCnt={isTeam ? cards.length : data ? data.data_body.length : 0}
           />

@@ -83,7 +83,6 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   useEffect(() => {
     if (data && onSearch) {
       onSearch(data)
-      console.log(isTeam, 'isTeam', isSearchingMember, 'isSearchingMember')
     }
   }, [value, data, onSearch])
 

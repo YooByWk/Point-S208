@@ -26,9 +26,7 @@ interface AddCardProps {
 
 const AddCard = ({ isAddCard, setIsAddCard, teamInfo }: AddCardProps) => {
   const userId = useRecoilValue(userState).userId
-  const [isDirectInput, setIsDirectInput] = useState(false)
-  console.log('팀앨범아이디', teamInfo?.teamAlbumId)
-
+  const [, setIsDirectInput] = useState(false)
   const handleClose = () => {
     setIsAddCard(!isAddCard) // 닫기
   }
@@ -38,7 +36,6 @@ const AddCard = ({ isAddCard, setIsAddCard, teamInfo }: AddCardProps) => {
   const navigate = useNavigate()
 
   const handleDirectInput = () => {
-    console.log('직접 입력 클릭')
     setIsAddCard(false)
     setIsDirectInput(true)
     navigate(`/myAlbum/register/${userId}`, {
@@ -47,7 +44,6 @@ const AddCard = ({ isAddCard, setIsAddCard, teamInfo }: AddCardProps) => {
   }
 
   const handleCameraInput = () => {
-    console.log('카메라입력클릭')
     setIsAddCard(false)
     setCamera(true)
     navigate(`/myAlbum/register/${userId}`, { state: { isCameraInput: true } })

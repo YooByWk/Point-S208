@@ -1,54 +1,26 @@
 /** @jsxImportSource @emotion/react */
-
-import { FilterListType, FilterType } from '@/types/FilterType'
+import { FilterType } from '@/types/FilterType'
 import { css } from '@emotion/react'
-// import { useQuery } from '@tanstack/react-query'
-// import  { useState } from 'react'
 import Flex from '@shared/Flex'
 import { tokens } from '@fluentui/react-components'
 import { Dismiss16Filled, Add16Filled } from '@fluentui/react-icons'
 import { colors } from '@/styles/colorPalette'
 import DetailAddFilterModal from '@/components/mobile/MyAlbum/MyAlbumDetail/DetailAddFilterModal'
-import { useState } from 'react'
-import { useParams } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import { userState } from '@/stores/user'
 import { useQuery } from '@tanstack/react-query'
 import { fetchCardsFilter } from '@/apis/album'
 
 const DetailFilter = ({ cardId }: { cardId: number }) => {
-  const [filters, setFilters] = useState<string[]>([])
-  // 필터 정보 불러오는 곳 - useQuery 사용 : 수정하기
+  // const [filters, setFilters] = useState<string[]>([])
   const userId = useRecoilValue(userState).userId
-  const params = useParams()
-  console.log(params)
-  
-  /**/
-  // 우선 더미 데이터로 대체
-  const dummyData: FilterListType = [
-    {
-      filterId: 1,
-      filterName: 'Filter 1asdasdasdasd',
-    },
-    {
-      filterId: 2,
-      filterName: 'Filter 2',
-    },
-    {
-      filterId: 3,
-      filterName: 'Filter 3',
-    },
-  ]
 
-  const {data} = useQuery({
+  const { data } = useQuery({
     queryKey: ['fetchCardsFilterList', cardId],
     queryFn: () => fetchCardsFilter(userId as number, cardId),
-  }) 
+  })
   const filter = data?.data.data_body || []
-  console.log(filter,'로그로그로그')
-  // 필터 추가하는 곳 - useMutation 사용
-  /**/
-  
+
   return (
     <Flex direction="column" align="center">
       <Flex justify="flex-start" align="center" css={container}>
@@ -60,10 +32,7 @@ const DetailFilter = ({ cardId }: { cardId: number }) => {
               css={tagStyle}
               justify="space-between"
             >
-              <Dismiss16Filled
-                css={iconCss}
-                onClick={() => {}}
-              />
+              <Dismiss16Filled css={iconCss} onClick={() => {}} />
               {filter.filterName}
             </Flex>
           )
@@ -73,7 +42,7 @@ const DetailFilter = ({ cardId }: { cardId: number }) => {
             icon={<Add16Filled />}
             cardId={cardId}
             onClick={() => {
-              console.log('필터 목록 보여주기: 수정하기')
+              // console.log('필터 목록 보여주기: 수정하기')
             }}
             dialogTitle="명함에 추가할 태그를 선택해주세요"
           />

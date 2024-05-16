@@ -39,7 +39,6 @@ const WebTeamDeleteSelected = ({
     mutationKey: ['deleteTeamCard'],
     mutationFn: deleteTeamCard,
     onSuccess(result) {
-      console.log('삭제 성공', result)
       setIsRefreshed(!isRefreshed)
     },
     onError(error) {

@@ -3,35 +3,32 @@ import {
   Dialog,
   DialogTrigger,
   DialogSurface,
-  DialogTitle,
   DialogBody,
   DialogActions,
   DialogContent,
   Button,
 } from '@fluentui/react-components'
-import { css } from "@emotion/react"
-import Text from '@/components/shared/Text';
-import Spacing from "@/components/shared/Spacing"
-import Flex from "@/components/shared/Flex"
+import { css } from '@emotion/react'
+import Text from '@/components/shared/Text'
+import Spacing from '@/components/shared/Spacing'
+import Flex from '@/components/shared/Flex'
 const ResModal = () => {
-  return(
+  return (
     <Dialog modalType="alert">
-    <DialogSurface css={surface}>
+      <DialogSurface css={surface}>
         <DialogBody css={body}>
           <DialogContent css={content}>
-            <Text typography='t9'>이메일을 전송했습니다.</Text>
-            <Spacing size={20} direction='vertical'/>
-          {(
-            <Flex direction='row' align='center' justify='center'>
-              <DialogActions css={fui}>
-                <DialogTrigger disableButtonEnhancement>
-                  <Button appearance="primary" >
-                    {'확인'}
-                  </Button>
-                </DialogTrigger>
-              </DialogActions>
-            </Flex>
-          )}
+            <Text typography="t9">이메일을 전송했습니다.</Text>
+            <Spacing size={20} direction="vertical" />
+            {
+              <Flex direction="row" align="center" justify="center">
+                <DialogActions css={fui}>
+                  <DialogTrigger disableButtonEnhancement>
+                    <Button appearance="primary">{'확인'}</Button>
+                  </DialogTrigger>
+                </DialogActions>
+              </Flex>
+            }
           </DialogContent>
         </DialogBody>
       </DialogSurface>
@@ -44,7 +41,7 @@ export default ResModal
 const fui = css`
   display: flex;
   flex-direction: row;
-  
+
   justify-content: space-evenly;
 `
 

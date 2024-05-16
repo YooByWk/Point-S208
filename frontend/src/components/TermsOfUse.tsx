@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 /**
  * This component is used to display the required
  * terms of use statement which can be found in a
@@ -10,8 +10,8 @@ class TermsOfUse extends React.Component {
       <div>
         <h1>Terms of Use</h1>
       </div>
-    );
+    )
   }
 }
 
-export default TermsOfUse;
+export default TermsOfUse

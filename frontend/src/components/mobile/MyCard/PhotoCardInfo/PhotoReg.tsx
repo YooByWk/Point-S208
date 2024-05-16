@@ -256,7 +256,6 @@ const PhotoReg = (props: { isMyCard: boolean; refetch: any }) => {
     mutationKey: ['ocrRegMyCard'],
     mutationFn: ocrRegMyCard,
     onSuccess(result) {
-      console.log('등록 성공', result)
       setCamera(false)
       setIsFirstCard(false)
       refetch()
@@ -271,7 +270,6 @@ const PhotoReg = (props: { isMyCard: boolean; refetch: any }) => {
     mutationKey: ['ocrRegOtherCard'],
     mutationFn: ocrRegOtherCard,
     onSuccess(result) {
-      console.log('등록 성공', result)
       setCamera(false)
       navigate(-1)
     },
@@ -285,7 +283,6 @@ const PhotoReg = (props: { isMyCard: boolean; refetch: any }) => {
     mutationKey: ['ocrRegTeamCard'],
     mutationFn: ocrRegTeamCard,
     onSuccess(result) {
-      console.log('등록 성공', result)
       setCamera(false)
       navigate(-1)
     },
@@ -390,9 +387,15 @@ const PhotoReg = (props: { isMyCard: boolean; refetch: any }) => {
               typography="t8"
               textAlign="center"
               style={{ marginTop: '2%' }}
-              onClick={() => (isMyCard && isFront && !backImgSrc ? setIsFront(false) : '')}
+              onClick={() =>
+                isMyCard && isFront && !backImgSrc ? setIsFront(false) : ''
+              }
             >
-              {isMyCard && !backImgSrc ? '영문추가 >' : isFront ? '국문' : '영문'}
+              {isMyCard && !backImgSrc
+                ? '영문추가 >'
+                : isFront
+                ? '국문'
+                : '영문'}
             </Text>
           </Flex>
           <Grid2>

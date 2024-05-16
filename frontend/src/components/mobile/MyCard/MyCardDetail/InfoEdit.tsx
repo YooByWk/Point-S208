@@ -2,7 +2,6 @@ import Flex from '@/components/shared/Flex'
 import Spacing from '@/components/shared/Spacing'
 import Text from '@/components/shared/Text'
 import TextField from '@/components/shared/TextField'
-import { BooleanStateType } from '@/types/commonType'
 import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import { Dismiss24Filled } from '@fluentui/react-icons'
 import { Button } from '@fluentui/react-components'
@@ -38,7 +37,6 @@ const InfoEdit = ({
     mutationKey: ['editMyCard'],
     mutationFn: editMyCard,
     onSuccess(result) {
-      console.log('명함 수정 성공', result)
       isFront ? setFrontCard(editInfo) : setBackCard(editInfo)
       setValue(false)
     },
@@ -53,7 +51,6 @@ const InfoEdit = ({
       cardId: editInfo.cardId,
       data: editInfo,
     }
-    console.log(params)
 
     mutate(params)
 

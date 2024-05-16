@@ -43,7 +43,6 @@ const AppTeamEdit = (props: {
     mutationKey: ['deleteTeam'],
     mutationFn: deleteTeam,
     onSuccess(result) {
-      console.log('등록 성공', result)
       refetch()
       setIsOpen(false)
     },
@@ -64,7 +63,6 @@ const AppTeamEdit = (props: {
     mutationKey: ['editTeamName'],
     mutationFn: editTeamName,
     onSuccess(result) {
-      console.log('등록 성공', result)
       refetch()
       setIsOpen(false)
     },

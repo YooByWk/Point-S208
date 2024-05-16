@@ -73,7 +73,6 @@ const WebAlbumDetail = ({
           selectedCard.address,
           function (result: LatLng[], status: any) {
             if (status === window.kakao.maps.services.Status.OK) {
-              console.log(result)
               setPositionArr({
                 y: result[0].y,
                 x: result[0].x,
@@ -128,9 +127,7 @@ const WebAlbumDetail = ({
   const { mutate } = useMutation({
     mutationKey: ['editMyAlbumMemo'],
     mutationFn: editMyAlbumMemo,
-    onSuccess(result) {
-      console.log('수정 성공', result)
-    },
+    onSuccess(result) {},
     onError(error) {
       console.error('수정 실패:', error)
     },

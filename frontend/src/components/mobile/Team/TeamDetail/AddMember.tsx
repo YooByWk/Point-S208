@@ -34,7 +34,7 @@ const AddMember = ({
   const userId = useRecoilValue(userState).userId
   const memberQuery = useFetchTeamMember({ teamId: team.teamAlbumId })
   const memberMutation = useAddMember()
-  
+
   const handleSearch = () => {}
 
   const handleMemberCheck = (user: UserType) => {
@@ -67,23 +67,22 @@ const AddMember = ({
     }
   }
 
-
   const teamMemberId =
     memberQuery.data?.data_body.map(
       (member: TeamMemberInfoType) => member.userId,
     ) || []
-    
-    const handleAddMember = () => {
-      var userList = selectedMember.map(member => member.userId) 
-      memberMutation.mutate({
-        userId: userId!,
-        teamId: team.teamAlbumId,
-        data: {
-          userList: userList
-        },
-      })
-      setIsWrite(!isWrite)
-    } 
+
+  const handleAddMember = () => {
+    var userList = selectedMember.map(member => member.userId)
+    memberMutation.mutate({
+      userId: userId!,
+      teamId: team.teamAlbumId,
+      data: {
+        userList: userList,
+      },
+    })
+    setIsWrite(!isWrite)
+  }
   return (
     <>
       <div
@@ -184,12 +183,7 @@ const AddMember = ({
         {selectedMember.length > 0 ? (
           <LargeButton text="완료" width="35vw" onClick={handleAddMember} />
         ) : (
-          <LargeButton
-            text="완료"
-            width="35vw"
-            disabled={true}
-            onClick={() => console.log('팀 추가 -멤버 포함 : 수정하기')}
-          />
+          <LargeButton text="완료" width="35vw" disabled={true} />
         )}
       </div>
     </>

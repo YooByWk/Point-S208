@@ -1,5 +1,5 @@
-import styled from '@emotion/styled'
-import { colors } from '@/styles/colorPalette'
+// import styled from '@emotion/styled'
+// import { colors } from '@/styles/colorPalette'
 import { useMutation } from '@tanstack/react-query'
 import { userReg } from '@/apis/auth'
 import { useRecoilState, useSetRecoilState } from 'recoil'
@@ -18,7 +18,6 @@ const Tutorial = () => {
   useData(async () => {
     if (teamsUserCredential) {
       const userInfo = await teamsUserCredential.getUserInfo()
-      console.log(userInfo)
       setUser({
         name: userInfo.displayName,
         email: userInfo.preferredUserName,
@@ -32,7 +31,6 @@ const Tutorial = () => {
     mutationKey: ['userReg'],
     mutationFn: userReg,
     onSuccess(result) {
-      console.log('등록 성공', result)
       setUser(prev => ({ ...prev, userId: result.data_body }))
     },
     onError(error) {
@@ -66,41 +64,41 @@ export default Tutorial
 
 // style
 
-const Container = styled.div`
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
+// const Container = styled.div`
+//   height: 100vh;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// `
 
-const Button = styled.button`
-  position: relative;
-  padding: 5px 10px;
-  border-radius: 10px;
-  background-color: ${colors.teamsBG6};
-  color: #fff;
-`
+// const Button = styled.button`
+//   position: relative;
+//   padding: 5px 10px;
+//   border-radius: 10px;
+//   background-color: ${colors.teamsBG6};
+//   color: #fff;
+// `
 
-const Box = styled.div`
-  position: relative;
-  text-align: center;
-  padding: 30px;
+// const Box = styled.div`
+//   position: relative;
+//   text-align: center;
+//   padding: 30px;
 
-  ::before {
-    content: '';
-    opacity: 0.3;
-    position: absolute;
-    background-color: ${colors.themeText};
-    border-radius: 20px;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-  }
+//   ::before {
+//     content: '';
+//     opacity: 0.3;
+//     position: absolute;
+//     background-color: ${colors.themeText};
+//     border-radius: 20px;
+//     top: 0px;
+//     left: 0px;
+//     right: 0px;
+//     bottom: 0px;
+//   }
 
-  p {
-    position: relative;
-    color: #fff;
-    margin-bottom: 20px;
-  }
-`
+//   p {
+//     position: relative;
+//     color: #fff;
+//     margin-bottom: 20px;
+//   }
+// `

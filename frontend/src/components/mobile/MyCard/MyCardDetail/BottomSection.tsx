@@ -4,9 +4,7 @@ import Flex from '@/components/shared/Flex'
 import Spacing from '@/components/shared/Spacing'
 import { themeState } from '@/stores/common'
 import Input from '@/components/shared/Input'
-import { colors } from '@/styles/colorPalette'
 import { css, keyframes } from '@emotion/react'
-import styled from '@emotion/styled'
 import {
   Accordion,
   AccordionHeader,
@@ -33,7 +31,6 @@ import NewlyAdded from './NewlyAdded'
 import { useShareCard } from '@/hooks/useShareCard'
 import { Dismiss24Filled } from '@fluentui/react-icons'
 import { MailRead48Filled } from '@fluentui/react-icons'
-import { ArrowCircleDown48Filled } from '@fluentui/react-icons'
 
 const BottomSection = ({
   list,
@@ -51,8 +48,6 @@ const BottomSection = ({
   const [openItems, setOpenItems] = useState(['0'])
   const handleToggle: AccordionToggleEventHandler<string> = (event, data) => {
     setOpenItems(data.openItems)
-    console.log(data.openItems)
-    console.log(openItems.includes('1')? 'true' : 'false');
   }
 
   const shareCardMutation = useShareCard()
@@ -69,9 +64,7 @@ const BottomSection = ({
   const handleEmailInput = (e: any) => {
     setEmailInput(e.target.value)
   }
-  // console.log(card)
   const handleEmailSubmit = () => {
-    console.log(emailInput)
     shareCardMutation.mutate({ id: card.cardId, email: emailInput })
     setIsModalOpen(!isModalOpen)
   }
@@ -238,11 +231,6 @@ export default BottomSection
 
 // style
 
-const Wrap = styled.div`
-  display: flex;
-  gap: 30px;
-  margin: 0 20px 20px;
-`
 const inputCss = css`
   width: 80%;
 `
@@ -258,13 +246,11 @@ const slideDown = keyframes`
     opacity: 1;
     transform: translateY(0);
   }
-`;
-
-
+`
 
 const slideDownAnimation = css`
   animation: ${slideDown} 0.55s ease-out forwards;
-`;
+`
 
 const containerStyle = css`
   display: flex;
@@ -282,19 +268,6 @@ const itemStyle = (theme: string) => css`
 const setMaxHeight = css`
   max-height: 100px;
   overflow-x: auto;
-`
-const Card = styled.div`
-  width: 80px;
-  height: 80px;
-  border: 1px solid ${colors.themeText};
-`
-
-const People = styled.div`
-  width: 50px;
-  height: 50px;
-  border: 1px solid ${colors.themeText};
-  border-radius: 50px;
-  margin-bottom: 5px;
 `
 
 // css

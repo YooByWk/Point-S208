@@ -20,12 +20,9 @@ import {
 import {
   CheckmarkCircle24Regular,
   Circle24Regular,
-  Star24Regular,
-  Star24Filled,
   ShareAndroid24Filled,
   Delete24Filled,
   MailRead48Filled,
-  ArrowCircleDown48Filled,
   Dismiss24Filled,
 } from '@fluentui/react-icons'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -56,7 +53,7 @@ const CardThumbnail = ({
   scale = 1,
   index = NaN,
 }: CardThumbnailProps) => {
-  const [isfavorite, setIsFavorite] = useState(false)
+  // const [isfavorite, setIsFavorite] = useState(false)
   const [isChecked, setIsChecked] = useState(false)
   const isSelected = selectedCards.includes(cardInfo.cardId)
   const userId = useRecoilValue(userState).userId
@@ -65,10 +62,9 @@ const CardThumbnail = ({
   const teamAlbumId = useParams()?.teamAlbumId
   const [isFirstRender, setIsFirstRender] = useState(true)
 
-  
   function delaySetIsFirstRender() {
     setTimeout(() => {
-      setIsFirstRender(false);
+      setIsFirstRender(false)
     }, index * 200)
   }
   useEffect(() => {
@@ -80,13 +76,13 @@ const CardThumbnail = ({
     onSelect(cardInfo.cardId)
   }
 
-  const handleFavorite = (event: React.MouseEvent) => {
-    event.stopPropagation()
+  // const handleFavorite = (event: React.MouseEvent) => {
+  //   event.stopPropagation()
 
-    setIsFavorite(!isfavorite)
-    /*  api 호출 */
-    // console.log('즐겨찾기 : ', cardInfo)
-  }
+  //   setIsFavorite(!isfavorite)
+  //   /*  api 호출 */
+  //   // console.log('즐겨찾기 : ', cardInfo)
+  // }
 
   const handleShare = (event: React.MouseEvent) => {
     event.stopPropagation()
@@ -120,7 +116,6 @@ const CardThumbnail = ({
 
   const handleEmailSubmit = (event: React.MouseEvent) => {
     event.stopPropagation()
-    console.log(emailInput)
     shareCardMutation.mutate({ id: cardInfo.cardId, email: emailInput })
     setIsModalOpen(!isModalOpen)
   }
@@ -172,7 +167,6 @@ const CardThumbnail = ({
               {cardInfo.position}
             </Text>
           )}
-
         </Flex>
 
         {cardInfo.realPicture || cardInfo.digitalPicture ? (
@@ -314,7 +308,7 @@ const CardThumbnail = ({
 
 export default CardThumbnail
 
-// css 
+// css
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -338,9 +332,13 @@ const cardContainer = (
   background-color: ${tokens.colorNeutralBackground1Selected};
   min-height: 100px;
   scale: ${forShare ? scale : 1};
-  animation: ${isFirstRender ? css`${fadeIn} 0.15s linear forwards` : 'none'};
+  animation: ${isFirstRender
+    ? css`
+        ${fadeIn} 0.15s linear forwards
+      `
+    : 'none'};
   opacity: ${isFirstRender ? 0 : 1};
-  animation-delay: ${isNaN(index)  ? 0 : index * 0.12}s;
+  animation-delay: ${isNaN(index) ? 0 : index * 0.12}s;
   /* padding: 10px; */
 
   &:hover,
@@ -430,5 +428,3 @@ const content = css`
   padding: 0;
   margin: 0;
 `
-
-

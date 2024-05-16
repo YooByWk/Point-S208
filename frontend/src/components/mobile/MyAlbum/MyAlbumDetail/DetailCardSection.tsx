@@ -1,21 +1,8 @@
-import Flex from '@/components/shared/Flex'
 import { themeState } from '@/stores/common'
-import { colors } from '@/styles/colorPalette'
 import { CardType } from '@/types/cardType'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import {
-  Popover,
-  PopoverSurface,
-  PopoverTrigger,
-  Switch,
-} from '@fluentui/react-components'
-import React, { useCallback } from 'react'
 import { useRecoilValue } from 'recoil'
-import {
-  ErrorCircle20Regular,
-  ArrowHookUpLeft28Regular,
-} from '@fluentui/react-icons'
 import { BooleanStateType } from '@/types/commonType'
 import WebMakeBusinessCard from '@/components/web/WebAlbum/WebMakeBusinessCard'
 
@@ -24,15 +11,13 @@ import { ExternalCardType } from '@/types/ExternalCard'
 const DetailCardComponent = ({
   isReal,
   card,
-}: { 
+}: {
   isReal: boolean
   card: CardType | ExternalCardType
 }) => {
-  
-
   if (isReal) {
     return card?.cardId ? (
-      card.realPicture ? ( // 타인의 카드는 사진으로 등록하니까.
+      card.realPicture ? (
         <RealCard $url={card.realPicture} />
       ) : (
         <div css={noCss}>
@@ -67,15 +52,8 @@ const DetailCardSection = ({
   card: CardType | ExternalCardType
 }) => {
   const theme = useRecoilValue(themeState)
-  const { value, setValue } = isRealState
+  const { value } = isRealState
   const isReal = value
-  const setIsReal = setValue
-  const onChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setIsReal(e.currentTarget.checked)
-    },
-    [setIsReal],
-  )
   return (
     <Container $theme={theme}>
       {/* {card.realPicture ? (
@@ -171,50 +149,4 @@ const NoCard = styled.div`
   background-color: #242424;
   border-radius: 10px;
   color: #fff;
-`
-
-const SwitchBtn = styled.div`
-  position: absolute;
-  display: flex;
-  z-index: 10;
-  margin: 2%;
-  top: 0;
-  left: 0;
-`
-
-const Desc = styled.div`
-  position: absolute;
-  color: white;
-  bottom: 0;
-  right: 0;
-  margin: 3%;
-`
-
-// css
-
-const switchStyle = (isReal: boolean) => css`
-  .fui-Switch__indicator {
-    background-color: ${isReal
-      ? colors.themeText
-      : colors.themeTextInverted} !important;
-
-    color: ${isReal ? colors.themeTextInverted : colors.themeText} !important;
-  }
-`
-
-const errorCircleStyle = css`
-  color: white;
-`
-
-const changeStyle = css`
-  position: absolute;
-  right: 0;
-  margin: 3%;
-  color: white;
-`
-
-const popoverStyle = css`
-  background-color: ${colors.gray02};
-  color: #fff;
-  padding: 8px;
 `

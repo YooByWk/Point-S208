@@ -73,12 +73,10 @@ const AddTeam = ({ setIsWrite, isWrite }: AddTeamProps) => {
   }
 
   const handleCreateTeam = () => {
-    console.log(selectedMember, 'selectedMember')
     const userList: number[] = selectedMember
       .map(member => member.userId)
       .filter((id): id is number => id !== undefined)
     setIsWrite(!isWrite)
-    console.log(userList, 'userList')
     if (!userList || userList.length === 0) return
     createTeamMutation.mutate({ teamName, userList })
   }
@@ -131,7 +129,6 @@ const AddTeam = ({ setIsWrite, isWrite }: AddTeamProps) => {
                 width="35vw"
                 onClick={() => {
                   setStep(2)
-                  console.log(teamName)
                 }}
                 disabled={!teamName.length}
               />
@@ -186,7 +183,12 @@ const AddTeam = ({ setIsWrite, isWrite }: AddTeamProps) => {
                   sortIcon={false}
                   width="70vw"
                 />
-                <LargeButton  typography='t8' text="검색"  onClick={handleSearch} width="15vw" />
+                <LargeButton
+                  typography="t8"
+                  text="검색"
+                  onClick={handleSearch}
+                  width="15vw"
+                />
               </Flex>
               <Spacing size={20} direction="vertical" />
               {SearchResults === undefined || SearchResults.length > 0 ? (

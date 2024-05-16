@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 /**
  * This component is used to display the required
  * privacy statement which can be found in a link in the
@@ -10,8 +10,8 @@ class Privacy extends React.Component {
       <div>
         <h1>Privacy Statement</h1>
       </div>
-    );
+    )
   }
 }
 
-export default Privacy;
+export default Privacy

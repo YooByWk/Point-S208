@@ -5,15 +5,9 @@ import Spacing from '@/components/shared/Spacing'
 import { CardType } from '@/types/cardType'
 import { BooleanStateType } from '@/types/commonType'
 import Text from '@shared/Text'
-import {
-  Edit20Regular,
-  EditRegular,
-  Guest24Regular,
-} from '@fluentui/react-icons'
-import CardInfo from '@components/mobile/MyCard/MyCardDetail/InfoSection'
+import { EditRegular, Guest24Regular } from '@fluentui/react-icons'
 import styled from '@emotion/styled'
 import { colors } from '@/styles/colorPalette'
-import { css } from '@emotion/react'
 import { ExternalCardType } from '@/types/ExternalCard'
 
 interface DetailInfoSectionProps {
@@ -54,7 +48,6 @@ const DetailInfoSection: React.FC<DetailInfoSectionProps> = ({
         <Edit
           onClick={() => {
             setValue(true)
-            console.log(isEdit.value)
           }}
         >
           <EditRegular />
@@ -140,11 +133,4 @@ const Edit = styled.div`
   align-items: center;
   height: 100%;
   gap: 5px;
-`
-
-// css
-
-const WriteStyle = css`
-  padding: 10px;
-  background-color: ${colors.themeTextInverted};
 `

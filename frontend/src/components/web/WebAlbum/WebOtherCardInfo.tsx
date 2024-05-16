@@ -59,7 +59,6 @@ const WebOtherCardInfo = ({
     mutationKey: ['editMyAlbumCard'],
     mutationFn: editMyAlbumCard,
     onSuccess(result) {
-      console.log('수정 성공', result)
       setSelectedCard(editInfo)
       setEditOpen(false)
       // refetch()
@@ -73,7 +72,6 @@ const WebOtherCardInfo = ({
     mutationKey: ['RegisterOtherCard'],
     mutationFn: RegisterOtherCard,
     onSuccess(result) {
-      console.log('타인 명함 등록 성공', result)
       setSelectedCard(editInfo)
       setEditOpen(false)
       // refetch()
@@ -93,7 +91,6 @@ const WebOtherCardInfo = ({
 
       editMyAlbumInfo(params)
     } else {
-      console.log('다른 사람 명함 추가')
       let params = {
         userId: userId as number,
         data: editInfo,

@@ -96,6 +96,7 @@ const TeamDetail = () => {
           onSearch={() => {}}
           disabled={true}
           filterIcon={false}
+          sortIcon={false}
         />
 
         <Flex
@@ -124,7 +125,6 @@ const TeamDetail = () => {
             handleAdd={hadnleAdd}
             isFetchingNextPage={isFetchingNextPage}
             hasNextPage={hasNextPage}
-            
           />
         ) : (
           <></>
