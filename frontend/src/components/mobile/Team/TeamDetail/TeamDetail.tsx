@@ -42,7 +42,7 @@ const TeamDetail = () => {
     }
   }, [teamAlbumId])
 
-  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
+  const { data, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery({
     queryKey: ['fetchTeamCardsList', teamAlbumIdNumber, 0],
     queryFn: ({ pageParam = 0 }) =>
       fetchTeamCardsList(teamAlbumIdNumber, pageParam),
@@ -85,7 +85,7 @@ const TeamDetail = () => {
     return <TeamMember team={teamInfo} />
   }
 
-  if (!data || teamCardList.length === 0) {
+  if (!isLoading && (!data || teamCardList.length === 0)) {
     return (
       <>
         <BackArrow />
@@ -118,7 +118,7 @@ const TeamDetail = () => {
         {teamCardList[0] !== undefined && teamCardList.length > 0 ? (
           <CardList cards={teamCardList} isTeam={true} handleAdd={hadnleAdd} />
         ) : (
-          <div>데이터가 없습니다.</div>
+          <></>
         )}
       </div>
       {isAddCard && (

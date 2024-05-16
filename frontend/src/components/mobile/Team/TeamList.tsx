@@ -3,7 +3,7 @@ import Spacing from '@/components/shared/Spacing'
 import TeamCard from '@/components/mobile/Team/TeamCard'
 import TeamListSearchBox from '@/components/mobile/Team/TeamList/TeamListSearchBox'
 import { useState } from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import * as teamState from '@/stores/team'
 import { css } from '@emotion/react'
 import LargeButton from '@/components/shared/LargeButton'
@@ -27,9 +27,7 @@ import AppTeamEdit from './AppTeamEdit'
 const TeamList = () => {
   const [searchValue, setSearchValue] = useState('')
   const [isWrite, setIsWrite] = useState(false)
-  const [selectedTeam, setSelectedTeam] = useRecoilState(
-    teamState.selectedTeamAlbumIdState,
-  )
+  const setSelectedTeam = useSetRecoilState(teamState.selectedTeamAlbumIdState)
   const navigate = useNavigate()
   const userId = useRecoilValue(userState).userId
 
@@ -48,17 +46,7 @@ const TeamList = () => {
   >()
 
   if (isLoading) {
-    return (
-      <Flex
-        direction="column"
-        justify="center"
-        align="center"
-        style={{ height: '100vh' }}
-      >
-        <Spinner />
-        <Text>로딩중...</Text>
-      </Flex>
-    )
+    return <Spinner label="로딩 중..." style={{ height: '100vh' }} />
   }
 
   if (isWrite) {
@@ -140,6 +128,9 @@ const TeamList = () => {
 }
 
 export default TeamList
+
+// css
+
 const buttonCss = css`
   position: fixed;
   width: 100%;
@@ -147,17 +138,6 @@ const buttonCss = css`
   z-index: 999;
   background-color: ${tokens.colorNeutralBackground1};
 `
-
-/*
-    const handleAddCard = () => {
-    if (teamAlbumId === undefined || currentteamAlbumId === undefined) {
-      alert('팀이 선택되지 않았습니다. 새로고침 해주세요.')
-      return
-    }
-    setIsAddCard(!isAddCard)
-    setTeamAlbumId(+currentteamAlbumId )
-  }
-  */
 
 // style
 
@@ -167,4 +147,5 @@ const Icon = styled.div`
   gap: 10px;
   margin-right: 20px;
   cursor: pointer;
+  white-space: nowrap;
 `

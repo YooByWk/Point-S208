@@ -2,7 +2,6 @@
 import {
   FluentProvider,
   teamsHighContrastTheme,
-  Spinner,
   tokens,
 } from '@fluentui/react-components'
 import { HashRouter as Router } from 'react-router-dom'
@@ -32,7 +31,7 @@ export default function App() {
 
   useEffect(() => {
     setTheme(themeString)
-  }, [setTheme, themeString]) 
+  }, [setTheme, themeString])
 
   return (
     <TeamsFxContext.Provider
@@ -46,14 +45,13 @@ export default function App() {
             ? teamsHighContrastTheme
             : {
                 ...customLightTheme,
-                // colorNeutralBackground1: '#',
                 colorNeutralBackground3: '#eeeeee',
               }
         }
         style={{ background: tokens.colorNeutralBackground1 }}
       >
         {loading ? (
-          <Spinner style={{ margin: 100 }} />
+          <></>
         ) : isUserinStorage ? (
           <Router>
             <AuthRouter />
