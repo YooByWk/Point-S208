@@ -13,7 +13,7 @@ spec:
     - type: Pods
       pods:
         metric:
-          name: http_requests
+          name: http_requests_total
         target:
-          type: AverageValue
-          averageValue: "100" # 양수인 타겟 평균값을 지정
+          type: Value
+          value: 100
