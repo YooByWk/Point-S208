@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -189,5 +190,18 @@ public class UserServiceImpl implements UserService{
             }
         }
         return dtos;
+    }
+
+    //링크로 공유
+    @Override
+    public PrivateAlbumResponseDto shareCard(Long cardId, String email){
+        Optional<Businesscard> businesscard = businesscardRepository.findById(cardId);
+        PrivateAlbumResponseDto dto = userMapper.toDto(businesscard.get());
+        if(dto.email().equals(email)){
+            return dto;
+        }
+        else{
+            return null;
+        }
     }
 }

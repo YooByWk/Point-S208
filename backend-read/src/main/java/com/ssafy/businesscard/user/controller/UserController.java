@@ -1,5 +1,7 @@
 package com.ssafy.businesscard.user.controller;
 
+import com.ssafy.businesscard.global.exception.UserErrorCode;
+import com.ssafy.businesscard.global.exception.UserException;
 import com.ssafy.businesscard.global.utils.MessageUtils;
 import com.ssafy.businesscard.privateAlbum.dto.PrivateAlbumResponseDto;
 import com.ssafy.businesscard.user.dto.UserInfoResponseDto;
@@ -53,5 +55,16 @@ public class UserController {
     public ResponseEntity<List<PrivateAlbumResponseDto>> searchTeamsCard(@PathVariable("team_album_id") Long teamAlbumId, @RequestParam("info") String info){
         List<PrivateAlbumResponseDto> dtos = userService.searchTeamsCard(teamAlbumId, info);
         return ResponseEntity.ok().body(MessageUtils.success(dtos).getDataBody());
+    }
+
+    // 링크로 공유
+    @GetMapping("/share/{card_id}")
+    public ResponseEntity<?> shareCard(@PathVariable("card_id") Long cardId, @RequestParam("email") String email){
+        PrivateAlbumResponseDto dto = userService.shareCard(cardId, email);
+        if(dto == null){
+            return ResponseEntity.ok("유효하지 않은 링크입니다.");
+        }else {
+            return ResponseEntity.ok().body(MessageUtils.success(dto).getDataBody());
+        }
     }
 }
