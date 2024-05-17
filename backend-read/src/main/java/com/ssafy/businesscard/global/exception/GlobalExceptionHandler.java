@@ -28,12 +28,11 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UserException.class)
-    public ResponseEntity userExceptionHandler(UserException e) {
+    public ResponseEntity userExceptionHandler(UserException e){
         log.error(Arrays.toString(e.getStackTrace()));
         return ResponseEntity.status(e.getUserErrorCode().getHttpStatus())
-                .body(MessageUtils.fail(String.valueOf(e.getUserErrorCode()), e.getMessage()));
+                .body(MessageUtils.fail(String.valueOf(e.getUserErrorCode()),e.getMessage()));
     }
-
     @ExceptionHandler({MethodArgumentNotValidException.class})
     public ResponseEntity<MessageUtils> validException(MethodArgumentNotValidException exception) {
         BindingResult bindingResult = exception.getBindingResult();
@@ -48,6 +47,27 @@ public class GlobalExceptionHandler {
         }
         log.error(errorMessages.toString());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(MessageUtils.fail(HttpStatus.BAD_REQUEST.name(), errorMessages.toString()));
+                .body(MessageUtils.fail(HttpStatus.BAD_REQUEST.name(),errorMessages.toString()));
+    }
+
+    @Getter
+    public static class UserException extends RuntimeException{
+        private final UserErrorCode userErrorCode;
+
+        public UserException(UserErrorCode userErrorCode) {
+            super(userErrorCode.getMessage());
+            this.userErrorCode = userErrorCode;
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum UserErrorCode {
+        NOT_EXISTS_USER("존재하지 않는 회원입니다.",HttpStatus.BAD_REQUEST),
+        ALREADY_IN_EMAIL("이미 가입된 회원입니다.", HttpStatus.BAD_REQUEST),
+        ACCESS_DENIED("권한이 없습니다.", HttpStatus.FORBIDDEN);
+
+        private final String message;
+        private final HttpStatus httpStatus;
     }
 }
