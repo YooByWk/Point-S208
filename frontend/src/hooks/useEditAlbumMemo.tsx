@@ -34,9 +34,3 @@ export const useEditAlbumMemo = ({
 
   return mutation
 }
-
-// export type editMemoType = {
-//   userId: number | undefined
-//   cardId: number | undefined
-//   data: { memo: string }
-// }

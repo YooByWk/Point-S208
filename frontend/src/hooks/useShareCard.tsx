@@ -2,7 +2,6 @@
 import { shareCard } from '@/apis/album'
 import { shareCardType } from '@/types/cardInput'
 import { useMutation } from '@tanstack/react-query'
-import resModal from '@/components/shared/resModal'
 export const useShareCard = () => {
   const Mutate = useMutation({
     mutationKey: ['shareCard'],
