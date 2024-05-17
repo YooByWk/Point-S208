@@ -47,7 +47,13 @@ const EmailComponent = () => {
   const hostname = window.location.hostname
 
   const handleAdd = async () => {
-    const externalUrl = `https://teams.microsoft.com/l/entity/${appId}/myAlbum?webUrl=https://${hostname}/index.html#/${cardIdNum}/share?email=${email}`
+    var encodedWebUrl = encodeURIComponent(
+      `https://${hostname}/index.html#/${cardIdNum}/share?email=${email}`,
+    )
+    const externalUrl =
+      `https://teams.microsoft.com/l/entity/${appId}/myAlbum?webUrl=` +
+      encodedWebUrl
+    console.log(externalUrl)
     window.location.href = externalUrl
   }
 
