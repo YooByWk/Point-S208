@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-
 import Flex from '@/components/shared/Flex'
 import LargeButton from '@/components/shared/LargeButton'
 import Spacing from '@/components/shared/Spacing'
@@ -46,12 +45,14 @@ const AddMember = ({
       setSelectedMember(prev => [...prev, user])
     }
   }
+
   // 아이콘 버튼에서 선택 해제용으로 사용
   const handleMemberUnCheck = (user: UserType) => {
     setSelectedMember(prev =>
       prev.filter(member => member.userId !== user.userId),
     )
   }
+
   // 선택 확인
   const isMember = (user: UserType) => {
     return selectedMember.some(member => member.userId === user.userId)
@@ -83,6 +84,7 @@ const AddMember = ({
     })
     setIsWrite(!isWrite)
   }
+
   return (
     <>
       <div
@@ -114,7 +116,7 @@ const AddMember = ({
               css={searchCss}
             >
               <SearchBox
-                onSearch={handleResult} // 검색 로직 넣기
+                onSearch={handleResult}
                 value={teamSearchValue}
                 isSearchingMember={true}
                 onChange={(e: any) => {

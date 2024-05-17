@@ -11,7 +11,7 @@ const AppTeam = () => {
   const hasSelectedTeam = useRecoilValue(teamState.hasSelectedTeam)
 
   return (
-    <div css={bg} style={{ height: '100dvh' }}>
+    <div css={bg}>
       <Outlet />
     </div>
   )

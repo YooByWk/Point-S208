@@ -46,11 +46,7 @@ const ShareCard = ({
   const [searchResults, setSearchResults] = useState<
     ExternalCardListType | undefined
   >(undefined)
-  // const [teamAlbumId, setTeamAlbumId] = useState<number>(); // teamAlbumId 상태를 관리
   const navigate = useNavigate()
-  /* 
-
-*/
 
   const handleTeamList = () => {
     navigate(`/myTeam/share`, {
@@ -63,6 +59,7 @@ const ShareCard = ({
       setSearchResults(data as ExternalCardListType)
     }
   }
+
   return (
     <div>
       <Flex direction="row" onClick={handleBackArrow} css={arrowContainer}>
@@ -147,7 +144,6 @@ const cardContainer = css`
   width: 95%;
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
   align-items: center;
 `
 
@@ -160,8 +156,6 @@ const btnContainer = css`
 `
 
 const arrowContainer = css`
-  /* width: fit-content; */
-  /* padding-left: 15px; */
   margin-left: 10px;
   margin-top: 10px;
 `

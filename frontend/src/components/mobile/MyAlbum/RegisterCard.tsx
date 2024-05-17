@@ -13,11 +13,15 @@ const RegisterCard = () => {
   const [isEnglish] = React.useState(false)
 
   return (
-    <div>
-      <BackArrow />
+    <>
       {camera && <PhotoReg isMyCard={false} refetch={() => {}} />}
-      {isDirectInput && <RegisterOtherCardInfo isEnglish={isEnglish} />}
-    </div>
+      {isDirectInput && (
+        <>
+          <BackArrow />
+          <RegisterOtherCardInfo isEnglish={isEnglish} />
+        </>
+      )}
+    </>
   )
 }
 

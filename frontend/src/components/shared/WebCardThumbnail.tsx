@@ -5,12 +5,7 @@ import type { CardType } from '@/types/cardType'
 import Flex from '@shared/Flex'
 import Spacing from '@shared/Spacing'
 import { Checkbox, Image } from '@fluentui/react-components'
-import {
-  // Star24Regular,
-  // Star24Filled,
-  ShareAndroid24Filled,
-  Delete24Filled,
-} from '@fluentui/react-icons'
+import { ShareAndroid24Filled, Delete24Filled } from '@fluentui/react-icons'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { selectedCardState } from '@stores/card'
 import { userState } from '@/stores/user'
@@ -34,7 +29,6 @@ const WebCardThumbnail = ({
   setIsDetail,
   onSelect,
 }: CardThumbnailProps) => {
-  // const [isfavorite, setIsFavorite] = useState(false)
   const [isChecked, setIsChecked] = useState(
     selectedCards.includes(cardInfo.cardId),
   )
@@ -69,12 +63,6 @@ const WebCardThumbnail = ({
     onSelect(cardInfo.cardId)
   }
 
-  // const handleFavorite = () => {
-  //   setIsFavorite(!isfavorite)
-  //   /*  api 호출 */
-  //   console.log('즐겨찾기 : ', cardInfo)
-  // }
-
   return (
     <>
       <Flex justify="center" align="center">
@@ -100,11 +88,7 @@ const WebCardThumbnail = ({
           />
 
           <Spacing size={10} />
-          {/* {isfavorite ? (
-            <Star24Filled css={iconCss} onClick={handleFavorite} />
-          ) : (
-            <Star24Regular css={i} onClick={handleFavorite} />
-          )} */}
+
           <WebAlbumShare card={cardInfo}>
             <ShareAndroid24Filled css={i} />
           </WebAlbumShare>
@@ -122,11 +106,6 @@ const WebCardThumbnail = ({
 }
 
 export default WebCardThumbnail
-
-// const iconCss = css`
-//   color: yellow;
-//   margin-bottom: 15px;
-// `
 
 const i = css`
   margin-bottom: 15px;

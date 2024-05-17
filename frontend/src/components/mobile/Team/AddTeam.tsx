@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { ArrowLeft24Regular } from '@fluentui/react-icons'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Text from '@shared/Text'
 import Flex from '@/components/shared/Flex'
 import SearchBox from '@/components/shared/SearchBox'
@@ -14,13 +14,15 @@ import { useRecoilValue } from 'recoil'
 import { userState } from '@/stores/user'
 import { useTeamCreatgeSkip } from '@/hooks/Team/useTeamCreateSkip'
 import { useCreateTeam } from '@/hooks/useCreateTeam'
+import { TeamListType } from '@/types/TeamListType'
 
 interface AddTeamProps {
   setIsWrite: (isWrite: boolean) => void
   isWrite: boolean
+  data: TeamListType[]
 }
 
-const AddTeam = ({ setIsWrite, isWrite }: AddTeamProps) => {
+const AddTeam = ({ setIsWrite, isWrite, data }: AddTeamProps) => {
   const userId = useRecoilValue(userState).userId
   const [step, setStep] = useState(1)
   const [teamName, setTeamName] = useState('')
@@ -81,6 +83,19 @@ const AddTeam = ({ setIsWrite, isWrite }: AddTeamProps) => {
     createTeamMutation.mutate({ teamName, userList })
   }
 
+  // 에러 처리
+  const [isError, setIsError] = useState(false)
+
+  useEffect(() => {
+    const isName = data.some(item => item.teamName === teamName)
+
+    if (isName) {
+      setIsError(true)
+    } else {
+      setIsError(false)
+    }
+  }, [data, teamName])
+
   return (
     <div css={Step1mainContainerCss}>
       <Flex direction="row" onClick={handleBackArrow} css={arrowContainer}>
@@ -88,14 +103,10 @@ const AddTeam = ({ setIsWrite, isWrite }: AddTeamProps) => {
         <Spacing size={10} direction="horizontal" />
         <Text typography="t7">뒤로가기</Text>
       </Flex>
+      <Spacing size={10} />
       {step === 1 ? (
         <div className={step === 1 ? 'step1-enter' : 'step1-exit'}>
-          <Flex
-            direction="column"
-            justify="space-around"
-            align="center"
-            css={Step1mainContainerCss}
-          >
+          <Flex direction="column" justify="space-around" align="center">
             {/* step 1*/}
             <Flex
               direction="column"
@@ -116,6 +127,7 @@ const AddTeam = ({ setIsWrite, isWrite }: AddTeamProps) => {
                 css={inputCss}
               />
             </Flex>
+            <Spacing size={20} direction="vertical" />
             <Flex css={btnContainer} justify="space-between">
               <LargeButton
                 text="취소"
@@ -130,10 +142,19 @@ const AddTeam = ({ setIsWrite, isWrite }: AddTeamProps) => {
                 onClick={() => {
                   setStep(2)
                 }}
-                disabled={!teamName.length}
+                disabled={!teamName.length || isError}
               />
             </Flex>
           </Flex>
+          {isError && (
+            <>
+              <Spacing size={20} direction="vertical" />
+              <Text typography="t9" className="red">
+                이미 해당 팀이 존재합니다.
+                <br />팀 이름을 다시 입력해 주세요
+              </Text>
+            </>
+          )}
         </div>
       ) : (
         <div className={step === 2 ? 'step2-enter' : 'step2-exit'}>
@@ -164,7 +185,7 @@ const AddTeam = ({ setIsWrite, isWrite }: AddTeamProps) => {
                 css={searchCss}
               >
                 <SearchBox
-                  onSearch={handleResult} // 검색 로직 넣기
+                  onSearch={handleResult}
                   value={teamSearchValue}
                   isSearchingMember={true}
                   onChange={(e: any) => {
@@ -265,18 +286,14 @@ const btnContainer = css`
   width: 100%;
 `
 const inputCss = css`
-  width: 81vw;
+  width: 100%;
   font-size: 16px !important;
-  /* margin-left: 5%; */
   background-color: ${tokens.colorNeutralBackground1Hover} !important;
 `
 
 const Step1mainContainerCss = css`
   margin-top: 2vh;
-  padding-left: 5%;
-  height: 40vh;
-  padding-bottom: 10vh;
-  padding-right: 5vw;
+  padding-inline: 5%;
   .step1-enter {
     animation: fadeIn 1s;
   }
@@ -309,6 +326,10 @@ const Step1mainContainerCss = css`
     to {
       opacity: 0;
     }
+  }
+
+  .red {
+    color: #d13448;
   }
 `
 const arrowContainer = css`

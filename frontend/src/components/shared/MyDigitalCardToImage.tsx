@@ -45,7 +45,6 @@ const MyDigitalCardToImage = ({
         document.body.appendChild(img) // 이미지를 DOM에 추가하거나 원하는 작업 수행
       })
       .catch(error => {
-        // 오류 처리
         console.error('이미지 생성 오류:', error.message)
       })
   }, [logoLoaded])
@@ -85,6 +84,7 @@ const MyDigitalCardToImage = ({
 export default MyDigitalCardToImage
 
 // style
+
 const LeftFlex = styled.div`
   display: flex;
   flex-direction: column;

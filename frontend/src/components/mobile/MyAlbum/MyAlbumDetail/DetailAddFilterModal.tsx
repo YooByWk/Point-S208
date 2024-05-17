@@ -10,7 +10,6 @@ import {
   DialogContent,
   Button,
 } from '@fluentui/react-components'
-
 import Text from '@/components/shared/Text'
 import { useQuery } from '@tanstack/react-query'
 import { addFilterToCard, fetchFilter } from '@/apis/album'
@@ -31,10 +30,6 @@ interface LargeModalProps {
   icon: ReactElement
 }
 
-/**
- * 뭔가 뭔가
- * @returns
- */
 const DetailAddFilterModal: React.FC<LargeModalProps> = ({
   dialogTitle,
   dialogContent,
@@ -46,7 +41,6 @@ const DetailAddFilterModal: React.FC<LargeModalProps> = ({
   const params = useParams()
   const teamAlbumId = Number(params?.teamAlbumId) || undefined
 
-  // 팀여부 확인완료
   const { data } = useQuery({
     queryKey: params.teamAlbumId
       ? ['fetchTeamFilterList', params.teamAlbumId]
@@ -56,12 +50,6 @@ const DetailAddFilterModal: React.FC<LargeModalProps> = ({
       : () => fetchFilter(userId as number),
   })
   const filterList: FilterListType = data?.data_body || []
-
-  // const handleAddFilter = (
-  //   userId: number,
-  //   cardId: number,
-  //   filterId: number,
-  // ) => {}
 
   return (
     <Dialog modalType="alert">

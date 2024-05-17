@@ -1,7 +1,6 @@
 import { CSSProperties } from 'react'
 import { colors, Colors } from '@styles/colorPalette'
 import { Typography, typographyMap } from '@styles/typography'
-
 import styled from '@emotion/styled'
 
 interface TextProps {
@@ -22,8 +21,8 @@ const Text = styled.span<TextProps>(
   }),
   ({ typography = 't5' }) => typographyMap[typography],
   {
-    display: 'flex', // 상하 중앙 정렬을 위해 추가된 display: flex
-    alignItems: 'center', // 상하 중앙 정렬을 위해 추가된 align-items: center
+    display: 'flex',
+    alignItems: 'center',
   },
 )
 

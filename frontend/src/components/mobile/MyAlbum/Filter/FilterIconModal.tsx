@@ -43,7 +43,7 @@ import {
   editTeamFilter,
   fetchTeamFilterList,
 } from '@/apis/team'
-///
+
 const NoFilter = ({ handleAddFilter }: { handleAddFilter: () => void }) => {
   return (
     <Flex direction="column" justify="space-evenly">
@@ -87,7 +87,6 @@ const Filter = ({
     </Flex>
   )
 }
-///
 
 interface LargeModalProps {
   dialogTitle: string
@@ -109,7 +108,6 @@ const FilterIconModal: React.FC<LargeModalProps> = ({
   const params = useParams()
   const teamAlbumId = Number(params['teamAlbumId'])
 
-  // 팀여부 확인완료
   const { data } = useQuery({
     queryKey: teamAlbumId ? ['fetchTeamFilterList'] : ['fetchFilterList'],
     queryFn: teamAlbumId
@@ -166,7 +164,6 @@ const FilterIconModal: React.FC<LargeModalProps> = ({
     }
   }, [filterList])
 
-  // 팀여부 확인완료
   const { mutate: mutateFilter } = useMutation({
     mutationKey: ['editFilter'],
     mutationFn: teamAlbumId
@@ -182,7 +179,6 @@ const FilterIconModal: React.FC<LargeModalProps> = ({
       })
     },
   })
-  // 팀여부 확인완료
 
   const { mutate: mutateDeleteFilter } = useMutation({
     mutationKey: ['deleteFilter'],

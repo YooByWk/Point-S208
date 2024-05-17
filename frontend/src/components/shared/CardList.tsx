@@ -223,14 +223,10 @@ const CardList = ({
 
 export default CardList
 
-// css
-
 const buttonCss = css`
   position: fixed;
   width: 100%;
-  bottom: 0px;
-  height: 45px;
+  bottom: 0;
+  padding-block: 10px;
   background-color: ${tokens.colorNeutralBackground1};
-  /* display: flex; */
-  /* align-items: center; */
 `

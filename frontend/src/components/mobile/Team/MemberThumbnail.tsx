@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-
 import { UserType } from '@/types/userType'
 import Text from '@shared/Text'
 import Flex from '@/components/shared/Flex'
@@ -24,6 +23,7 @@ const MemberThumbnail = ({
   onIconClick,
 }: MemberThumbnailProps) => {
   if (!user) return null
+
   return (
     <div onClick={onClick} css={mainContCss}>
       <Flex direction="column" justify="center" align="" css={cont}>
@@ -49,6 +49,7 @@ const mainContCss = css`
   width: 100%;
   position: relative;
 `
+
 const iconCss = css`
   position: absolute;
   top: 0;

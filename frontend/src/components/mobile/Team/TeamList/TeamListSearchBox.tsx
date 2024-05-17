@@ -86,9 +86,11 @@ const TeamListSearchBox: React.FC<SearchBoxProps> = ({
     </div>
   )
 }
+
 export default TeamListSearchBox
 
 // css
+
 const mainContainerCss = css`
   padding-left: 5%;
   padding-right: 5%;
@@ -109,6 +111,7 @@ const searchBoxCss = (bg: string) => css`
   width: 100%;
   background-color: ${tokens.colorNeutralBackground2};
 `
+
 const searchBoxContainerCss = (width: string) => css`
   min-width: 220px;
   background-color: ${tokens.colorNeutralBackground2};

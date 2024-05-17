@@ -24,6 +24,7 @@ const BackArrow = ({ onClick }: BackArrowProps) => {
     e.stopPropagation()
     navigate(-1)
   }
+
   return (
     <div css={topContainer}>
       <Spacing size={10} direction="vertical" />
@@ -32,11 +33,9 @@ const BackArrow = ({ onClick }: BackArrowProps) => {
         <ArrowLeft24Regular onClick={handleBackArrow} />
         <Spacing size={10} direction="horizontal" onClick={handleBackArrow} />
         <Text typography="t7" onClick={handleBackArrow}>
-          {' '}
-          뒤로가기{' '}
+          뒤로가기
         </Text>
       </Flex>
-      {/* <hr style={{margin:'1%'}} /> */}
       <Spacing size={5} direction="vertical" />
     </div>
   )
@@ -48,7 +47,7 @@ const topContainer = css`
   margin-top: 10px;
   margin-left: 15px;
 `
+
 const container = css`
-  /* width: fit-content; */
   cursor: pointer;
 `

@@ -12,7 +12,6 @@ import { ExternalCardListType } from '@/types/ExternalCard'
 import { isAlbumState } from '@/stores/emptyCard'
 
 const AlbumList = () => {
-  // 내 명함 리스트
   const userId = useRecoilValue(userState).userId
   const [searchValue] = useState('')
   const [filterState] = useRecoilState(filterStoreState)
@@ -69,14 +68,13 @@ const AlbumList = () => {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [fetchNextPage, hasNextPage, data])
-  //
+
   const [isAddCard, setIsAddCard] = useState(false)
   const handleAdd = () => {
     setIsAddCard(!isAddCard)
     setIsAlbum(true)
   }
-  //
-  console.log(userId)
+
   const [searchResults] = useState<ExternalCardListType | undefined>(undefined)
 
   const renderCards = () => {
@@ -107,12 +105,7 @@ const AlbumList = () => {
       searchValue.length > 0 ? (
         searchResults?.map(res => <p>{res.name}</p>)
       ) : (
-        <div>
-          {renderCards()}
-          {/* {isFetchingNextPage && (
-            <Spinner label="불러오는 중..."  />
-          )} */}
-        </div>
+        <>{renderCards()}</>
       )}
       {isAddCard && (
         <AddCard isAddCard={isAddCard} setIsAddCard={setIsAddCard} />

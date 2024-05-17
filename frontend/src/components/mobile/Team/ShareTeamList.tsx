@@ -1,15 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import Spacing from '@/components/shared/Spacing'
-import TeamCard from '@/components/mobile/Team/TeamCard'
 import TeamListSearchBox from '@/components/mobile/Team/TeamList/TeamListSearchBox'
 import { useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import * as teamState from '@/stores/team'
 import { css } from '@emotion/react'
 import LargeButton from '@/components/shared/LargeButton'
-import AddTeam from '@/components/mobile/Team/AddTeam'
 import { Spinner, tokens } from '@fluentui/react-components'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { fetchTeamList } from '@/apis/team'
 import { userState } from '@/stores/user'
@@ -18,7 +16,6 @@ import Text from '@/components/shared/Text'
 import { TeamListType } from '@/types/TeamListType'
 import ShareTeamCard from './ShareTeamCard'
 import { shareToTeamCard } from '@/apis/album'
-
 import {
   CheckmarkCircle24Regular,
   Circle24Regular,
@@ -61,13 +58,10 @@ const TeamList = () => {
       param.state.selectedCards,
     )
     await queryClient.invalidateQueries({ queryKey: ['fetchTeamCardsList'] })
-    // navigate(`/myTeam/${selectedTeam.teamAlbumId}`, {
-    // state: { teamAlbumId: selectedTeam },
-    // })
     navigate(`/myAlbum`, { state: { isShare: false } })
     alert('명함을 팀에 공유했습니다')
-    // window.location.reload()
   }
+
   if (!data || data.length === 0) {
     return (
       <Flex
@@ -125,6 +119,7 @@ const TeamList = () => {
 }
 
 export default TeamList
+
 const buttonCss = css`
   position: fixed;
   width: 100%;
@@ -133,16 +128,6 @@ const buttonCss = css`
   background-color: ${tokens.colorNeutralBackground1};
 `
 
-/*
-  const handleAddCard = () => {
-  if (teamAlbumId === undefined || currentteamAlbumId === undefined) {
-    alert('팀이 선택되지 않았습니다. 새로고침 해주세요.')
-    return
-  }
-  setIsAddCard(!isAddCard)
-  setTeamAlbumId(+currentteamAlbumId )
-}
-*/
 const iconCont = css`
   position: relative;
 `

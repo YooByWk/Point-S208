@@ -16,6 +16,7 @@ import { UserListType } from '@/types/userType'
 import { useRecoilValue } from 'recoil'
 import { userState } from '@/stores/user'
 import { useParams } from 'react-router-dom'
+
 interface SearchBoxProps {
   placeholder?: string
   onChange?: (e: any) => void
@@ -34,11 +35,7 @@ interface SearchBoxProps {
   size?: 'small' | 'large' | 'medium' | undefined
   buttonSize?: number
 }
-/**
- *
- * [searchValue, setSearchValue] = useState('');를
- * 각각 value와 onChange로 받아서 사용
- */
+
 const SearchBox: React.FC<SearchBoxProps> = ({
   disabled = false,
   placeholder,
@@ -58,7 +55,6 @@ const SearchBox: React.FC<SearchBoxProps> = ({
 }) => {
   const userId = useRecoilValue(userState).userId
 
-  // 검색 로직
   const param = useParams().teamAlbumId
   const teamAlbumId = param ? +param : NaN
 
@@ -117,24 +113,6 @@ const SearchBox: React.FC<SearchBoxProps> = ({
 
 export default SearchBox
 
-// 사용 예
-/**
- *
- *   const [searchValue, setSearchValue] = useState('');
- * return (
- *   <div>
- *     모바일 팀 명함
- *     <p></p>
- *     <SearchBox
- *     value={searchValue}
- *     onChange={(e:any) =>{ setSearchValue(e.target.value)
- *     console.log(searchValue)} }
- *
- *     />
- *   </div>
- * );
- */
-
 const mainContainerCss = css`
   padding-left: 5%;
   padding-right: 5%;
@@ -155,6 +133,7 @@ const searchBoxCss = (bg: string) => css`
   width: 100%;
   background-color: ${tokens.colorNeutralBackground2};
 `
+
 const searchBoxContainerCss = (width: string) => css`
   min-width: 220px;
   background-color: ${tokens.colorNeutralBackground2};
