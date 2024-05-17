@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-cud
+  namespace: ingress-nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: backend-cud
+  template:
+    metadata:
+      labels:
+        app: backend-cud
+    spec:
+      containers:
+        - name: backend-cud
+          image: junwon1131/s208-backend-cud-kubernetes:latest
+          imagePullPolicy: IfNotPresent # 또는 Never에 따라 필요에 맞게 변경
+          ports:
+            - containerPort: 8080
+      imagePullSecrets: # 이미지 풀 시크릿 추가
+        - name: myregistrykey

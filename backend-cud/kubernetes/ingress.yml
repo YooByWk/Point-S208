@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: backend-cud-ingress
+  namespace: ingress-nginx
+spec:
+  rules:
+    - host: hello-minikube.local
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: backend-cud-service
+                port:
+                  number: 8080
