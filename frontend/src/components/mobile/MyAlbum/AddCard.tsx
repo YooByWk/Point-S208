@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-
 import Text from '@shared/Text'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { userState } from '@/stores/user'
@@ -33,6 +32,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { getCardInfo } from '@/apis/card'
 import { RegisterOtherCard } from '@/apis/album'
 import { RegisterTeamCard } from '@/apis/team'
+
 interface AddCardProps {
   isAddCard: boolean
   setIsAddCard: (isAddCard: boolean) => void
@@ -43,7 +43,7 @@ const AddCard = ({ isAddCard, setIsAddCard, teamInfo }: AddCardProps) => {
   const userId = useRecoilValue(userState).userId
   const [, setIsDirectInput] = useState(false)
   const handleClose = () => {
-    setIsAddCard(!isAddCard) // 닫기
+    setIsAddCard(!isAddCard)
   }
   const [modalOpen, setModalOpen] = useState(false)
   const [inputLink, setInputLink] = useState('')
@@ -81,7 +81,7 @@ const AddCard = ({ isAddCard, setIsAddCard, teamInfo }: AddCardProps) => {
         : queryClient.invalidateQueries({
             queryKey: ['fetchMyAlbum', userId, 0],
           })
-        window.scrollTo(0, 0)
+      window.scrollTo(0, 0)
     },
     onError(error) {
       console.error('타인 명함 등록 실패:', error)
@@ -117,7 +117,7 @@ const AddCard = ({ isAddCard, setIsAddCard, teamInfo }: AddCardProps) => {
     getCardInfoMutation({ cardId: cardIdNum, email: email })
 
     setModalOpen(false)
-    setIsAddCard(!isAddCard) // 닫기
+    setIsAddCard(!isAddCard)
   }
   return (
     <>

@@ -39,9 +39,8 @@ const NewlyAdded = ({
 
   return (
     <>
-      <Flex align="center" css={bg}>
+      <Flex align="center">
         <Flex align="center" onClick={handleOnClick}>
-          {/* 사진 */}
           <Flex css={boxStyles} align="center">
             {card.realPicture ? (
               <Image
@@ -69,8 +68,6 @@ const NewlyAdded = ({
 export default NewlyAdded
 
 // css
-
-const bg = css``
 
 const boxStyles = css`
   width: 40vw;

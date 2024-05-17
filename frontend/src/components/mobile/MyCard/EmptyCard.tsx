@@ -55,14 +55,6 @@ const EmptyCard = () => {
   )
 }
 
-const linkStyles = css`
-  text-align: center;
-
-  &:hover {
-    cursor: pointer;
-  }
-`
-
 export default EmptyCard
 
 // style
@@ -72,4 +64,14 @@ const container = css`
   justify-content: center;
   align-items: center;
   border-bottom: 1px solid ${colors.gray02};
+`
+
+// css
+
+const linkStyles = css`
+  text-align: center;
+
+  &:hover {
+    cursor: pointer;
+  }
 `

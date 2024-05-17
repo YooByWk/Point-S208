@@ -28,10 +28,6 @@ interface SmallModalProps {
   onIconClick?: (() => void) | ((e: React.MouseEvent) => void)
 }
 
-/**
- * 뭔가 뭔가
- * @returns
- */
 const ShareModal: React.FC<SmallModalProps> = ({
   icon,
   dialogTitle,

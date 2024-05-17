@@ -54,7 +54,6 @@ const CardThumbnail = ({
   scale = 1,
   index = NaN,
 }: CardThumbnailProps) => {
-  // const [isfavorite, setIsFavorite] = useState(false)
   const [isChecked, setIsChecked] = useState(false)
   const isSelected = selectedCards.includes(cardInfo.cardId)
   const userId = useRecoilValue(userState).userId
@@ -77,14 +76,6 @@ const CardThumbnail = ({
     setIsChecked(!isChecked)
     onSelect(cardInfo.cardId)
   }
-
-  // const handleFavorite = (event: React.MouseEvent) => {
-  //   event.stopPropagation()
-
-  //   setIsFavorite(!isfavorite)
-  //   /*  api 호출 */
-  //   // console.log('즐겨찾기 : ', cardInfo)
-  // }
 
   const handleShare = (event: React.MouseEvent) => {
     event.stopPropagation()
@@ -121,22 +112,18 @@ const CardThumbnail = ({
     shareCardMutation.mutate({ id: cardInfo.cardId, email: emailInput })
     setIsModalOpen(!isModalOpen)
   }
-  
-  const handleLinkShare = async (event : React.MouseEvent) => {
-    
+
+  const handleLinkShare = async (event: React.MouseEvent) => {
     event.stopPropagation()
     const shareableUrl = `https://${hostname}/index.html#/${cardInfo.cardId}/share?email=${cardInfo.email}&appId=${process.env.REACT_APP_TEAMS_APP_ID}`
     try {
       await navigator.clipboard.writeText(shareableUrl)
-      console.log(shareableUrl)
       alert('URL이 클립보드에 복사되었습니다.')
-      
     } catch (error) {
       console.error('URL 복사 중 오류가 발생했습니다:', error)
     }
     setIsModalOpen(false)
-  } 
-  
+  }
 
   const navigate = useNavigate()
   return (
@@ -204,11 +191,6 @@ const CardThumbnail = ({
         )}
         {!forShare && (
           <Flex direction="column" justify="space-around" align="center">
-            {/* {isfavorite ? (
-              <Star24Filled css={iconCss} onClick={handleFavorite} />
-            ) : (
-              <Star24Regular css={i} onClick={handleFavorite} />
-            )} */}
             <div onClick={event => event.stopPropagation()}>
               <Dialog
                 modalType="alert"
@@ -235,7 +217,11 @@ const CardThumbnail = ({
                         </>
                       )}
                       {!isEmail ? (
-                        <Flex direction="row" align="center" justify="space-around">
+                        <Flex
+                          direction="row"
+                          align="center"
+                          justify="space-around"
+                        >
                           <DialogActions css={fui}>
                             <div css={dismissCss}>
                               <DialogTrigger disableButtonEnhancement>
@@ -250,40 +236,31 @@ const CardThumbnail = ({
                               </DialogTrigger>
                             </div>
 
-                              <DialogTrigger disableButtonEnhancement>
-                                <Flex
-                                  direction="column"
-                                  align="center"
-                                  justify="center"
-                                  onClick={handleEmailClick}
-                                >
-                                  <MailRead48Filled />
-                                  <Text typography="t9">이메일</Text>
-                                </Flex>
-                              </DialogTrigger>
-                              <Spacing size={20} direction='horizontal'/>
-                              <DialogTrigger disableButtonEnhancement>
-                                <Flex
-                                  direction="column"
-                                  align="center"
-                                  justify="center"
-                                  onClick={(e) => {handleLinkShare(e)}}
-                                >
-                                  <PersonLink48Filled />
-                                  <Text typography="t9">공유 링크 복사</Text>
-                                </Flex>
-                              </DialogTrigger>
-                            {/* <DialogTrigger disableButtonEnhancement>
+                            <DialogTrigger disableButtonEnhancement>
                               <Flex
                                 direction="column"
                                 align="center"
                                 justify="center"
-                                onClick={event => event.stopPropagation()}
+                                onClick={handleEmailClick}
                               >
-                                <ArrowCircleDown48Filled />
-                                <Text typography="t9">파일 저장</Text>
+                                <MailRead48Filled />
+                                <Text typography="t9">이메일</Text>
                               </Flex>
-                            </DialogTrigger> */}
+                            </DialogTrigger>
+                            <Spacing size={20} direction="horizontal" />
+                            <DialogTrigger disableButtonEnhancement>
+                              <Flex
+                                direction="column"
+                                align="center"
+                                justify="center"
+                                onClick={e => {
+                                  handleLinkShare(e)
+                                }}
+                              >
+                                <PersonLink48Filled />
+                                <Text typography="t9">공유 링크 복사</Text>
+                              </Flex>
+                            </DialogTrigger>
                           </DialogActions>
                         </Flex>
                       ) : (
@@ -340,6 +317,7 @@ const CardThumbnail = ({
 export default CardThumbnail
 
 // css
+
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -370,7 +348,6 @@ const cardContainer = (
     : 'none'};
   opacity: ${isFirstRender ? 0 : 1};
   animation-delay: ${isNaN(index) ? 0 : index * 0.12}s;
-  /* padding: 10px; */
 
   &:hover,
   &:active,
@@ -392,7 +369,6 @@ const cardContainer = (
     }
   }
 `
-// css
 
 const i = css`
   margin-bottom: 15px;

@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-
 import Text from '@/components/shared/Text'
 import Flex from '@/components/shared/Flex'
 import Spacing from '@/components/shared/Spacing'
@@ -16,7 +15,11 @@ import {
 } from '@fluentui/react-components'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { MailRead48Filled, Dismiss24Filled, PersonLink48Filled } from '@fluentui/react-icons'
+import {
+  MailRead48Filled,
+  Dismiss24Filled,
+  PersonLink48Filled,
+} from '@fluentui/react-icons'
 import Input from '@/components/shared/Input'
 import { useShareCard } from '@/hooks/useShareCard'
 import { ExternalCardType } from '@/types/ExternalCard'
@@ -24,10 +27,9 @@ import { CardType } from '@/types/cardType'
 
 interface DetailBottomSectionProps {
   card: CardType | ExternalCardType
-
 }
 
-const DetailBottomSection = ({card}: DetailBottomSectionProps ) => {
+const DetailBottomSection = ({ card }: DetailBottomSectionProps) => {
   const params = useParams()
   const cardId: number = Number(params.cardId)
   const shareCardMutation = useShareCard()
@@ -55,7 +57,6 @@ const DetailBottomSection = ({card}: DetailBottomSectionProps ) => {
     const shareableUrl = `https://${hostname}/index.html#/${card.cardId}/share?email=${card.email}&appId=${process.env.REACT_APP_TEAMS_APP_ID}`
     try {
       await navigator.clipboard.writeText(shareableUrl)
-      console.log(shareableUrl)
       alert('URL이 클립보드에 복사되었습니다.')
     } catch (error) {
       console.error('URL 복사 중 오류가 발생했습니다:', error)
@@ -130,16 +131,6 @@ const DetailBottomSection = ({card}: DetailBottomSectionProps ) => {
                           <Text typography="t9">공유 링크 복사</Text>
                         </Flex>
                       </DialogTrigger>
-                      {/* <DialogTrigger disableButtonEnhancement>
-                        <Flex
-                          direction="column"
-                          align="center"
-                          justify="center"
-                        >
-                          <ArrowCircleDown48Filled />
-                          <Text typography="t9">파일 저장</Text>
-                        </Flex>
-                      </DialogTrigger> */}
                     </DialogActions>
                   </Flex>
                 ) : (

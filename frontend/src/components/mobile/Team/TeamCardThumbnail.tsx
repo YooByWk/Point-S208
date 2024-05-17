@@ -7,7 +7,6 @@ import styled from '@emotion/styled'
 import Text from '@/components/shared/Text'
 
 const TeamCardThumbnail: any = ({ teamAlbumId }: { teamAlbumId: any }) => {
-  /* 팀 명함 정보*/
   const { data, isLoading } = useQuery({
     queryKey: ['fetchTeamCardsList', teamAlbumId],
     queryFn: () => fetchTeamCardsList(teamAlbumId, 0),
@@ -71,6 +70,9 @@ const TeamCardThumbnail: any = ({ teamAlbumId }: { teamAlbumId: any }) => {
 }
 
 export default TeamCardThumbnail
+
+// css
+
 const TeamCardThumbnailContainer = css`
   /* 세개의 카드가 겹친 모양 */
   display: flex;

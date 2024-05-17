@@ -1,11 +1,11 @@
+/** @jsxImportSource @emotion/react */
 import { Button, tokens } from '@fluentui/react-components'
 import { colors } from '@/styles/colorPalette'
-/** @jsxImportSource @emotion/react */
-// import type { ButtonProps } from "@fluentui/react-components"
 import Text from '@/components/shared/Text'
 import { css } from '@emotion/react'
 import Flex from './Flex'
 import { Typography } from '@styles/typography'
+
 interface ButtonProps {
   text: string
   onClick?: () => void
@@ -15,6 +15,7 @@ interface ButtonProps {
   secondary?: boolean
   typography?: Typography
 }
+
 /**
  * @param
  *  onclick: () => void,
@@ -80,5 +81,5 @@ const buttonCss = (props: any) => css`
 `
 
 const searchBoxContainerCss = css`
-  /* background-color: ${tokens.colorNeutralBackground1}; */
+  white-space: nowrap;
 `

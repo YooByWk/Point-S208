@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-
 import Text from '@shared/Text'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { userState } from '@/stores/user'
@@ -77,12 +76,15 @@ const TeamMember = ({ team }: { team: TeamListType }) => {
             onSearch={() => {}}
             onChange={e => setSearchValue(e.target.value)}
             placeholder="이름 혹은 이메일로 검색"
+            filterIcon={false}
+            sortIcon={false}
           />
-          {/* <Text textAlign='center' typography='t8'>팀원 목록</Text> */}
           <Spacing size={15} direction="vertical" />
-          {filteredMembers.map(member => {
-            return <MemberComponent {...member} />
-          })}
+          <div style={{ marginBottom: '81px' }}>
+            {filteredMembers.map(member => {
+              return <MemberComponent {...member} />
+            })}
+          </div>
           <div css={btn}>
             <LargeButton
               text="팀원 추가"

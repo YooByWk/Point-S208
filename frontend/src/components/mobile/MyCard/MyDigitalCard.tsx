@@ -47,7 +47,6 @@ const MyDigitalCard: React.FC<MyDigitalCardProps> = ({
   if (!scale) {
     scale = 1.1
   }
-  // const cardInfo = props.cardInfo
   const [loaded, setLoaded] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const userId = useRecoilValue(userState).userId
@@ -151,6 +150,7 @@ const MyDigitalCard: React.FC<MyDigitalCardProps> = ({
 export default MyDigitalCard
 
 // style
+
 const LeftFlex = styled.div`
   display: flex;
   flex-direction: column;

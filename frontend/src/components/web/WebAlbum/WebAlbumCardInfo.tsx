@@ -17,16 +17,16 @@ const WebAlbumCardInfo = () => {
     <>
       <Flex direction="column">
         <Flex justify="center" align="center" css={boxStyles}>
-          {selectedCard.realPicture ? (
-            <Image
-              fit="contain"
-              src={selectedCard.realPicture}
-              alt={`${selectedCard.name}'s card`}
-            />
-          ) : selectedCard.digitalPicture ? (
+          {selectedCard.digitalPicture ? (
             <Image
               fit="contain"
               src={selectedCard.digitalPicture}
+              alt={`${selectedCard.name}'s card`}
+            />
+          ) : selectedCard.realPicture ? (
+            <Image
+              fit="contain"
+              src={selectedCard.realPicture}
               alt={`${selectedCard.name}'s card`}
             />
           ) : (

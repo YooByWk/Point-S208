@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-
 import {
   PeopleTeam28Regular,
   PeopleTeam28Filled,
@@ -19,8 +18,6 @@ interface PeopleFilterSortIconsProps {
   memberIcon?: boolean
   filterIcon?: boolean
   sortIcon?: boolean
-
-  /* 클릭 로직 추가 : 수정하기 */
 }
 
 const PeopleFilterSortIcons: React.FC<PeopleFilterSortIconsProps> = ({
@@ -60,13 +57,7 @@ const PeopleFilterSortIcons: React.FC<PeopleFilterSortIconsProps> = ({
           <FilterIconModal icon={<Filter28Regular />} dialogTitle="명함 필터" />
         )
       ) : null}
-      {sortIcon ? (
-        <ArrowSort28Regular
-          onClick={() => {
-            // console.log('정렬')
-          }}
-        />
-      ) : null}
+      {sortIcon ? <ArrowSort28Regular /> : null}
     </Flex>
   )
 }

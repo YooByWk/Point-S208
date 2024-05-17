@@ -69,12 +69,9 @@ const AlbumCardDetail = () => {
           isEdit={{ value: isEdit, setValue: setIsEdit }}
         />
         <DetailMapSection card={cardInfo} />
-        <DetailBottomSection card={cardInfo}/>
-        {/* <DetailFilter cardId={cardInfo.cardId} /> */}
+        <DetailBottomSection card={cardInfo} />
         <MemoSection card={cardInfo} />
       </Container>
-      // 지도 : 수정하기
-      // 메모 : 수정하기
     )
   }
   return <>{renderContent()}</>

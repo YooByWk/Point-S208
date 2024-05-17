@@ -12,6 +12,7 @@ import { css } from '@emotion/react'
 import Text from '@/components/shared/Text'
 import Spacing from '@/components/shared/Spacing'
 import Flex from '@/components/shared/Flex'
+
 const ResModal = () => {
   return (
     <Dialog modalType="alert">
