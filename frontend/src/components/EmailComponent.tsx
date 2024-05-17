@@ -13,7 +13,6 @@ import Flex from './shared/Flex'
 import Spacing from './shared/Spacing'
 import WebAlbumCardInfo from './web/WebAlbum/WebAlbumCardInfo'
 import { colors } from '@/styles/colorPalette'
-import { app } from '@microsoft/teams-js'
 
 declare global {
   interface Window {
@@ -45,17 +44,11 @@ const EmailComponent = () => {
   const email = emailParam ? decodeURIComponent(emailParam) : ''
   const appIdParam = queryParams.get('appId')
   const appId = appIdParam ? decodeURIComponent(appIdParam) : ''
+  const hostname = window.location.hostname
 
   const handleAdd = async () => {
-    app.getContext().then((context: app.Context) => {
-      // console.log('context: ', context.page.id)
-      // console.log('context: ', context.page.subPageId)
-
-      // console.log('appId: ', appId)
-      const externalUrl = `https://teams.microsoft.com/l/entity/${appId}/myAlbum`
-      // console.log(externalUrl)
-      window.location.href = externalUrl
-    })
+    const externalUrl = `https://teams.microsoft.com/l/entity/${appId}/myAlbum?webUrl=https://${hostname}/index.html#/${cardIdNum}/share?email=${email}`
+    window.location.href = externalUrl
   }
 
   const { mutate: getCardInfoMutation } = useMutation({
