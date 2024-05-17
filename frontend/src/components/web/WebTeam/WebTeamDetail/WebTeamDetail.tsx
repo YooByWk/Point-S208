@@ -14,7 +14,7 @@ const WebTeamDetail = () => {
   const [isDetail, setIsDetail] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
   const [cards, setCards] = useState<CardType[]>([])
-  const [selectedCards, setSelectedCards] = useState<number[]>([]) // 선택한 명함 번호들
+  const [selectedCards, setSelectedCards] = useState<number[]>([])
   const [searchResults, setSearchResults] = useState<
     ExternalCardListType | undefined
   >(undefined)

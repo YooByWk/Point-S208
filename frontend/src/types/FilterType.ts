@@ -1,10 +1,9 @@
 export type FilterType = {
-  filterId : number;
-  filterName : string;
+  filterId: number
+  filterName: string
 }
 
 export type FilterListType = FilterType[]
-
 
 export type FilterNameState = {
   [filterId: number]: string
@@ -17,15 +16,15 @@ export type FilterNameAction = {
 }
 
 export type EditFilterArgs = {
-  userId: number;
-  filterId: number;
-  filterName: string;
-};
+  userId: number
+  filterId: number
+  filterName: string
+}
 
 export type ReadDeletefilterType = {
   userId: number | undefined
   filterId: number | undefined
-} 
+}
 export type UpdatefilterType = {
   userId: number | undefined
   filterId: number | undefined
@@ -37,9 +36,9 @@ export type CreateFilterType = {
   filterName: string | undefined
 }
 
-export type editTeamFilterType ={
-  userId : number
-  filterId : number
-  filterName : string 
-  teamAlbumId : number
+export type editTeamFilterType = {
+  userId: number
+  filterId: number
+  filterName: string
+  teamAlbumId: number
 }

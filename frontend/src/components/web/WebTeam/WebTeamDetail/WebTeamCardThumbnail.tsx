@@ -8,7 +8,6 @@ import { Checkbox, Image } from '@fluentui/react-components'
 import { ShareAndroid24Filled, Delete24Filled } from '@fluentui/react-icons'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { selectedCardState } from '@stores/card'
-import { userState } from '@/stores/user'
 import { ExternalCardType } from '@/types/ExternalCard'
 import { useMutation } from '@tanstack/react-query'
 import WebMakeBusinessCard from '../../WebAlbum/WebMakeBusinessCard'
@@ -30,14 +29,11 @@ const WebTeamCardThumbnail = ({
   setIsDetail,
   onSelect,
 }: CardThumbnailProps) => {
-  // const [isfavorite, setIsFavorite] = useState(false)
   const [isChecked, setIsChecked] = useState(
     selectedCards.includes(cardInfo.cardId),
   )
   const setSelectedCard = useSetRecoilState(selectedCardState)
   const selectedTeam = useRecoilValue(selectedTeamAlbumIdState)
-
-  const userId = useRecoilValue(userState).userId
 
   useEffect(() => {
     const isChecked = selectedCards.includes(cardInfo.cardId)
@@ -65,12 +61,6 @@ const WebTeamCardThumbnail = ({
     onSelect(cardInfo.cardId)
   }
 
-  // const handleFavorite = () => {
-  //   setIsFavorite(!isfavorite)
-  //   /*  api 호출 */
-  //   console.log('즐겨찾기 : ', cardInfo)
-  // }
-
   return (
     <>
       <Flex justify="center" align="center">
@@ -96,11 +86,6 @@ const WebTeamCardThumbnail = ({
           />
 
           <Spacing size={10} />
-          {/* {isfavorite ? (
-            <Star24Filled css={iconCss} onClick={handleFavorite} />
-          ) : (
-            <Star24Regular css={i} onClick={handleFavorite} />
-          )} */}
           <WebAlbumShare card={cardInfo}>
             <ShareAndroid24Filled css={i} />
           </WebAlbumShare>

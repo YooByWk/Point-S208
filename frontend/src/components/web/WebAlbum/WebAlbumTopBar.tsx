@@ -159,7 +159,6 @@ const WebAlbumTopBar = ({
     <>
       <Flex direction="column" css={boxStyles}>
         <Flex justify="space-between" align="center">
-          {/* <SearchBox appearance="underline" placeholder="명함 검색" /> */}
           <SearchBox
             onChange={e => {
               if (e.target.value !== undefined) {
@@ -174,20 +173,7 @@ const WebAlbumTopBar = ({
             sortIcon={false}
             width="100%"
           />
-          <Flex align="center">
-            {/* <ArrowSort24Filled css={iconStyles} />
-            <TabList defaultSelectedValue="newly">
-              <Tab value="newly">최신순</Tab>
-              <Tab value="name">이름순</Tab>
-              <Tab value="company">회사명순</Tab>
-            </TabList>
-            <Filter24Filled css={iconStyles} />
-            <TabList defaultSelectedValue="none">
-              <Tab value="none">필터 없음</Tab>
-              <Tab value="stared">즐겨찾기 한 명함</Tab>
-              <Tab value="received">받은 명함</Tab>
-            </TabList> */}
-          </Flex>
+          <Flex align="center"></Flex>
         </Flex>
         <Spacing size={10} />
         <Flex justify="space-between" align="center">
@@ -267,6 +253,7 @@ const boxStyles = css`
   background-color: ${colors.themeTextInverted};
   z-index: 1000;
 `
+
 const buttonStyles = css`
   padding: 0;
   margin: 0;

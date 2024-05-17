@@ -65,7 +65,6 @@ const EmailComponent = () => {
     mutationKey: ['getCardInfo'],
     mutationFn: getCardInfo,
     onSuccess(result) {
-      // console.log('읽어오기 성공', result)
       setSelectedCard(result)
     },
     onError(error) {
@@ -93,7 +92,6 @@ const EmailComponent = () => {
           selectedCard.address,
           function (result: LatLng[], status: any) {
             if (status === window.kakao.maps.services.Status.OK) {
-              // console.log(result)
               setPositionArr({
                 y: result[0].y,
                 x: result[0].x,
@@ -119,7 +117,6 @@ const EmailComponent = () => {
               )
               marker.setMap(map)
             } else {
-              // console.log('kakao map is not available')
               const position = new window.kakao.maps.LatLng(
                 positionArr.y,
                 positionArr.x,
@@ -179,7 +176,6 @@ const EmailComponent = () => {
           <div css={buttonCss}>
             <LargeButton text="Teams로 이동" width="80%" onClick={handleAdd} />
           </div>
-          )
         </>
       ) : (
         <Text>유효하지 않은 링크입니다.</Text>

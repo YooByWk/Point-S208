@@ -48,16 +48,16 @@ const WebAddCard = ({ isAddCard, setIsAddCard }: AddCardProps) => {
   const [inputLink, setInputLink] = useState('')
 
   const handleClose = () => {
-    setIsAddCard(!isAddCard) // 닫기
+    setIsAddCard(!isAddCard)
   }
 
   const handleDirectInput = () => {
-    setIsAddCard(!isAddCard) // 닫기
+    setIsAddCard(!isAddCard)
     setIsAddCardByInfo(true)
   }
 
   const handleImageInput = () => {
-    setIsAddCard(!isAddCard) // 닫기
+    setIsAddCard(!isAddCard)
     setCamera(true)
   }
 
@@ -65,7 +65,6 @@ const WebAddCard = ({ isAddCard, setIsAddCard }: AddCardProps) => {
     mutationKey: ['RegisterOtherCard'],
     mutationFn: RegisterOtherCard,
     onSuccess(result) {
-      console.log('타인 명함 등록 성공', result)
       setIsRefreshAlbum(!isRefreshAlbum)
     },
     onError(error) {
@@ -77,7 +76,6 @@ const WebAddCard = ({ isAddCard, setIsAddCard }: AddCardProps) => {
     mutationKey: ['getCardInfo'],
     mutationFn: getCardInfo,
     onSuccess(result) {
-      console.log('읽어오기 성공', result)
       let params = {
         userId: userId as number,
         data: result,
@@ -202,6 +200,7 @@ export default WebAddCard
 
 const container = css`
   height: 100%;
+
   .in {
     position: relative;
     background-color: ${tokens.colorNeutralBackground1};
@@ -212,6 +211,7 @@ const container = css`
     max-width: 400px;
     text-align: center;
   }
+
   .X {
     position: absolute;
     right: 10px;

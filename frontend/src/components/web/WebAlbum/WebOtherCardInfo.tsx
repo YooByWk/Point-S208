@@ -61,7 +61,6 @@ const WebOtherCardInfo = ({
     onSuccess(result) {
       setSelectedCard(editInfo)
       setEditOpen(false)
-      // refetch()
     },
     onError(error) {
       console.error('수정 실패:', error)
@@ -74,7 +73,6 @@ const WebOtherCardInfo = ({
     onSuccess(result) {
       setSelectedCard(editInfo)
       setEditOpen(false)
-      // refetch()
     },
     onError(error) {
       console.error('타인 명함 등록 실패:', error)

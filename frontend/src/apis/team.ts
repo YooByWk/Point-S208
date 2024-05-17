@@ -8,15 +8,11 @@ import {
 } from '@/types/TeamListType'
 import { editTeamMemoType } from '@/types/cardInput'
 import { authRequest } from '@/utils/requestMethod'
-// import { deleteTeam } from '@/apis/team';
 
 const CudUrl = '/cud/api/teams'
 const ReadUrl = '/read/api/teams'
 const userSearchUrl = '/read/api/user/search'
-/**
- * 유저 검색 - 주로 멤버 추가에서 사용
- * @param  userInput
- */
+
 export const searchUser = async (userInput: string | number) => {
   return authRequest
     .get(userSearchUrl, { params: { info: userInput } })
@@ -32,10 +28,6 @@ export const fetchTeamList = async (userId: number) => {
     .catch(err => console.log(err))
 }
 
-/**
- * @param userInput
- * @returns 팀 명함 검색 목록
- */
 export const fetchTeamCardsList = async (teamAlbumId: number, page: number) => {
   return authRequest
     .get(`${ReadUrl}/list/${teamAlbumId}/${page}`)
@@ -58,6 +50,7 @@ export const CreateTeam = async (params: CreateTeamType) => {
     .then(res => res.data)
     .catch(err => console.log(err))
 }
+
 // 팀 멤버 조회
 export const fetchTeamMember = async (teamAlbumId: number, userId: number) => {
   return authRequest
@@ -65,7 +58,8 @@ export const fetchTeamMember = async (teamAlbumId: number, userId: number) => {
     .then(res => res.data)
     .catch(err => console.log(err))
 }
-// 팀
+
+// 팀 내 카드 등록
 export const RegisterTeamCard = async (params: RegisterTeammCardType) => {
   return authRequest
     .post(`${CudUrl}/${params.userId}/${params.teamId}/card`, params.data)
@@ -74,6 +68,7 @@ export const RegisterTeamCard = async (params: RegisterTeammCardType) => {
     })
     .catch(err => console.log(err))
 }
+
 // 팀 카드 검색
 export const searchTeamCard = async (
   teamAlbumId: number,
@@ -124,13 +119,6 @@ export const deleteTeamCards = async (params: deleteTeamCardArrayType) => {
   return Promise.all(deleteRequests)
 }
 
-// export const fetchTeamCardFilter = async (teamAlbumId: number, filter: string) => {
-//   return authRequest
-//     .get(`${ReadUrl}/${teamAlbumId}/filter/${filter}`)
-//     .then(res => res.data)
-//     .catch(err => console.log(err))
-// }
-
 // 팀 내 명함 OCR 등록
 export const ocrRegTeamCard = async (params: any) => {
   return authRequest
@@ -138,6 +126,7 @@ export const ocrRegTeamCard = async (params: any) => {
     .then(res => res.data)
     .catch(err => console.log(err))
 }
+
 export const editTeamAlbumMemo = async (params: editTeamMemoType) => {
   return authRequest
     .post(
@@ -191,43 +180,60 @@ export const editTeamName = async (params: any) => {
     .catch(err => console.log(err))
 }
 
-
 export const fetchTeamFilterList = async (teamAlbumId: number) => {
   return authRequest
     .get(`${ReadUrl}/${teamAlbumId}/filter`)
     .then(res => res.data)
     .catch(err => console.log(err))
-
 }
 
-export const fetchTeamCardsFilter = async (teamAlbumId: number, cardId: number) => {
+export const fetchTeamCardsFilter = async (
+  teamAlbumId: number,
+  cardId: number,
+) => {
   return authRequest
     .get(`${ReadUrl}/${teamAlbumId}/${cardId}/filter`)
     .then(res => res.data)
     .catch(err => console.log(err))
 }
 
-
-export const createTeamFilter = async (userId: number, teamAlbumId: number, filterName: any) => {
+export const createTeamFilter = async (
+  userId: number,
+  teamAlbumId: number,
+  filterName: any,
+) => {
   return authRequest
     .post(`${CudUrl}/${userId}/${teamAlbumId}/filter`, { filterName })
     .then(res => res.data)
     .catch(err => console.log(err))
 }
 
-export const deleteTeamFilter = async (userId: number, teamAlbumId: number, filterId: number) => {
+export const deleteTeamFilter = async (
+  userId: number,
+  teamAlbumId: number,
+  filterId: number,
+) => {
   return authRequest
     .delete(`${CudUrl}/${userId}/${teamAlbumId}/filter/${filterId}`)
     .then(res => res.data)
     .catch(err => console.log(err))
 }
 
-
-export const editTeamFilter = async ({ userId, filterId, filterName, teamAlbumId }: { userId: number, teamAlbumId: number, filterId: number, filterName: string }) => {
+export const editTeamFilter = async ({
+  userId,
+  filterId,
+  filterName,
+  teamAlbumId,
+}: {
+  userId: number
+  teamAlbumId: number
+  filterId: number
+  filterName: string
+}) => {
   return authRequest
-    .patch(`${CudUrl}/${userId}/${teamAlbumId}/filter/${filterId}`, { filterName })
+    .patch(`${CudUrl}/${userId}/${teamAlbumId}/filter/${filterId}`, {
+      filterName,
+    })
     .then(res => res.data)
     .catch(err => console.log(err))
 }
-
-

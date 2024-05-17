@@ -19,12 +19,14 @@ const WebCard = () => {
     if (editOpen) {
       return <WebOtherCardInfo setEditOpen={setEditOpen} isEdit={true} />
     }
+
     // 새로 추가된 명함 상세
     if (isDetail) {
       return (
         <WebAlbumDetail setIsDetail={setIsDetail} setEditOpen={setEditOpen} />
       )
     }
+
     // 내 명함 정보 입력
     if (writeInfo)
       return (
@@ -34,6 +36,7 @@ const WebCard = () => {
           refetch={() => {}}
         />
       )
+
     // 등록된 명함 정보가 있을 때
     if (isCard) {
       return (

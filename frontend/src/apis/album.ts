@@ -69,7 +69,12 @@ export const ocrRegOtherCard = async (params: OcrCardType) => {
 export const searchMyAlbumCard = async (params: searchType) => {
   return authRequest
     .get(`${ReadUrl}/${params.id}/search`, {
-      params: { info: typeof params.userInput === 'string' ? params.userInput.toLowerCase() : params.userInput },
+      params: {
+        info:
+          typeof params.userInput === 'string'
+            ? params.userInput.toLowerCase()
+            : params.userInput,
+      },
     })
     .then(res => {
       return res.data
@@ -101,19 +106,20 @@ export const shareCard = async (params: shareCardType) => {
     })
     .then(res => res.data)
     .catch(err => console.log(err))
-}                             
-
-
+}
 
 // 명함지갑 팀 명함에 공유
-export const shareToTeamCard = async (userId: number, teamId: number, params: number[]) => {
+export const shareToTeamCard = async (
+  userId: number,
+  teamId: number,
+  params: number[],
+) => {
   return authRequest
     .post(`${cudBaseUrl}/my-album/${userId}/${teamId}/share`, {
-      cardIds: params
+      cardIds: params,
     })
     .then(res => res.data)
     .catch(err => console.log(err))
-
 }
 
 export const fetchFilter = async (userId: number) => {
@@ -132,7 +138,6 @@ export const createFilter = async (params: CreateFilterType) => {
     .catch(err => console.log(err))
 }
 
-//
 export const fetchCardByFilter = async (userId: number, filterId: number) => {
   return authRequest
     .get(`${ReadUrl}/${userId}/filter/${filterId}`)
@@ -140,15 +145,13 @@ export const fetchCardByFilter = async (userId: number, filterId: number) => {
     .catch(err => console.log(err))
 }
 
-// 내 명함지갑 중 한개 명함이 가지고있는 필터는 어떻게?
-
 export const addFilterToCard = async (
   userId: number,
   cardId: number,
   filterId: number,
 ) => {
   return authRequest
-    .post(`${CudUrl}/${userId}/${cardId}`, [{filterId}])
+    .post(`${CudUrl}/${userId}/${cardId}`, [{ filterId }])
     .then(res => res.data)
     .catch(err => console.log(err))
 }
@@ -191,31 +194,28 @@ export const deleteMyAlbumCards = async (params: deleteAlbumCardArrayType) => {
   return Promise.all(deleteRequests)
 }
 
-// export const fetchFilterByCard = async() => {
-// return authRequest
-// .get(`${ReadUrl}/${userId}/filter`)
-// }
-
-
 export const saveToMyAlbum = async (userId: number, cardIds: number[]) => {
   return authRequest
-  .post(`${CudUrl}/${userId}/save`, { cardIds })
-  .then(res => res.data)
-  .catch(err => console.log(err))  
+    .post(`${CudUrl}/${userId}/save`, { cardIds })
+    .then(res => res.data)
+    .catch(err => console.log(err))
 }
 
+export const fetchCardsFilter = async (
+  userId: number | undefined,
+  cardId: number | undefined,
+) => {
+  if (!userId || !cardId) return
+  return authRequest.get(`${ReadUrl}/${userId}/${cardId}/filter`)
+}
 
-export const fetchCardsFilter = async (userId: number|undefined, cardId: number|undefined) => {
+export const fetchAlbumCardDetail = async (
+  userId: number | undefined,
+  cardId: number | undefined,
+) => {
   if (!userId || !cardId) return
   return authRequest
-  .get(`${ReadUrl}/${userId}/${cardId}/filter`)
+    .get(`${ReadUrl}/${userId}/${cardId}`)
+    .then(res => res.data)
+    .catch(err => console.log(err))
 }
-
-export const fetchAlbumCardDetail = async (userId: number | undefined,cardId:number|undefined) => {
-  if (!userId || !cardId) return
-  return authRequest
-  .get(`${ReadUrl}/${userId}/${cardId}`)
-  .then(res => res.data)
-  // .catch(err => {console.log(err)})
-}
-
