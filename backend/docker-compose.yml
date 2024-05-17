@@ -26,8 +26,8 @@ services:
       - "8000:8000"
     networks:
       - jenkins-network
-    volumes:
-      - /var/jenkins_home/workspace/back-ocr/submodule/secrets.json:/app/secrets.json
+    # volumes:
+      # - /var/jenkins_home/workspace/back-ocr/submodule/secrets.json:/app/secrets.json
 
   redis:
     image: redis:latest
@@ -41,13 +41,38 @@ services:
       - /etc/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
+    networks:
+        - jenkins-network
+        
+  prometheus_nginx_exporter:
+    image: nginx/nginx-prometheus-exporter:latest
+    ports:
+      - "9113:9113"  # Nginx exporter가 노출하는 포트
+    networks:
+        - jenkins-network
+    command:
+      - "-nginx.scrape-uri=https://k10s208.p.ssafy.io//basic_status"
 
+
+        
   grafana:
     image: grafana/grafana:latest
     depends_on:
       - prometheus
     ports:
       - "3000:3000"
+    networks:
+        - jenkins-network
+      
+  alertmanager:
+    image: prom/alertmanager:v0.21.0
+    volumes:
+      - /etc/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--web.listen-address=:9093'
+    ports:
+      - '9093:9093'
 
   backend-cud:
     container_name: backend-cud
