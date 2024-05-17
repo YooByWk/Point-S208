@@ -38,13 +38,17 @@ const EmailComponent = () => {
 
   const location = useLocation()
   const { cardId } = useParams()
-  const cardIdNum = cardId ? parseInt(cardId) : 0
   const queryParams = new URLSearchParams(location.search)
-  const emailParam = queryParams.get('email')
-  const email = emailParam ? decodeURIComponent(emailParam) : ''
   const appIdParam = queryParams.get('appId')
   const appId = appIdParam ? decodeURIComponent(appIdParam) : ''
   const hostname = window.location.hostname
+
+  const params = new URLSearchParams(location.search)
+  const Decemail64 = params.get('email')
+
+  const cardIdDecoded = atob(cardId || '')
+  const cardIdNum = cardId ? parseInt(cardIdDecoded) : 0
+  const email = atob(Decemail64 || '')
 
   const handleAdd = async () => {
     var encodedWebUrl = encodeURIComponent(
