@@ -97,7 +97,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
             placeholder={placeholder}
             onChange={onChange}
             css={searchBoxCss(bgColor)}
-            appearance="filled-darker"
+            appearance="underline"
             contentBefore={lefticon ? <SearchRegular /> : null}
           />
         </div>

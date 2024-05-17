@@ -26,6 +26,7 @@ import { ExternalCardListType } from '@/types/ExternalCard'
 import WebAlbumDeleteSelected from './WebAlbumDeleteSelected'
 import { useMutation } from '@tanstack/react-query'
 import { fetchAllAlbum } from '@/apis/album'
+import { themeState } from '@/stores/common'
 
 const WebAlbumTopBar = ({
   allCards,
@@ -47,6 +48,7 @@ const WebAlbumTopBar = ({
   setSearchValue: React.Dispatch<React.SetStateAction<string>>
 }) => {
   const userId = useRecoilValue(userState).userId
+  const theme = useRecoilValue(themeState)
 
   const handleResult = (data: ExternalCardListType | UserListType) => {
     if (Array.isArray(data)) {
@@ -157,7 +159,7 @@ const WebAlbumTopBar = ({
 
   return (
     <>
-      <Flex direction="column" css={boxStyles}>
+      <Flex direction="column" css={boxStyles(theme)}>
         <Flex justify="space-between" align="center">
           <SearchBox
             onChange={e => {
@@ -246,11 +248,11 @@ const WebAlbumTopBar = ({
 
 export default WebAlbumTopBar
 
-const boxStyles = css`
+const boxStyles = (theme: string) => css`
   position: fixed;
   padding: 5px 24px;
   width: 100%;
-  background-color: ${colors.themeTextInverted};
+  background-color: ${theme === 'dark' ? colors.black01 : '#fff'};
   z-index: 1000;
 `
 
