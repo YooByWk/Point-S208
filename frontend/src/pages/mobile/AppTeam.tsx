@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom'
 
 const AppTeam = () => {
   return (
-    <div css={bg}>
+    <div css={bg} style={{ height: '100dvh' }}>
       <Outlet />
     </div>
   )
