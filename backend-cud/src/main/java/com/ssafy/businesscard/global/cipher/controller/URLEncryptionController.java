@@ -1,5 +1,6 @@
 package com.ssafy.businesscard.global.cipher.controller;
 
+import com.ssafy.businesscard.global.cipher.dto.URLResponse;
 import com.ssafy.businesscard.global.cipher.service.URLEncryptionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,14 +19,30 @@ import java.net.URLEncoder;
 @RequestMapping("/api")
 public class URLEncryptionController {
     private final URLEncryptionService urlEncryptionService;
-    @GetMapping("/encrypt")
-    public String encryptURL(@RequestParam String url) {
-        return urlEncryptionService.encryptURL(url);
+    @GetMapping("/encode")
+    public String encodeURL(@RequestParam String url) {
+        try {
+            // Extract the part after "https://"
+            String urlToEncode = url.substring(url.indexOf("://") + 3);
+            String encodedUrl = urlEncryptionService.encodeURL(urlToEncode);
+            return "https://" + encodedUrl;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Encoding 중 에러가 발생했습니다.";
+        }
     }
 
-    @GetMapping("/decrypt")
-    public String decryptURL(@RequestParam String encryptedURL) {
-        return urlEncryptionService.decryptURL(encryptedURL);
+    @GetMapping("/decode")
+    public String decodeURL(@RequestParam String encodedUrl) {
+        try {
+            // Extract the part after "http://"
+            String urlToDecode = encodedUrl.substring(encodedUrl.indexOf("://") + 3);
+            String decodedUrl = urlEncryptionService.decodeURL(urlToDecode);
+            return "https://" + decodedUrl;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Decoding 중 에러가 발생했습니다.";
+        }
     }
 
 }
