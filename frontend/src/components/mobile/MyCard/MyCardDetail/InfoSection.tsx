@@ -46,20 +46,21 @@ const InfoSection = (props: BooleanStateType) => {
       {(isFront && frontCard.cardId) || (!isFront && backCard.cardId) ? (
         <Flex direction="column">
           <Wrap>
-            <Text typography="t5" bold={true}>
-              {card.name}
-            </Text>
+            <Flex justify="space-between" align="center">
+              <Text typography="t5" bold={true}>
+                {card.name}
+              </Text>
+              <Edit onClick={() => setValue(true)}>
+                <EditRegular />
+                <Text typography="t8">수정</Text>
+              </Edit>
+            </Flex>
 
             <Text typography="t7">
               {card.position && card.department
                 ? `${card.position} / ${card.department}`
                 : card.position || card.department}
             </Text>
-
-            <Edit onClick={() => setValue(true)}>
-              <EditRegular />
-              <Text typography="t8">수정</Text>
-            </Edit>
           </Wrap>
 
           <BreackLine />
@@ -130,8 +131,6 @@ const Wrap = styled.div`
 `
 
 const Edit = styled.div`
-  position: absolute;
-  right: 0;
   display: flex;
   align-items: center;
   height: 100%;

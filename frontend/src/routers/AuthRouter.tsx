@@ -14,16 +14,20 @@ import ShareTeamList from '@components/mobile/Team/ShareTeamList'
 import Meeting from '@pages/Meeting/Meeting'
 import SidePanel from '@pages/Meeting/SidePanel'
 import EmailComponent from '@components/EmailComponent'
+import TermsOfUse from '@/components/TermsOfUse'
+import Privacy from '@/components/Privacy'
 
 const AuthRouter = () => {
   const width = useWindowSize()
+
   return (
     <Routes>
+      <Route path="/termsofuse" element={<TermsOfUse />} />
+      <Route path="/privacy" element={<Privacy />} />
       <Route path="/configure" element={<Meeting />} />
       <Route path="/sidepanel" element={<SidePanel />} />
       <Route path="/" element={<MyCard />} />
       <Route path="/:cardId/share" element={<EmailComponent />} />
-      {/* <Route path="/myAlbum" element={<MyAlbum />} /> */}
       {width >= 768 ? (
         <Route path="/myAlbum" element={<WebAlbum />} />
       ) : (
@@ -31,8 +35,6 @@ const AuthRouter = () => {
           <Route index element={<AppAlbumList />} />
           <Route path="register/:userId" element={<RegisterCard />} />
           <Route path=":userId/:cardId" element={<AlbumCardDetail />} />
-          {/* <Route path=':cardId' element={<CardDetail />} /> */}
-          {/* <Route path=":teamId" element={<TeamDetail />} /> */}
         </Route>
       )}
       {width >= 768 ? (
@@ -40,8 +42,6 @@ const AuthRouter = () => {
       ) : (
         <Route path="/myTeam" element={<AppTeam />}>
           <Route index element={<AppTeamList />} />
-          {/* <Route path=':teamId' element={< />}/> */}
-          {/* <Route path=':teamId' element={<CardList />}/>  */}
           <Route path=":teamAlbumId/:cardId" element={<AlbumCardDetail />} />
           <Route path=":teamAlbumId" element={<TeamDetail />} />
           <Route path="share" element={<ShareTeamList />} />
@@ -53,5 +53,3 @@ const AuthRouter = () => {
 }
 
 export default AuthRouter
-
-

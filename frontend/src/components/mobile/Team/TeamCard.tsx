@@ -8,13 +8,12 @@ import { tokens } from '@fluentui/react-components'
 import type { TeamListType } from '@/types/TeamListType'
 import { colors } from '@/styles/colorPalette'
 
-/*  유저의 디지털 카드가 필요함*/
-// const cardInfo: CardType = dummyCard[0]
 interface TeamCardProps {
   teamInfo: TeamListType
   isEdit: boolean
   onClick?: () => void
 }
+
 const TeamCard = ({ teamInfo, isEdit, onClick }: TeamCardProps) => {
   return (
     <div css={container}>

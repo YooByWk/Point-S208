@@ -1,10 +1,8 @@
 /** @jsxImportSource @emotion/react */
-import { useState } from 'react'
 import Flex from '@/components/shared/Flex'
 import {
   Circle24Regular,
   CheckmarkCircle24Regular,
-  ArrowDownload24Regular,
   Delete24Filled,
 } from '@fluentui/react-icons'
 import Text from '@shared/Text'
@@ -17,7 +15,6 @@ import { useDeleteTeamAlbumCards } from '@/hooks/Team/useDeleteTeamAlbumCards'
 import { useParams } from 'react-router-dom'
 import { userState } from '@/stores/user'
 import { useRecoilValue } from 'recoil'
-import * as XLSX from 'xlsx'
 
 interface MultiSelectBarProps {
   selectedCards: number[]
@@ -45,47 +42,6 @@ const MultiSelectBar = ({
     }
   }
 
-  const handleDownload = () => {
-    // id로 카드 정보 가져오기
-    const selectedCardDetails: CardType[] = allCards.filter(card =>
-      selectedCards.includes(card.cardId),
-    )
-
-    const data = [
-      [
-        '이름',
-        '회사',
-        '부서',
-        '직무',
-        '직책',
-        '이메일',
-        '유선전화',
-        '휴대전화',
-        '팩스번호',
-        '웹사이트',
-        '주소',
-      ],
-      ...selectedCardDetails.map(card => [
-        card.name,
-        card.company,
-        card.department,
-        card.rank,
-        card.position,
-        card.email,
-        card.landlineNumber,
-        card.phoneNumber,
-        card.faxNumber,
-        card.domainUrl,
-        card.address,
-      ]),
-    ]
-    const wb = XLSX.utils.book_new()
-    const ws = XLSX.utils.aoa_to_sheet(data)
-    XLSX.utils.book_append_sheet(wb, ws, '사용자 정보')
-
-    XLSX.writeFile(wb, '명함.xlsx')
-  }
-
   const handleDelete = async () => {
     if (teamAlbumId) {
       const params = {
@@ -93,11 +49,9 @@ const MultiSelectBar = ({
         cardIdArray: selectedCards,
         userId: userId,
       }
-      // teamAlubmDeleteMutation.mutate(selectedCards)
       teamAlubmDeleteMutation.mutate(params)
       return
     }
-    // console.log('handleDelete: ', selectedCards)
     myAlbumDeletemutation.mutate(selectedCards)
   }
 
@@ -126,7 +80,6 @@ const MultiSelectBar = ({
         )}
       </Flex>
       <Flex>
-        {/* <ArrowDownload24Regular onClick={handleDownload} /> */}
         <SmallModal
           icon={<Delete24Filled />}
           dialogTitle="명함 삭제"

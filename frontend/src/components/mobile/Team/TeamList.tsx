@@ -49,7 +49,7 @@ const TeamList = () => {
   }
 
   if (isWrite) {
-    return <AddTeam isWrite={isWrite} setIsWrite={setIsWrite} />
+    return <AddTeam isWrite={isWrite} setIsWrite={setIsWrite} data={data} />
   }
 
   if (!data || data.length === 0) {
@@ -134,7 +134,8 @@ export default TeamList
 const buttonCss = css`
   position: fixed;
   width: 100%;
-  bottom: 0vh;
+  bottom: 0;
+  padding-block: 10px;
   z-index: 999;
   background-color: ${tokens.colorNeutralBackground1};
 `

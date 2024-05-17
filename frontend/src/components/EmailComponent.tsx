@@ -13,7 +13,6 @@ import Flex from './shared/Flex'
 import Spacing from './shared/Spacing'
 import WebAlbumCardInfo from './web/WebAlbum/WebAlbumCardInfo'
 import { colors } from '@/styles/colorPalette'
-import { app } from '@microsoft/teams-js'
 
 declare global {
   interface Window {
@@ -39,23 +38,27 @@ const EmailComponent = () => {
 
   const location = useLocation()
   const { cardId } = useParams()
-  const cardIdNum = cardId ? parseInt(cardId) : 0
   const queryParams = new URLSearchParams(location.search)
-  const emailParam = queryParams.get('email')
-  const email = emailParam ? decodeURIComponent(emailParam) : ''
   const appIdParam = queryParams.get('appId')
   const appId = appIdParam ? decodeURIComponent(appIdParam) : ''
+  const hostname = window.location.hostname
+
+  const params = new URLSearchParams(location.search)
+  const Decemail64 = params.get('email')
+
+  const cardIdDecoded = atob(cardId || '')
+  const cardIdNum = cardId ? parseInt(cardIdDecoded) : 0
+  const email = atob(Decemail64 || '')
 
   const handleAdd = async () => {
-    app.getContext().then((context: app.Context) => {
-      // console.log('context: ', context.page.id)
-      // console.log('context: ', context.page.subPageId)
-
-      // console.log('appId: ', appId)
-      const externalUrl = `https://teams.microsoft.com/l/entity/${appId}/myAlbum`
-      // console.log(externalUrl)
-      window.location.href = externalUrl
-    })
+    var encodedWebUrl = encodeURIComponent(
+      `https://${hostname}/index.html#/${cardIdNum}/share?email=${email}`,
+    )
+    const externalUrl =
+      `https://teams.microsoft.com/l/entity/${appId}/myAlbum?webUrl=` +
+      encodedWebUrl
+    console.log(externalUrl)
+    window.location.href = externalUrl
   }
 
   const { mutate: getCardInfoMutation } = useMutation({

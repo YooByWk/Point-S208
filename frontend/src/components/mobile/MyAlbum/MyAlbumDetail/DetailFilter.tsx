@@ -12,7 +12,6 @@ import { useQuery } from '@tanstack/react-query'
 import { fetchCardsFilter } from '@/apis/album'
 
 const DetailFilter = ({ cardId }: { cardId: number }) => {
-  // const [filters, setFilters] = useState<string[]>([])
   const userId = useRecoilValue(userState).userId
 
   const { data } = useQuery({
@@ -41,9 +40,7 @@ const DetailFilter = ({ cardId }: { cardId: number }) => {
           <DetailAddFilterModal
             icon={<Add16Filled />}
             cardId={cardId}
-            onClick={() => {
-              // console.log('필터 목록 보여주기: 수정하기')
-            }}
+            onClick={() => {}}
             dialogTitle="명함에 추가할 태그를 선택해주세요"
           />
         </div>
@@ -55,7 +52,6 @@ const DetailFilter = ({ cardId }: { cardId: number }) => {
 export default DetailFilter
 
 const container = css`
-  /* margin-bottom: 5vh; */
   background-color: ${tokens.colorNeutralBackground2};
   height: fit-content;
   border-radius: 10px;

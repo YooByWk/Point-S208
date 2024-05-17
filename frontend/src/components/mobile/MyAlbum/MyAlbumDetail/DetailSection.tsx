@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-
 import Flex from '@/components/shared/Flex'
 import Spacing from '@/components/shared/Spacing'
 import { CardType } from '@/types/cardType'

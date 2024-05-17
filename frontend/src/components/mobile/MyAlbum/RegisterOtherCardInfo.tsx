@@ -82,7 +82,7 @@ const RegisterOtherCardInfo = ({
         faxNumber: cardInputs.faxNumber,
         address: cardInputs.address,
         domainUrl: cardInputs.domainUrl,
-        frontBack: 'FRONT', // 첫 추가는 앞면.
+        frontBack: 'FRONT',
       },
     }
     if (teamInfo === undefined) {

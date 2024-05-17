@@ -5,7 +5,6 @@ import styled from '@emotion/styled'
 import { useRecoilValue } from 'recoil'
 import { BooleanStateType } from '@/types/commonType'
 import WebMakeBusinessCard from '@/components/web/WebAlbum/WebMakeBusinessCard'
-
 import { ExternalCardType } from '@/types/ExternalCard'
 
 const DetailCardComponent = ({
@@ -31,8 +30,7 @@ const DetailCardComponent = ({
     )
   } else {
     return (
-      card.cardId && ( // 타인 카드에 대한 디지털 생성물 올리기.
-        // <RealCard $url={card.digitalPicture} />
+      card.cardId && ( // 타인 카드에 대한 디지털 생성물 올리기
         <WebMakeBusinessCard
           cardInfo={card}
           width="245px"
@@ -56,40 +54,11 @@ const DetailCardSection = ({
   const isReal = value
   return (
     <Container $theme={theme}>
-      {/* {card.realPicture ? (
-        <SwitchBtn>
-          <Switch
-            checked={isReal}
-            onChange={onChange}
-            css={switchStyle(isReal)}
-          />
-          <Flex align="center">
-            <Popover withArrow>
-              <PopoverTrigger disableButtonEnhancement>
-                <ErrorCircle20Regular css={errorCircleStyle} />
-              </PopoverTrigger>
-              <PopoverSurface tabIndex={-1} css={popoverStyle}>
-                실물명함과 디지털명함을 교차 선택합니다.
-              </PopoverSurface>
-            </Popover>
-          </Flex>
-        </SwitchBtn>
-      ) : (
-        ''
-      )} */}
       <Wrap>
-        {/* <Card $isReal={false}>
-          {DetailCardComponent({ isReal: !isReal, card })}
-        </Card> */}
         <Card $isReal={true}>
           {DetailCardComponent({ isReal: isReal, card })}
         </Card>
       </Wrap>
-      {/* <ArrowHookUpLeft28Regular
-        css={changeStyle}
-        onClick={() => setIsReal(!isReal)}
-      />
-      <Desc>{isReal ? '실물' : '디지털'}</Desc> */}
     </Container>
   )
 }

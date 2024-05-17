@@ -1,8 +1,7 @@
 /** @jsxImportSource @emotion/react */
-
 import { css } from '@emotion/react'
 import { Textarea, tokens } from '@fluentui/react-components'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Flex from '@shared/Flex'
 import Text from '@shared/Text'
 import { CardType } from '@/types/cardType'
@@ -18,7 +17,6 @@ import {
 } from '@fluentui/react-icons'
 import { useQueryClient } from '@tanstack/react-query'
 import { ExternalCardType } from '@/types/ExternalCard'
-// import { getAlbumDetail } from '@/apis/album'
 
 interface MemoSectionProps {
   card: CardType | ExternalCardType
@@ -29,14 +27,6 @@ const MemoSection = ({ card }: MemoSectionProps) => {
   const userId = useRecoilValue(userState).userId as unknown as number
   const cardId = useParams()?.cardId as unknown as number
   const queryClient = useQueryClient()
-
-  // const { data: memoText } = useQuery({
-  //   queryKey: ['fetchCardMemo'],
-  //   queryFn: () => {
-  //     return getAlbumDetail({ userId, cardId })
-  //   },
-  //   enabled: !teamId,
-  // })
 
   const memo = card.memo
 
@@ -57,14 +47,9 @@ const MemoSection = ({ card }: MemoSectionProps) => {
     setEditValue(memo)
   }
 
-  // const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   setEditValue(event.target.value)
-  // }
-
   const handleSaveClick = () => {
     setIsEdit(false)
     editAlbumMutation.mutate({ memo: editvalue })
-    // card.memo = editvalue
     setDisplayMemo(editvalue)
 
     teamId
@@ -80,6 +65,7 @@ const MemoSection = ({ card }: MemoSectionProps) => {
     setEditValue(memo)
     setDisplayMemo(memo)
   }, [memo])
+
   return (
     <>
       <div css={memoBoxStyles}>

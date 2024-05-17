@@ -82,6 +82,7 @@ const TeamDetail = () => {
       </>
     )
   }
+
   if (isLookingMember) {
     return <TeamMember team={teamInfo} />
   }
@@ -103,7 +104,7 @@ const TeamDetail = () => {
           direction="column"
           justify="center"
           align="center"
-          style={{ height: '100vh' }}
+          style={{ height: '70vh' }}
         >
           <Text>팀에 명함이 없습니다. </Text>
           <Text>명함을 추가해주세요. </Text>

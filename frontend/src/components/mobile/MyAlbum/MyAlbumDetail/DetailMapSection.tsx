@@ -5,12 +5,6 @@ import { ExternalCardType } from '@/types/ExternalCard'
 import { css } from '@emotion/react'
 import { useEffect, useRef, useState } from 'react'
 
-// declare global {
-//   interface Window {
-//     kakao: any
-//   }
-// }
-
 interface LatLng {
   x: number
   y: number

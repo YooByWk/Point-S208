@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-
 import { ReactNode } from 'react'
 import {
   Dialog,
@@ -29,10 +28,6 @@ interface LargeModalProps {
   btnWidth?: string
 }
 
-/**
- * 뭔가 뭔가
- * @returns
- */
 const LargeModal: React.FC<LargeModalProps> = ({
   buttonText,
   dialogTitle,
@@ -49,7 +44,6 @@ const LargeModal: React.FC<LargeModalProps> = ({
     <Dialog modalType="alert">
       <DialogTrigger disableButtonEnhancement>
         <LargeButton text={buttonText} width={btnWidth} />
-        {/* <Button appearance='primary' css={s.largeModalButton(btnWidth)}>{buttonText}</Button> */}
       </DialogTrigger>
       <DialogSurface>
         <DialogBody css={s.largeModalBody({ height })}>
@@ -70,7 +64,7 @@ const LargeModal: React.FC<LargeModalProps> = ({
               </DialogTrigger>
               <DialogTrigger disableButtonEnhancement>
                 <Button appearance="secondary">
-                  {closeButtonText ? closeButtonText : '닫기'}{' '}
+                  {closeButtonText ? closeButtonText : '닫기'}
                 </Button>
               </DialogTrigger>
             </DialogActions>
@@ -78,7 +72,7 @@ const LargeModal: React.FC<LargeModalProps> = ({
             <DialogActions>
               <DialogTrigger disableButtonEnhancement>
                 <Button appearance="secondary">
-                  {closeButtonText ? closeButtonText : '닫기'}{' '}
+                  {closeButtonText ? closeButtonText : '닫기'}
                 </Button>
               </DialogTrigger>
               <DialogTrigger disableButtonEnhancement>

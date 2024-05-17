@@ -64,7 +64,9 @@ const WebAlbumShare = ({
   }, [])
 
   const handleShareWithLink = async () => {
-    const shareableUrl = `https://${hostname}/index.html#/${card.cardId}/share?email=${card.email}&appId=${process.env.REACT_APP_TEAMS_APP_ID}`
+    const cardId64 = btoa(String(card.cardId))
+    const email64 = btoa(card.email)
+    const shareableUrl = `https://${hostname}/index.html#/${cardId64}/share?email=${email64}&appId=${process.env.REACT_APP_TEAMS_APP_ID}`
 
     try {
       await navigator.clipboard.writeText(shareableUrl)
