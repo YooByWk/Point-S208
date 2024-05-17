@@ -22,7 +22,6 @@ public class URLEncryptionController {
     @GetMapping("/encode")
     public String encodeURL(@RequestParam String url) {
         try {
-            // Extract the part after "https://"
             String urlToEncode = url.substring(url.indexOf("://") + 3);
             String encodedUrl = urlEncryptionService.encodeURL(urlToEncode);
             return "https://" + encodedUrl;
@@ -35,7 +34,6 @@ public class URLEncryptionController {
     @GetMapping("/decode")
     public String decodeURL(@RequestParam String encodedUrl) {
         try {
-            // Extract the part after "http://"
             String urlToDecode = encodedUrl.substring(encodedUrl.indexOf("://") + 3);
             String decodedUrl = urlEncryptionService.decodeURL(urlToDecode);
             return "https://" + decodedUrl;
@@ -44,5 +42,4 @@ public class URLEncryptionController {
             return "Decoding 중 에러가 발생했습니다.";
         }
     }
-
 }
