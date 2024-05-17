@@ -46,7 +46,6 @@ const WebNewlyAdded = ({
     <>
       <Flex css={boxBorderStyles} align="center">
         <Flex align="center" onClick={handleOnClick}>
-          {/* 사진 */}
           <Flex css={boxStyles} align="center">
             {card.realPicture ? (
               <Image
@@ -65,7 +64,7 @@ const WebNewlyAdded = ({
               />
             )}
           </Flex>
-          {/* 정보 */}
+
           <Flex direction="column" justify="center" css={boxBorderStyles2}>
             <Text typography="t7">{card.company}</Text>
             <Text typography="t7">{card.name}</Text>
@@ -73,7 +72,7 @@ const WebNewlyAdded = ({
             <Text typography="t7">{card.email}</Text>
           </Flex>
         </Flex>
-        {/* 공유버튼 */}
+
         <WebAlbumShare card={card}>
           <Button appearance="transparent">
             <ShareAndroid16Filled /> 공유

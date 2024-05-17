@@ -14,7 +14,6 @@ const SidePanel = () => {
   const userId = useRecoilValue(userState).userId
   const setFrontCard = useSetRecoilState(frontCardState)
   const setBackCard = useSetRecoilState(backCardState)
-  // const card = isFront ? frontCard : backCard
 
   const { mutate } = useMutation({
     mutationKey: ['fetchMyCard'],

@@ -2,7 +2,6 @@
 import { css } from '@emotion/react'
 import Flex from '@shared/Flex'
 import Spacing from '@shared/Spacing'
-
 import axios from 'axios'
 import { useState, useEffect } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
@@ -42,13 +41,13 @@ function useFetchCardData(
         const response = await axios.get(
           `https://k10s208.p.ssafy.io/read/api/my-card/${userId}`,
         )
-        setData(response.data) // 데이터 설정
+        setData(response.data)
         setFrontCard(response.data.front)
         setBackCard(response.data.back)
-        setLoading(false) // 로딩 상태 해제
+        setLoading(false)
       } catch (error) {
         console.error(error)
-        setError(true) // 에러 처리
+        setError(true)
         setLoading(false)
       }
     }
@@ -76,7 +75,6 @@ const WebMyCard = ({
   const [isFront, setIsFront] = useState(true)
 
   if (loading) return <div>Loading...</div>
-  // if (error) return <div>Error loading data!</div>
   if (!data) return <div>No data available</div>
   if (!isFront && data.back === null) {
     setIsEnglish(true)

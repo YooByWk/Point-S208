@@ -39,7 +39,7 @@ const WebReg = (props: { state: string }) => {
     }
   }
 
-  // 사진  렌더
+  // 사진 렌더
   const renderImage = () => {
     const objectURL = imgSrc && URL.createObjectURL(imgSrc)
 

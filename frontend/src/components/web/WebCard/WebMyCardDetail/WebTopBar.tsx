@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-
 import {
   ShareAndroid16Filled,
   ArrowSwap16Filled,
