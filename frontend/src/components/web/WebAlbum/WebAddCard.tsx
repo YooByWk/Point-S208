@@ -92,16 +92,20 @@ const WebAddCard = ({ isAddCard, setIsAddCard }: AddCardProps) => {
   }, [])
 
   const handleAddFromLink = () => {
-    const cardIdRegex = /\/(\d+)\/share/
+    const cardIdRegex = /\/([^/]+)\/share\?email=/
     const cardIdMatch = inputLink.match(cardIdRegex)
     const cardId = cardIdMatch ? cardIdMatch[1] : null
-    const cardIdNum = cardId ? parseInt(cardId) : 0
+    //const cardIdNum = cardId ? parseInt(cardId) : 0
 
     const emailRegex = /email=([^&]+)/
     const emailMatch = inputLink.match(emailRegex)
     const email = emailMatch ? emailMatch[1] : ''
 
-    getCardInfoMutation({ cardId: cardIdNum, email: email })
+    const cardIdDecoded = atob(cardId || '')
+    const cardIdNum = cardId ? parseInt(cardIdDecoded) : 0
+    const emailDecoded = atob(email || '')
+
+    getCardInfoMutation({ cardId: cardIdNum, email: emailDecoded })
 
     setModalOpen(false)
     setIsAddCard(!isAddCard) // 닫기
