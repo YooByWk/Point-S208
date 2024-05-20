@@ -92,12 +92,12 @@ _사내 사용자에게만 제공되는 기능_
 
 실물 명함을 사진으로 등록한 경우에도 디지털 명함이 생성됩니다.
 
-| <img src='https://private-user-images.githubusercontent.com/139323278/331856257-7f0cfac2-0e23-463d-bb38-21a42608bd6e.gif?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTYxNjU1ODEsIm5iZiI6MTcxNjE2NTI4MSwicGF0aCI6Ii8xMzkzMjMyNzgvMzMxODU2MjU3LTdmMGNmYWMyLTBlMjMtNDYzZC1iYjM4LTIxYTQyNjA4YmQ2ZS5naWY_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNTIwJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDUyMFQwMDM0NDFaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT05NGU2NDJmMDQ1NzE0MzU3NDJjYzljMWViZjRjZjU1OWQ1Y2I5YjI0MDkxMTRkZjhjNmNiY2YyOTk1NWJjNWExJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.LRg8Af68luZNAgS-VbVU5Qg9UfndmIVuK69TU_RwV60' width='200px' height='400px'/> | <img src='./wiki/img/pcDigital.png' width='500'/> |
+| <img src='./wiki/gif/directo.gif' width='200px' height='400px' alt="직접입력을 통한 명함 등록 이미지" /> | <img src='./wiki/img/pcDigital.png' width='500'  alt="PC에서의 디지털 명함"/>  |
 | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
 
 **2️⃣ 실물 명함의 OCR을 통한 등록**
 
-|<img src='https://private-user-images.githubusercontent.com/139323278/331855849-45170444-0d86-431f-bdc9-006c28346684.gif?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTYxNjU2MTksIm5iZiI6MTcxNjE2NTMxOSwicGF0aCI6Ii8xMzkzMjMyNzgvMzMxODU1ODQ5LTQ1MTcwNDQ0LTBkODYtNDMxZi1iZGM5LTAwNmMyODM0NjY4NC5naWY_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNTIwJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDUyMFQwMDM1MTlaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT02NTkwYzQwYmY1NzUxZTlhN2UxMTZiZmUwYmRkYjI0ZDI3ZGY0ZGVjMWIzOWY5MjMxYWIzNzg5YTE2MDIzODBmJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.9ZrSV2RRrDx1MUM-8pDrNuI77bg0a3jqEvLA_SWUASY' width='200px' height='400px'/>
+<img src='./wiki/gif/Foto.gif' width='200px' height='400px' alt="사진을 통한 명함 등록 이미지"/>
 
 OCR을 통해 자신의 명함을 빠르게 등록할 수 있습니다.  
  촬영된 명함의 사진은 {수정필요} 를 통해 깔끔한 명함 이미지로 저장됩니다.
@@ -108,7 +108,7 @@ _임직원의 경우 개인의 명함 정보를 바탕으로 디지털 명함이
 
 **3️⃣ 이메일을 통한 명함 공유**
 
-| <img alt="이메일 공유" src='https://private-user-images.githubusercontent.com/139323278/331856660-62683a38-8ab3-4c55-b036-f767049eae08.gif?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTYxNjU2ODAsIm5iZiI6MTcxNjE2NTM4MCwicGF0aCI6Ii8xMzkzMjMyNzgvMzMxODU2NjYwLTYyNjgzYTM4LThhYjMtNGM1NS1iMDM2LWY3NjcwNDllYWUwOC5naWY_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNTIwJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDUyMFQwMDM2MjBaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1iN2E4NmNhZDA5ZDI2Njk1YzJmMjZhYTk0MGFlNmEzZDFlZmYxZTk4NTJkZWU2M2FhNWFiNGE3ZmFiODUwZTk4JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.AfMUavri8kOBu6N9zwocNc0FB6kZHwjU5UeUzTQF8v8' width='200px' height='400px'/> | <img src='./wiki/img/emailShare.png' width='600px' height='400' /> |
+| <img alt="이메일 공유" src='./wiki/gif/emailShare.gif' width='200px' height='400px'/> | <img src='./wiki/img/emailShare.png' width='600px' height='400' /> |
 | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
 
 공유를 원하는 이메일 주소 입력을 통해 명함 사진 / 디지털 명함과 명함의 정보를 편리하게 전달할 수 있습니다.
@@ -117,19 +117,19 @@ _임직원의 경우 개인의 명함 정보를 바탕으로 디지털 명함이
 
 팀 명함지갑에서 팀원간 공유한 명함 확인
 
-<img width='200px' height='400px' src='https://private-user-images.githubusercontent.com/139323278/331859306-f30f500e-cf91-40dc-90b0-27288aa9d78b.gif?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTYxNjU3MzMsIm5iZiI6MTcxNjE2NTQzMywicGF0aCI6Ii8xMzkzMjMyNzgvMzMxODU5MzA2LWYzMGY1MDBlLWNmOTEtNDBkYy05MGIwLTI3Mjg4YWE5ZDc4Yi5naWY_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNTIwJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDUyMFQwMDM3MTNaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT02M2VlOTE4OTg4NWQxNGVkZjcyYmU4M2Y2ZWVmYzBhMmQ3NGZlZWFmZGQwMmExMGQxZjQ3YTVhZTQ1OGIyYjFiJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.ymU6aK_8qT3PN-TFHZb78681H4GFhK8j-J-4oM3J544' /> 
+<img width='200px' height='400px' src='./wiki/gif/teamAlbum.gif' /> 
 
 ---
 
 팀 명함에서 개인의 명함지갑으로 공유하기
 
-<img width='200px' height='400px' src='https://private-user-images.githubusercontent.com/139323278/331859311-0f06c71c-77b5-41e7-9315-5aa87cbea0d0.gif?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTYxNjU3MzMsIm5iZiI6MTcxNjE2NTQzMywicGF0aCI6Ii8xMzkzMjMyNzgvMzMxODU5MzExLTBmMDZjNzFjLTc3YjUtNDFlNy05MzE1LTVhYTg3Y2JlYTBkMC5naWY_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNTIwJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDUyMFQwMDM3MTNaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1jZmU0NjkzZTQ0ZGExMTYzNDFhYzRlNzQxODFmODQ4MzMwZGMyZDdmYjE3ZWU5OTIxOGZjN2E1ODYwNmRjYTNjJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.u3edJ8FBfqXHPL4--xxBkDHa3HZoZ4HiPNFSB57y0n4' /> 
+<img width='200px' height='400px' src='./wiki/gif/ToMyAlbum.gif' /> 
 
 ---
 
 개인 명함 지갑에서 팀 명함지갑으로 공유하기
 
-<img width='200px' height='400px' src='https://private-user-images.githubusercontent.com/139323278/331859313-4722be39-d531-453f-a127-2695cf4239a4.gif?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTYxNjU3MzMsIm5iZiI6MTcxNjE2NTQzMywicGF0aCI6Ii8xMzkzMjMyNzgvMzMxODU5MzEzLTQ3MjJiZTM5LWQ1MzEtNDUzZi1hMTI3LTI2OTVjZjQyMzlhNC5naWY_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNTIwJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDUyMFQwMDM3MTNaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT03YmRhNWJlZjkyNWRkN2YzMjJkZmNmOGE1ZTk1YjRiNzU4OTZkNDkwNmNlNzk0NDU5Y2FhYjI3YWRkYmUyNjMwJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.JEBeNLU-BME7JinGBXPXtS6fDM6IdQvng26vUxC916g' />
+<img width='200px' height='400px' src='./wiki/gif/ToTeam.gif' />
 
 
 팀 기능을 통해 원하는 팀에 명함을 공유하거나 등록하는 방법을 통해 간편하게 다양한 명함을 공유할 수 있습니다.
