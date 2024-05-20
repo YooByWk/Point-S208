@@ -39,12 +39,10 @@
 <div id="1"></div>
 
 ## 프로젝트 개요
-
-<p align="center">
-  <img src="./wiki/img/ssafyLogo.png" width="100" height="50" style="display: inline; margin: 0 10px;" />
-  <img src="./wiki/img/x.png" style="display: inline; margin: 0 10px;" />
-  <img src="./wiki/img/logo.png" width="100" height="50" style="display: inline; margin: 0 10px;" />
-</p>
+![ssafyLogo](/uploads/c10600540c49b3b0d283672092de5657/ssafyLogo.png)
+![x](/uploads/bd9d8d1e8c8fa6fb1834bbadb3d64184/x.png)
+![logo](/uploads/3243185da25b76b8f0b31cf7b8a0256b/logo.png)
+ 
 
 <br />
 <br />
