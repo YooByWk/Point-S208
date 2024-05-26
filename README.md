@@ -39,9 +39,9 @@
 <div id="1"></div>
 
 ## 프로젝트 개요
-![ssafyLogo](/uploads/c10600540c49b3b0d283672092de5657/ssafyLogo.png)
-![x](/uploads/bd9d8d1e8c8fa6fb1834bbadb3d64184/x.png)
-![logo](/uploads/3243185da25b76b8f0b31cf7b8a0256b/logo.png)
+![ssafyLogo](./wiki/img/ssafyLogo.png)
+![x](./wiki/img/x.png)
+![logo](./wiki/img/logo.png)
  
 
 <br />
